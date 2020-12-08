@@ -1,0 +1,32 @@
+variables:
+  Solution: MySolution.sln
+
+before_script:
+  - "echo off"
+  - 'call "%VS120COMNTOOLS%\vsvars32.bat"'
+  # output environment variables (usefull for debugging, propably not what you want to do if your ci server is public)
+  - echo.
+  - set
+  - echo.
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+  - echo building...
+  - 'msbuild.exe "Thesis - Multicut in Trees"'
+  except:
+  - tags
+
+test:
+  stage: test
+  script:
+  - echo testing...
+  - 'msbuild.exe "Thesis - Multicut in Trees"'
+  - dir /s /b *.Tests.dll | findstr /r Tests\\*\\bin\\ > testcontainers.txt
+  - 'for /f %%f in (testcontainers.txt) do mstest.exe /testcontainer:"%%f"'
+  except:
+  - tags
