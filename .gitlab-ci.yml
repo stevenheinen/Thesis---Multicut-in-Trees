@@ -17,6 +17,6 @@ test:
   stage: test
   script:
   - echo testing...
-  - 'dotnet test "TESTS - Multicut in Trees"' /p:CollectCoverage=true
+  - 'dotnet test "TESTS - Multicut in Trees" /p:CollectCoverage=true'
   except:
   - tags
