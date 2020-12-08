@@ -17,7 +17,7 @@ test:
   stage: test
   script:
   - echo testing...
-  - 'dotnet test "Thesis - Multicut in Trees"'
+  - 'dotnet test "TESTS - Multicut in Trees"'
   #- dir /s /b *.Tests.dll | findstr /r Tests\\*\\bin\\ > testcontainers.txt
   #- 'for /f %%f in (testcontainers.txt) do mstest.exe /testcontainer:"%%f"'
   except:
