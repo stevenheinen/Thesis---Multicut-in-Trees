@@ -1,6 +1,9 @@
 variables:
   Solution: MySolution.sln
 
+before_script:
+  - 'dotnet restore'
+
 stages:
   - build
   - test
@@ -17,8 +20,6 @@ test:
   stage: test
   script:
   - echo testing...
-  - 'dotnet test "TESTS - Multicut in Trees"'
-  #- dir /s /b *.Tests.dll | findstr /r Tests\\*\\bin\\ > testcontainers.txt
-  #- 'for /f %%f in (testcontainers.txt) do mstest.exe /testcontainer:"%%f"'
+  - 'dotnet test "TESTS - Multicut in Trees" /p:CollectCoverage=true'
   except:
   - tags
