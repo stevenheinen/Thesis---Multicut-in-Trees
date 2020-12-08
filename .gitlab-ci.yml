@@ -1,6 +1,9 @@
 variables:
   Solution: MySolution.sln
 
+before_script:
+  - 'dotnet restore'
+
 stages:
   - build
   - test
