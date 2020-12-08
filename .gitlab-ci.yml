@@ -1,0 +1,24 @@
+variables:
+  Solution: MySolution.sln
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+  - echo building...
+  - 'dotnet build "Thesis - Multicut in Trees"'
+  except:
+  - tags
+
+test:
+  stage: test
+  script:
+  - echo testing...
+  - 'dotnet test "TESTS - Multicut in Trees"'
+  #- dir /s /b *.Tests.dll | findstr /r Tests\\*\\bin\\ > testcontainers.txt
+  #- 'for /f %%f in (testcontainers.txt) do mstest.exe /testcontainer:"%%f"'
+  except:
+  - tags
