@@ -9,7 +9,7 @@ build:
   stage: build
   script:
   - echo building...
-  - 'msbuild.exe "Thesis - Multicut in Trees"'
+  - 'dotnet build "Thesis - Multicut in Trees"'
   except:
   - tags
 
