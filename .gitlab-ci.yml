@@ -8,7 +8,7 @@ stages:
 build:
   stage: build
   script:
-    - cmd BuildProject.cmd
+    - BuildProject.cmd
   except:
     - tags
 
