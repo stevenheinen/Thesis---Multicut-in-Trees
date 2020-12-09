@@ -1,6 +1,3 @@
-variables:
-  Solution: MySolution.sln
-
 before_script:
   - 'dotnet restore'
 
@@ -19,11 +16,11 @@ build:
 lint:
   stage: test
   script:
-    - echo Inspecting code...
+    - echo "Inspecting code..."
     - 'jb inspectcode "Thesis - Multicut in Trees.sln" -o=".\Resharper\inspectcode.xml"'
-    - echo Running cleanup...
+    - echo "Running cleanup..."
     - 'jb cleanupcode "Thesis - Multicut in Trees.sln"'
-    - echo Detecting duplicates...
+    - echo "Detecting duplicates..."
     - 'jb dupfinder "Thesis - Multicut in Trees.sln" -o=".\Resharper\dupfinder.xml"'
   except:
     - tags
