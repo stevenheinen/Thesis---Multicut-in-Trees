@@ -8,8 +8,7 @@ stages:
 build:
   stage: build
   script:
-    - echo building...
-    - 'dotnet build "Thesis - Multicut in Trees"'
+    - BuildProject.cmd
   except:
     - tags
 
