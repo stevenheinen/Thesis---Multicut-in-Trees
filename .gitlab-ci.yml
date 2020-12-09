@@ -10,7 +10,7 @@ build:
   script:
     - BuildProject.cmd
   tags:
-    - shell
+    - windows
   except:
     - tags
 
