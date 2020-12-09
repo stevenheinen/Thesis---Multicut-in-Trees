@@ -5,3 +5,4 @@ dotnet test "TESTS - Multicut in Trees" /p:CollectCoverage=true /p:CoverletOutpu
 echo Generating report...
 rmdir /Q /S coveragereport
 C:\Users\steve\.dotnet\tools\reportgenerator "-reports:.\TESTS - Multicut in Trees\coverage.cobertura.xml" "-targetdir:coveragereport" -reporttypes:Html
+coveragereport\index.html
