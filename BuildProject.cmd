@@ -1,2 +1,2 @@
 echo Building...
-dotnet build "Thesis - Multicut in Trees"
+dotnet build "MulticutInTrees"

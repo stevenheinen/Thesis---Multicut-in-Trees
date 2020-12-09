@@ -1,6 +1,6 @@
 echo Inspecting code...
-C:\Users\steve\.dotnet\tools\jb inspectcode "Thesis - Multicut in Trees.sln" -o=".\Resharper\inspectcode.xml"
+C:\Users\steve\.dotnet\tools\jb inspectcode "MulticutInTrees.sln" -o=".\Resharper\inspectcode.xml"
 echo Running cleanup...
-C:\Users\steve\.dotnet\tools\jb cleanupcode "Thesis - Multicut in Trees.sln"
+C:\Users\steve\.dotnet\tools\jb cleanupcode "MulticutInTrees.sln"
 echo Detecting duplicates...
-C:\Users\steve\.dotnet\tools\jb dupfinder "Thesis - Multicut in Trees.sln" -o=".\Resharper\dupfinder.xml"
+C:\Users\steve\.dotnet\tools\jb dupfinder "MulticutInTrees.sln" -o=".\Resharper\dupfinder.xml"

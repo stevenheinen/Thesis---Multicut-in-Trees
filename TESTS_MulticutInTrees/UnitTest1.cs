@@ -11,6 +11,7 @@ namespace TESTS_MulticutInTrees
     public class UnitTest1
     {
         private const string Expected = "Hello World!";
+
         [TestMethod]
         public void TestMethod1()
         {
@@ -22,4 +23,4 @@ namespace TESTS_MulticutInTrees
             Assert.AreEqual(Expected, result);
         }
     }
-} 
+}

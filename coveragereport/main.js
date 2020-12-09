@@ -222,9 +222,9 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
-    "name": "Thesis - Multicut in Trees",
+    "name": "MulticutInTrees",
     "classes": [
-      { "name": "MulticutInTrees.Program", "rp": "Thesis___Multicut_in_Trees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 14, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 14, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 

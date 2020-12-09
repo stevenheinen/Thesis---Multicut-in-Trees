@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Thesis - Multicut in Trees\Thesis - Multicut in Trees.csproj" />
+    <ProjectReference Include="..\MulticutInTrees\MulticutInTrees.csproj" />
   </ItemGroup>
 
 </Project>
