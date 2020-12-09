@@ -1,4 +1,3 @@
-title Testing project
 echo Building...
 dotnet build "Thesis - Multicut in Trees"
 echo Testing...
@@ -7,4 +6,3 @@ echo Generating report...
 rmdir /Q /S coveragereport
 reportgenerator "-reports:.\TESTS - Multicut in Trees\coverage.cobertura.xml" "-targetdir:coveragereport" -reporttypes:Html
 coveragereport\index.html
-pause
