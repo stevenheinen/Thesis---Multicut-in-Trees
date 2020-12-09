@@ -3,5 +3,6 @@ set "s=// This code was written between November 2020 and October 2021 by Steven
 echo %s%
 findstr /b /c:"%t%" %1
 if not "%errorlevel%" == "0" (
+	echo Missing copyright in file %1!
 	exit 1
 )

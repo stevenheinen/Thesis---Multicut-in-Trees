@@ -3,5 +3,8 @@ set "s=// This code was written between November 2020 and October 2021 by Steven
 echo %s%
 findstr /b /c:"%t%" %1
 if not "%errorlevel%" == "0" (
-	exit 1
+	(echo %s%) >tmp.txt
+	echo.>>tmp.txt
+	type %1 >>tmp.txt
+	move /y tmp.txt %1
 )
