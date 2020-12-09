@@ -9,8 +9,6 @@ build:
   stage: build
   script:
     - BuildProject.cmd
-  tags:
-    - windows
   except:
     - tags
 
