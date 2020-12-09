@@ -15,7 +15,7 @@ build:
 copyright:
   stage: test
   script:
-    .\AddCopyrightToAllFiles.cmd
+    .\CheckCopyrightAllFiles.cmd
   except:
     - tags
 
