@@ -8,8 +8,7 @@ stages:
 build:
   stage: build
   script:
-    - 'cd $CI_PROJECT_DIR'
-    - BuildProject.cmd
+    - sh BuildProject.cmd
   except:
     - tags
 
