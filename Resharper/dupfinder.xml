@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>473</CodebaseCost>
-    <TotalDuplicatesCost>0</TotalDuplicatesCost>
-    <TotalFragmentsCost>0</TotalFragmentsCost>
+    <CodebaseCost>5868</CodebaseCost>
+    <TotalDuplicatesCost>101</TotalDuplicatesCost>
+    <TotalFragmentsCost>303</TotalFragmentsCost>
   </Statistics>
-  <Duplicates></Duplicates>
+  <Duplicates>
+    <Duplicate Cost="101">
+      <Fragment>
+        <FileName>TESTS_MulticutInTrees\UnitTestNode.cs</FileName>
+        <OffsetRange Start="6674" End="6846"></OffsetRange>
+        <LineRange Start="223" End="227"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>TESTS_MulticutInTrees\UnitTestNode.cs</FileName>
+        <OffsetRange Start="7512" End="7684"></OffsetRange>
+        <LineRange Start="251" End="255"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>TESTS_MulticutInTrees\UnitTestNode.cs</FileName>
+        <OffsetRange Start="9760" End="9932"></OffsetRange>
+        <LineRange Start="323" End="327"></LineRange>
+      </Fragment>
+    </Duplicate>
+  </Duplicates>
 </DuplicatesReport>

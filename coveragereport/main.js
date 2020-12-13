@@ -224,6 +224,7 @@ var assemblies = [
   {
     "name": "MulticutInTrees",
     "classes": [
+      { "name": "MulticutInTrees.Node", "rp": "MulticutInTrees_Node.html", "cl": 93, "ucl": 0, "cal": 93, "tl": 158, "ct": "LineCoverage", "mc": "-", "cb": 30, "tb": 30, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 14, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
 ];

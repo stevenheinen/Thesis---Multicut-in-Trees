@@ -8,12 +8,12 @@ using MulticutInTrees;
 namespace TESTS_MulticutInTrees
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTestProgram
     {
         private const string Expected = "Hello World!";
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestMain()
         {
             using var sw = new StringWriter();
             Console.SetOut(sw);
