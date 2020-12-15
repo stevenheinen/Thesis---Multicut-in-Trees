@@ -5,9 +5,18 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>MulticutInTrees</RootNamespace>
     <StartupObject>MulticutInTrees.Program</StartupObject>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DefaultDocumentationFolder>Documentation</DefaultDocumentationFolder>
+    <DefaultDocumentationInvalidCharReplacement>_</DefaultDocumentationInvalidCharReplacement>
+    <DefaultDocumentationWikiLinks>true</DefaultDocumentationWikiLinks>
+    <DefaultDocumentationHome>home</DefaultDocumentationHome>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DefaultDocumentation" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.8.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
