@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>5868</CodebaseCost>
+    <CodebaseCost>9196</CodebaseCost>
     <TotalDuplicatesCost>101</TotalDuplicatesCost>
     <TotalFragmentsCost>303</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
     <Duplicate Cost="101">
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\UnitTestNode.cs</FileName>
-        <OffsetRange Start="6674" End="6846"></OffsetRange>
-        <LineRange Start="223" End="227"></LineRange>
+        <FileName>TESTS_MulticutInTrees\UnitTestGraphNode.cs</FileName>
+        <OffsetRange Start="11724" End="11933"></OffsetRange>
+        <LineRange Start="346" End="350"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\UnitTestNode.cs</FileName>
-        <OffsetRange Start="7512" End="7684"></OffsetRange>
-        <LineRange Start="251" End="255"></LineRange>
+        <FileName>TESTS_MulticutInTrees\UnitTestGraphNode.cs</FileName>
+        <OffsetRange Start="12823" End="13032"></OffsetRange>
+        <LineRange Start="378" End="382"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\UnitTestNode.cs</FileName>
-        <OffsetRange Start="9760" End="9932"></OffsetRange>
-        <LineRange Start="323" End="327"></LineRange>
+        <FileName>TESTS_MulticutInTrees\UnitTestGraphNode.cs</FileName>
+        <OffsetRange Start="15654" End="15863"></OffsetRange>
+        <LineRange Start="458" End="462"></LineRange>
       </Fragment>
     </Duplicate>
   </Duplicates>

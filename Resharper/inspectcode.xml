@@ -9,60 +9,74 @@
   </Information>
   <IssueTypes>
     <IssueType Id="AutoPropertyCanBeMadeGetOnly.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Global" />
-    <IssueType Id="CSharpWarnings::CS0660,CS0661" Category="Compiler Warnings" CategoryId="CompilerWarnings" Description="Operator '==' or operator '!=' with 'Object.Equals(object o)' and 'Object.GetHashCode()' not overridden" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CSharpWarnings_CS0660_CS0661" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
     <IssueType Id="ConditionIsAlwaysTrueOrFalse" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Expression is always 'true' or always 'false'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConditionIsAlwaysTrueOrFalse" />
     <IssueType Id="EqualExpressionComparison" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Similar expressions comparison" Severity="WARNING" />
+    <IssueType Id="ExpressionIsAlwaysNull" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Expression is always 'null'" Severity="WARNING" />
     <IssueType Id="InconsistentNaming" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Inconsistent Naming" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=InconsistentNaming" />
     <IssueType Id="JoinDeclarationAndInitializer" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Join local variable declaration and assignment" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=JoinDeclarationAndInitializer" />
     <IssueType Id="MemberCanBePrivate.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Member can be made private" Description="Member can be made private: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=MemberCanBePrivate.Global" />
+    <IssueType Id="NonReadonlyMemberInGetHashCode" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Non-readonly type member referenced in 'GetHashCode()'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=NonReadonlyMemberInGetHashCode" />
     <IssueType Id="PossibleMultipleEnumeration" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible multiple enumeration" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleMultipleEnumeration" />
+    <IssueType Id="RedundantBaseConstructorCall" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Redundant base constructor call" Severity="WARNING" />
     <IssueType Id="RedundantStringInterpolation" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant string interpolation" Severity="SUGGESTION" />
-    <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
+    <IssueType Id="SuspiciousTypeConversion.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Suspicious type conversion or check" Severity="WARNING" Global="True" />
     <IssueType Id="UnusedMemberInSuper.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never accessed via base type" Description="Type member is never accessed via base type: Non-private accessibility" Severity="SUGGESTION" Global="True" />
     <IssueType Id="UnusedVariable" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Unused local variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedVariable" />
   </IssueTypes>
   <Issues>
     <Project Name="MulticutInTrees">
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\INode.cs" Offset="691-692" Line="11" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\INode.cs" Offset="794-796" Line="15" Message="Name 'ID' does not match rule 'Properties'. Suggested name is 'Id'." />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="846-856" Line="17" Message="Only implementations of property 'Neighbours' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="859-862" Line="17" Message="Only implementations of accessor 'Neighbours.get' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="888-894" Line="19" Message="Only implementations of property 'Degree' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="897-900" Line="19" Message="Only implementations of accessor 'Degree.get' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="927-935" Line="21" Message="Only implementations of method 'AddChild' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="969-980" Line="23" Message="Only implementations of method 'AddChildren' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1030-1041" Line="25" Message="Only implementations of method 'RemoveChild' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1075-1089" Line="27" Message="Only implementations of method 'RemoveChildren' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1139-1156" Line="29" Message="Only implementations of method 'RemoveAllChildren' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1185-1193" Line="31" Message="Only implementations of method 'ToString' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1220-1232" Line="33" Message="Only implementations of method 'HasNeighbour' are used" />
-      <Issue TypeId="CSharpWarnings::CS0660,CS0661" File="MulticutInTrees\Node.cs" Offset="746-750" Line="14" Message="'MulticutInTrees.Node' defines operator '==' or operator '!=' but does not override 'Object.Equals(object o)' and 'Object.GetHashCode()'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Node.cs" Offset="1328-1338" Line="34" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Node.cs" Offset="1403-1413" Line="35" Message="Possible multiple enumeration" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Node.cs" Offset="1630-1633" Line="45" Message="Accessor 'ID.set' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Node.cs" Offset="1630-1634" Line="45" Message="Auto-property can be made get-only" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="335-342" Line="7" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\AddNeighbourToSelfException.cs" Offset="714-722" Line="15" Message="Redundant base constructor call" />
+      <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\AlreadyANeighbourException.cs" Offset="736-744" Line="15" Message="Redundant base constructor call" />
+      <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\IncompatibleTypesException.cs" Offset="715-723" Line="15" Message="Redundant base constructor call" />
+      <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\NotANeighbourException.cs" Offset="715-723" Line="15" Message="Redundant base constructor call" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\GraphNode.cs" Offset="1897-1907" Line="43" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\GraphNode.cs" Offset="1977-1987" Line="44" Message="Possible multiple enumeration" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\GraphNode.cs" Offset="2729-2732" Line="60" Message="Accessor 'ID.set' can be made private" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\GraphNode.cs" Offset="2729-2733" Line="60" Message="Auto-property can be made get-only" />
+      <Issue TypeId="NonReadonlyMemberInGetHashCode" File="MulticutInTrees\GraphNode.cs" Offset="10057-10059" Line="206" Message="Non-readonly property referenced in 'GetHashCode()'" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\INode.cs" Offset="587-588" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\INode.cs" Offset="776-778" Line="19" Message="Name 'ID' does not match rule 'Properties'. Suggested name is 'Id'." />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1297-1307" Line="25" Message="Only implementations of property 'Neighbours' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1310-1313" Line="25" Message="Only implementations of accessor 'Neighbours.get' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1455-1461" Line="30" Message="Only implementations of property 'Degree' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1464-1467" Line="30" Message="Only implementations of accessor 'Degree.get' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1683-1695" Line="36" Message="Only implementations of method 'AddNeighbour' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="1959-1972" Line="42" Message="Only implementations of method 'AddNeighbours' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="2211-2226" Line="48" Message="Only implementations of method 'RemoveNeighbour' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="2493-2509" Line="54" Message="Only implementations of method 'RemoveNeighbours' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="2686-2705" Line="59" Message="Only implementations of method 'RemoveAllNeighbours' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="2946-2954" Line="65" Message="Only implementations of method 'ToString' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\INode.cs" Offset="3372-3384" Line="72" Message="Only implementations of method 'HasNeighbour' are used" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="416-423" Line="10" Message="Class 'Program' is never instantiated" />
     </Project>
     <Project Name="TESTS_MulticutInTrees">
-      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="647-665" Line="8" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="885-889" Line="19" Message="Join declaration and assignment" />
-      <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="1117-1122" Line="28" Message="Join declaration and assignment" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="1980-1981" Line="58" Message="Local variable 'b' is never used" />
-      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="1984-1996" Line="58" Message="Expression is always false" />
-      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="2158-2159" Line="63" Message="Redundant string interpolation" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="2410-2411" Line="73" Message="Local variable 'b' is never used" />
-      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="2414-2426" Line="73" Message="Expression is always false" />
-      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="2588-2589" Line="78" Message="Redundant string interpolation" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="2838-2839" Line="88" Message="Local variable 'b' is never used" />
-      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="2842-2854" Line="88" Message="Expression is always true" />
-      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="3016-3017" Line="93" Message="Redundant string interpolation" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="3271-3272" Line="103" Message="Local variable 'b' is never used" />
-      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="3275-3287" Line="103" Message="Expression is always true" />
-      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="3449-3450" Line="108" Message="Redundant string interpolation" />
-      <Issue TypeId="EqualExpressionComparison" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="3744-3758" Line="117" Message="Similar expressions comparison" />
-      <Issue TypeId="EqualExpressionComparison" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="4058-4072" Line="126" Message="Similar expressions comparison" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestNode.cs" Offset="4712-4713" Line="152" Message="Local variable 'b' is never used" />
+      <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="638-642" Line="17" Message="Join declaration and assignment" />
+      <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="890-895" Line="26" Message="Join declaration and assignment" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="1797-1798" Line="56" Message="Local variable 'b' is never used" />
+      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="1801-1813" Line="56" Message="Expression is always false" />
+      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="1988-1989" Line="61" Message="Redundant string interpolation" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="2454-2455" Line="75" Message="Local variable 'b' is never used" />
+      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="2458-2470" Line="75" Message="Expression is always false" />
+      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="2645-2646" Line="80" Message="Redundant string interpolation" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="3109-3110" Line="94" Message="Local variable 'b' is never used" />
+      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="3113-3125" Line="94" Message="Expression is always true" />
+      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="3300-3301" Line="99" Message="Redundant string interpolation" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="3769-3770" Line="113" Message="Local variable 'b' is never used" />
+      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="3773-3785" Line="113" Message="Expression is always true" />
+      <Issue TypeId="RedundantStringInterpolation" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="3960-3961" Line="118" Message="Redundant string interpolation" />
+      <Issue TypeId="EqualExpressionComparison" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="4469-4483" Line="131" Message="Similar expressions comparison" />
+      <Issue TypeId="EqualExpressionComparison" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="4793-4807" Line="140" Message="Similar expressions comparison" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="5487-5488" Line="166" Message="Local variable 'b' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="6645-6646" Line="202" Message="Local variable 'b' is never used" />
+      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="6661-6664" Line="202" Message="Expression is always null" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="7420-7421" Line="227" Message="Local variable 'b' is never used" />
+      <Issue TypeId="SuspiciousTypeConversion.Global" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="7424-7438" Line="227" Message="Suspicious comparison: there is no type in the solution which is inherited from both 'MulticutInTrees.GraphNode' and 'int'" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="7988-7989" Line="241" Message="Local variable 'b' is never used" />
+      <Issue TypeId="SuspiciousTypeConversion.Global" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="7992-8006" Line="241" Message="Suspicious comparison: there is no type in the solution which is inherited from both 'MulticutInTrees.GraphNode' and 'string'" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="8559-8560" Line="255" Message="Local variable 'b' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="9134-9135" Line="269" Message="Local variable 'b' is never used" />
+      <Issue TypeId="SuspiciousTypeConversion.Global" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="9138-9152" Line="269" Message="Suspicious comparison: there is no type in the solution which is inherited from both 'MulticutInTrees.GraphNode' and 'char'" />
     </Project>
   </Issues>
 </Report>

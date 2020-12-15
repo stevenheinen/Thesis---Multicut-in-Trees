@@ -224,8 +224,12 @@ var assemblies = [
   {
     "name": "MulticutInTrees",
     "classes": [
-      { "name": "MulticutInTrees.Node", "rp": "MulticutInTrees_Node.html", "cl": 93, "ucl": 0, "cal": 93, "tl": 158, "ct": "LineCoverage", "mc": "-", "cb": 30, "tb": 30, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 14, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Exceptions.AddNeighbourToSelfException", "rp": "MulticutInTrees_AddNeighbourToSelfException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Exceptions.AlreadyANeighbourException", "rp": "MulticutInTrees_AlreadyANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Exceptions.IncompatibleTypesException", "rp": "MulticutInTrees_IncompatibleTypesException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Exceptions.NotANeighbourException", "rp": "MulticutInTrees_NotANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.GraphNode", "rp": "MulticutInTrees_GraphNode.html", "cl": 114, "ucl": 0, "cal": 114, "tl": 288, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 20, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 

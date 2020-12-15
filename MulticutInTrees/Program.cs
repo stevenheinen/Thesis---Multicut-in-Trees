@@ -4,8 +4,14 @@ using System;
 
 namespace MulticutInTrees
 {
+    /// <summary>
+    /// The entry class for the program.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The entry method for the program.
+        /// </summary>
         public static void Main()
         {
             Console.WriteLine("Hello World!");
