@@ -1,5 +1,5 @@
 before_script:
-  - 'dotnet restore'
+  - 'dotnet restore --verbosity n'
 
 stages:
   - build
