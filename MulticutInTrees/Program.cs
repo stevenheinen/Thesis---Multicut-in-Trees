@@ -6,7 +6,6 @@ namespace MulticutInTrees
 {
     /// <summary>
     /// The entry class for the program.
-    /// THIS IS A TEST MESSAGE
     /// </summary>
     public class Program
     {
