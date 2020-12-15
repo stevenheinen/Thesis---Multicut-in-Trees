@@ -4,6 +4,7 @@ before_script:
 stages:
   - build
   - test
+  - documentation
 
 build:
   stage: build
@@ -30,5 +31,12 @@ test:
   stage: test
   script:
     - .\TestProject.cmd
+  except:
+    - tags
+
+update_documentation:
+  stage: documentation
+  script:
+    - .\UploadDocumentation.cmd
   except:
     - tags
