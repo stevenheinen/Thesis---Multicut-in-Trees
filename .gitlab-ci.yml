@@ -4,7 +4,6 @@ before_script:
 stages:
   - build
   - test
-  - documentation
 
 build:
   stage: build
@@ -31,15 +30,5 @@ test:
   stage: test
   script:
     - .\TestProject.cmd
-  except:
-    - tags
-
-update_documentation:
-  stage: documentation
-  script:
-    - git remote set-url origin https://s.a.heinen:${CI_PUSH_TOKEN}@git.science.uu.nl/s.a.heinen/thesis-multicut-in-trees.wiki.git
-    - git config --global user.email 's.a.heinen@uu.nl'
-    - git config --global user.name 's.a.heinen'
-    - .\UploadDocumentation.cmd
   except:
     - tags
