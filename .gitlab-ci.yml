@@ -1,5 +1,5 @@
 before_script:
-  - 'dotnet restore --packages "C:\Users\steve\.nuget\LocalPackages" --verbosity n'
+  - 'dotnet restore --verbosity n'
 
 stages:
   - build
