@@ -1,4 +1,5 @@
 before_script:
+  - 'dotnet nuget locals all --clear'
   - 'dotnet restore --verbosity n'
 
 stages:
