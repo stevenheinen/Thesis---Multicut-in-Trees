@@ -1,5 +1,5 @@
 before_script:
-  - 'dotnet restore -s C:\Users\steve\.nuget\LocalPackages -s https://api.nuget.org/'
+  - 'dotnet restore'
 
 stages:
   - build
