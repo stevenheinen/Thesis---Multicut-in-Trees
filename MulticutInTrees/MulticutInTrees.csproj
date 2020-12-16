@@ -9,6 +9,7 @@
     <DefaultDocumentationFolder>Documentation</DefaultDocumentationFolder>
     <DefaultDocumentationInvalidCharReplacement>_</DefaultDocumentationInvalidCharReplacement>
     <DefaultDocumentationWikiLinks>true</DefaultDocumentationWikiLinks>
+    <DefaultDocumentationFileNameMode>Name</DefaultDocumentationFileNameMode>
     <DefaultDocumentationHome>home</DefaultDocumentationHome>
   </PropertyGroup>
 
