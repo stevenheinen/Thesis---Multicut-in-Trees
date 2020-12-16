@@ -64,7 +64,7 @@ namespace MulticutInTrees
         /// Constructor for a <see cref="Tree{N}"/>.
         /// </summary>
         /// <param name="node">One of the nodes in this <see cref="Tree{N}"/>. Does not necessarily have to be the root.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         public Tree(N node)
         {
             if (node is null)
@@ -82,7 +82,7 @@ namespace MulticutInTrees
         /// Constructor for a <see cref="Tree{N}"/>.
         /// </summary>
         /// <param name="nodes">All nodes in this tree.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
         public Tree(IEnumerable<N> nodes)
         {
             if (nodes is null)
@@ -100,7 +100,7 @@ namespace MulticutInTrees
         /// </summary>
         /// <param name="root">The root of this <see cref="Tree{N}"/>.</param>
         /// <param name="nodes">All nodes in this tree.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="root"/> or <paramref name="nodes"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="root"/> or <paramref name="nodes"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoRootException">Thrown when <paramref name="root"/> is not the root of the tree consisting of nodes in <paramref name="nodes"/>.</exception>
         public Tree(IEnumerable<N> nodes, N root)
         {
@@ -127,7 +127,7 @@ namespace MulticutInTrees
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> for which we want to know if it is part of this <see cref="Tree{N}"/>.</param>
         /// <returns><see langword="true"/> if <paramref name="node"/> is part of this <see cref="Tree{N}"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         public bool HasNode(N node)
         {
             if (node is null)
