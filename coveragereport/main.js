@@ -228,10 +228,13 @@ var assemblies = [
       { "name": "MulticutInTrees.Exceptions.AddParentAsChildException", "rp": "MulticutInTrees_AddParentAsChildException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.AlreadyANeighbourException", "rp": "MulticutInTrees_AlreadyANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.IncompatibleTypesException", "rp": "MulticutInTrees_IncompatibleTypesException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Exceptions.NoRootException", "rp": "MulticutInTrees_NoRootException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.NotANeighbourException", "rp": "MulticutInTrees_NotANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.GraphNode", "rp": "MulticutInTrees_GraphNode.html", "cl": 110, "ucl": 0, "cal": 110, "tl": 285, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 20, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 22, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Tree`1", "rp": "MulticutInTrees_Tree_1.html", "cl": 77, "ucl": 0, "cal": 77, "tl": 193, "ct": "LineCoverage", "mc": "-", "cb": 18, "tb": 18, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.TreeNode", "rp": "MulticutInTrees_TreeNode.html", "cl": 172, "ucl": 0, "cal": 172, "tl": 382, "ct": "LineCoverage", "mc": "-", "cb": 56, "tb": 56, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Utilities.DFS", "rp": "MulticutInTrees_DFS.html", "cl": 81, "ucl": 0, "cal": 81, "tl": 152, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 
