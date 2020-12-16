@@ -225,11 +225,13 @@ var assemblies = [
     "name": "MulticutInTrees",
     "classes": [
       { "name": "MulticutInTrees.Exceptions.AddNeighbourToSelfException", "rp": "MulticutInTrees_AddNeighbourToSelfException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Exceptions.AddParentAsChildException", "rp": "MulticutInTrees_AddParentAsChildException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.AlreadyANeighbourException", "rp": "MulticutInTrees_AlreadyANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.IncompatibleTypesException", "rp": "MulticutInTrees_IncompatibleTypesException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.NotANeighbourException", "rp": "MulticutInTrees_NotANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.GraphNode", "rp": "MulticutInTrees_GraphNode.html", "cl": 114, "ucl": 0, "cal": 114, "tl": 288, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.GraphNode", "rp": "MulticutInTrees_GraphNode.html", "cl": 110, "ucl": 0, "cal": 110, "tl": 285, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 20, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.TreeNode", "rp": "MulticutInTrees_TreeNode.html", "cl": 172, "ucl": 0, "cal": 172, "tl": 382, "ct": "LineCoverage", "mc": "-", "cb": 56, "tb": 56, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 

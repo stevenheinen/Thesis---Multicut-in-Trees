@@ -33,94 +33,68 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestConstructorWithNullNeighbours()
         {
-            GraphNode node0 = new GraphNode(0, null);
-            Assert.IsNotNull(node0);
-            GraphNode node1 = new GraphNode(1);
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                node0.AddNeighbour(node1);
-                Assert.IsTrue(node0.HasNeighbour(node1));
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
+                GraphNode node0 = new GraphNode(0, null);
+            });
+        }
+
+        [TestMethod]
+        public void TestID()
+        {
+            GraphNode node = new GraphNode(496);
+            Assert.AreEqual(node.ID, (uint)496);
+        }
+
+        [TestMethod]
+        public void TestNeighbours()
+        {
+            GraphNode node = new GraphNode(0);
+            Assert.IsNotNull(node.Neighbours);
         }
 
         [TestMethod]
         public void TestCompareToNull()
         {
-            GraphNode node = new GraphNode(0);
-            try
+            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node = new GraphNode(0);
                 bool b = node == null;
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Right hand side of == operator for GraphNode is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
+            Assert.AreEqual(a.ParamName, "rhs");
         }
 
         [TestMethod]
         public void TestCompareToNullLeft()
         {
-            GraphNode node = new GraphNode(0);
-            try
+            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node = new GraphNode(0);
                 bool b = null == node;
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Left hand side of == operator for GraphNode is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
+            Assert.AreEqual(a.ParamName, "lhs");
         }
 
         [TestMethod]
         public void TestCompareToNotNull()
         {
-            GraphNode node = new GraphNode(0);
-            try
+            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node = new GraphNode(0);
                 bool b = node != null;
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Right hand side of != operator for GraphNode is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
+            Assert.AreEqual(a.ParamName, "rhs");
         }
 
         [TestMethod]
         public void TestCompareToNotNullLeft()
         {
-            GraphNode node = new GraphNode(0);
-            try
+            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node = new GraphNode(0);
                 bool b = null != node;
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Left hand side of != operator for GraphNode is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
+            Assert.AreEqual(a.ParamName, "lhs");
         }
 
         [TestMethod]
@@ -159,21 +133,11 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestEqualToNull()
         {
-            GraphNode node0 = new GraphNode(0);
-
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                bool b = node0.Equals(null);
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to compare {node0} to null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+                GraphNode node = new GraphNode(0);
+                bool b = node.Equals(null);
+            });
         }
 
         [TestMethod]
@@ -195,21 +159,12 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestGenericEqualsNull()
         {
-            GraphNode node = new GraphNode(0);
-            object obj = null;
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node = new GraphNode(0);
+                object obj = null;
                 bool b = node.Equals(obj);
-                Assert.Fail("Expected Exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to compare {node} to null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -217,66 +172,29 @@ namespace TESTS_MulticutInTrees
         {
             GraphNode node = new GraphNode(0);
 
-            int i = 0;
-            string s = "0";
-            object obj = new object();
-            char c = '0';
-
-            try
+            Assert.ThrowsException<IncompatibleTypesException>(() =>
             {
+                int i = 0;
                 bool b = node.Equals(i);
-                Assert.Fail("Expected Exception!");
-            }
-            catch (IncompatibleTypesException e)
-            {
-                Assert.AreEqual(e.Message, $"Type of {i} (type: {typeof(int)}) cannot be compared to {node} (type: {typeof(GraphNode)})!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(IncompatibleTypesException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
 
-            try
+            Assert.ThrowsException<IncompatibleTypesException>(() =>
             {
+                string s = "0";
                 bool b = node.Equals(s);
-                Assert.Fail("Expected Exception!");
-            }
-            catch (IncompatibleTypesException e)
-            {
-                Assert.AreEqual(e.Message, $"Type of {s} (type: {typeof(string)}) cannot be compared to {node} (type: {typeof(GraphNode)})!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(IncompatibleTypesException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
 
-            try
+            Assert.ThrowsException<IncompatibleTypesException>(() =>
             {
+                object obj = new object();
                 bool b = node.Equals(obj);
-                Assert.Fail("Expected Exception!");
-            }
-            catch (IncompatibleTypesException e)
-            {
-                Assert.AreEqual(e.Message, $"Type of {obj} (type: {typeof(object)}) cannot be compared to {node} (type: {typeof(GraphNode)})!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(IncompatibleTypesException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
 
-            try
+            Assert.ThrowsException<IncompatibleTypesException>(() =>
             {
+                char c = '0';
                 bool b = node.Equals(c);
-                Assert.Fail("Expected Exception!");
-            }
-            catch (IncompatibleTypesException e)
-            {
-                Assert.AreEqual(e.Message, $"Type of {c} (type: {typeof(char)}) cannot be compared to {node} (type: {typeof(GraphNode)})!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(IncompatibleTypesException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -292,21 +210,11 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestAddChildAddItself()
         {
-            GraphNode node0 = new GraphNode(0);
-
-            try
+            Assert.ThrowsException<AddNeighbourToSelfException>(() =>
             {
+                GraphNode node0 = new GraphNode(0);
                 node0.AddNeighbour(node0);
-                Assert.Fail("Expected exception!");
-            }
-            catch (AddNeighbourToSelfException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to add {node0} as a child to itself!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected an {typeof(AddNeighbourToSelfException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -323,21 +231,11 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestAddChildAddNull()
         {
-            GraphNode node0 = new GraphNode(0);
-
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node0 = new GraphNode(0);
                 node0.AddNeighbour(null);
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to add a child to {node0}, but child is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -355,21 +253,11 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestAddChildrenNull()
         {
-            GraphNode node0 = new GraphNode(0);
-
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node0 = new GraphNode(0);
                 node0.AddNeighbours(null);
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to add a list of children to {node0}, but the list is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -399,42 +287,22 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestRemoveNonExistingChild()
         {
-            GraphNode node0 = new GraphNode(0);
-            GraphNode node1 = new GraphNode(1);
-
-            try
+            Assert.ThrowsException<NotANeighbourException>(() =>
             {
+                GraphNode node0 = new GraphNode(0);
+                GraphNode node1 = new GraphNode(1);
                 node0.RemoveNeighbour(node1);
-                Assert.Fail("Expected exception!");
-            }
-            catch (NotANeighbourException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to remove {node1} from {node0}'s neighbours, but {node1} is no neighbour of {node0}!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NotANeighbourException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
         public void TestRemoveNullChild()
         {
-            GraphNode node0 = new GraphNode(0);
-
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node0 = new GraphNode(0);
                 node0.RemoveNeighbour(null);
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to remove a child from {node0}, but child is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -455,32 +323,21 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestRemoveNullChildren()
         {
-            GraphNode node0 = new GraphNode(0);
-            GraphNode node1 = new GraphNode(1);
-            GraphNode node2 = new GraphNode(2);
-
-            node0.AddNeighbours(new List<GraphNode>() { node1, node2 });
-
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node0 = new GraphNode(0);
+                GraphNode node1 = new GraphNode(1);
+                GraphNode node2 = new GraphNode(2);
+                node0.AddNeighbours(new List<GraphNode>() { node1, node2 });
                 node0.RemoveNeighbours(null);
-                Assert.Fail("Expected exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to remove a list of children from {node0}, but the list is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
         public void TestToString()
         {
             GraphNode node = new GraphNode(24362);
-            Assert.AreEqual("Node 24362", node.ToString());
+            Assert.AreEqual("GraphNode 24362", node.ToString());
         }
 
         [TestMethod]
@@ -501,20 +358,11 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestHasNullNeighbour()
         {
-            GraphNode node = new GraphNode(0);
-            try
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
+                GraphNode node = new GraphNode(0);
                 node.HasNeighbour(null);
-                Assert.Fail("Expected Exception!");
-            }
-            catch (NullReferenceException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to see if {node} has a neighbour, but the neighbour is null!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NullReferenceException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
         }
 
         [TestMethod]
@@ -532,11 +380,14 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestDegree()
         {
-            List<GraphNode> nodes = new List<GraphNode>();
-            for (uint i = 0; i < 5; i++)
-            {
-                nodes.Add(new GraphNode(i));
-            }
+            List<GraphNode> nodes = new List<GraphNode>() 
+            { 
+                new GraphNode(0), 
+                new GraphNode(1), 
+                new GraphNode(2), 
+                new GraphNode(3), 
+                new GraphNode(4) 
+            };
 
             Assert.AreEqual(nodes[0].Degree, 0);
 
@@ -555,33 +406,15 @@ namespace TESTS_MulticutInTrees
             nodes[0].RemoveNeighbours(new List<GraphNode>() { nodes[3], nodes[4] });
             Assert.AreEqual(nodes[0].Degree, 1);
 
-            try
+            Assert.ThrowsException<NotANeighbourException>(() =>
             {
                 nodes[0].RemoveNeighbour(nodes[1]);
-                Assert.Fail("An exception should have been thrown!");
-            }
-            catch (NotANeighbourException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to remove {nodes[1]} from {nodes[0]}'s neighbours, but {nodes[1]} is no neighbour of {nodes[0]}!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected a {typeof(NotANeighbourException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
 
-            try
+            Assert.ThrowsException<AlreadyANeighbourException>(() =>
             {
                 nodes[0].AddNeighbour(nodes[2]);
-                Assert.Fail("An exception should have been thrown!");
-            }
-            catch (AlreadyANeighbourException e)
-            {
-                Assert.AreEqual(e.Message, $"Trying to add {nodes[2]} as a neighbour to {nodes[0]}, but {nodes[2]} is already a neighbour of {nodes[0]}!");
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"Expected an {typeof(AlreadyANeighbourException)}, but got an {typeof(Exception)} with message: {e.Message}");
-            }
+            });
 
             nodes[0].AddNeighbours(new List<GraphNode>() { nodes[3], nodes[4] });
             nodes[0].RemoveAllNeighbours();

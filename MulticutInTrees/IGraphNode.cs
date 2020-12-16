@@ -9,65 +9,65 @@ namespace MulticutInTrees
     /// <summary>
     /// Interface for a node.
     /// </summary>
-    /// <typeparam name="N">The type of node that implements <see cref="INode{N}"/>.</typeparam>
-    public interface INode<N> : IEquatable<INode<N>> where N : INode<N>
+    /// <typeparam name="N">The type of node that implements <see cref="IGraphNode{N}"/>.</typeparam>
+    public interface IGraphNode<N> : IEquatable<IGraphNode<N>> where N : IGraphNode<N>
     {
 
         /// <summary>
-        /// The unique identifier of this <see cref="INode{N}"/>.
+        /// The unique identifier of this <see cref="IGraphNode{N}"/>.
         /// </summary>
         public uint ID { get; }
 
         /// <summary>
-        /// The <see cref="ReadOnlyCollection{T}"/> of neighbours this <see cref="INode{N}"/> is connected to. Cannot be edited by itself. This should be done using existing methods.
+        /// The <see cref="ReadOnlyCollection{T}"/> of neighbours this <see cref="IGraphNode{N}"/> is connected to. Cannot be edited by itself. This should be done using existing methods.
         /// See also <seealso cref="AddNeighbour(N)"/>, <seealso cref="AddNeighbours(IEnumerable{N})"/>, <seealso cref="RemoveNeighbour(N)"/>, <seealso cref="RemoveNeighbours(IEnumerable{N})"/> and <seealso cref="RemoveAllNeighbours"/>.
         /// </summary>
         public ReadOnlyCollection<N> Neighbours { get; }
 
         /// <summary>
-        /// The degree of this <see cref="INode{N}"/> in the graph.
+        /// The degree of this <see cref="IGraphNode{N}"/> in the graph.
         /// </summary>
         public int Degree { get; }
 
         /// <summary>
-        /// Add a new neighbour to this <see cref="INode{N}"/>.
+        /// Add a new neighbour to this <see cref="IGraphNode{N}"/>.
         /// </summary>
         /// <param name="neighbour">The new neighbour to be added.s</param>
         public void AddNeighbour(N neighbour);
 
         /// <summary>
-        /// Add multiple new neighbours to this <see cref="INode{N}"/>.
+        /// Add multiple new neighbours to this <see cref="IGraphNode{N}"/>.
         /// </summary>
         /// <param name="neighbours">The <see cref="IEnumerable{T}"/> of neighbours to be added.</param>
         public void AddNeighbours(IEnumerable<N> neighbours);
 
         /// <summary>
-        /// Remove a neighbour from this <see cref="INode{N}"/>.
+        /// Remove a neighbour from this <see cref="IGraphNode{N}"/>.
         /// </summary>
         /// <param name="neighbour">The neighbour to be removed.</param>
         public void RemoveNeighbour(N neighbour);
 
         /// <summary>
-        /// Remove multiple neighbours from this <see cref="INode{N}"/>.
+        /// Remove multiple neighbours from this <see cref="IGraphNode{N}"/>.
         /// </summary>
         /// <param name="neighbours">The <see cref="IEnumerable{T}"/> of neighbours to be removed.</param>
         public void RemoveNeighbours(IEnumerable<N> neighbours);
         
         /// <summary>
-        /// Removes all neighbours from this <see cref="INode{N}"/>.
+        /// Removes all neighbours from this <see cref="IGraphNode{N}"/>.
         /// </summary>
         public void RemoveAllNeighbours();
 
         /// <summary>
-        /// Returns this <see cref="INode{N}"/> as a <see cref="string"/>.
+        /// Returns this <see cref="IGraphNode{N}"/> as a <see cref="string"/>.
         /// </summary>
-        /// <returns>The <see cref="string"/> of this <see cref="INode{N}"/>.</returns>
+        /// <returns>The <see cref="string"/> of this <see cref="IGraphNode{N}"/>.</returns>
         public string ToString();
 
         /// <summary>
         /// Checks whether the parameter <paramref name="node"/> is a neighbour of this node.
         /// </summary>
-        /// <param name="node">The node that is potentially a neighbour of this <see cref="INode{N}"/>.</param>
+        /// <param name="node">The node that is potentially a neighbour of this <see cref="IGraphNode{N}"/>.</param>
         /// <returns><see langword="true"/> if the parameter is a neighbour of this node, <see langword="false"/> otherwise.</returns>
         public bool HasNeighbour(N node);
     }
