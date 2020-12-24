@@ -8,12 +8,14 @@
     </InspectionScope>
   </Information>
   <IssueTypes>
+    <IssueType Id="ArrangeModifiersOrder" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Adjust modifiers declaration order" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeModifiersOrder" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
     <IssueType Id="ConditionIsAlwaysTrueOrFalse" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Expression is always 'true' or always 'false'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConditionIsAlwaysTrueOrFalse" />
     <IssueType Id="ConvertIfStatementToNullCoalescingAssignment" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '??=' assignment" Severity="SUGGESTION" />
     <IssueType Id="EqualExpressionComparison" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Similar expressions comparison" Severity="WARNING" />
     <IssueType Id="ExpressionIsAlwaysNull" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Expression is always 'null'" Severity="WARNING" />
     <IssueType Id="InconsistentNaming" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Inconsistent Naming" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=InconsistentNaming" />
+    <IssueType Id="InvokeAsExtensionMethod" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert static method invocation to extension method call" Severity="SUGGESTION" />
     <IssueType Id="JoinDeclarationAndInitializer" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Join local variable declaration and assignment" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=JoinDeclarationAndInitializer" />
     <IssueType Id="PossibleMultipleEnumeration" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible multiple enumeration" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleMultipleEnumeration" />
     <IssueType Id="PossibleNullReferenceException" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible 'System.NullReferenceException'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleNullReferenceException" />
@@ -91,19 +93,22 @@
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\ITreeNode.cs" Offset="4449-4455" Line="95" Message="Only implementations of method 'IsRoot' are used" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="286-318" Line="4" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="320-353" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="485-492" Line="12" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="355-392" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="394-429" Line="7" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="561-568" Line="14" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="ArrangeModifiersOrder" File="MulticutInTrees\Program.cs" Offset="720-742" Line="19" Message="Inconsistent modifiers declaration order" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Tree.cs" Offset="666-667" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="2962-2968" Line="72" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="3709-3716" Line="90" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="3849-3854" Line="93" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="3904-3909" Line="94" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="3968-3973" Line="95" Message="Possible multiple enumeration" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="4703-4710" Line="109" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="4907-4913" Line="113" Message="Use 'nameof' expression to reference parameter 'root' name" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="5030-5035" Line="115" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="5323-5328" Line="121" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="5387-5392" Line="122" Message="Possible multiple enumeration" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="6103-6109" Line="135" Message="Use 'nameof' expression to reference parameter 'node' name" />
+      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="2980-2986" Line="72" Message="Use 'nameof' expression to reference parameter 'node' name" />
+      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="3745-3752" Line="90" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="3885-3890" Line="93" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="3940-3945" Line="94" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="4004-4009" Line="95" Message="Possible multiple enumeration" />
+      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="4757-4764" Line="109" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
+      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="4961-4967" Line="113" Message="Use 'nameof' expression to reference parameter 'root' name" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="5084-5089" Line="115" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="5377-5382" Line="121" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Tree.cs" Offset="5441-5446" Line="122" Message="Possible multiple enumeration" />
+      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Tree.cs" Offset="6175-6181" Line="135" Message="Use 'nameof' expression to reference parameter 'node' name" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\TreeNode.cs" Offset="361-399" Line="6" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\TreeNode.cs" Offset="401-419" Line="7" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="UseNameofExpression" File="MulticutInTrees\TreeNode.cs" Offset="3901-3909" Line="107" Message="Use 'nameof' expression to reference parameter 'parent' name" />
@@ -134,6 +139,7 @@
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="7093-7094" Line="137" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="7268-7275" Line="141" Message="Use 'nameof' expression to reference parameter 'node1' name" />
       <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="7478-7485" Line="145" Message="Use 'nameof' expression to reference parameter 'node2' name" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\Fisher_Yates.cs" Offset="499-511" Line="11" Message="Name 'Fisher_Yates' does not match rule 'Types and namespaces'. Suggested name is 'FisherYates'." />
     </Project>
     <Project Name="TESTS_MulticutInTrees">
       <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\UnitTestGraphNode.cs" Offset="638-642" Line="17" Message="Join declaration and assignment" />
@@ -216,6 +222,12 @@
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="535-546" Line="13" Message="Name 'UnitTestDFS' does not match rule 'Types and namespaces'. Suggested name is 'UnitTestDfs'." />
       <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6110-6115" Line="154" Message="Expression is always null" />
       <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6413-6418" Line="162" Message="Expression is always null" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Utilities\UnitTestFisher_Yates.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestFisher_Yates.cs" Offset="611-631" Line="15" Message="Name 'UnitTestFisher_Yates' does not match rule 'Types and namespaces'. Suggested name is 'UnitTestFisherYates'." />
+      <Issue TypeId="InvokeAsExtensionMethod" File="TESTS_MulticutInTrees\Utilities\UnitTestFisher_Yates.cs" Offset="1235-1250" Line="30" Message="Invoke as extension method" />
+      <Issue TypeId="InvokeAsExtensionMethod" File="TESTS_MulticutInTrees\Utilities\UnitTestFisher_Yates.cs" Offset="1511-1527" Line="37" Message="Invoke as extension method" />
+      <Issue TypeId="InvokeAsExtensionMethod" File="TESTS_MulticutInTrees\Utilities\UnitTestFisher_Yates.cs" Offset="1709-1716" Line="43" Message="Invoke as extension method" />
+      <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Utilities\UnitTestFisher_Yates.cs" Offset="3783-3784" Line="106" Message="Redundant explicit array size specification" />
     </Project>
   </Issues>
 </Report>

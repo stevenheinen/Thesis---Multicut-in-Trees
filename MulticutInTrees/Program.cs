@@ -3,6 +3,8 @@
 using System;
 using MulticutInTrees.Utilities;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 
 namespace MulticutInTrees
 {
@@ -11,6 +13,11 @@ namespace MulticutInTrees
     /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The global <see cref="System.Random"/> used throughout the entire program.
+        /// </summary>
+        public readonly static Random Random = new Random();
+
         /// <summary>
         /// The entry method for the program.
         /// </summary>
