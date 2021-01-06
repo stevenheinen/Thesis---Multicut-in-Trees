@@ -3,11 +3,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using MulticutInTrees.Exceptions;
 
-namespace MulticutInTrees
+namespace MulticutInTrees.Graphs
 {
     /// <summary>
     /// Implementation of <see cref="ITreeNode{N}"/> to be used for nodes in a tree.
@@ -25,10 +23,6 @@ namespace MulticutInTrees
         private HashSet<TreeNode> InternalUniqueChildren { get; }
 
         /// <inheritdoc/>
-        /// <value>The value of this identifier is given as paramter in the constructor.</value>
-        public uint ID { get; }
-
-        /// <inheritdoc/>
         public ReadOnlyCollection<TreeNode> Children => InternalChildren.AsReadOnly();
 
         /// <summary>
@@ -38,12 +32,11 @@ namespace MulticutInTrees
         {
             get
             {
-                int degree = InternalChildren.Count;
-                if (!(Parent is null))
+                if (Parent is null)
                 {
-                    degree++;
+                    return InternalChildren.Count;
                 }
-                return degree;
+                return InternalChildren.Count + 1;
             }
         }
 
@@ -61,7 +54,7 @@ namespace MulticutInTrees
         }
 
         /// <inheritdoc/>
-        public int DepthOfSubtree
+        public int HeightOfSubtree
         {
             get
             {
@@ -72,7 +65,7 @@ namespace MulticutInTrees
                 int maxDepth = 0;
                 foreach (TreeNode child in InternalChildren)
                 {
-                    maxDepth = Math.Max(maxDepth, child.DepthOfSubtree);
+                    maxDepth = Math.Max(maxDepth, child.HeightOfSubtree);
                 }
                 return maxDepth + 1;
             }
@@ -84,7 +77,39 @@ namespace MulticutInTrees
         public TreeNode Parent { get; private set; }
 
         /// <summary>
+        /// The <see cref="ReadOnlyCollection{T}"/> of all neighbours of this <see cref="TreeNode"/>. Includes <see cref="Parent"/> and <see cref="Children"/>. Cannot be edited directly.
+        /// <br/>
+        /// When using this <see cref="TreeNode"/> in combination with an <see cref="ITree{N}"/>, refer to <seealso cref="ITree{TreeNode}.AddChild(TreeNode, TreeNode)"/>, <seealso cref="ITree{TreeNode}.AddChildren(TreeNode, IEnumerable{TreeNode})"/>, <seealso cref="ITree{TreeNode}.RemoveNode(TreeNode)"/> and <seealso cref="ITree{TreeNode}.RemoveNodes(IEnumerable{TreeNode})"/>.
+        /// <br/>
+        /// When using this <see cref="TreeNode"/> without and <see cref="ITree{N}"/>, refer to <seealso cref="AddChild(TreeNode)"/>, <seealso cref="AddChildren(IEnumerable{TreeNode})"/>, <seealso cref="RemoveChild(TreeNode)"/>, <seealso cref="RemoveChildren(IEnumerable{TreeNode})"/> and <seealso cref="RemoveAllChildren"/>.
+        /// </summary>
+        public ReadOnlyCollection<TreeNode> Neighbours
+        {
+            get
+            {
+                if (Parent is null)
+                {
+                    return InternalChildren.AsReadOnly();
+                }
+
+                List<TreeNode> neighbours = new List<TreeNode>(InternalChildren)
+                {
+                    Parent
+                };
+                return neighbours.AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// The unique identifier of this <see cref="TreeNode"/>.
+        /// </summary>
+        public uint ID { get; }
+
+        /// <summary>
         /// Constructor for a <see cref="TreeNode"/>.
+        /// <para>
+        /// <b>Note:</b> Use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
+        /// </para>
         /// </summary>
         /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
         public TreeNode(uint id)
@@ -96,6 +121,9 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Constructor for a <see cref="TreeNode"/>.
+        /// <para>
+        /// <b>Note:</b> DO NOT use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
+        /// </para>
         /// </summary>
         /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
         /// <param name="parent">The <see cref="TreeNode"/> that is the parent of the new <see cref="TreeNode"/> instance.</param>
@@ -115,6 +143,9 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Constructor for a <see cref="TreeNode"/>.
+        /// <para>
+        /// <b>Note:</b> DO NOT use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
+        /// </para>
         /// </summary>
         /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
         /// <param name="parent">The <see cref="TreeNode"/> that is the parent of the new <see cref="TreeNode"/> instance.</param>
@@ -140,6 +171,9 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Constructor for a <see cref="TreeNode"/>.
+        /// <para>
+        /// <b>Note:</b> DO NOT use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
+        /// </para>
         /// </summary>
         /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
         /// <param name="children">The <see cref="IEnumerable{T}"/> of <see cref="TreeNode"/>s containing the children of this <see cref="TreeNode"/>.</param>
@@ -159,6 +193,9 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Add another <see cref="TreeNode"/> as child to this <see cref="TreeNode"/>.
+        /// <para>
+        /// <b>NOTE:</b> If this <see cref="TreeNode"/> is part of a graph, the graph does not see this new neighbour. Please use <see cref="ITree{N}.AddChild(N, N)"/> instead.
+        /// </para>
         /// </summary>
         /// <param name="child">The <see cref="TreeNode"/> to be added as child.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="child"/> is <see langword="null"/>.</exception>
@@ -191,6 +228,9 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Add multiple <see cref="TreeNode"/>s as children to this <see cref="TreeNode"/>. Uses <see cref="AddChild(TreeNode)"/> internally to add each child individually.
+        /// <para>
+        /// <b>NOTE:</b> If this <see cref="TreeNode"/> is part of a graph, the graph does not see this new neighbour. Please use <see cref="ITree{N}.AddChildren(N, IEnumerable{N})"/> instead.
+        /// </para>
         /// </summary>
         /// <param name="children">The <see cref="IEnumerable{T}"/> with children to be added.</param>
         /// <exception cref="ArgumentNullException">Thrown when the <see cref="IEnumerable{T}"/> parameter with children is <see langword="null"/>.</exception>
@@ -209,6 +249,9 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Remove one of the children of this <see cref="TreeNode"/> from its children.
+        /// <para>
+        /// <b>NOTE:</b> If this <see cref="TreeNode"/> is part of a graph, the graph does not see this new neighbour. Please use <see cref="ITree{N}.RemoveNode(N)"/> instead.
+        /// </para>
         /// </summary>
         /// <param name="child">The <see cref="TreeNode"/> to be removed.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="child"/> is <see langword="null"/>.</exception>
@@ -224,13 +267,19 @@ namespace MulticutInTrees
                 throw new NotANeighbourException($"Trying to remove {child} from the children of {this}, but {child} is no neighbour of {this}!");
             }
 
-            child.Parent = null;
+            if (child.Parent == this)
+            {
+                child.Parent = null;
+            }
             InternalChildren.Remove(child); 
             InternalUniqueChildren.Remove(child);
         }
 
         /// <summary>
         /// Remove multiple <see cref="TreeNode"/>s from the children of this <see cref="TreeNode"/>. Uses <see cref="RemoveChild(TreeNode)"/> internally to remove each child individually.
+        /// <para>
+        /// <b>NOTE:</b> If this <see cref="TreeNode"/> is part of a graph, the graph does not see this new neighbour. Please use <see cref="ITree{N}.RemoveNodes(IEnumerable{N})"/> instead.
+        /// </para>
         /// </summary>
         /// <param name="children">The <see cref="IEnumerable{T}"/> with children to be removed.</param>
         /// <exception cref="ArgumentNullException">Thrown when the <see cref="IEnumerable{T}"/> parameter with children is <see langword="null"/>.</exception>
@@ -249,12 +298,18 @@ namespace MulticutInTrees
 
         /// <summary>
         /// Remove all children from this <see cref="TreeNode"/>.
+        /// <para>
+        /// <b>NOTE:</b> If this <see cref="TreeNode"/> is part of a graph, the graph does not see this new neighbour. Please use <see cref="ITree{N}.RemoveNodes(IEnumerable{N})"/> instead.
+        /// </para>
         /// </summary>
         public void RemoveAllChildren()
         {
             foreach (TreeNode child in InternalChildren)
             {
-                child.Parent = null;
+                if (child.Parent == this)
+                {
+                    child.Parent = null;
+                }
             }
             InternalChildren.Clear();
             InternalUniqueChildren.Clear();
@@ -277,106 +332,113 @@ namespace MulticutInTrees
         }
 
         /// <summary>
-        /// Indicates whether the current <see cref="TreeNode"/> is equal to <paramref name="obj"/>.
+        /// Checks whether this <see cref="TreeNode"/> is the root of the <see cref="ITree{N}"/> it is in.
+        /// <br/>
+        /// It checks whether the parent of this <see cref="TreeNode"/> is <see langword="null"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="object"/> to compare to the current <see cref="TreeNode"/>.</param>
-        /// <returns><see langword="true"/> if the current <see cref="TreeNode"/> is equal to <paramref name="obj"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="obj"/> is <see langword="null"/>.</exception>
-        /// <exception cref="IncompatibleTypesException">Thrown when the type of <paramref name="obj"/> cannot be compared to a <see cref="TreeNode"/>.</exception>
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-            {
-                throw new ArgumentNullException("obj", $"Trying to compare {this} to null!");
-            }
-            if (obj.GetType() != typeof(TreeNode))
-            {
-                throw new IncompatibleTypesException($"Type of {obj} (type: {obj.GetType()}) cannot be compared to {this} (type: {typeof(TreeNode)})!");
-            }
-
-            return Equals((TreeNode)obj);
-        }
-
-        /// <summary>
-        /// Indicates whether the current <see cref="TreeNode"/> is equal to the <see cref="TreeNode"/> <paramref name="other"/>.
-        /// </summary>
-        /// <param name="other">The <see cref="TreeNode"/> to compare to the current <see cref="TreeNode"/>.</param>
-        /// <returns><see langword="true"/> if the current <see cref="TreeNode"/> is equal to <paramref name="other"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="other"/> is <see langword="null"/>.</exception>
-        public bool Equals(ITreeNode<TreeNode> other)
-        {
-            if (other is null)
-            {
-                throw new ArgumentNullException("other", $"Trying to compare {this} to null!");
-            }
-
-            return ID.Equals(other.ID);
-        }
-
-        /// <summary>
-        /// Checks if the current <see cref="TreeNode"/> is the root of its tree.
-        /// </summary>
-        /// <returns><see langword="true"/> is this <see cref="TreeNode"/> is the root of its tree, <see langword="false"/> otherwise.</returns>
+        /// <returns><see langword="true"/> if this <see cref="TreeNode"/> is the root of its <see cref="ITree{N}"/>, <see langword="false"/> otherwise.</returns>
         public bool IsRoot()
         {
             return Parent is null;
         }
 
         /// <summary>
-        /// Returns a <see cref="string"/> representing the current object.
+        /// Returns a <see cref="string"/> representation of this <see cref="TreeNode"/>.
+        /// <br/>
+        /// Looks like: "TreeNode [ID]", where "[ID]" is the <see cref="ID"/> of this <see cref="TreeNode"/>.
         /// </summary>
-        /// <returns>The <see cref="string"/> "TreeNode [ID]", where [ID] is <see cref="ID"/>.</returns>
+        /// <returns>The <see cref="string"/> representation of this <see cref="TreeNode"/>.</returns>
         public override string ToString()
         {
             return $"TreeNode {ID}";
         }
 
-        /// <inheritdoc/>
-        public override int GetHashCode()
+        /// <summary>
+        /// Calls <see cref="AddChild(TreeNode)"/>.
+        /// </summary>
+        /// <param name="neighbour"><inheritdoc cref="AddChild(TreeNode)"/></param>
+        /// <param name="directed">Unused.</param>
+        void INode<TreeNode>.AddNeighbour(TreeNode neighbour, bool directed)
         {
-            return ID.GetHashCode();
+            AddChild(neighbour);
         }
 
         /// <summary>
-        /// Checks two <see cref="TreeNode"/>s for equality.
+        /// Calls <see cref="AddChildren(IEnumerable{TreeNode})"/>.
         /// </summary>
-        /// <param name="lhs">The first <see cref="TreeNode"/>.</param>
-        /// <param name="rhs">The second <see cref="TreeNode"/>.</param>
-        /// <returns><see langword="true"/> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="lhs"/> or <paramref name="rhs"/> is <see langword="null"/>.</exception>
-        public static bool operator ==(TreeNode lhs, TreeNode rhs)
+        /// <param name="neighbours"><inheritdoc cref="AddChildren(IEnumerable{TreeNode})"/></param>
+        /// <param name="directed">Unused.</param>
+        void INode<TreeNode>.AddNeighbours(IEnumerable<TreeNode> neighbours, bool directed)
         {
-            if (lhs is null)
-            {
-                throw new ArgumentNullException("lhs", "Left hand side of == operator for TreeNode is null!");
-            }
-            if (rhs is null)
-            {
-                throw new ArgumentNullException("rhs", "Right hand side of == operator for TreeNode is null!");
-            }
-
-            return lhs.Equals(rhs);
+            AddChildren(neighbours);
         }
 
         /// <summary>
-        /// Checks two <see cref="TreeNode"/>s for inequality.
+        /// Removes all children and parent from this <see cref="TreeNode"/>.
         /// </summary>
-        /// <param name="lhs">The first <see cref="TreeNode"/>.</param>
-        /// <param name="rhs">The second <see cref="TreeNode"/>.</param>
-        /// <returns><see langword="true"/> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="lhs"/> or <paramref name="rhs"/> is <see langword="null"/>.</exception>
-        public static bool operator !=(TreeNode lhs, TreeNode rhs)
+        /// <param name="directed">Unused.</param>
+        void INode<TreeNode>.RemoveAllNeighbours(bool directed)
         {
-            if (lhs is null)
+            RemoveAllChildren();
+            Parent.RemoveChild(this);
+        }
+
+        /// <summary>
+        /// Remove a <see cref="TreeNode"/> from the neighbours of this <see cref="TreeNode"/>.
+        /// </summary>
+        /// <param name="neighbour">The neighbour to be removed.</param>
+        /// <param name="directed">Unused.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbour"/> is <see langword="null"/>.</exception>
+        void INode<TreeNode>.RemoveNeighbour(TreeNode neighbour, bool directed)
+        {
+            if (neighbour is null)
             {
-                throw new ArgumentNullException("lhs", "Left hand side of != operator for TreeNode is null!");
-            }
-            if (rhs is null)
-            {
-                throw new ArgumentNullException("rhs", "Right hand side of != operator for TreeNode is null!");
+                throw new ArgumentNullException("neighbour", $"Trying to remove a neighbour from {this}, but the neighbour is null!");
             }
 
-            return !lhs.Equals(rhs);
+            if (neighbour == Parent)
+            {
+                Parent.RemoveChild(this);
+            }
+            else
+            {
+                RemoveChild(neighbour);
+            }
+        }
+
+        /// <summary>
+        /// Remove multiple <see cref="TreeNode"/>s from the neighbours of this <see cref="TreeNode"/>.
+        /// </summary>
+        /// <param name="neighbours"></param>
+        /// <param name="directed"></param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> is <see langword="null"/>.</exception>
+        void INode<TreeNode>.RemoveNeighbours(IEnumerable<TreeNode> neighbours, bool directed)
+        {
+            if (neighbours is null)
+            {
+                throw new ArgumentNullException("neighbours", $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
+            }
+
+            foreach (TreeNode neighbour in neighbours)
+            {
+                ((INode<TreeNode>)this).RemoveNeighbour(neighbour);
+            }
+        }
+
+        /// <summary>
+        /// Checks whether <paramref name="node"/> is either the <see cref="Parent"/> or a child of this <see cref="TreeNode"/>.
+        /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> for which we want to know if it is a neighbour of this <see cref="TreeNode"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="node"/> is the parent or a child of this <see cref="TreeNode"/>, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
+        bool INode<TreeNode>.HasNeighbour(TreeNode node)
+        {
+            if (node == null)
+            {
+                throw new ArgumentNullException("node", $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
+            }
+
+            return node == Parent || HasChild(node);
         }
     }
 }

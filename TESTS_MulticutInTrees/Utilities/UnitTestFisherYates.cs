@@ -2,12 +2,11 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using MulticutInTrees;
-using MulticutInTrees.Utilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.ObjectModel;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.Graphs;
+using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Utilities
 {
@@ -40,7 +39,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             Assert.ThrowsException<NotSupportedException>(() => 
             {
-                Fisher_Yates.Shuffle(list.AsReadOnly());
+                FisherYates.Shuffle(list.AsReadOnly());
             });
 
             Assert.ThrowsException<NotSupportedException>(() =>

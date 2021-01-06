@@ -3,10 +3,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MulticutInTrees;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.Graphs;
 
-namespace TESTS_MulticutInTrees
+namespace TESTS_MulticutInTrees.Graphs
 {
     [TestClass]
     public class UnitTestTreeNode
@@ -122,159 +122,6 @@ namespace TESTS_MulticutInTrees
             TreeNode node = new TreeNode(2, parent, new List<TreeNode>() { child });
             Assert.AreEqual(child.Parent, node);
             Assert.AreEqual(node.Parent, parent);
-        }
-
-        [TestMethod]
-        public void TestCompareToNull()
-        {
-            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                TreeNode node = new TreeNode(0);
-                bool b = node == null;
-            });
-            Assert.AreEqual(a.ParamName, "rhs");
-        }
-
-        [TestMethod]
-        public void TestCompareToNullLeft()
-        {
-            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                TreeNode node = new TreeNode(0);
-                bool b = null == node;
-            });
-            Assert.AreEqual(a.ParamName, "lhs");
-        }
-
-        [TestMethod]
-        public void TestCompareInequalToNull()
-        {
-            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                TreeNode node = new TreeNode(0);
-                bool b = node != null;
-            });
-            Assert.AreEqual(a.ParamName, "rhs");
-        }
-
-        [TestMethod]
-        public void TestCompareInequalToNullLeft()
-        {
-            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                TreeNode node = new TreeNode(0);
-                bool b = null != node;
-            });
-            Assert.AreEqual(a.ParamName, "lhs");
-        }
-
-        [TestMethod]
-        public void TestEqualsObjectNull()
-        {
-            Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                TreeNode node = new TreeNode(0);
-                bool b = node.Equals((object)null);
-            });
-        }
-
-        [TestMethod]
-        public void TestEqualsTreeNodeNull()
-        {
-            Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                TreeNode node = new TreeNode(0);
-                bool b = node.Equals(null);
-            });
-        }
-
-        [TestMethod]
-        public void TestCompareToItselfTrue()
-        {
-            TreeNode node0 = new TreeNode(0);
-#pragma warning disable CS1718 // Comparison made to same variable
-            Assert.IsTrue(node0 == node0);
-#pragma warning restore CS1718 // Comparison made to same variable
-        }
-
-        [TestMethod]
-        public void TestCompareToItselfFalse()
-        {
-            TreeNode node0 = new TreeNode(0);
-#pragma warning disable CS1718 // Comparison made to same variable
-            Assert.IsFalse(node0 != node0);
-#pragma warning restore CS1718 // Comparison made to same variable
-        }
-
-        [TestMethod]
-        public void TestEqualToOther()
-        {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            Assert.IsFalse(node0.Equals(node1));
-        }
-
-        [TestMethod]
-        public void TestEqualToItself()
-        {
-            TreeNode node0 = new TreeNode(0);
-            Assert.IsTrue(node0.Equals(node0));
-        }
-
-        [TestMethod]
-        public void TestEqualsOperatorToOther()
-        {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            Assert.IsFalse(node0 == node1);
-        }
-
-        [TestMethod]
-        public void TestNotEqualsOperatorToOtherTrue()
-        {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            Assert.IsTrue(node0 != node1);
-        }
-
-        [TestMethod]
-        public void TestGenericEqualsDifferentTypes()
-        {
-            TreeNode node = new TreeNode(0);
-
-            Assert.ThrowsException<IncompatibleTypesException>(() =>
-            {
-                int i = 0;
-                bool b = node.Equals(i);
-            });
-
-            Assert.ThrowsException<IncompatibleTypesException>(() =>
-            {
-                string s = "0";
-                bool b = node.Equals(s);
-            });
-
-            Assert.ThrowsException<IncompatibleTypesException>(() =>
-            {
-                object obj = new object();
-                bool b = node.Equals(obj);
-            });
-
-            Assert.ThrowsException<IncompatibleTypesException>(() =>
-            {
-                char c = '0';
-                bool b = node.Equals(c);
-            });
-        }
-
-        [TestMethod]
-        public void TestGenericEqualsCorrect()
-        {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-
-            Assert.IsTrue(node0.Equals((object)node0));
-            Assert.IsFalse(node0.Equals((object)node1));
         }
 
         [TestMethod]
@@ -533,15 +380,200 @@ namespace TESTS_MulticutInTrees
             node6.AddChild(node7);
             node3.RemoveChild(node6);
 
-            Assert.AreEqual(node0.DepthOfSubtree, 3);
-            Assert.AreEqual(node1.DepthOfSubtree, 1);
-            Assert.AreEqual(node2.DepthOfSubtree, 2);
-            Assert.AreEqual(node3.DepthOfSubtree, 0);
-            Assert.AreEqual(node4.DepthOfSubtree, 1);
-            Assert.AreEqual(node5.DepthOfSubtree, 0);
-            Assert.AreEqual(node6.DepthOfSubtree, 1);
-            Assert.AreEqual(node7.DepthOfSubtree, 0);
+            Assert.AreEqual(node0.HeightOfSubtree, 3);
+            Assert.AreEqual(node1.HeightOfSubtree, 1);
+            Assert.AreEqual(node2.HeightOfSubtree, 2);
+            Assert.AreEqual(node3.HeightOfSubtree, 0);
+            Assert.AreEqual(node4.HeightOfSubtree, 1);
+            Assert.AreEqual(node5.HeightOfSubtree, 0);
+            Assert.AreEqual(node6.HeightOfSubtree, 1);
+            Assert.AreEqual(node7.HeightOfSubtree, 0);
         }
 
+        [TestMethod]
+        public void TestAddNeighbour()
+        {
+            ITreeNode<TreeNode> node0 = new TreeNode(0);
+            ITreeNode<TreeNode> node1 = new TreeNode(1);
+            ITreeNode<TreeNode> node2 = new TreeNode(2);
+
+            node0.AddNeighbour((TreeNode)node1);
+            node0.AddNeighbour((TreeNode)node2);
+
+            Assert.IsTrue(node0.HasChild((TreeNode)node1));
+            Assert.IsTrue(node0.HasChild((TreeNode)node2));
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                node1.AddNeighbour(null);
+            });
+
+            Assert.ThrowsException<AlreadyANeighbourException>(() =>
+            {
+                node0.AddNeighbour((TreeNode)node2);
+            });
+
+            Assert.ThrowsException<AddNeighbourToSelfException>(() =>
+            {
+                node0.AddNeighbour((TreeNode)node0);
+            });
+
+            Assert.ThrowsException<AddParentAsChildException>(() =>
+            {
+                node1.AddNeighbour((TreeNode)node0);
+            });
+        }
+
+        [TestMethod]
+        public void TestAddNeighbours()
+        {
+            ITreeNode<TreeNode> parent = new TreeNode(0);
+            List<TreeNode> children = new List<TreeNode>()
+            {
+                new TreeNode(1),
+                new TreeNode(2),
+                new TreeNode(3),
+                new TreeNode(4),
+            };
+
+            parent.AddNeighbours(children);
+            foreach (TreeNode child in children)
+            {
+                Assert.IsTrue(parent.HasChild(child));
+                Assert.IsTrue(child.Parent == parent);
+            }
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                parent.AddNeighbours(null);
+            });
+        }
+
+        [TestMethod]
+        public void TestRemoveAllNeighbours()
+        {
+            TreeNode uberParent = new TreeNode(3);
+            List<TreeNode> children = new List<TreeNode>()
+            {
+                new TreeNode(1),
+                new TreeNode(2),
+            };
+            ITreeNode<TreeNode> parent = new TreeNode(0, children);
+            uberParent.AddChild((TreeNode)parent);
+
+            parent.RemoveAllNeighbours();
+
+            Assert.IsTrue(parent.Children.Count == 0);
+            Assert.IsFalse(parent.HasChild(children[0]));
+            Assert.IsFalse(parent.HasChild(children[1]));
+            Assert.IsTrue(children[0].Parent is null);
+            Assert.IsTrue(children[1].Parent is null);
+            Assert.IsFalse(uberParent.HasChild((TreeNode)parent));
+            Assert.IsTrue(parent.Parent is null);
+        }
+
+        [TestMethod]
+        public void TestRemoveNeighbour()
+        {
+            ITreeNode<TreeNode> parent = new TreeNode(0);
+            TreeNode child = new TreeNode(1, (TreeNode)parent);
+            TreeNode nonChild = new TreeNode(2);
+            TreeNode uberParent = new TreeNode(3);
+            uberParent.AddChild((TreeNode)parent);
+            Assert.IsTrue(parent.Parent == uberParent);
+            
+            parent.RemoveNeighbour(child);
+
+            Assert.IsTrue(child.Parent is null);
+
+            parent.RemoveNeighbour(uberParent);
+            Assert.IsTrue(parent.Parent is null);
+
+            Assert.ThrowsException<NotANeighbourException>(() =>
+            {
+                parent.RemoveNeighbour(child);
+            });
+
+            Assert.ThrowsException<NotANeighbourException>(() =>
+            {
+                parent.RemoveNeighbour(nonChild);
+            });
+
+            Assert.ThrowsException<NotANeighbourException>(() =>
+            {
+                parent.RemoveNeighbour((TreeNode)parent);
+            });
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                parent.RemoveNeighbour(null);
+            });
+        }
+
+        [TestMethod]
+        public void TestRemoveNeighbours()
+        {
+            List<TreeNode> children = new List<TreeNode>()
+            {
+                new TreeNode(1),
+                new TreeNode(2),
+                new TreeNode(3),
+                new TreeNode(4),
+            };
+            ITreeNode<TreeNode> parent = new TreeNode(0, children);
+            TreeNode child = new TreeNode(5, (TreeNode)parent);
+            TreeNode uberParent = new TreeNode(6);
+            uberParent.AddChild((TreeNode)parent);
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                parent.RemoveNeighbours(null);
+            });
+
+            parent.RemoveNeighbours(new List<TreeNode>(children) { uberParent });
+
+            foreach (TreeNode _child in children)
+            {
+                Assert.IsTrue(_child.Parent is null);
+                Assert.IsFalse(parent.HasChild(_child));
+            }
+
+            Assert.IsFalse(uberParent.HasChild((TreeNode)parent));
+            Assert.IsTrue(parent.Parent is null);
+
+            Assert.IsTrue(parent.HasChild(child));
+            Assert.IsTrue(child.Parent == parent);
+        }
+
+        [TestMethod]
+        public void TestHasNeighbour()
+        {
+            TreeNode node0 = new TreeNode(0);
+            ITreeNode<TreeNode> node1 = new TreeNode(1, node0);
+            TreeNode node2 = new TreeNode(2, (TreeNode)node1);
+            Assert.IsTrue(node1.HasNeighbour(node2));
+            Assert.IsTrue(node1.HasNeighbour(node0));
+
+            Assert.IsFalse(((ITreeNode<TreeNode>)node0).HasNeighbour(node2));
+            Assert.IsFalse(((ITreeNode<TreeNode>)node2).HasNeighbour(node0));
+
+            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                node1.HasNeighbour(null);
+            });
+            Assert.AreEqual("node", a.ParamName);
+        }
+
+        [TestMethod]
+        public void TestNullArgument()
+        {
+            TreeNode t = new TreeNode(0);
+
+            Assert.ThrowsException<ArgumentNullException>(() => t.AddChild(null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.AddChildren(null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.HasChild(null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChild(null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChildren(null));
+        }
     }
 }

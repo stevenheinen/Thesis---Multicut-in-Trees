@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MulticutInTrees", "MulticutInTrees\MulticutInTrees.csproj", "{A87E8A00-627E-4329-A031-9513B9BE9D60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TESTS_MulticutInTrees", "TESTS_MulticutInTrees\TESTS_MulticutInTrees.csproj", "{B860E78A-E0DC-4BD8-AE3E-F1218D3C79BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TESTS_MulticutInTrees", "TESTS_MulticutInTrees\TESTS_MulticutInTrees.csproj", "{B860E78A-E0DC-4BD8-AE3E-F1218D3C79BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

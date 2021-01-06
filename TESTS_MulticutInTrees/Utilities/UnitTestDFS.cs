@@ -2,10 +2,9 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using MulticutInTrees;
-using MulticutInTrees.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.Graphs;
+using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Utilities
 {
@@ -220,6 +219,116 @@ namespace TESTS_MulticutInTrees.Utilities
             {
                 DFS.AreConnected(default, default, skip);
             });
+        }
+
+        [TestMethod]
+        public void TestNullFindEdges()
+        {
+            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                DFS.FindAllEdgesGraph<Graph<Node>, Node>(null);
+            });
+            Assert.AreEqual(a.ParamName, "graph");
+
+            ArgumentNullException b = Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                DFS.FindAllEdgesGraph<Graph<Node>, Node>(default);
+            });
+            Assert.AreEqual(b.ParamName, "graph");
+        }
+
+        [TestMethod]
+        public void TestFindAllEdgesGraph()
+        {
+            Graph<Node> graph = new Graph<Node>();
+
+            Assert.AreEqual(0, DFS.FindAllEdgesGraph<Graph<Node>, Node>(graph).Count);
+
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+
+            List<(Node, Node)> edges = new List<(Node, Node)>()
+            {
+                (node0, node1),
+                (node0, node2),
+                (node1, node2),
+                (node1, node3),
+                (node2, node4),
+                (node3, node4)
+            };
+
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 });
+            graph.AddEdges(edges);
+
+            List<(Node, Node)> foundEdges = DFS.FindAllEdgesGraph<Graph<Node>, Node>(graph);
+
+            foreach ((Node, Node) edge in foundEdges)
+            {
+                (Node, Node) edge2 = (edge.Item2, edge.Item1);
+                Assert.IsTrue(edges.Contains(edge) || edges.Contains(edge2));
+            }
+
+            foreach ((Node, Node) edge in edges)
+            {
+                (Node, Node) edge2 = (edge.Item2, edge.Item1);
+                Assert.IsTrue(foundEdges.Contains(edge) || foundEdges.Contains(edge2));
+            }
+        }
+
+        [TestMethod]
+        public void TestFindAllEdgesTree()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+
+            Assert.AreEqual(0, DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(tree).Count);
+
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+
+            List<(TreeNode, TreeNode)> edges = new List<(TreeNode, TreeNode)>()
+            {
+                (node0, node1),
+                (node0, node2),
+                (node1, node3),
+                (node1, node4)
+            };
+
+            tree.AddRoot(node0);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+
+            List<(TreeNode, TreeNode)> foundEdges = DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(tree);
+
+            foreach ((TreeNode, TreeNode) edge in foundEdges)
+            {
+                (TreeNode, TreeNode) edge2 = (edge.Item2, edge.Item1);
+                Assert.IsTrue(edges.Contains(edge) || edges.Contains(edge2));
+            }
+
+            foreach ((TreeNode, TreeNode) edge in edges)
+            {
+                (TreeNode, TreeNode) edge2 = (edge.Item2, edge.Item1);
+                Assert.IsTrue(foundEdges.Contains(edge) || foundEdges.Contains(edge2));
+            }
+        }
+
+        [TestMethod]
+        public void TestNullArgument()
+        {
+            Node n = new Node(0);
+
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(null, n));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(n, null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllConnectedComponents<Node>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesGraph<Graph<Node>, Node>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindConnectedComponent<Node>(null));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MulticutInTrees.Utilities
     /// <summary>
     /// Class that shuffles the elements of an <see cref="IList{T}"/>.
     /// </summary>
-    public static class Fisher_Yates
+    public static class FisherYates
     {
         /// <summary>
         /// Shuffles the indices of the elements in <paramref name="list"/> using the Fisher-Yates method.
