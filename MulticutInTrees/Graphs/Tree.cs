@@ -131,7 +131,7 @@ namespace MulticutInTrees.Graphs
         {
             if (node is null)
             {
-                throw new ArgumentNullException("node", "Trying to add the children of a node to its parent, but the node is null!");
+                throw new ArgumentNullException(nameof(node), "Trying to add the children of a node to its parent, but the node is null!");
             }
 
             if (node.Equals(Root))
@@ -180,7 +180,7 @@ namespace MulticutInTrees.Graphs
         {
             if (node is null) 
             {
-                throw new ArgumentNullException("node", $"Trying to see if a node is in {this}, but the node is null!");
+                throw new ArgumentNullException(nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
             }
 
             return UniqueInternalNodes.Contains(node);
@@ -197,11 +197,11 @@ namespace MulticutInTrees.Graphs
         {
             if (parent is null)
             {
-                throw new ArgumentNullException("parent", $"Trying to find out whether an edge exists in {this}, but the parent of the edge is null!");
+                throw new ArgumentNullException(nameof(parent), $"Trying to find out whether an edge exists in {this}, but the parent of the edge is null!");
             }
             if (child is null)
             {
-                throw new ArgumentNullException("child", $"Trying to find out whether an edge exists in {this}, but the child of the edge is null!");
+                throw new ArgumentNullException(nameof(child), $"Trying to find out whether an edge exists in {this}, but the child of the edge is null!");
             }
             if (!HasNode(parent))
             {
@@ -224,7 +224,7 @@ namespace MulticutInTrees.Graphs
         {
             if (newRoot is null)
             {
-                throw new ArgumentNullException("newRoot", $"Trying to add a new root to {this}, but the new root is null!");
+                throw new ArgumentNullException(nameof(newRoot), $"Trying to add a new root to {this}, but the new root is null!");
             }
 
             if (!(Root is null))
@@ -251,11 +251,11 @@ namespace MulticutInTrees.Graphs
         {
             if (parent is null)
             {
-                throw new ArgumentNullException("parent", $"Trying to add {child} as a child to a parent, but the parent is null!");
+                throw new ArgumentNullException(nameof(parent), $"Trying to add {child} as a child to a parent, but the parent is null!");
             }
             if (child is null)
             {
-                throw new ArgumentNullException("child", $"Trying to add a child to {parent}, but the child is null!");
+                throw new ArgumentNullException(nameof(child), $"Trying to add a child to {parent}, but the child is null!");
             }
             if (!HasNode(parent))
             {
@@ -284,11 +284,11 @@ namespace MulticutInTrees.Graphs
         {
             if (parent is null)
             {
-                throw new ArgumentNullException("parent", $"Trying to add multiple children to a parent, but the parent is null!");
+                throw new ArgumentNullException(nameof(parent), $"Trying to add multiple children to a parent, but the parent is null!");
             }
             if (children is null)
             {
-                throw new ArgumentNullException("children", $"Trying to add multiple children to {parent}, but the IEnumerable of children is null!");
+                throw new ArgumentNullException(nameof(children), $"Trying to add multiple children to {parent}, but the IEnumerable of children is null!");
             }
 
             foreach (N child in children)
@@ -307,7 +307,7 @@ namespace MulticutInTrees.Graphs
         {
             if (node is null)
             {
-                throw new ArgumentNullException("node", $"Trying to remove a node from {this}, but the node is null!");
+                throw new ArgumentNullException(nameof(node), $"Trying to remove a node from {this}, but the node is null!");
             }
             if (!HasNode(node))
             {
@@ -340,7 +340,7 @@ namespace MulticutInTrees.Graphs
         {
             if (nodes is null)
             {
-                throw new ArgumentNullException("nodes", $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
+                throw new ArgumentNullException(nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
             }
 
             foreach (N node in nodes)

@@ -132,7 +132,7 @@ namespace MulticutInTrees.Graphs
         {
             if (parent is null)
             {
-                throw new ArgumentNullException("parent", $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
+                throw new ArgumentNullException(nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
             }
 
             ID = id;
@@ -155,11 +155,11 @@ namespace MulticutInTrees.Graphs
         {
             if (parent is null)
             {
-                throw new ArgumentNullException("parent", $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
+                throw new ArgumentNullException(nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
             }
             if (children is null)
             {
-                throw new ArgumentNullException("children", $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
+                throw new ArgumentNullException(nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
             }
 
             ID = id;
@@ -182,7 +182,7 @@ namespace MulticutInTrees.Graphs
         {
             if (children is null)
             {
-                throw new ArgumentNullException("children", $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
+                throw new ArgumentNullException(nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
             }
 
             ID = id;
@@ -206,7 +206,7 @@ namespace MulticutInTrees.Graphs
         {
             if (child is null)
             {
-                throw new ArgumentNullException("child", $"Trying to add a child to {this}, but child is null!");
+                throw new ArgumentNullException(nameof(child), $"Trying to add a child to {this}, but child is null!");
             }
             if (child == this)
             {
@@ -238,7 +238,7 @@ namespace MulticutInTrees.Graphs
         {
             if (children is null)
             {
-                throw new ArgumentNullException("children", $"Trying to add multiple children to {this}, but the IEnumerable of children is null!");
+                throw new ArgumentNullException(nameof(children), $"Trying to add multiple children to {this}, but the IEnumerable of children is null!");
             }
 
             foreach (TreeNode child in children)
@@ -260,7 +260,7 @@ namespace MulticutInTrees.Graphs
         {
             if (child is null)
             {
-                throw new ArgumentNullException("child", $"Trying to remove a child from {this}, but the child is null!");
+                throw new ArgumentNullException(nameof(child), $"Trying to remove a child from {this}, but the child is null!");
             }
             if (!InternalUniqueChildren.Contains(child))
             {
@@ -287,7 +287,7 @@ namespace MulticutInTrees.Graphs
         {
             if (children is null)
             {
-                throw new ArgumentNullException("children", $"Trying to remove multiple children from {this}, but the IEnumerable with children is null!");
+                throw new ArgumentNullException(nameof(children), $"Trying to remove multiple children from {this}, but the IEnumerable with children is null!");
             }
 
             foreach (TreeNode child in children)
@@ -325,7 +325,7 @@ namespace MulticutInTrees.Graphs
         {
             if (node is null)
             {
-                throw new ArgumentNullException("node", $"Trying to see if a node is a child of {this}, but node is null!");
+                throw new ArgumentNullException(nameof(node), $"Trying to see if a node is a child of {this}, but node is null!");
             }
 
             return InternalUniqueChildren.Contains(node);
@@ -393,7 +393,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbour is null)
             {
-                throw new ArgumentNullException("neighbour", $"Trying to remove a neighbour from {this}, but the neighbour is null!");
+                throw new ArgumentNullException(nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
             }
 
             if (neighbour == Parent)
@@ -416,7 +416,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbours is null)
             {
-                throw new ArgumentNullException("neighbours", $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
+                throw new ArgumentNullException(nameof(neighbours), $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
             }
 
             foreach (TreeNode neighbour in neighbours)
@@ -435,7 +435,7 @@ namespace MulticutInTrees.Graphs
         {
             if (node == null)
             {
-                throw new ArgumentNullException("node", $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
+                throw new ArgumentNullException(nameof(node), $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
             }
 
             return node == Parent || HasChild(node);

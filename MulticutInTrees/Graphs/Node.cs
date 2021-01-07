@@ -60,7 +60,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbours is null)
             {
-                throw new ArgumentNullException("neighbours", $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
+                throw new ArgumentNullException(nameof(neighbours), $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
             }
 
             ID = id;
@@ -91,7 +91,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbour is null)
             {
-                throw new ArgumentNullException("neighbour", $"Trying to add a neighbour to {this}, but neighbour is null!");
+                throw new ArgumentNullException(nameof(neighbour), $"Trying to add a neighbour to {this}, but neighbour is null!");
             }
             if (neighbour == this)
             {
@@ -124,7 +124,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbours is null)
             {
-                throw new ArgumentNullException("neighbours", $"Trying to add a list of neighbours to {this}, but the list is null!");
+                throw new ArgumentNullException(nameof(neighbours), $"Trying to add a list of neighbours to {this}, but the list is null!");
             }
 
             foreach (Node neighbour in neighbours)
@@ -168,7 +168,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbour is null)
             {
-                throw new ArgumentNullException("neighbour", $"Trying to remove a neighbour from {this}, but neighbour is null!");
+                throw new ArgumentNullException(nameof(neighbour), $"Trying to remove a neighbour from {this}, but neighbour is null!");
             }
             if (!InternalUniqueNeighbours.Contains(neighbour))
             {
@@ -197,7 +197,7 @@ namespace MulticutInTrees.Graphs
         {
             if (neighbours is null)
             {
-                throw new ArgumentNullException("neighbours", $"Trying to remove a list of neighbours from {this}, but the list is null!");
+                throw new ArgumentNullException(nameof(neighbours), $"Trying to remove a list of neighbours from {this}, but the list is null!");
             }
 
             foreach (Node neighbour in neighbours)
@@ -216,7 +216,7 @@ namespace MulticutInTrees.Graphs
         {
             if (node is null)
             {
-                throw new ArgumentNullException("node", $"Trying to see if {this} has a neighbour, but the neighbour is null!");
+                throw new ArgumentNullException(nameof(node), $"Trying to see if {this} has a neighbour, but the neighbour is null!");
             }
 
             return InternalUniqueNeighbours.Contains(node);

@@ -27,15 +27,15 @@ namespace MulticutInTrees.Utilities
         {
             if (inputGraph is null)
             {
-                throw new ArgumentNullException("inputGraph", "Trying to compute multiple source, multiple sink flow with unit capacities, but the input graph is null!");
+                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with unit capacities, but the input graph is null!");
             }
             if (sources is null)
             {
-                throw new ArgumentNullException("source", "Trying to compute multiple source, multiple sink flow with unit capacities, but the source node is null!");
+                throw new ArgumentNullException(nameof(sources), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sources is null!");
             }
             if (sinks is null)
             {
-                throw new ArgumentNullException("sink", "Trying to compute multiple source, multiple sink flow with unit capacities, but the sink node is null!");
+                throw new ArgumentNullException(nameof(sinks), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sinks is null!");
             }
             
             // Create a capacity dictionary with capacity 1 for each edge.
@@ -67,19 +67,19 @@ namespace MulticutInTrees.Utilities
         {
             if (inputGraph is null)
             {
-                throw new ArgumentNullException("inputGraph", "Trying to compute multiple source, multiple sink flow with capacities, but the input graph is null!");
+                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with capacities, but the input graph is null!");
             }
             if (sources is null)
             {
-                throw new ArgumentNullException("source", "Trying to compute multiple source, multiple sink flow with capacities, but the source node is null!");
+                throw new ArgumentNullException(nameof(sources), "Trying to compute multiple source, multiple sink flow with capacities, but the IEnumerable with sources is null!");
             }
             if (sinks is null)
             {
-                throw new ArgumentNullException("sink", "Trying to compute multiple source, multiple sink flow with capacities, but the sink node is null!");
+                throw new ArgumentNullException(nameof(sinks), "Trying to compute multiple source, multiple sink flow with capacities, but the IEnumerable with sinks is null!");
             }
             if (capacities is null)
             {
-                throw new ArgumentNullException("sink", "Trying to compute multiple source, multiple sink flow with capacities, but the dictionary with capacities is null!");
+                throw new ArgumentNullException(nameof(capacities), "Trying to compute multiple source, multiple sink flow with capacities, but the dictionary with capacities is null!");
             }
 
             if (sources.Count() == 1 && sinks.Count() == 1)
@@ -158,15 +158,15 @@ namespace MulticutInTrees.Utilities
         {
             if (inputGraph is null)
             {
-                throw new ArgumentNullException("inputGraph", "Trying to compute single source, single sink flow with unit capacities, but the input graph is null!");
+                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute single source, single sink flow with unit capacities, but the input graph is null!");
             }
             if (source is null)
             {
-                throw new ArgumentNullException("source", "Trying to compute single source, single sink flow with unit capacities, but the source node is null!");
+                throw new ArgumentNullException(nameof(source), "Trying to compute single source, single sink flow with unit capacities, but the source node is null!");
             }
             if (sink is null)
             {
-                throw new ArgumentNullException("sink", "Trying to compute single source, single sink flow with unit capacities, but the sink node is null!");
+                throw new ArgumentNullException(nameof(sink), "Trying to compute single source, single sink flow with unit capacities, but the sink node is null!");
             }
 
             // Create a capacity dictionary with capacity 1 for each edge.
@@ -198,19 +198,19 @@ namespace MulticutInTrees.Utilities
         {
             if (inputGraph is null)
             {
-                throw new ArgumentNullException("inputGraph", "Trying to compute single source, single sink flow with capacities, but the input graph is null!");
+                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute single source, single sink flow with capacities, but the input graph is null!");
             }
             if (source is null)
             {
-                throw new ArgumentNullException("source", "Trying to compute single source, single sink flow with capacities, but the source node is null!");
+                throw new ArgumentNullException(nameof(source), "Trying to compute single source, single sink flow with capacities, but the source node is null!");
             }
             if (sink is null)
             {
-                throw new ArgumentNullException("sink", "Trying to compute single source, single sink flow with capacities, but the sink node is null!");
+                throw new ArgumentNullException(nameof(sink), "Trying to compute single source, single sink flow with capacities, but the sink node is null!");
             }
             if (capacities is null)
             {
-                throw new ArgumentNullException("sink", "Trying to compute single source, single sink flow with capacities, but the dictionary with capacities is null!");
+                throw new ArgumentNullException(nameof(sink), "Trying to compute single source, single sink flow with capacities, but the dictionary with capacities is null!");
             }
 
             if (source.Equals(sink))
@@ -271,19 +271,19 @@ namespace MulticutInTrees.Utilities
         {
             if (inputGraph is null)
             {
-                throw new ArgumentNullException("inputGraph", "Trying to send flow, but the input graph is null!");
+                throw new ArgumentNullException(nameof(inputGraph), "Trying to send flow, but the input graph is null!");
             }
             if (source is null)
             {
-                throw new ArgumentNullException("source", "Trying to send flow, but the source node is null!");
+                throw new ArgumentNullException(nameof(source), "Trying to send flow, but the source node is null!");
             }
             if (flow is null)
             {
-                throw new ArgumentNullException("flow", "Trying to send flow, but the dictionary with flow is null!");
+                throw new ArgumentNullException(nameof(flow), "Trying to send flow, but the dictionary with flow is null!");
             }
             if (capacities is null)
             {
-                throw new ArgumentNullException("capacities", "Trying to send flow, but the dictionary with capacities is null!");
+                throw new ArgumentNullException(nameof(capacities), "Trying to send flow, but the dictionary with capacities is null!");
             }
 
             // Initialise each level to -1.
@@ -332,27 +332,27 @@ namespace MulticutInTrees.Utilities
         {
             if (inputGraph is null)
             {
-                throw new ArgumentNullException("inputGraph", "Trying to send flow, but the input graph is null!");
+                throw new ArgumentNullException(nameof(inputGraph), "Trying to send flow, but the input graph is null!");
             }
             if (node is null)
             {
-                throw new ArgumentNullException("node", "Trying to send flow, but the source node is null!");
+                throw new ArgumentNullException(nameof(node), "Trying to send flow, but the source node is null!");
             }
             if (sink is null)
             {
-                throw new ArgumentNullException("sink", "Trying to send flow, but the sink is null!");
+                throw new ArgumentNullException(nameof(sink), "Trying to send flow, but the sink is null!");
             }
             if (flow is null)
             {
-                throw new ArgumentNullException("flow", "Trying to send flow, but the dictionary with flow is null!");
+                throw new ArgumentNullException(nameof(flow), "Trying to send flow, but the dictionary with flow is null!");
             }
             if (capacities is null)
             {
-                throw new ArgumentNullException("capacities", "Trying to send flow, but the dictionary with capacities is null!");
+                throw new ArgumentNullException(nameof(capacities), "Trying to send flow, but the dictionary with capacities is null!");
             }
             if (levels is null)
             {
-                throw new ArgumentNullException("levels", "Trying to send flow, but the dictionary with levels is null!");
+                throw new ArgumentNullException(nameof(levels), "Trying to send flow, but the dictionary with levels is null!");
             }
 
             // If we have reached the sink, we do not send any more flow, so return.

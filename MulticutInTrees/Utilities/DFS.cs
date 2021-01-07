@@ -23,7 +23,7 @@ namespace MulticutInTrees.Utilities
         {
             if (startNode is null)
             {
-                throw new ArgumentNullException("startNode", "Trying to find a connected component of an INode, but the start node is null!");
+                throw new ArgumentNullException(nameof(startNode), "Trying to find a connected component of an INode, but the start node is null!");
             }
 
             return FindConnectedComponent(startNode, default, seen);
@@ -85,7 +85,7 @@ namespace MulticutInTrees.Utilities
         {
             if (allNodes is null)
             {
-                throw new ArgumentNullException("allNodes", "Trying to find all connected components of an IEnumerable with nodes, but the IEnumberable is null!");
+                throw new ArgumentNullException(nameof(allNodes), "Trying to find all connected components of an IEnumerable with nodes, but the IEnumberable is null!");
             }
 
             List<List<N>> result = new List<List<N>>();
@@ -123,11 +123,11 @@ namespace MulticutInTrees.Utilities
         {
             if (node1 is null)
             {
-                throw new ArgumentNullException("node1", "Trying to find whether two nodes are connected, but the first of these nodes is null!");
+                throw new ArgumentNullException(nameof(node1), "Trying to find whether two nodes are connected, but the first of these nodes is null!");
             }
             if (node2 is null)
             {
-                throw new ArgumentNullException("node2", "Trying to find whether two nodes are connected, but the second of these nodes is null!");
+                throw new ArgumentNullException(nameof(node2), "Trying to find whether two nodes are connected, but the second of these nodes is null!");
             }
 
             List<N> connectedComponent = FindConnectedComponent(node1, node2, seen);
@@ -146,7 +146,7 @@ namespace MulticutInTrees.Utilities
         {
             if (graph is null)
             {
-                throw new ArgumentNullException("graph", "Trying to find all edges in a graph, but the graph is null!");
+                throw new ArgumentNullException(nameof(graph), "Trying to find all edges in a graph, but the graph is null!");
             }
 
             List<(N, N)> result = new List<(N, N)>();
@@ -187,7 +187,7 @@ namespace MulticutInTrees.Utilities
         {
             if (tree is null)
             {
-                throw new ArgumentNullException("tree", "Trying to find all edges in a tree, but the tree is null!");
+                throw new ArgumentNullException(nameof(tree), "Trying to find all edges in a tree, but the tree is null!");
             }
 
             List<(N, N)> result = new List<(N, N)>();
