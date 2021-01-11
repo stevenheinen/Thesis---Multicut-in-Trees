@@ -19,7 +19,6 @@
     <IssueType Id="InvokeAsExtensionMethod" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert static method invocation to extension method call" Severity="SUGGESTION" />
     <IssueType Id="JoinDeclarationAndInitializer" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Join local variable declaration and assignment" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=JoinDeclarationAndInitializer" />
     <IssueType Id="MemberCanBePrivate.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Member can be made private" Description="Member can be made private: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=MemberCanBePrivate.Global" />
-    <IssueType Id="NotResolvedInText" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Cannot resolve symbol in text argument" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=NotResolvedInText" />
     <IssueType Id="ParameterOnlyUsedForPreconditionCheck.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Parameter is only used for precondition check" Description="Parameter is only used for precondition check: Private accessibility" Severity="WARNING" />
     <IssueType Id="PossibleMultipleEnumeration" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible multiple enumeration" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleMultipleEnumeration" />
     <IssueType Id="PossibleNullReferenceException" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible 'System.NullReferenceException'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleNullReferenceException" />
@@ -32,11 +31,10 @@
     <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
     <IssueType Id="ReplaceWithSingleAssignment.False" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Replace with single assignment" Description="Replace with single assignment: Replace with single assignment" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ReplaceWithSingleAssignment.False" />
     <IssueType Id="UnusedMember.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never used" Description="Type member is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedMember.Global" />
-    <IssueType Id="UnusedMember.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never used" Description="Type member is never used: Private accessibility" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedMember.Local" />
     <IssueType Id="UnusedMemberInSuper.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never accessed via base type" Description="Type member is never accessed via base type: Non-private accessibility" Severity="SUGGESTION" Global="True" />
+    <IssueType Id="UnusedMethodReturnValue.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Method return value is never used" Description="Method return value is never used: Private accessibility" Severity="WARNING" />
     <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type is never used" Description="Type is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global" />
     <IssueType Id="UnusedVariable" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Unused local variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedVariable" />
-    <IssueType Id="UseNameofExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Use 'nameof' expression to reference name" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UseNameofExpression" />
   </IssueTypes>
   <Issues>
     <Project Name="MulticutInTrees">
@@ -55,26 +53,11 @@
       <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1330-1339" Line="27" Message="Property 'UniqueInternalEdges' can be made private" />
       <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1539-1548" Line="32" Message="Property 'UniqueInternalNodes' can be made private" />
       <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1748-1757" Line="37" Message="Property 'InternalNodes' can be made private" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="4821-4827" Line="96" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="5959-5967" Line="113" Message="Use 'nameof' expression to reference parameter 'origin' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="6180-6193" Line="117" Message="Use 'nameof' expression to reference parameter 'destination' name" />
-      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8176-8194" Line="160" Message="Method 'UpdateNodesInGraph' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8651-8669" Line="175" Message="Method 'UpdateEdgesInGraph' is never used" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="9511-9517" Line="191" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="10328-10335" Line="211" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="11441-11449" Line="231" Message="Use 'nameof' expression to reference parameter 'origin' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="11642-11655" Line="235" Message="Use 'nameof' expression to reference parameter 'destination' name" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="12342-12347" Line="247" Message="The parameter directed has the same default value" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="13156-13163" Line="266" Message="Use 'nameof' expression to reference parameter 'edges' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="13996-14002" Line="285" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="14867-14874" Line="306" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="15735-15741" Line="325" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="16604-16611" Line="344" Message="Use 'nameof' expression to reference parameter 'edges' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="17579-17587" Line="363" Message="Use 'nameof' expression to reference parameter 'origin' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Graph.cs" Offset="17786-17794" Line="367" Message="Use 'nameof' expression to reference parameter 'origin' name" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8194-8212" Line="160" Message="Method 'UpdateNodesInGraph' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8669-8687" Line="175" Message="Method 'UpdateEdgesInGraph' is never used" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="12384-12389" Line="247" Message="The parameter directed has the same default value" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="20097-20101" Line="418" Message="The parameter seen has the same default value" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\IGraph.cs" Offset="585-586" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="747-760" Line="18" Message="Only implementations of property 'NumberOfNodes' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="763-766" Line="18" Message="Only implementations of accessor 'NumberOfNodes.get' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="905-918" Line="23" Message="Only implementations of property 'NumberOfEdges' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="921-924" Line="23" Message="Only implementations of accessor 'NumberOfEdges.get' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="2359-2366" Line="46" Message="Only implementations of method 'HasNode' are used" />
@@ -89,13 +72,13 @@
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="7085-7095" Line="110" Message="Only implementations of method 'RemoveEdge' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="7662-7673" Line="117" Message="Only implementations of method 'RemoveEdges' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="8211-8231" Line="124" Message="Only implementations of method 'RemoveAllEdgesOfNode' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="8543-8552" Line="130" Message="Only implementations of method 'IsAcyclic' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="8833-8844" Line="136" Message="Only implementations of method 'IsConnected' are used" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\INode.cs" Offset="594-595" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\INode.cs" Offset="758-760" Line="18" Message="Name 'ID' does not match rule 'Properties'. Suggested name is 'Id'." />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\INode.cs" Offset="1976-1982" Line="33" Message="Only implementations of property 'Degree' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\INode.cs" Offset="1985-1988" Line="33" Message="Only implementations of accessor 'Degree.get' are used" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\ITree.cs" Offset="583-584" Line="12" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="748-761" Line="17" Message="Only implementations of property 'NumberOfNodes' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="764-767" Line="17" Message="Only implementations of accessor 'NumberOfNodes.get' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1107-1113" Line="27" Message="Only implementations of property 'Height' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1116-1119" Line="27" Message="Only implementations of accessor 'Height.get' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1583-1588" Line="35" Message="Only implementations of property 'Edges' are used" />
@@ -114,53 +97,24 @@
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="1749-1752" Line="27" Message="Only implementations of accessor 'DepthFromRoot.get' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="3106-3112" Line="48" Message="Only implementations of method 'IsRoot' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="5514-5528" Line="84" Message="Only implementations of method 'RemoveChildren' are used" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Node.cs" Offset="3046-3058" Line="63" Message="Use 'nameof' expression to reference parameter 'neighbours' name" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3256-3266" Line="67" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3327-3337" Line="68" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3429-3439" Line="72" Message="Possible multiple enumeration" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Node.cs" Offset="4790-4801" Line="94" Message="Use 'nameof' expression to reference parameter 'neighbour' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Node.cs" Offset="6545-6557" Line="127" Message="Use 'nameof' expression to reference parameter 'neighbours' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Node.cs" Offset="8706-8717" Line="171" Message="Use 'nameof' expression to reference parameter 'neighbour' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Node.cs" Offset="10309-10321" Line="200" Message="Use 'nameof' expression to reference parameter 'neighbours' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Node.cs" Offset="11325-11331" Line="219" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\Tree.cs" Offset="639-640" Line="14" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="827-836" Line="19" Message="Property 'InternalEdges' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="871-875" Line="19" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1027-1036" Line="24" Message="Property 'UniqueInternalEdges' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1080-1084" Line="24" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1235-1244" Line="29" Message="Property 'UniqueInternalNodes' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1283-1287" Line="29" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1436-1445" Line="34" Message="Property 'InternalNodes' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1475-1479" Line="34" Message="Auto-property can be made get-only" />
-      <Issue TypeId="UnusedMember.Local" File="MulticutInTrees\Graphs\Tree.cs" Offset="4745-4753" Line="107" Message="Method 'FindRoot' is never used" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="6256-6262" Line="134" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="6820-6822" Line="146" Message="Convert to '?:' expression" />
-      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Graphs\Tree.cs" Offset="7256-7266" Line="160" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="8402-8408" Line="183" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="9487-9495" Line="200" Message="Use 'nameof' expression to reference parameter 'parent' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="9702-9709" Line="204" Message="Use 'nameof' expression to reference parameter 'child' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="10953-10962" Line="227" Message="Use 'nameof' expression to reference parameter 'newRoot' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="12492-12500" Line="254" Message="Use 'nameof' expression to reference parameter 'parent' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="12688-12695" Line="258" Message="Use 'nameof' expression to reference parameter 'child' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="14343-14351" Line="287" Message="Use 'nameof' expression to reference parameter 'parent' name" />
-      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Graphs\Tree.cs" Offset="14353-14354" Line="287" Message="Redundant string interpolation" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="14541-14551" Line="291" Message="Use 'nameof' expression to reference parameter 'children' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="15482-15488" Line="310" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="ReplaceWithSingleAssignment.False" File="MulticutInTrees\Graphs\Tree.cs" Offset="15768-15888" Line="316" Message="Replace with single assignment" />
-      <Issue TypeId="ConvertIfToOrExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="15803-15805" Line="317" Message="Convert to '||' expression" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="16907-16914" Line="343" Message="Use 'nameof' expression to reference parameter 'nodes' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="5622-5630" Line="135" Message="Use 'nameof' expression to reference parameter 'parent' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="6955-6963" Line="158" Message="Use 'nameof' expression to reference parameter 'parent' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="7177-7187" Line="162" Message="Use 'nameof' expression to reference parameter 'children' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="8394-8404" Line="185" Message="Use 'nameof' expression to reference parameter 'children' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="10051-10058" Line="209" Message="Use 'nameof' expression to reference parameter 'child' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="11761-11771" Line="241" Message="Use 'nameof' expression to reference parameter 'children' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="12879-12886" Line="263" Message="Use 'nameof' expression to reference parameter 'child' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="14338-14348" Line="290" Message="Use 'nameof' expression to reference parameter 'children' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="16027-16033" Line="328" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="18931-18942" Line="396" Message="Use 'nameof' expression to reference parameter 'neighbour' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="19834-19846" Line="419" Message="Use 'nameof' expression to reference parameter 'neighbours' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="20922-20928" Line="438" Message="Use 'nameof' expression to reference parameter 'node' name" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3262-3272" Line="67" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3333-3343" Line="68" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3435-3445" Line="72" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\Tree.cs" Offset="673-674" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="861-870" Line="20" Message="Property 'InternalEdges' can be made private" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="905-909" Line="20" Message="Auto-property can be made get-only" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1061-1070" Line="25" Message="Property 'UniqueInternalEdges' can be made private" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1114-1118" Line="25" Message="Auto-property can be made get-only" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1269-1278" Line="30" Message="Property 'UniqueInternalNodes' can be made private" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1317-1321" Line="30" Message="Auto-property can be made get-only" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1470-1479" Line="35" Message="Property 'InternalNodes' can be made private" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1509-1513" Line="35" Message="Auto-property can be made get-only" />
+      <Issue TypeId="UnusedMethodReturnValue.Local" File="MulticutInTrees\Graphs\Tree.cs" Offset="4774-4775" Line="108" Message="Method 'FindRoot' return value is never used" />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="6857-6859" Line="147" Message="Convert to '?:' expression" />
+      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Graphs\Tree.cs" Offset="7293-7303" Line="161" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Graphs\Tree.cs" Offset="14432-14433" Line="288" Message="Redundant string interpolation" />
+      <Issue TypeId="ReplaceWithSingleAssignment.False" File="MulticutInTrees\Graphs\Tree.cs" Offset="15859-15979" Line="317" Message="Replace with single assignment" />
+      <Issue TypeId="ConvertIfToOrExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="15894-15896" Line="318" Message="Convert to '||' expression" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\Graphs\_NamespaceDocGraphs.cs" Offset="444-456" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="286-319" Line="4" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="321-356" Line="5" Message="Using directive is not required by the code and can be safely removed" />
@@ -171,70 +125,45 @@
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="487-519" Line="10" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="651-658" Line="17" Message="Class 'Program' is never instantiated" />
       <Issue TypeId="ArrangeModifiersOrder" File="MulticutInTrees\Program.cs" Offset="810-832" Line="22" Message="Inconsistent modifiers declaration order" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Utilities\DFS.cs" Offset="489-492" Line="12" Message="Class 'DFS' is never instantiated" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="489-492" Line="12" Message="Name 'DFS' does not match rule 'Types and namespaces'. Suggested name is 'Dfs'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="1225-1226" Line="22" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="1395-1406" Line="26" Message="Use 'nameof' expression to reference parameter 'startNode' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2307-2308" Line="40" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="2447-2449" Line="43" Message="Convert to '??='" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="4496-4497" Line="84" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="4677-4687" Line="88" Message="Use 'nameof' expression to reference parameter 'allNodes' name" />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="4880-4882" Line="92" Message="Convert to '??='" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="6325-6326" Line="122" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="6496-6503" Line="126" Message="Use 'nameof' expression to reference parameter 'node1' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="6706-6713" Line="130" Message="Use 'nameof' expression to reference parameter 'node2' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="7708-7709" Line="145" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="7711-7712" Line="145" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="7869-7876" Line="149" Message="Use 'nameof' expression to reference parameter 'graph' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="9585-9586" Line="186" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DFS.cs" Offset="9744-9750" Line="190" Message="Use 'nameof' expression to reference parameter 'tree' name" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Utilities\DFS.cs" Offset="524-527" Line="13" Message="Class 'DFS' is never instantiated" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="524-527" Line="13" Message="Name 'DFS' does not match rule 'Types and namespaces'. Suggested name is 'Dfs'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="1260-1261" Line="23" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2338-2339" Line="41" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2341-2342" Line="41" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DFS.cs" Offset="2529-2530" Line="45" Message="Redundant string interpolation" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="3693-3694" Line="64" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DFS.cs" Offset="3881-3882" Line="68" Message="Redundant string interpolation" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="5249-5250" Line="91" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="5416-5418" Line="94" Message="Convert to '??='" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="8276-8277" Line="152" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="8666-8668" Line="160" Message="Convert to '??='" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="10111-10112" Line="190" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="11506-11507" Line="213" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="11509-11510" Line="213" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="13389-13390" Line="254" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="1977-1978" Line="26" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="1980-1981" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="2194-2206" Line="30" Message="Use 'nameof' expression to reference parameter 'inputGraph' name" />
-      <Issue TypeId="NotResolvedInText" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="2431-2437" Line="34" Message="Cannot resolve symbol 'source'" />
-      <Issue TypeId="NotResolvedInText" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="2661-2665" Line="38" Message="Cannot resolve symbol 'sink'" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5225-5226" Line="66" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5228-5229" Line="66" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5484-5496" Line="70" Message="Use 'nameof' expression to reference parameter 'inputGraph' name" />
-      <Issue TypeId="NotResolvedInText" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5716-5722" Line="74" Message="Cannot resolve symbol 'source'" />
-      <Issue TypeId="NotResolvedInText" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5941-5945" Line="78" Message="Cannot resolve symbol 'sink'" />
-      <Issue TypeId="NotResolvedInText" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6167-6171" Line="82" Message="Cannot resolve symbol 'sink'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6327-6334" Line="85" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6351-6356" Line="85" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6577-6584" Line="88" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6599-6604" Line="88" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7436-7443" Line="104" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7497-7502" Line="105" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7831-7838" Line="108" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7942-7947" Line="112" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8322-8327" Line="122" Message="The parameter directed has the same default value" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8803-8808" Line="132" Message="The parameter directed has the same default value" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10301-10302" Line="157" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10304-10305" Line="157" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10490-10502" Line="161" Message="Use 'nameof' expression to reference parameter 'inputGraph' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10721-10729" Line="165" Message="Use 'nameof' expression to reference parameter 'source' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10946-10952" Line="169" Message="Use 'nameof' expression to reference parameter 'sink' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13133-13134" Line="197" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13136-13137" Line="197" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13364-13376" Line="201" Message="Use 'nameof' expression to reference parameter 'inputGraph' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13590-13598" Line="205" Message="Use 'nameof' expression to reference parameter 'source' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13810-13816" Line="209" Message="Use 'nameof' expression to reference parameter 'sink' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="14032-14038" Line="213" Message="Use 'nameof' expression to reference parameter 'sink' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17168-17169" Line="270" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17171-17172" Line="270" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17427-17439" Line="274" Message="Use 'nameof' expression to reference parameter 'inputGraph' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17607-17615" Line="278" Message="Use 'nameof' expression to reference parameter 'source' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17781-17787" Line="282" Message="Use 'nameof' expression to reference parameter 'flow' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17968-17980" Line="286" Message="Use 'nameof' expression to reference parameter 'capacities' name" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20555-20556" Line="331" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20558-20559" Line="331" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Local" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20563-20573" Line="331" Message="Parameter 'inputGraph' is only passed to itself and used for precondition check(s)" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20867-20879" Line="335" Message="Use 'nameof' expression to reference parameter 'inputGraph' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="21045-21051" Line="339" Message="Use 'nameof' expression to reference parameter 'node' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="21217-21223" Line="343" Message="Use 'nameof' expression to reference parameter 'sink' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="21382-21388" Line="347" Message="Use 'nameof' expression to reference parameter 'flow' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="21569-21581" Line="351" Message="Use 'nameof' expression to reference parameter 'capacities' name" />
-      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="21764-21772" Line="355" Message="Use 'nameof' expression to reference parameter 'levels' name" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5271-5272" Line="66" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5274-5275" Line="66" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6431-6438" Line="85" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6455-6460" Line="85" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6681-6688" Line="88" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6703-6708" Line="88" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7540-7547" Line="104" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7601-7606" Line="105" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7935-7942" Line="108" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8046-8051" Line="112" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8426-8431" Line="122" Message="The parameter directed has the same default value" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8907-8912" Line="132" Message="The parameter directed has the same default value" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10405-10406" Line="157" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10408-10409" Line="157" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13255-13256" Line="197" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13258-13259" Line="197" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17314-17315" Line="270" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17317-17318" Line="270" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20725-20726" Line="331" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20728-20729" Line="331" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Local" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20733-20743" Line="331" Message="Parameter 'inputGraph' is only passed to itself and used for precondition check(s)" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\Utilities\_NamespaceDocUtilities.cs" Offset="466-478" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\_NamespaceDocMain.cs" Offset="506-518" Line="8" Message="Class 'NamespaceDoc' is never used" />
     </Project>
@@ -277,6 +206,11 @@
       <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="15157-15158" Line="391" Message="Redundant explicit array size specification" />
       <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16708-16714" Line="417" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16736-16737" Line="417" Message="Redundant explicit array size specification" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17442-17450" Line="440" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17570-17597" Line="444" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17745-17772" Line="449" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17969-17981" Line="452" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="18183-18210" Line="457" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="587-604" Line="15" Message="Name 'TestConstructorID' does not match rule 'Methods'. Suggested name is 'TestConstructorId'." />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1173-1177" Line="35" Message="Local variable 'node' is never used" />
       <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1196-1202" Line="35" Message="Expression is always null" />
@@ -289,9 +223,9 @@
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3242-3248" Line="94" Message="Name 'TestID' does not match rule 'Methods'. Suggested name is 'TestId'." />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="8894-8900" Line="280" Message="Name '_child' does not match rule 'Local variables'. Suggested name is 'child'." />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="17755-17761" Line="535" Message="Name '_child' does not match rule 'Local variables'. Suggested name is 'child'." />
-      <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="522-533" Line="12" Message="Name 'UnitTestDFS' does not match rule 'Types and namespaces'. Suggested name is 'UnitTestDfs'." />
-      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6097-6102" Line="153" Message="Expression is always null" />
-      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6400-6405" Line="161" Message="Expression is always null" />
+      <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="557-568" Line="13" Message="Name 'UnitTestDFS' does not match rule 'Types and namespaces'. Suggested name is 'UnitTestDfs'." />
+      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6132-6137" Line="154" Message="Expression is always null" />
+      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6435-6440" Line="162" Message="Expression is always null" />
       <Issue TypeId="RedundantTypeArgumentsOfMethod" File="TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs" Offset="1970-1989" Line="30" Message="Type argument specification is redundant" />
       <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs" Offset="3014-3030" Line="42" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="RedundantExplicitParamsArrayCreation" File="TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs" Offset="3049-3057" Line="42" Message="Redundant explicit array creation in argument of 'params' parameter" />

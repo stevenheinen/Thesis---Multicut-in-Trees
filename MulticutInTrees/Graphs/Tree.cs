@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.Graphs
 {
@@ -99,7 +100,7 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
-        /// Update the root with information from <see cref="Nodes"/>.
+        /// Get the root with information from <see cref="Nodes"/>.
         /// </summary>
         /// <returns>The first occurance of an <typeparamref name="N"/> in <see cref="Nodes"/> that is a root.</returns>
         /// <exception cref="NoRootException">Thrown when there is no root in <see cref="Nodes"/>.</exception>
@@ -349,6 +350,26 @@ namespace MulticutInTrees.Graphs
             }
         }
 
-        // todo: check if valid tree: no cycles (from graph), exactly one root, connected (from graph)
+        /// <summary>
+        /// Checks if this <see cref="Tree{N}"/> is valid: it has exactly 1 root, is acyclic, and is connected.
+        /// </summary>
+        /// <returns><see langword="true"/> if this <see cref="Tree{N}"/> is valid, <see langword="false"/> otherwise.</returns>
+        public bool IsValid()
+        {
+            try
+            {
+                FindRoot();
+            }
+            catch (NoRootException)
+            {
+                return false;
+            }
+            catch (MultipleRootsException)
+            {
+                return false;
+            }
+            
+            return DFS.IsAcyclicTree<Tree<N>, N>(this) && DFS.FindAllConnectedComponents(Nodes).Count == 1;
+        }
     }
 }

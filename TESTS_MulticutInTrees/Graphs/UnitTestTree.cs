@@ -418,5 +418,45 @@ namespace TESTS_MulticutInTrees.Graphs
             });
             Assert.IsInstanceOfType(e.InnerException, typeof(ArgumentNullException));
         }
+
+        [TestMethod]
+        public void TestValidTree()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+
+            Assert.IsFalse(tree.IsValid());
+
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+
+            tree.AddRoot(node0);
+            tree.AddChild(node0, node1);
+            tree.AddChild(node0, node2);
+
+            Assert.IsTrue(tree.IsValid());
+
+            PropertyInfo property = typeof(TreeNode).GetProperty("Parent");
+            property.GetSetMethod(true).Invoke(node1, new object[] { null });
+
+            Assert.IsFalse(tree.IsValid());
+
+            property.GetSetMethod(true).Invoke(node1, new object[] { node0 });
+
+            Assert.IsTrue(tree.IsValid());
+
+            TreeNode node3 = new TreeNode(3);
+            property.GetSetMethod(true).Invoke(node3, new object[] { node2 });
+
+            PropertyInfo nodeproperty = typeof(Tree<TreeNode>).GetProperty("InternalNodes", BindingFlags.NonPublic | BindingFlags.Instance);
+            nodeproperty.GetSetMethod(true).Invoke(tree, new object[] { new List<TreeNode>() { node0, node1, node2, node3 } });
+
+            Assert.IsFalse(tree.IsValid());
+
+            node0.AddChild(node3);
+            property.GetSetMethod(true).Invoke(node3, new object[] { node2 });
+
+            Assert.IsFalse(tree.IsValid());
+        }
     }
 }

@@ -705,5 +705,62 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNode(null));
             Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNodes(null));
         }
+
+        [TestMethod]
+        public void TestAcyclic()
+        {
+            Graph<Node> graph = new Graph<Node>();
+
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
+            graph.AddEdges(new List<(Node, Node)>()
+            {
+                (node0, node1),
+                (node1, node2),
+                (node2, node3),
+                (node3, node0)
+            });
+
+            Assert.IsFalse(graph.IsAcyclic());
+
+            graph.RemoveEdge(node0, node3);
+
+            Assert.IsTrue(graph.IsAcyclic());
+
+            graph.RemoveNode(node1);
+            graph.RemoveNode(node2);
+            graph.RemoveNode(node3);
+
+            Assert.IsTrue(graph.IsAcyclic());
+        }
+
+        [TestMethod]
+        public void TestConnected()
+        {
+            Graph<Node> graph = new Graph<Node>();
+
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
+            graph.AddEdges(new List<(Node, Node)>()
+            {
+                (node0, node1),
+                (node1, node2),
+                (node2, node3),
+            });
+
+            Assert.IsTrue(graph.IsConnected());
+
+            graph.RemoveNode(node1);
+
+            Assert.IsFalse(graph.IsConnected());
+        }
     }
 }

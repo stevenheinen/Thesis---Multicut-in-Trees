@@ -400,7 +400,22 @@ namespace MulticutInTrees.Graphs
             }
         }
 
-        //todo: add cyclic/acyclic check
-        //todo: add connected check
+        /// <summary>
+        /// Checks whether this <see cref="Graph{N}"/> is acyclic.
+        /// </summary>
+        /// <returns><see langword="true"/> if this <see cref="Graph{N}"/> is acyclic, <see langword="false"/> if it is cyclic.</returns>
+        public bool IsAcyclic()
+        {
+            return DFS.IsAcyclicGraph<Graph<N>, N>(this);
+        }
+
+        /// <summary>
+        /// Checks whether this <see cref="Graph{N}"/> is connected.
+        /// </summary>
+        /// <returns><see langword="true"/> if this <see cref="Graph{N}"/> is connected, <see langword="false"/> otherwise.</returns>
+        public bool IsConnected()
+        {
+            return DFS.FindAllConnectedComponents(Nodes, null).Count == 1;
+        }
     }
 }

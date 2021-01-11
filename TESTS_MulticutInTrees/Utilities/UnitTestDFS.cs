@@ -3,6 +3,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -329,6 +330,65 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesGraph<Graph<Node>, Node>(null));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(null));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindConnectedComponent<Node>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicGraph<Graph<Node>, Node>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(null));
+        }
+        
+        [TestMethod]
+        public void TestAcyclicGraph()
+        {
+            Graph<Node> graph = new Graph<Node>();
+
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
+            graph.AddEdges(new List<(Node, Node)>()
+            {
+                (node0, node1),
+                (node1, node2),
+                (node2, node3),
+                (node3, node0)
+            });
+
+            Assert.IsFalse(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph));
+
+            graph.RemoveEdge(node0, node3);
+
+            Assert.IsTrue(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph));
+
+            graph.RemoveNode(node1);
+            graph.RemoveNode(node2);
+            graph.RemoveNode(node3);
+
+            Assert.IsTrue(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph));
+        }
+
+        [TestMethod]
+        public void TestAcyclicTree()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+
+            Assert.ThrowsException<NoRootException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree));
+
+            tree.AddRoot(node0);
+
+            Assert.IsTrue(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree));
+
+            tree.AddChild(node0, node1);
+            tree.AddChild(node0, node2);
+
+            Assert.IsTrue(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree));
+
+            node1.AddChild(node2);
+
+            Assert.IsFalse(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree));
         }
     }
 }

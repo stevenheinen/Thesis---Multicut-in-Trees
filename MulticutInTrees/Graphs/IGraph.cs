@@ -122,5 +122,17 @@ namespace MulticutInTrees.Graphs
         /// <param name="node">The <typeparamref name="N"/> from which we want to remove all its edges.</param>
         /// <param name="directed">If <see langword="true"/>, only the outgoing edges from <paramref name="node"/> are removed. If <see langword="false"/>, the edges incoming to <paramref name="node"/> are removed as well.</param>
         public void RemoveAllEdgesOfNode(N node, bool directed = false);
+
+        /// <summary>
+        /// Checks whether this <see cref="IGraph{N}"/> is acyclic.
+        /// </summary>
+        /// <returns><see langword="true"/> if this <see cref="IGraph{N}"/> is acyclic, <see langword="false"/> if it is cyclic.</returns>
+        public bool IsAcyclic();
+
+        /// <summary>
+        /// Checks whether this <see cref="IGraph{N}"/> is connected.
+        /// </summary>
+        /// <returns><see langword="true"/> if this <see cref="IGraph{N}"/> is connected, <see langword="false"/> otherwise.</returns>
+        public bool IsConnected();
     }
 }
