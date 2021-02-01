@@ -6,7 +6,9 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees
@@ -27,6 +29,25 @@ namespace MulticutInTrees
         public static void Main()
         {
             Console.WriteLine("Hello World!");
+
+            /*
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+
+            tree.AddRoot(node0);
+            tree.AddChild(node0, node1);
+            tree.AddChild(node0, node2);
+            tree.AddChild(node1, node3);
+
+            DemandPair dp = new DemandPair(node0, node2);
+
+            GuoNiedermeierFPT g = new GuoNiedermeierFPT(tree, new List<DemandPair>() { dp });
+
+            var x = g.Run();
+            */
 
             /*
             Graph<Node> g = new Graph<Node>();

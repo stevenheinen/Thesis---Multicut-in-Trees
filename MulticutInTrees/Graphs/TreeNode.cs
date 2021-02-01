@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.Graphs
 {
@@ -130,10 +131,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> is <see langword="null"/>.</exception>
         public TreeNode(uint id, TreeNode parent)
         {
-            if (parent is null)
-            {
-                throw new ArgumentNullException(nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
-            }
+            Utils.NullCheck(parent, nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
 
             ID = id;
             InternalChildren = new List<TreeNode>();
@@ -153,14 +151,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> or <paramref name="children"/> is <see langword="null"/>.</exception>
         public TreeNode(uint id, TreeNode parent, IEnumerable<TreeNode> children)
         {
-            if (parent is null)
-            {
-                throw new ArgumentNullException(nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
-            }
-            if (children is null)
-            {
-                throw new ArgumentNullException(nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
-            }
+            Utils.NullCheck(parent, nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
+            Utils.NullCheck(children, nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
 
             ID = id;
             InternalChildren = new List<TreeNode>();
@@ -180,10 +172,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="children"/> is <see langword="null"/>.</exception>
         public TreeNode(uint id, IEnumerable<TreeNode> children)
         {
-            if (children is null)
-            {
-                throw new ArgumentNullException(nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
-            }
+            Utils.NullCheck(children, nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
 
             ID = id;
             InternalChildren = new List<TreeNode>();
@@ -204,10 +193,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyANeighbourException">Thrown when parameter <paramref name="child"/> is already a child of the <see cref="TreeNode"/> this method is called from.</exception>
         public void AddChild(TreeNode child)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child), $"Trying to add a child to {this}, but child is null!");
-            }
+            Utils.NullCheck(child, nameof(child), $"Trying to add a child to {this}, but child is null!");
             if (child == this)
             {
                 throw new AddNeighbourToSelfException($"Trying to add {this} as child to itself!");
@@ -236,10 +222,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when the <see cref="IEnumerable{T}"/> parameter with children is <see langword="null"/>.</exception>
         public void AddChildren(IEnumerable<TreeNode> children)
         {
-            if (children is null)
-            {
-                throw new ArgumentNullException(nameof(children), $"Trying to add multiple children to {this}, but the IEnumerable of children is null!");
-            }
+            Utils.NullCheck(children, nameof(children), $"Trying to add multiple children to {this}, but the IEnumerable of children is null!");
 
             foreach (TreeNode child in children)
             {
@@ -258,10 +241,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotANeighbourException">Thrown when <paramref name="child"/> is not a child of this <see cref="TreeNode"/>.</exception>
         public void RemoveChild(TreeNode child)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child), $"Trying to remove a child from {this}, but the child is null!");
-            }
+            Utils.NullCheck(child, nameof(child), $"Trying to remove a child from {this}, but the child is null!");
             if (!InternalUniqueChildren.Contains(child))
             {
                 throw new NotANeighbourException($"Trying to remove {child} from the children of {this}, but {child} is no neighbour of {this}!");
@@ -285,10 +265,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when the <see cref="IEnumerable{T}"/> parameter with children is <see langword="null"/>.</exception>
         public void RemoveChildren(IEnumerable<TreeNode> children)
         {
-            if (children is null)
-            {
-                throw new ArgumentNullException(nameof(children), $"Trying to remove multiple children from {this}, but the IEnumerable with children is null!");
-            }
+            Utils.NullCheck(children, nameof(children), $"Trying to remove multiple children from {this}, but the IEnumerable with children is null!");
 
             foreach (TreeNode child in children)
             {
@@ -323,10 +300,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         public bool HasChild(TreeNode node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to see if a node is a child of {this}, but node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to see if a node is a child of {this}, but node is null!");
 
             return InternalUniqueChildren.Contains(node);
         }
@@ -391,10 +365,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbour"/> is <see langword="null"/>.</exception>
         void INode<TreeNode>.RemoveNeighbour(TreeNode neighbour, bool directed)
         {
-            if (neighbour is null)
-            {
-                throw new ArgumentNullException(nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
-            }
+            Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
 
             if (neighbour == Parent)
             {
@@ -414,10 +385,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> is <see langword="null"/>.</exception>
         void INode<TreeNode>.RemoveNeighbours(IEnumerable<TreeNode> neighbours, bool directed)
         {
-            if (neighbours is null)
-            {
-                throw new ArgumentNullException(nameof(neighbours), $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
-            }
+            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
 
             foreach (TreeNode neighbour in neighbours)
             {
@@ -433,10 +401,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         bool INode<TreeNode>.HasNeighbour(TreeNode node)
         {
-            if (node == null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
 
             return node == Parent || HasChild(node);
         }

@@ -1,7 +1,5 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿// This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -91,10 +89,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         public bool HasNode(N node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
 
             return UniqueInternalNodes.Contains(node);
         }
@@ -108,14 +103,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is not part of this <see cref="Graph{N}"/>.</exception>
         public bool HasEdge(N origin, N destination, bool directed = false)
         {
-            if (origin is null)
-            {
-                throw new ArgumentNullException(nameof(origin), $"Trying to find out whether an edge exists in {this}, but the origin of the edge is null!");
-            }
-            if (destination is null)
-            {
-                throw new ArgumentNullException(nameof(destination), $"Trying to find out whether an edge exists in {this}, but the destination of the edge is null!");
-            }
+            Utils.NullCheck(origin, nameof(origin), $"Trying to find out whether an edge exists in {this}, but the origin of the edge is null!");
+            Utils.NullCheck(destination, nameof(destination), $"Trying to find out whether an edge exists in {this}, but the destination of the edge is null!");
             if (!HasNode(origin))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the origin of the edge is not part of {this}!");
@@ -136,7 +125,8 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// Finds whether the edge <paramref name="edge"/> exists in this <see cref="Graph{N}"/>.
         /// </summary>
-        /// <inheritdoc/>
+        /// <param name="edge">The tuple of two <typeparamref name="N"/>s for which we want to know if it is part of this <see cref="Graph{N}"/>.</param>
+        /// <param name="directed">Optional. If <see langword="true"/>, only the edge from the first to the second endpoint of <paramref name="edge"/> is checked. If <see langword="false"/>, also the inverse edge is checked.</param>
         /// <returns><see langword="true"/> if <paramref name="edge"/> exists in this <see cref="Graph{N}"/>, <see langword="false"/> otherwise.</returns>
         public bool HasEdge((N, N) edge, bool directed = false)
         {
@@ -186,10 +176,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyInGraphException">Thrown when <paramref name="node"/> is already part of this <see cref="Graph{N}"/>.</exception>
         public void AddNode(N node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to add a node to {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to add a node to {this}, but the node is null!");
             if (HasNode(node))
             {
                 throw new AlreadyInGraphException($"Trying to add {node} to {this}, but {node} is already part of {this}!");
@@ -206,10 +193,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
         public void AddNodes(IEnumerable<N> nodes)
         {
-            if (nodes is null)
-            {
-                throw new ArgumentNullException(nameof(nodes), $"Trying to add an IEnumerable of nodes to {this}, but the IEnumerable is null!");
-            }
+            Utils.NullCheck(nodes, nameof(nodes), $"Trying to add an IEnumerable of nodes to {this}, but the IEnumerable is null!");
 
             foreach (N node in nodes)
             {
@@ -226,14 +210,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyInGraphException">Thrown when the edge to be added is already part of this <see cref="Graph{N}"/>.</exception>
         public void AddEdge(N origin, N destination, bool directed = false)
         {
-            if (origin is null)
-            {
-                throw new ArgumentNullException(nameof(origin), $"Trying to add an edge to {this}, but the origin of the edge is null!");
-            }
-            if (destination is null)
-            {
-                throw new ArgumentNullException(nameof(destination), $"Trying to add an edge to {this}, but the destination of the edge is null!");
-            }
+            Utils.NullCheck(origin, nameof(origin), $"Trying to add an edge to {this}, but the origin of the edge is null!");
+            Utils.NullCheck(destination, nameof(destination), $"Trying to add an edge to {this}, but the destination of the edge is null!");
             if (!HasNode(origin))
             {
                 throw new NotInGraphException($"Trying to add an edge between {origin} and {destination} to {this}, but {origin} is not part of {this}!");
@@ -261,10 +239,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
         public void AddEdges(IEnumerable<(N, N)> edges, bool directed = false)
         {
-            if (edges is null)
-            {
-                throw new ArgumentNullException(nameof(edges), $"Trying to add an IEnumerable of edges to {this}, but the IEnumerable is null!");
-            }
+            Utils.NullCheck(edges, nameof(edges), $"Trying to add an IEnumerable of edges to {this}, but the IEnumerable is null!");
 
             foreach ((N origin, N destination) in edges)
             {
@@ -280,10 +255,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Graph{N}"/>.</exception>
         public void RemoveNode(N node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to remove a node from {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to remove a node from {this}, but the node is null!");
             if (!HasNode(node))
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");
@@ -301,10 +273,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
         public void RemoveNodes(IEnumerable<N> nodes)
         {
-            if (nodes is null)
-            {
-                throw new ArgumentNullException(nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
-            }
+            Utils.NullCheck(nodes, nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
 
             foreach (N node in nodes)
             {
@@ -320,10 +289,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Graph{N}"/>.</exception>
         public void RemoveAllEdgesOfNode(N node, bool directed = false)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to remove all edges of a node in {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to remove all edges of a node in {this}, but the node is null!");
             if (!HasNode(node))
             {
                 throw new NotInGraphException($"Trying to remove all edges of {node} from {this}, but {node} is not part of {this}!");
@@ -339,10 +305,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
         public void RemoveEdges(IList<(N, N)> edges, bool directed = false)
         {
-            if (edges is null)
-            {
-                throw new ArgumentNullException(nameof(edges), $"Trying to remove multiple edges from {this}, but the IEnumerable with edges is null!");
-            }
+            Utils.NullCheck(edges, nameof(edges), $"Trying to remove multiple edges from {this}, but the IEnumerable with edges is null!");
 
             foreach ((N origin, N destination) in edges)
             {
@@ -358,14 +321,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when <paramref name="origin"/>, <paramref name="destination"/> or the edge between them is not part of this <see cref="Graph{N}"/>.</exception>
         public void RemoveEdge(N origin, N destination, bool directed = false)
         { 
-            if (origin is null)
-            {
-                throw new ArgumentNullException(nameof(origin), $"Trying to remove the edge from {this}, but the origin of the edge is null!");
-            }
-            if (destination is null)
-            {
-                throw new ArgumentNullException(nameof(origin), $"Trying to remove the edge from {this}, but the destination of the edge is null!");
-            }
+            Utils.NullCheck(origin, nameof(origin), $"Trying to remove the edge from {this}, but the origin of the edge is null!");
+            Utils.NullCheck(destination, nameof(destination), $"Trying to remove the edge from {this}, but the destination of the edge is null!");
             if (!HasNode(origin))
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but {origin} is not part of {this}!");

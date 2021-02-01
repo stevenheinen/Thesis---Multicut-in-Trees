@@ -130,10 +130,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="MultipleRootsException">Thrown when <paramref name="node"/> is the root and has multiple children.</exception>
         private void AddChildrenToParent(N node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), "Trying to add the children of a node to its parent, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), "Trying to add the children of a node to its parent, but the node is null!");
 
             if (node.Equals(Root))
             {
@@ -179,10 +176,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         public bool HasNode(N node)
         {
-            if (node is null) 
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
 
             return UniqueInternalNodes.Contains(node);
         }
@@ -196,14 +190,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when either <paramref name="parent"/> or <paramref name="child"/> is not part of this <see cref="Tree{N}"/>.</exception>
         public bool HasEdge(N parent, N child)
         {
-            if (parent is null)
-            {
-                throw new ArgumentNullException(nameof(parent), $"Trying to find out whether an edge exists in {this}, but the parent of the edge is null!");
-            }
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child), $"Trying to find out whether an edge exists in {this}, but the child of the edge is null!");
-            }
+            Utils.NullCheck(parent, nameof(parent), $"Trying to find out whether an edge exists in {this}, but the parent of the edge is null!");
+            Utils.NullCheck(child, nameof(child), $"Trying to find out whether an edge exists in {this}, but the child of the edge is null!");
             if (!HasNode(parent))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the parent of the edge is not part of {this}!");
@@ -217,16 +205,49 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
+        /// Checks whether the edge <paramref name="edge"/> is part of this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="edge">The <see cref="ValueTuple{T1, T2}"/> of <typeparamref name="N"/>s for which we want to know if it is part of this <see cref="Tree{N}"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="edge"/> exists in this <see cref="ITree{N}"/>, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when either <typeparamref name="N"/> of <paramref name="edge"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotInGraphException">Thrown when either <typeparamref name="N"/> of <paramref name="edge"/> is not part of this <see cref="Tree{N}"/>.</exception>
+        public bool HasEdge((N, N) edge)
+        {
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to find out whether an edge exists in {this}, but the first endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to find out whether an edge exists in {this}, but the second endpoint of the edge is null!");
+            if (!HasNode(edge.Item1))
+            {
+                throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the first endpoint of the edge is not part of {this}!");
+            }
+            if (!HasNode(edge.Item2))
+            {
+                throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the second endpoint of the edge is not part of {this}!");
+            }
+
+            N parent = edge.Item1;
+            N child = edge.Item2;
+
+            if (!parent.Equals(Root))
+            {
+                if (parent.Parent.Equals(child))
+                {
+                    parent = edge.Item2;
+                    child = edge.Item1;
+                }
+            }
+
+            return UniqueInternalEdges.Contains((parent, child));
+        }
+
+
+        /// <summary>
         /// Add <paramref name="newRoot"/> as root to this <see cref="Tree{N}"/>. The old root (if it exists) becomes a child of <paramref name="newRoot"/>.
         /// </summary>
         /// <param name="newRoot">The <typeparamref name="N"/> that will be the new root of this <see cref="Tree{N}"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="newRoot"/> is <see langword="null"/>.</exception>
         public void AddRoot(N newRoot)
         {
-            if (newRoot is null)
-            {
-                throw new ArgumentNullException(nameof(newRoot), $"Trying to add a new root to {this}, but the new root is null!");
-            }
+            Utils.NullCheck(newRoot, nameof(newRoot), $"Trying to add a new root to {this}, but the new root is null!");
 
             if (!(Root is null))
             {
@@ -250,14 +271,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyInGraphException">Thrown when <paramref name="child"/> is already part of this <see cref="Tree{N}"/>.</exception>
         public void AddChild(N parent, N child)
         {
-            if (parent is null)
-            {
-                throw new ArgumentNullException(nameof(parent), $"Trying to add {child} as a child to a parent, but the parent is null!");
-            }
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child), $"Trying to add a child to {parent}, but the child is null!");
-            }
+            Utils.NullCheck(parent, nameof(parent), $"Trying to add {child} as a child to a parent, but the parent is null!");
+            Utils.NullCheck(child, nameof(child), $"Trying to add a child to {parent}, but the child is null!");
             if (!HasNode(parent))
             {
                 throw new NotInGraphException($"Trying to add {child} as a child to {parent}, but {parent} is not part of {this}!");
@@ -283,14 +298,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when either <paramref name="parent"/> or <paramref name="children"/> is <see langword="null"/>.</exception>
         public void AddChildren(N parent, IEnumerable<N> children)
         {
-            if (parent is null)
-            {
-                throw new ArgumentNullException(nameof(parent), $"Trying to add multiple children to a parent, but the parent is null!");
-            }
-            if (children is null)
-            {
-                throw new ArgumentNullException(nameof(children), $"Trying to add multiple children to {parent}, but the IEnumerable of children is null!");
-            }
+            Utils.NullCheck(parent, nameof(parent), $"Trying to add multiple children to a parent, but the parent is null!");
+            Utils.NullCheck(children, nameof(children), $"Trying to add multiple children to {parent}, but the IEnumerable of children is null!");
 
             foreach (N child in children)
             {
@@ -306,10 +315,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Tree{N}"/>.</exception>
         public void RemoveNode(N node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to remove a node from {this}, but the node is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to remove a node from {this}, but the node is null!");
             if (!HasNode(node))
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");
@@ -339,10 +345,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
         public void RemoveNodes(IEnumerable<N> nodes)
         {
-            if (nodes is null)
-            {
-                throw new ArgumentNullException(nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
-            }
+            Utils.NullCheck(nodes, nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
 
             foreach (N node in nodes)
             {

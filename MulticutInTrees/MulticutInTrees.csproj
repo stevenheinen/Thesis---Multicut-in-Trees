@@ -13,16 +13,37 @@
     <DefaultDocumentationHome>home</DefaultDocumentationHome>
   </PropertyGroup>
 
+  <Choose>
+    <When Condition="'$(BuildingForLiveUnitTesting)' == 'true'">
+      <ItemGroup>
+        <PackageReference Include="DefaultDocumentation" Version="0.6.14">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+      </ItemGroup>
+    </When>
+    <!--
+    <When Condition="'$(BuildingForLiveUnitTesting)' != 'true'">
+      <ItemGroup>
+        <PackageReference Include="DefaultDocumentation" Version="0.6.14">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+      </ItemGroup>
+    </When>
+    -->
+  </Choose>
+
   <ItemGroup>
-    <PackageReference Include="DefaultDocumentation" Version="0.6.14">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.8.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
+  </Target>
 
 </Project>

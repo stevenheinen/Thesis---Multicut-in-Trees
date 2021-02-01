@@ -15,9 +15,12 @@ namespace MulticutInTrees.Utilities
         /// </summary>
         /// <typeparam name="T">The type of elements in <paramref name="list"/>.</typeparam>
         /// <param name="list">The <see cref="IList{T}"/> to be shuffled. Cannot be readonly.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="list"/> is readonly.</exception>
         public static void Shuffle<T>(this IList<T> list)
         {
+            Utils.NullCheck(list, nameof(list), $"Trying to shuffle an IList, but the IList is null!");
+
             if (list.IsReadOnly && !(list is T[]))
             {
                 throw new NotSupportedException($"Cannot shuffle this {list.GetType()} because it is readonly!");

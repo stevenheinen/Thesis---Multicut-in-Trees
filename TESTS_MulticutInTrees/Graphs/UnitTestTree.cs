@@ -161,17 +161,15 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.IsTrue(tree.HasEdge(node1, node5));
             Assert.IsFalse(tree.HasEdge(node0, node4));
 
-            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 tree.HasEdge(node0, null);
             });
-            Assert.AreEqual("child", a.ParamName);
 
-            ArgumentNullException b = Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 tree.HasEdge(null, node10);
             });
-            Assert.AreEqual("parent", b.ParamName);
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
@@ -183,6 +181,45 @@ namespace TESTS_MulticutInTrees.Graphs
                 tree.HasEdge(node7, node5);
             });
         }
+
+        [TestMethod]
+        public void TestHasEdgeTuple()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+            TreeNode node5 = new TreeNode(5);
+            TreeNode node6 = new TreeNode(6);
+            TreeNode node7 = new TreeNode(7);
+            TreeNode node8 = new TreeNode(8);
+            TreeNode node9 = new TreeNode(9);
+            TreeNode node10 = new TreeNode(10);
+
+            tree.AddRoot(node1);
+            tree.AddRoot(node0);
+            tree.AddChildren(node0, new List<TreeNode>() { node2, node3 });
+            tree.AddChildren(node1, new List<TreeNode>() { node4, node5 });
+
+            Assert.IsTrue(tree.HasEdge((node0, node1)));
+            Assert.IsTrue(tree.HasEdge((node1, node5)));
+            Assert.IsFalse(tree.HasEdge((node0, node4)));
+
+            Assert.IsTrue(tree.HasEdge((node1, node0)));
+            Assert.IsTrue(tree.HasEdge((node5, node1)));
+            Assert.IsFalse(tree.HasEdge((node4, node0)));
+
+            Assert.ThrowsException<ArgumentNullException>(() => tree.HasEdge((node0, null)));
+            Assert.ThrowsException<ArgumentNullException>(() => tree.HasEdge((null, node10)));
+            Assert.ThrowsException<NotInGraphException>(() => tree.HasEdge((node1, node9)));
+            Assert.ThrowsException<NotInGraphException>(() => tree.HasEdge((node7, node5)));
+            Assert.ThrowsException<NotInGraphException>(() => tree.HasEdge((node9, node1)));
+            Assert.ThrowsException<NotInGraphException>(() => tree.HasEdge((node5, node7)));
+        }
+
 
         [TestMethod]
         public void TestAddChild()

@@ -1,5 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -56,6 +57,13 @@ namespace MulticutInTrees.Graphs
         /// <param name="child">The <typeparamref name="N"/> that should be the child of the connection.</param>
         /// <returns><see langword="true"/> if the edge between <paramref name="parent"/> and <paramref name="child"/> exists in this <see cref="ITree{N}"/>, <see langword="false"/> otherwise.</returns>
         public bool HasEdge(N parent, N child);
+
+        /// <summary>
+        /// Checks whether the edge <paramref name="edge"/> is part of this <see cref="ITree{N}"/>.
+        /// </summary>
+        /// <param name="edge">The <see cref="ValueTuple{T1, T2}"/> of <typeparamref name="N"/>s for which we want to know if it is part of this <see cref="ITree{N}"/>.</param>
+        /// <returns><see langword="true"/> if <paramref name="edge"/> exists in this <see cref="ITree{N}"/>, <see langword="false"/> otherwise.</returns>
+        public bool HasEdge((N, N) edge);
 
         /// <summary>
         /// Add a new root to this <see cref="ITree{N}"/>.

@@ -320,6 +320,25 @@ namespace TESTS_MulticutInTrees.Utilities
         }
 
         [TestMethod]
+        public void TestPathBetween()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+
+            tree.AddRoot(node0);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+
+            List<TreeNode> path = DFS.FindPathBetween(node2, node4);
+            CollectionAssert.AreEqual(new List<TreeNode>() { node2, node0, node1, node4 }, path);
+        }
+
+        [TestMethod]
         public void TestNullArgument()
         {
             Node n = new Node(0);
@@ -332,6 +351,8 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindConnectedComponent<Node>(null));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicGraph<Graph<Node>, Node>(null));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(n, null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(null, n));
         }
         
         [TestMethod]

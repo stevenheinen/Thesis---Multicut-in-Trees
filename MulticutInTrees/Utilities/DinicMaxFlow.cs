@@ -25,18 +25,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="sinks"/> or <paramref name="sources"/> is <see langword="null"/>.</exception>
         public static int MaxFlowMultipleSourcesSinksUnitCapacities<G, N>(G inputGraph, IEnumerable<N> sources, IEnumerable<N> sinks) where G : IGraph<N> where N : INode<N>
         {
-            if (inputGraph is null)
-            {
-                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with unit capacities, but the input graph is null!");
-            }
-            if (sources is null)
-            {
-                throw new ArgumentNullException(nameof(sources), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sources is null!");
-            }
-            if (sinks is null)
-            {
-                throw new ArgumentNullException(nameof(sinks), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sinks is null!");
-            }
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with unit capacities, but the input graph is null!");
+            Utils.NullCheck(sources, nameof(sources), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sources is null!");
+            Utils.NullCheck(sinks, nameof(sinks), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sinks is null!");
             
             // Create a capacity dictionary with capacity 1 for each edge.
             ReadOnlyCollection<(N, N)> edges = inputGraph.Edges;
@@ -65,22 +56,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="KeyNotFoundException">Thrown when there is an edge in <paramref name="inputGraph"/> that does not have a capacity in <paramref name="capacities"/>.</exception>
         public static int MaxFlowMultipleSourcesSinks<G, N>(G inputGraph, IEnumerable<N> sources, IEnumerable<N> sinks, Dictionary<(uint, uint), int> capacities) where G : IGraph<N> where N : INode<N>
         {
-            if (inputGraph is null)
-            {
-                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with capacities, but the input graph is null!");
-            }
-            if (sources is null)
-            {
-                throw new ArgumentNullException(nameof(sources), "Trying to compute multiple source, multiple sink flow with capacities, but the IEnumerable with sources is null!");
-            }
-            if (sinks is null)
-            {
-                throw new ArgumentNullException(nameof(sinks), "Trying to compute multiple source, multiple sink flow with capacities, but the IEnumerable with sinks is null!");
-            }
-            if (capacities is null)
-            {
-                throw new ArgumentNullException(nameof(capacities), "Trying to compute multiple source, multiple sink flow with capacities, but the dictionary with capacities is null!");
-            }
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with capacities, but the input graph is null!");
+            Utils.NullCheck(sources, nameof(sources), "Trying to compute multiple source, multiple sink flow with capacities, but the IEnumerable with sources is null!");
+            Utils.NullCheck(sinks, nameof(sinks), "Trying to compute multiple source, multiple sink flow with capacities, but the IEnumerable with sinks is null!");
+            Utils.NullCheck(capacities, nameof(capacities), "Trying to compute multiple source, multiple sink flow with capacities, but the dictionary with capacities is null!");
 
             if (sources.Count() == 1 && sinks.Count() == 1)
             {
@@ -156,18 +135,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="sink"/> or <paramref name="source"/> is <see langword="null"/>.</exception>
         public static int MaxFlowUnitCapacities<G, N>(G inputGraph, N source, N sink) where G : IGraph<N> where N : INode<N>
         {
-            if (inputGraph is null)
-            {
-                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute single source, single sink flow with unit capacities, but the input graph is null!");
-            }
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source), "Trying to compute single source, single sink flow with unit capacities, but the source node is null!");
-            }
-            if (sink is null)
-            {
-                throw new ArgumentNullException(nameof(sink), "Trying to compute single source, single sink flow with unit capacities, but the sink node is null!");
-            }
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute single source, single sink flow with unit capacities, but the input graph is null!");
+            Utils.NullCheck(source, nameof(source), "Trying to compute single source, single sink flow with unit capacities, but the source node is null!");
+            Utils.NullCheck(sink, nameof(sink), "Trying to compute single source, single sink flow with unit capacities, but the sink node is null!");
 
             // Create a capacity dictionary with capacity 1 for each edge.
             ReadOnlyCollection<(N, N)> edges = inputGraph.Edges;
@@ -196,22 +166,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="KeyNotFoundException">Thrown when there is an edge in <paramref name="inputGraph"/> that does not have a capacity in <paramref name="capacities"/>.</exception>
         public static int MaxFlow<G, N>(G inputGraph, N source, N sink, Dictionary<(uint, uint), int> capacities) where G : IGraph<N> where N : INode<N>
         {
-            if (inputGraph is null)
-            {
-                throw new ArgumentNullException(nameof(inputGraph), "Trying to compute single source, single sink flow with capacities, but the input graph is null!");
-            }
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source), "Trying to compute single source, single sink flow with capacities, but the source node is null!");
-            }
-            if (sink is null)
-            {
-                throw new ArgumentNullException(nameof(sink), "Trying to compute single source, single sink flow with capacities, but the sink node is null!");
-            }
-            if (capacities is null)
-            {
-                throw new ArgumentNullException(nameof(sink), "Trying to compute single source, single sink flow with capacities, but the dictionary with capacities is null!");
-            }
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute single source, single sink flow with capacities, but the input graph is null!");
+            Utils.NullCheck(source, nameof(source), "Trying to compute single source, single sink flow with capacities, but the source node is null!");
+            Utils.NullCheck(sink, nameof(sink), "Trying to compute single source, single sink flow with capacities, but the sink node is null!");
+            Utils.NullCheck(capacities, nameof(capacities), "Trying to compute single source, single sink flow with capacities, but the dictionary with capacities is null!");
 
             if (source.Equals(sink))
             {
@@ -269,22 +227,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="source"/>, <paramref name="flow"/> or <paramref name="capacities"/> is <see langword="null"/>.</exception>
         private static Dictionary<uint, int> FindLevels<G, N>(G inputGraph, N source, Dictionary<(uint, uint), int> flow, Dictionary<(uint, uint), int> capacities) where G : IGraph<N> where N : INode<N>
         {
-            if (inputGraph is null)
-            {
-                throw new ArgumentNullException(nameof(inputGraph), "Trying to send flow, but the input graph is null!");
-            }
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source), "Trying to send flow, but the source node is null!");
-            }
-            if (flow is null)
-            {
-                throw new ArgumentNullException(nameof(flow), "Trying to send flow, but the dictionary with flow is null!");
-            }
-            if (capacities is null)
-            {
-                throw new ArgumentNullException(nameof(capacities), "Trying to send flow, but the dictionary with capacities is null!");
-            }
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to send flow, but the input graph is null!");
+            Utils.NullCheck(source, nameof(source), "Trying to send flow, but the source node is null!");
+            Utils.NullCheck(flow, nameof(flow), "Trying to send flow, but the dictionary with flow is null!");
+            Utils.NullCheck(capacities, nameof(capacities), "Trying to send flow, but the dictionary with capacities is null!");
 
             // Initialise each level to -1.
             Dictionary<uint, int> levels = new Dictionary<uint, int>();
@@ -330,30 +276,12 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="node"/>, <paramref name="sink"/>, <paramref name="flow"/>, <paramref name="capacities"/> or <paramref name="levels"/> is <see langword="null"/>.</exception>
         private static int SendFlow<G, N>(G inputGraph, N node, N sink, int currentFlow, Dictionary<(uint, uint), int> flow, Dictionary<(uint, uint), int> capacities, Dictionary<uint, int> levels) where G : IGraph<N> where N : INode<N>
         {
-            if (inputGraph is null)
-            {
-                throw new ArgumentNullException(nameof(inputGraph), "Trying to send flow, but the input graph is null!");
-            }
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), "Trying to send flow, but the source node is null!");
-            }
-            if (sink is null)
-            {
-                throw new ArgumentNullException(nameof(sink), "Trying to send flow, but the sink is null!");
-            }
-            if (flow is null)
-            {
-                throw new ArgumentNullException(nameof(flow), "Trying to send flow, but the dictionary with flow is null!");
-            }
-            if (capacities is null)
-            {
-                throw new ArgumentNullException(nameof(capacities), "Trying to send flow, but the dictionary with capacities is null!");
-            }
-            if (levels is null)
-            {
-                throw new ArgumentNullException(nameof(levels), "Trying to send flow, but the dictionary with levels is null!");
-            }
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to send flow, but the input graph is null!");
+            Utils.NullCheck(node, nameof(node), "Trying to send flow, but the source node is null!");
+            Utils.NullCheck(sink, nameof(sink), "Trying to send flow, but the sink is null!");
+            Utils.NullCheck(flow, nameof(flow), "Trying to send flow, but the dictionary with flow is null!");
+            Utils.NullCheck(capacities, nameof(capacities), "Trying to send flow, but the dictionary with capacities is null!");
+            Utils.NullCheck(levels, nameof(levels), "Trying to send flow, but the dictionary with levels is null!");
 
             // If we have reached the sink, we do not send any more flow, so return.
             if (node.Equals(sink))

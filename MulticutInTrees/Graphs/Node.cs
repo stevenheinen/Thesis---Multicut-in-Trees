@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.Graphs
 {
@@ -58,10 +59,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> is <see langword="null"/>.</exception>
         public Node(uint id, IEnumerable<Node> neighbours, bool directed = false)
         {
-            if (neighbours is null)
-            {
-                throw new ArgumentNullException(nameof(neighbours), $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
-            }
+            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
 
             ID = id;
             InternalNeighbours = new List<Node>(neighbours);
@@ -89,10 +87,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyANeighbourException">Thrown when paramter <paramref name="neighbour"/> is already a neighbour of this <see cref="Node"/>.</exception>
         public void AddNeighbour(Node neighbour, bool directed = false)
         {
-            if (neighbour is null)
-            {
-                throw new ArgumentNullException(nameof(neighbour), $"Trying to add a neighbour to {this}, but neighbour is null!");
-            }
+            Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to add a neighbour to {this}, but neighbour is null!");
             if (neighbour == this)
             {
                 throw new AddNeighbourToSelfException($"Trying to add {neighbour} as a neighbour to itself!");
@@ -122,10 +117,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when the <see cref="IEnumerable{T}"/> parameter with neighbours is <see langword="null"/>.</exception>
         public void AddNeighbours(IEnumerable<Node> neighbours, bool directed = false)
         {
-            if (neighbours is null)
-            {
-                throw new ArgumentNullException(nameof(neighbours), $"Trying to add a list of neighbours to {this}, but the list is null!");
-            }
+            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to add a list of neighbours to {this}, but the list is null!");
 
             foreach (Node neighbour in neighbours)
             {
@@ -166,10 +158,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotANeighbourException">Thrown when the parameter <paramref name="neighbour"/> is not a neighbour of this <see cref="Node"/>.</exception>
         public void RemoveNeighbour(Node neighbour, bool directed = false)
         {
-            if (neighbour is null)
-            {
-                throw new ArgumentNullException(nameof(neighbour), $"Trying to remove a neighbour from {this}, but neighbour is null!");
-            }
+            Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to remove a neighbour from {this}, but neighbour is null!");
             if (!InternalUniqueNeighbours.Contains(neighbour))
             {
                 throw new NotANeighbourException($"Trying to remove {neighbour} from {this}'s neighbours, but {neighbour} is no neighbour of {this}!");
@@ -195,10 +184,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when the <see cref="IEnumerable{T}"/> parameter is <see langword="null"/>.</exception>
         public void RemoveNeighbours(IEnumerable<Node> neighbours, bool directed = false)
         {
-            if (neighbours is null)
-            {
-                throw new ArgumentNullException(nameof(neighbours), $"Trying to remove a list of neighbours from {this}, but the list is null!");
-            }
+            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to remove a list of neighbours from {this}, but the list is null!");
 
             foreach (Node neighbour in neighbours)
             {
@@ -214,10 +200,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="node"/> is <see langword="null"/>.</exception>
         public bool HasNeighbour(Node node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node), $"Trying to see if {this} has a neighbour, but the neighbour is null!");
-            }
+            Utils.NullCheck(node, nameof(node), $"Trying to see if {this} has a neighbour, but the neighbour is null!");
 
             return InternalUniqueNeighbours.Contains(node);
         }
