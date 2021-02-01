@@ -15,7 +15,7 @@ namespace MulticutInTrees.ReductionRules
     /// <br/>
     /// Rule: If there is a tree edge with no demand path passing through it, contract this edge.
     /// </summary>
-    internal class IdleEdge : ReductionRule
+    public class IdleEdge : ReductionRule
     {
         /// <summary>
         /// A <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.
@@ -31,7 +31,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        internal IdleEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
+        public IdleEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
         {
             Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the IdleEdge rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the IdleEdge rule, but the list of demand pairs is null!");

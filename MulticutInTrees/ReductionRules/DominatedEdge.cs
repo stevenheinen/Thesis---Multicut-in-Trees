@@ -16,7 +16,7 @@ namespace MulticutInTrees.ReductionRules
     /// <br/>
     /// Rule: If all demand paths that pass through edge e_1 also pass through edge e_2, then contract e_1.
     /// </summary>
-    internal class DominatedEdge : ReductionRule
+    public class DominatedEdge : ReductionRule
     {
         /// <summary>
         /// A <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.
@@ -32,7 +32,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        internal DominatedEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
+        public DominatedEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
         {
             Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the DominatedEdge reduction rule, but the list of demand pairs is null!");

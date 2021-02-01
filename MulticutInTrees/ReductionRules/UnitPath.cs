@@ -15,7 +15,7 @@ namespace MulticutInTrees.ReductionRules
     /// <br/>
     /// Rule: If a demand path has length one, cut its edge e.
     /// </summary>
-    internal class UnitPath : ReductionRule
+    public class UnitPath : ReductionRule
     {
         /// <summary>
         /// Constructor for the <see cref="UnitPath"/> rule.
@@ -24,7 +24,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
-        internal UnitPath(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm) : base(input, demandPairs, algorithm)
+        public UnitPath(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm) : base(input, demandPairs, algorithm)
         {
             Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the Unit Path rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the Unit Path rule, but the list of demand pairs is null!");

@@ -8,9 +8,13 @@
     </InspectionScope>
   </Information>
   <IssueTypes>
+    <IssueType Id="AccessToModifiedClosure" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Access to modified captured variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AccessToModifiedClosure" />
     <IssueType Id="ArrangeModifiersOrder" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Adjust modifiers declaration order" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeModifiersOrder" />
+    <IssueType Id="AssignNullToNotNullAttribute" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Possible 'null' assignment to non-nullable entity" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AssignNullToNotNullAttribute" />
     <IssueType Id="AutoPropertyCanBeMadeGetOnly.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Global" />
+    <IssueType Id="CSharpErrors" Category="C# Compiler Errors" CategoryId="CSharpErrors" Description="" Severity="ERROR" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
+    <IssueType Id="ConvertClosureToMethodGroup" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert lambda expression to method group" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertClosureToMethodGroup" />
     <IssueType Id="ConvertIfStatementToConditionalTernaryExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '?:' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToConditionalTernaryExpression" />
     <IssueType Id="ConvertIfStatementToNullCoalescingAssignment" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '??=' assignment" Severity="SUGGESTION" />
     <IssueType Id="ConvertIfToOrExpression" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Convert 'if' to '||'" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfToOrExpression" />
@@ -19,13 +23,16 @@
     <IssueType Id="InvokeAsExtensionMethod" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert static method invocation to extension method call" Severity="SUGGESTION" />
     <IssueType Id="JoinDeclarationAndInitializer" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Join local variable declaration and assignment" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=JoinDeclarationAndInitializer" />
     <IssueType Id="MemberCanBePrivate.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Member can be made private" Description="Member can be made private: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=MemberCanBePrivate.Global" />
-    <IssueType Id="ParameterOnlyUsedForPreconditionCheck.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Parameter is only used for precondition check" Description="Parameter is only used for precondition check: Private accessibility" Severity="WARNING" />
+    <IssueType Id="ParameterOnlyUsedForPreconditionCheck.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Parameter is only used for precondition check" Description="Parameter is only used for precondition check: Non-private accessibility" Severity="SUGGESTION" Global="True" />
+    <IssueType Id="PossibleInvalidCastExceptionInForeachLoop" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible 'System.InvalidCastException' in foreach loop" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleInvalidCastExceptionInForeachLoop" />
     <IssueType Id="PossibleMultipleEnumeration" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible multiple enumeration" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleMultipleEnumeration" />
     <IssueType Id="PossibleNullReferenceException" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible 'System.NullReferenceException'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleNullReferenceException" />
+    <IssueType Id="PublicConstructorInAbstractClass" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Make constructor in abstract class protected" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PublicConstructorInAbstractClass" />
     <IssueType Id="RedundantArgumentDefaultValue" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant argument with default value" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantArgumentDefaultValue" />
     <IssueType Id="RedundantBaseConstructorCall" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Redundant base constructor call" Severity="WARNING" />
     <IssueType Id="RedundantExplicitArraySize" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant explicit size specification in array creation" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantExplicitArraySize" />
     <IssueType Id="RedundantExplicitParamsArrayCreation" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant explicit array creation in argument of 'params' parameter" Severity="SUGGESTION" />
+    <IssueType Id="RedundantJumpStatement" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant control flow jump statement" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantJumpStatement" />
     <IssueType Id="RedundantStringInterpolation" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant string interpolation" Severity="SUGGESTION" />
     <IssueType Id="RedundantTypeArgumentsOfMethod" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant type arguments of method" Severity="WARNING" />
     <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
@@ -35,9 +42,54 @@
     <IssueType Id="UnusedMethodReturnValue.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Method return value is never used" Description="Method return value is never used: Private accessibility" Severity="WARNING" />
     <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type is never used" Description="Type is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global" />
     <IssueType Id="UnusedVariable" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Unused local variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedVariable" />
+    <IssueType Id="UseCollectionCountProperty" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Use collection's count property" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UseCollectionCountProperty" />
+    <IssueType Id="UseNameofExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Use 'nameof' expression to reference name" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UseNameofExpression" />
+    <IssueType Id="VirtualMemberCallInConstructor" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Virtual member call in constructor" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=VirtualMemberCallInConstructor" />
   </IssueTypes>
   <Issues>
     <Project Name="MulticutInTrees">
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="272-285" Line="3" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="361-379" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="1666-1675" Line="41" Message="Property 'K' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="2733-2736" Line="61" Message="Accessor 'LastContractedEdges.set' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="2966-2969" Line="66" Message="Accessor 'LastRemovedDemandPairs.set' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="3261-3264" Line="71" Message="Accessor 'LastChangedEdgesPerDemandPair.set' can be made private" />
+      <Issue TypeId="PublicConstructorInAbstractClass" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="3688-3694" Line="79" Message="Convert constructor to protected" />
+      <Issue TypeId="RedundantJumpStatement" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="7087-7096" Line="144" Message="Redundant control flow jump statement" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Algorithms\Algorithm.cs" Offset="7377-7387" Line="154" Message="Only overrides of method 'Preprocess' are used" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="733-750" Line="18" Message="Name 'GuoNiedermeierFPT' does not match rule 'Types and namespaces'. Suggested name is 'GuoNiedermeierFpt'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="2006-2007" Line="38" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="2175-2176" Line="39" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="2368-2369" Line="42" Message="Redundant string interpolation" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="2545-2555" Line="45" Message="Virtual member call in constructor" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="5803-5804" Line="114" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="5958-5959" Line="115" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="6113-6114" Line="116" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="7593-7594" Line="143" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="7723-7724" Line="144" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="8389-8390" Line="156" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="8519-8520" Line="157" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="8934-8935" Line="166" Message="Redundant string interpolation" />
+      <Issue TypeId="UseCollectionCountProperty" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="9053-9055" Line="168" Message="Replace 'Enumerable.Count()' invocation with collection count property access" />
+      <Issue TypeId="UseCollectionCountProperty" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="9192-9194" Line="171" Message="Replace 'Enumerable.Count()' invocation with collection count property access" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="10474-10475" Line="193" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="10609-10610" Line="194" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="10878-10884" Line="201" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="11137-11142" Line="210" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="11248-11255" Line="212" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="13665-13667" Line="264" Message="Convert to '??='" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="14257-14258" Line="279" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="14392-14393" Line="280" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="14822-14823" Line="289" Message="Redundant string interpolation" />
+      <Issue TypeId="UseCollectionCountProperty" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="15044-15046" Line="294" Message="Replace 'Enumerable.Count()' invocation with collection count property access" />
+      <Issue TypeId="UseCollectionCountProperty" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="15188-15190" Line="297" Message="Replace 'Enumerable.Count()' invocation with collection count property access" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="15976-15977" Line="315" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="17324-17325" Line="348" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="18101-18102" Line="363" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="18245-18246" Line="364" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="18409-18410" Line="365" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs" Offset="20533-20534" Line="404" Message="Redundant string interpolation" />
+      <Issue TypeId="UnusedType.Global" File="MulticutInTrees\Algorithms\_NamespaceDocAlgorithms.cs" Offset="469-481" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\AddNeighbourToSelfException.cs" Offset="714-722" Line="15" Message="Redundant base constructor call" />
       <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\AddParentAsChildException.cs" Offset="710-718" Line="15" Message="Redundant base constructor call" />
       <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\AlreadyANeighbourException.cs" Offset="736-744" Line="15" Message="Redundant base constructor call" />
@@ -47,16 +99,24 @@
       <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\NoRootException.cs" Offset="678-686" Line="15" Message="Redundant base constructor call" />
       <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\NotANeighbourException.cs" Offset="715-723" Line="15" Message="Redundant base constructor call" />
       <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\NotInGraphException.cs" Offset="732-740" Line="15" Message="Redundant base constructor call" />
+      <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\NotOnDemandPathException.cs" Offset="768-776" Line="16" Message="Redundant base constructor call" />
+      <Issue TypeId="RedundantBaseConstructorCall" File="MulticutInTrees\Exceptions\ZeroLengthDemandPathException.cs" Offset="715-723" Line="16" Message="Redundant base constructor call" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\Exceptions\_NamespaceDocExceptions.cs" Offset="458-470" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\Graph.cs" Offset="943-944" Line="17" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1129-1138" Line="22" Message="Property 'InternalEdges' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1330-1339" Line="27" Message="Property 'UniqueInternalEdges' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1539-1548" Line="32" Message="Property 'UniqueInternalNodes' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1748-1757" Line="37" Message="Property 'InternalNodes' can be made private" />
-      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8194-8212" Line="160" Message="Method 'UpdateNodesInGraph' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8669-8687" Line="175" Message="Method 'UpdateEdgesInGraph' is never used" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="12384-12389" Line="247" Message="The parameter directed has the same default value" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="20097-20101" Line="418" Message="The parameter seen has the same default value" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\Graph.cs" Offset="671-672" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="857-866" Line="20" Message="Property 'InternalEdges' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1058-1067" Line="25" Message="Property 'UniqueInternalEdges' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1267-1276" Line="30" Message="Property 'UniqueInternalNodes' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="1476-1485" Line="35" Message="Property 'InternalNodes' can be made private" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8061-8079" Line="150" Message="Method 'UpdateNodesInGraph' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Graph.cs" Offset="8536-8554" Line="165" Message="Method 'UpdateEdgesInGraph' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Graph.cs" Offset="10077-10082" Line="196" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Graph.cs" Offset="10216-10221" Line="198" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="11951-11956" Line="225" Message="The parameter directed has the same default value" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Graph.cs" Offset="12698-12703" Line="242" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Graph.cs" Offset="12856-12861" Line="244" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Graph.cs" Offset="14271-14276" Line="276" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Graph.cs" Offset="14417-14422" Line="278" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Graphs\Graph.cs" Offset="19144-19148" Line="375" Message="The parameter seen has the same default value" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\IGraph.cs" Offset="585-586" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="905-918" Line="23" Message="Only implementations of property 'NumberOfEdges' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\IGraph.cs" Offset="921-924" Line="23" Message="Only implementations of accessor 'NumberOfEdges.get' are used" />
@@ -78,28 +138,35 @@
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\INode.cs" Offset="758-760" Line="18" Message="Name 'ID' does not match rule 'Properties'. Suggested name is 'Id'." />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\INode.cs" Offset="1976-1982" Line="33" Message="Only implementations of property 'Degree' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\INode.cs" Offset="1985-1988" Line="33" Message="Only implementations of accessor 'Degree.get' are used" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\ITree.cs" Offset="583-584" Line="12" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1107-1113" Line="27" Message="Only implementations of property 'Height' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1116-1119" Line="27" Message="Only implementations of accessor 'Height.get' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1583-1588" Line="35" Message="Only implementations of property 'Edges' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1591-1594" Line="35" Message="Only implementations of accessor 'Edges.get' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="2053-2058" Line="43" Message="Only implementations of property 'Nodes' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="2061-2064" Line="43" Message="Only implementations of accessor 'Nodes.get' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="2528-2535" Line="50" Message="Only implementations of method 'HasNode' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="3288-3295" Line="58" Message="Only implementations of method 'HasEdge' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="3576-3583" Line="64" Message="Only implementations of method 'AddRoot' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="4097-4105" Line="71" Message="Only implementations of method 'AddChild' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="4674-4685" Line="78" Message="Only implementations of method 'AddChildren' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="4959-4969" Line="84" Message="Only implementations of method 'RemoveNode' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="5257-5268" Line="90" Message="Only implementations of method 'RemoveNodes' are used" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\ITree.cs" Offset="598-599" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1122-1128" Line="28" Message="Only implementations of property 'Height' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1131-1134" Line="28" Message="Only implementations of accessor 'Height.get' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1598-1603" Line="36" Message="Only implementations of property 'Edges' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="1606-1609" Line="36" Message="Only implementations of accessor 'Edges.get' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="2068-2073" Line="44" Message="Only implementations of property 'Nodes' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="2076-2079" Line="44" Message="Only implementations of accessor 'Nodes.get' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="2543-2550" Line="51" Message="Only implementations of method 'HasNode' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="3303-3310" Line="59" Message="Only implementations of method 'HasEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="3836-3843" Line="66" Message="Only implementations of method 'HasEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="4118-4125" Line="72" Message="Only implementations of method 'AddRoot' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="4639-4647" Line="79" Message="Only implementations of method 'AddChild' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="5216-5227" Line="86" Message="Only implementations of method 'AddChildren' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="5501-5511" Line="92" Message="Only implementations of method 'RemoveNode' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITree.cs" Offset="5799-5810" Line="98" Message="Only implementations of method 'RemoveNodes' are used" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="608-609" Line="12" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="1733-1746" Line="27" Message="Only implementations of property 'DepthFromRoot' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="1749-1752" Line="27" Message="Only implementations of accessor 'DepthFromRoot.get' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="3106-3112" Line="48" Message="Only implementations of method 'IsRoot' are used" />
       <Issue TypeId="UnusedMemberInSuper.Global" File="MulticutInTrees\Graphs\ITreeNode.cs" Offset="5514-5528" Line="84" Message="Only implementations of method 'RemoveChildren' are used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3262-3272" Line="67" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3333-3343" Line="68" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3435-3445" Line="72" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\Node.cs" Offset="2903-2907" Line="60" Message="Constructor 'Node' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3010-3020" Line="62" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3223-3233" Line="65" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3294-3304" Line="66" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="3396-3406" Line="70" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="6371-6381" Line="120" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="6518-6528" Line="122" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="9997-10007" Line="187" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Node.cs" Offset="10149-10159" Line="189" Message="Possible multiple enumeration" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Graphs\Tree.cs" Offset="673-674" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="861-870" Line="20" Message="Property 'InternalEdges' can be made private" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="905-909" Line="20" Message="Auto-property can be made get-only" />
@@ -110,64 +177,223 @@
       <Issue TypeId="MemberCanBePrivate.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1470-1479" Line="35" Message="Property 'InternalNodes' can be made private" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutInTrees\Graphs\Tree.cs" Offset="1509-1513" Line="35" Message="Auto-property can be made get-only" />
       <Issue TypeId="UnusedMethodReturnValue.Local" File="MulticutInTrees\Graphs\Tree.cs" Offset="4774-4775" Line="108" Message="Method 'FindRoot' return value is never used" />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="6857-6859" Line="147" Message="Convert to '?:' expression" />
-      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Graphs\Tree.cs" Offset="7293-7303" Line="161" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Graphs\Tree.cs" Offset="14432-14433" Line="288" Message="Redundant string interpolation" />
-      <Issue TypeId="ReplaceWithSingleAssignment.False" File="MulticutInTrees\Graphs\Tree.cs" Offset="15859-15979" Line="317" Message="Replace with single assignment" />
-      <Issue TypeId="ConvertIfToOrExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="15894-15896" Line="318" Message="Convert to '||' expression" />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="6782-6784" Line="144" Message="Convert to '?:' expression" />
+      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Graphs\Tree.cs" Offset="7218-7228" Line="158" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Graphs\Tree.cs" Offset="11851-11857" Line="230" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Graphs\Tree.cs" Offset="15910-15911" Line="301" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Tree.cs" Offset="16013-16021" Line="302" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Tree.cs" Offset="16167-16175" Line="304" Message="Possible multiple enumeration" />
+      <Issue TypeId="ReplaceWithSingleAssignment.False" File="MulticutInTrees\Graphs\Tree.cs" Offset="17172-17292" Line="323" Message="Replace with single assignment" />
+      <Issue TypeId="ConvertIfToOrExpression" File="MulticutInTrees\Graphs\Tree.cs" Offset="17207-17209" Line="324" Message="Convert to '||' expression" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Tree.cs" Offset="18244-18249" Line="348" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\Tree.cs" Offset="18390-18395" Line="350" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="5515-5523" Line="132" Message="Constructor 'TreeNode' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="6749-6757" Line="152" Message="Constructor 'TreeNode' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="7007-7015" Line="155" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="7321-7329" Line="160" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="8067-8075" Line="173" Message="Constructor 'TreeNode' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="8157-8165" Line="175" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="8471-8479" Line="180" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="11386-11394" Line="225" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="11545-11553" Line="227" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="13825-13833" Line="268" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="13991-13999" Line="270" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="19112-19122" Line="388" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Graphs\TreeNode.cs" Offset="19290-19300" Line="390" Message="Possible multiple enumeration" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\Graphs\_NamespaceDocGraphs.cs" Offset="444-456" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="286-319" Line="4" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="321-356" Line="5" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="358-395" Line="6" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="397-415" Line="7" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="417-454" Line="8" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="456-485" Line="9" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="487-519" Line="10" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="651-658" Line="17" Message="Class 'Program' is never instantiated" />
-      <Issue TypeId="ArrangeModifiersOrder" File="MulticutInTrees\Program.cs" Offset="810-832" Line="22" Message="Inconsistent modifiers declaration order" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="456-489" Line="9" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="491-520" Line="10" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="522-559" Line="11" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Program.cs" Offset="561-593" Line="12" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Program.cs" Offset="725-732" Line="19" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="ArrangeModifiersOrder" File="MulticutInTrees\Program.cs" Offset="884-906" Line="24" Message="Inconsistent modifiers declaration order" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="381-399" Line="7" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="2528-2529" Line="37" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="2690-2691" Line="38" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="2858-2859" Line="39" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="3047-3048" Line="40" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="4325-4326" Line="54" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="4549-4550" Line="55" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="4768-4769" Line="56" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="4987-4988" Line="57" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="5678-5679" Line="69" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="5860-5861" Line="70" Message="Redundant string interpolation" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="6231-6252" Line="73" Message="Convert to method group" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="6653-6682" Line="80" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="6723-6724" Line="80" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="7029-7058" Line="83" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="8471-8489" Line="122" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="8519-8520" Line="122" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="8798-8816" Line="125" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="10375-10376" Line="164" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantJumpStatement" File="MulticutInTrees\ReductionRules\DominatedEdge.cs" Offset="11866-11873" Line="205" Message="Redundant control flow jump statement" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="342-360" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="2430-2431" Line="36" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="2577-2578" Line="37" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="2730-2731" Line="38" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="2904-2905" Line="39" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="3807-3808" Line="52" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="3961-3962" Line="53" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantJumpStatement" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="4697-4704" Line="68" Message="Redundant control flow jump statement" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="5853-5854" Line="97" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="6334-6352" Line="106" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="6382-6383" Line="106" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="6759-6777" Line="110" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="7782-7811" Line="136" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="7852-7853" Line="136" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleInvalidCastExceptionInForeachLoop" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="8096-8149" Line="139" Message="Possible 'System.InvalidCastException' when casting from (System.Collections.Generic.List&lt;(MulticutInTrees.Graphs.TreeNode, MulticutInTrees.Graphs.TreeNode)&gt;, MulticutInTrees.Utilities.DemandPair) to (System.Collections.Generic.IEnumerable&lt;(MulticutInTrees.Graphs.TreeNode, MulticutInTrees.Graphs.TreeNode)&gt;, MulticutInTrees.Utilities.DemandPair)" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\IdleEdge.cs" Offset="8153-8182" Line="139" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\ReductionRules\ReductionRule.cs" Offset="272-285" Line="3" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\ReductionRules\ReductionRule.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="PublicConstructorInAbstractClass" File="MulticutInTrees\ReductionRules\ReductionRule.cs" Offset="1644-1650" Line="38" Message="Convert constructor to protected" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="MulticutInTrees\ReductionRules\ReductionRule.cs" Offset="1866-1876" Line="43" Message="Virtual member call in constructor" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="342-360" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="1655-1656" Line="29" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="1803-1804" Line="30" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="1957-1958" Line="31" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="2757-2758" Line="42" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="3289-3318" Line="51" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="3359-3360" Line="51" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="3648-3677" Line="54" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="4421-4422" Line="75" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="4946-4973" Line="84" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="5012-5013" Line="84" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="5307-5334" Line="87" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantJumpStatement" File="MulticutInTrees\ReductionRules\UnitPath.cs" Offset="6546-6553" Line="131" Message="Redundant control flow jump statement" />
+      <Issue TypeId="UnusedType.Global" File="MulticutInTrees\ReductionRules\_NamespaceDocReductionRules.cs" Offset="480-492" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="RedundantUsingDirective" File="MulticutInTrees\Utilities\DemandPair.cs" Offset="381-399" Line="7" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DemandPair.cs" Offset="2822-2823" Line="56" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DemandPair.cs" Offset="2960-2961" Line="57" Message="Redundant string interpolation" />
+      <Issue TypeId="ReplaceWithSingleAssignment.False" File="MulticutInTrees\Utilities\DemandPair.cs" Offset="6018-6161" Line="106" Message="Replace with single assignment" />
+      <Issue TypeId="ConvertIfToOrExpression" File="MulticutInTrees\Utilities\DemandPair.cs" Offset="6053-6055" Line="107" Message="Convert to '||' expression" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="MulticutInTrees\Utilities\DFS.cs" Offset="524-527" Line="13" Message="Class 'DFS' is never instantiated" />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="524-527" Line="13" Message="Name 'DFS' does not match rule 'Types and namespaces'. Suggested name is 'Dfs'." />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="1260-1261" Line="23" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2338-2339" Line="41" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2341-2342" Line="41" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DFS.cs" Offset="2529-2530" Line="45" Message="Redundant string interpolation" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="3693-3694" Line="64" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DFS.cs" Offset="3881-3882" Line="68" Message="Redundant string interpolation" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="5249-5250" Line="91" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="5416-5418" Line="94" Message="Convert to '??='" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="8276-8277" Line="152" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="8666-8668" Line="160" Message="Convert to '??='" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="10111-10112" Line="190" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="11506-11507" Line="213" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="11509-11510" Line="213" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="13389-13390" Line="254" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2263-2264" Line="38" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="2266-2267" Line="38" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DFS.cs" Offset="2394-2395" Line="40" Message="Redundant string interpolation" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="3543-3544" Line="58" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\DFS.cs" Offset="3671-3672" Line="60" Message="Redundant string interpolation" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="5308-5309" Line="84" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="5498-5500" Line="87" Message="Convert to '??='" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="9017-9018" Line="160" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DFS.cs" Offset="9128-9136" Line="162" Message="Possible multiple enumeration" />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="MulticutInTrees\Utilities\DFS.cs" Offset="9332-9334" Line="165" Message="Convert to '??='" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DFS.cs" Offset="9454-9462" Line="169" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="10777-10778" Line="195" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="12230-12231" Line="213" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="13484-13485" Line="231" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="13487-13488" Line="231" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DFS.cs" Offset="15292-15293" Line="269" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="1977-1978" Line="26" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
       <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="1980-1981" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5271-5272" Line="66" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5274-5275" Line="66" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6431-6438" Line="85" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6455-6460" Line="85" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6681-6688" Line="88" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6703-6708" Line="88" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7540-7547" Line="104" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7601-7606" Line="105" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7935-7942" Line="108" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8046-8051" Line="112" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8426-8431" Line="122" Message="The parameter directed has the same default value" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8907-8912" Line="132" Message="The parameter directed has the same default value" />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10405-10406" Line="157" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="10408-10409" Line="157" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13255-13256" Line="197" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="13258-13259" Line="197" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17314-17315" Line="270" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="17317-17318" Line="270" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20725-20726" Line="331" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20728-20729" Line="331" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Local" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="20733-20743" Line="331" Message="Parameter 'inputGraph' is only passed to itself and used for precondition check(s)" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="2292-2299" Line="29" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="2469-2474" Line="30" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="3208-3215" Line="42" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="3217-3222" Line="42" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5046-5047" Line="57" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5049-5050" Line="57" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5398-5405" Line="60" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5570-5575" Line="61" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5906-5913" Line="64" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="5930-5935" Line="64" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6156-6163" Line="67" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="6178-6183" Line="67" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7015-7022" Line="83" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7076-7081" Line="84" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7410-7417" Line="87" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7521-7526" Line="91" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="7901-7906" Line="101" Message="The parameter directed has the same default value" />
+      <Issue TypeId="RedundantArgumentDefaultValue" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="8382-8387" Line="111" Message="The parameter directed has the same default value" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="9880-9881" Line="136" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="9883-9884" Line="136" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="12505-12506" Line="167" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="12508-12509" Line="167" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="16270-16271" Line="228" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="16273-16274" Line="228" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="19381-19382" Line="277" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\DinicMaxFlow.cs" Offset="19384-19385" Line="277" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\FisherYates.cs" Offset="1231-1232" Line="22" Message="Redundant string interpolation" />
+      <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Global" File="MulticutInTrees\Utilities\Utils.cs" Offset="1454-1463" Line="24" Message="Parameter 'parameter' is only used for precondition check(s)" />
+      <Issue TypeId="UseNameofExpression" File="MulticutInTrees\Utilities\Utils.cs" Offset="1617-1628" Line="28" Message="Use 'nameof' expression to reference parameter 'paramName' name" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\Utils.cs" Offset="1630-1631" Line="28" Message="Redundant string interpolation" />
+      <Issue TypeId="InconsistentNaming" File="MulticutInTrees\Utilities\Utils.cs" Offset="3010-3011" Line="49" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\Utils.cs" Offset="3111-3112" Line="51" Message="Redundant string interpolation" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\Utils.cs" Offset="3265-3266" Line="52" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Utilities\Utils.cs" Offset="3384-3394" Line="54" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="MulticutInTrees\Utilities\Utils.cs" Offset="3400-3410" Line="54" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="4478-4484" Line="71" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\Utils.cs" Offset="4502-4503" Line="71" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="4633-4642" Line="72" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\Utils.cs" Offset="4663-4664" Line="72" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="4791-4797" Line="74" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="4808-4817" Line="74" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="4910-4916" Line="79" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="4926-4935" Line="79" Message="Possible multiple enumeration" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="MulticutInTrees\Utilities\Utils.cs" Offset="4936-4944" Line="79" Message="Convert to method group" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="5807-5811" Line="93" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantStringInterpolation" File="MulticutInTrees\Utilities\Utils.cs" Offset="5827-5828" Line="93" Message="Redundant string interpolation" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="5991-5995" Line="96" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="MulticutInTrees\Utilities\Utils.cs" Offset="6052-6056" Line="97" Message="Possible multiple enumeration" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\Utilities\_NamespaceDocUtilities.cs" Offset="466-478" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="UnusedType.Global" File="MulticutInTrees\_NamespaceDocMain.cs" Offset="506-518" Line="8" Message="Class 'NamespaceDoc' is never used" />
     </Project>
     <Project Name="TESTS_MulticutInTrees">
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs" Offset="272-285" Line="3" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs" Offset="322-346" Line="5" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs" Offset="467-500" Line="9" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="467-500" Line="9" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="619-644" Line="15" Message="Name 'UnitTestGuoNiedermeierFPT' does not match rule 'Types and namespaces'. Suggested name is 'UnitTestGuoNiedermeierFpt'." />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="1210-1229" Line="28" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="1293-1331" Line="29" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="1536-1549" Line="32" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="1606-1638" Line="33" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="1863-1886" Line="36" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="2124-2160" Line="39" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="2402-2440" Line="42" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="2680-2717" Line="45" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="2901-2910" Line="48" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="3130-3157" Line="51" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="3383-3413" Line="54" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="3653-3690" Line="57" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="4296-4297" Line="71" Message="Local variable 'g' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="4436-4437" Line="72" Message="Local variable 'g' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="4565-4566" Line="73" Message="Local variable 'g' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="4699-4700" Line="74" Message="Local variable 'g' is never used" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="4830-4856" Line="75" Message="Cannot access internal method 'ChangeEndpointOfDemandPair' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="4953-4979" Line="76" Message="Cannot access internal method 'ChangeEndpointOfDemandPair' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5074-5100" Line="77" Message="Cannot access internal method 'ChangeEndpointOfDemandPair' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5195-5222" Line="78" Message="Cannot access internal method 'ChangeEndpointOfDemandPairs' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5307-5319" Line="79" Message="Cannot access internal method 'ContractEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5412-5424" Line="80" Message="Cannot access internal method 'ContractEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5517-5529" Line="81" Message="Cannot access internal method 'ContractEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5622-5635" Line="82" Message="Cannot access internal method 'ContractEdges' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5720-5727" Line="83" Message="Cannot access internal method 'CutEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5820-5827" Line="84" Message="Cannot access internal method 'CutEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="5920-5927" Line="85" Message="Cannot access internal method 'CutEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="6020-6028" Line="86" Message="Cannot access internal method 'CutEdges' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="6113-6129" Line="87" Message="Cannot access internal method 'RemoveDemandPair' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="6214-6231" Line="88" Message="Cannot access internal method 'RemoveDemandPairs' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="7493-7505" Line="115" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="7587-7591" Line="116" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="8994-9006" Line="145" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="9217-9223" Line="148" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="9309-9313" Line="149" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="10519-10526" Line="178" Message="Cannot access internal method 'CutEdge' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="10747-10766" Line="181" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="11811-11819" Line="206" Message="Cannot access internal method 'CutEdges' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="12105-12124" Line="209" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="13173-13185" Line="234" Message="Cannot access internal method 'ContractEdge' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="14247-14260" Line="261" Message="Cannot access internal method 'ContractEdges' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="15388-15414" Line="288" Message="Cannot access internal method 'ChangeEndpointOfDemandPair' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="15518-15544" Line="291" Message="Cannot access internal method 'ChangeEndpointOfDemandPair' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs" Offset="16630-16657" Line="317" Message="Cannot access internal method 'ChangeEndpointOfDemandPairs' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs" Offset="2156-2166" Line="56" Message="Constructor 'Graph' has 0 parameter(s) but is invoked with 1 argument(s)" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs" Offset="8953-8958" Line="253" Message="Local variable 'node7' is never used" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs" Offset="9031-9036" Line="255" Message="Local variable 'node9' is never used" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs" Offset="10935-10940" Line="315" Message="Local variable 'node7' is never used" />
@@ -176,9 +402,13 @@
       <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs" Offset="24301-24307" Line="679" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="642-646" Line="17" Message="Join declaration and assignment" />
       <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="884-889" Line="26" Message="Join declaration and assignment" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="921-950" Line="27" Message="Constructor 'Node' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="JoinDeclarationAndInitializer" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="1359-1364" Line="39" Message="Join declaration and assignment" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="1396-1431" Line="40" Message="Constructor 'Node' has 1 parameter(s) but is invoked with 3 argument(s)" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="1882-1887" Line="53" Message="Local variable 'node0' is never used" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="1899-1906" Line="53" Message="Constructor 'Node' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="1982-1988" Line="58" Message="Name 'TestID' does not match rule 'Methods'. Suggested name is 'TestId'." />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestNode.cs" Offset="6630-6659" Line="211" Message="Constructor 'Node' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="2820-2826" Line="74" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="2851-2852" Line="74" Message="Redundant explicit array size specification" />
       <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="3199-3200" Line="83" Message="Redundant explicit array size specification" />
@@ -192,37 +422,157 @@
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="4725-4731" Line="119" Message="Local variable 'node10' is never used" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="5760-5765" Line="149" Message="Local variable 'node6' is never used" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="5854-5859" Line="151" Message="Local variable 'node8' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7355-7360" Line="194" Message="Local variable 'node2' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7449-7454" Line="196" Message="Local variable 'node4' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7496-7501" Line="197" Message="Local variable 'node5' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7543-7548" Line="198" Message="Local variable 'node6' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7590-7595" Line="199" Message="Local variable 'node7' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7684-7689" Line="201" Message="Local variable 'node9' is never used" />
-      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7731-7737" Line="202" Message="Local variable 'node10' is never used" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="14251-14257" Line="373" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="14603-14609" Line="382" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="14978-14991" Line="388" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="15131-15132" Line="391" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="15157-15158" Line="391" Message="Redundant explicit array size specification" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16708-16714" Line="417" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16736-16737" Line="417" Message="Redundant explicit array size specification" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17442-17450" Line="440" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17570-17597" Line="444" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17745-17772" Line="449" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="17969-17981" Line="452" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="18183-18210" Line="457" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7390-7395" Line="196" Message="Local variable 'node6' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="7484-7489" Line="198" Message="Local variable 'node8' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9011-9016" Line="231" Message="Local variable 'node2' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9105-9110" Line="233" Message="Local variable 'node4' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9152-9157" Line="234" Message="Local variable 'node5' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9199-9204" Line="235" Message="Local variable 'node6' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9246-9251" Line="236" Message="Local variable 'node7' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9340-9345" Line="238" Message="Local variable 'node9' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="9387-9393" Line="239" Message="Local variable 'node10' is never used" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="15907-15913" Line="410" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16259-16265" Line="419" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16634-16647" Line="425" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16787-16788" Line="428" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="16813-16814" Line="428" Message="Redundant explicit array size specification" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="18364-18370" Line="454" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="18392-18393" Line="454" Message="Redundant explicit array size specification" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="19098-19106" Line="477" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="19226-19253" Line="481" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="19401-19428" Line="486" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="19625-19637" Line="489" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Graphs\UnitTestTree.cs" Offset="19839-19866" Line="494" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="587-604" Line="15" Message="Name 'TestConstructorID' does not match rule 'Methods'. Suggested name is 'TestConstructorId'." />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="882-891" Line="25" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1173-1177" Line="35" Message="Local variable 'node' is never used" />
-      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1196-1202" Line="35" Message="Expression is always null" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1193-1202" Line="35" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1453-1495" Line="44" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1787-1791" Line="54" Message="Local variable 'node' is never used" />
-      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1810-1818" Line="54" Message="Expression is always null" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="1807-1818" Line="54" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="2123-2173" Line="64" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 3 argument(s)" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="2593-2597" Line="76" Message="Local variable 'node' is never used" />
-      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="2616-2622" Line="76" Message="Expression is always null" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="2613-2663" Line="76" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 3 argument(s)" />
       <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3072-3076" Line="88" Message="Local variable 'node' is never used" />
-      <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3103-3111" Line="88" Message="Expression is always null" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3092-3111" Line="88" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 3 argument(s)" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3242-3248" Line="94" Message="Name 'TestID' does not match rule 'Methods'. Suggested name is 'TestId'." />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3583-3591" Line="106" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3686-3719" Line="109" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="3861-3901" Line="113" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 3 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="4168-4209" Line="122" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 3 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="4484-4491" Line="131" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="4756-4764" Line="140" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="4915-4948" Line="144" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="7506-7515" Line="232" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="8599-8610" Line="270" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="8656-8665" Line="271" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="8894-8900" Line="280" Message="Name '_child' does not match rule 'Local variables'. Suggested name is 'child'." />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="9457-9468" Line="298" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="15177-15188" Line="461" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="15886-15905" Line="479" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="17307-17318" Line="523" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="17364-17383" Line="524" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="17755-17761" Line="535" Message="Name '_child' does not match rule 'Local variables'. Suggested name is 'child'." />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="18332-18340" Line="552" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs" Offset="18386-18404" Line="553" Message="Constructor 'TreeNode' has 1 parameter(s) but is invoked with 2 argument(s)" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="322-346" Line="5" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="348-366" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="456-489" Line="9" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="3210-3212" Line="73" Message="Local variable 'de' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="3404-3406" Line="74" Message="Local variable 'de' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="3591-3593" Line="75" Message="Local variable 'de' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="3744-3746" Line="76" Message="Local variable 'de' is never used" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="4015-4030" Line="80" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="4074-4096" Line="80" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="4125-4140" Line="81" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="4184-4205" Line="81" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="4234-4249" Line="82" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="4293-4313" Line="82" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="5805-5822" Line="113" Message="Cannot access internal method 'RunFirstIteration' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="6881-6898" Line="131" Message="Cannot access internal method 'RunFirstIteration' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="8745-8766" Line="166" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="9101-9122" Line="172" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="10925-10947" Line="206" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="12713-12735" Line="239" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="14638-14660" Line="275" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="16671-16693" Line="312" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs" Offset="18503-18523" Line="346" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="348-366" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="456-489" Line="9" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="3313-3314" Line="75" Message="Local variable 'i' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="3496-3497" Line="76" Message="Local variable 'i' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="3672-3673" Line="77" Message="Local variable 'i' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="3814-3815" Line="78" Message="Local variable 'i' is never used" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="3930-3945" Line="80" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="3984-4006" Line="80" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="4035-4050" Line="81" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="4089-4110" Line="81" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="4139-4154" Line="82" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="4193-4213" Line="82" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="4457-4463" Line="85" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="4714-4720" Line="87" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="6194-6214" Line="118" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="7762-7783" Line="150" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="7862-7883" Line="151" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="9298-9320" Line="182" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="9483-9505" Line="183" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs" Offset="10518-10535" Line="203" Message="Cannot access internal method 'RunFirstIteration' here" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="348-366" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="456-489" Line="9" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="1597-1599" Line="42" Message="Local variable 'up' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="1722-1724" Line="43" Message="Local variable 'up' is never used" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="1840-1842" Line="44" Message="Local variable 'up' is never used" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="1910-1925" Line="46" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="1964-1986" Line="46" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="2015-2030" Line="47" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="2069-2090" Line="47" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="2119-2134" Line="48" Message="Ambiguous invocation:&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Action) (in class Assert)&#xD;&#xA;  System.ArgumentNullException ThrowsException&lt;ArgumentNullException&gt;(System.Func&lt;object&gt;) (in class Assert)&#xD;&#xA;match" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="2173-2193" Line="48" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="2470-2476" Line="53" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="3825-3845" Line="83" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="4037-4057" Line="86" Message="Cannot access internal method 'AfterEdgeContraction' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="4971-4992" Line="111" Message="Cannot access internal method 'AfterDemandPathRemove' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="6276-6298" Line="141" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="6482-6504" Line="144" Message="Cannot access internal method 'AfterDemandPathChanged' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="7833-7850" Line="176" Message="Cannot access internal method 'RunFirstIteration' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs" Offset="7892-7909" Line="177" Message="Cannot access internal method 'RunFirstIteration' here" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="287-320" Line="4" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="348-366" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="1637-1640" Line="48" Message="Local variable '_dp' is never used" />
+      <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="1637-1640" Line="48" Message="Name '_dp' does not match rule 'Local variables'. Suggested name is 'dp'." />
+      <Issue TypeId="UnusedVariable" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="1754-1757" Line="49" Message="Local variable '_dp' is never used" />
+      <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="1754-1757" Line="49" Message="Name '_dp' does not match rule 'Local variables'. Suggested name is 'dp'." />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="1924-1940" Line="53" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="2033-2049" Line="54" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="2142-2158" Line="55" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="2251-2265" Line="56" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="2349-2363" Line="57" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="2661-2696" Line="60" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="2950-2985" Line="63" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="3239-3274" Line="66" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="3711-3748" Line="70" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="4002-4039" Line="73" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="4293-4330" Line="76" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="4779-4816" Line="80" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="5070-5107" Line="83" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="5361-5398" Line="86" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="6209-6223" Line="107" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="6258-6272" Line="109" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="6367-6381" Line="112" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="6536-6550" Line="115" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="6643-6657" Line="116" Message="Cannot access internal method 'ChangeEndpoint' here" />
+      <Issue TypeId="AccessToModifiedClosure" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7309-7311" Line="136" Message="Captured variable is modified in the outer scope" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7312-7328" Line="136" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="AccessToModifiedClosure" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7427-7429" Line="137" Message="Captured variable is modified in the outer scope" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7430-7446" Line="137" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7538-7554" Line="140" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7658-7674" Line="143" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="7812-7828" Line="147" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="AccessToModifiedClosure" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="8018-8020" Line="151" Message="Captured variable is modified in the outer scope" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="8021-8037" Line="151" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="AccessToModifiedClosure" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="8181-8183" Line="154" Message="Captured variable is modified in the outer scope" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="8184-8200" Line="154" Message="Cannot access internal method 'OnEdgeContracted' here" />
+      <Issue TypeId="PossibleNullReferenceException" File="TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs" Offset="8560-8597" Line="158" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="InconsistentNaming" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="557-568" Line="13" Message="Name 'UnitTestDFS' does not match rule 'Types and namespaces'. Suggested name is 'UnitTestDfs'." />
       <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6132-6137" Line="154" Message="Expression is always null" />
       <Issue TypeId="ExpressionIsAlwaysNull" File="TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs" Offset="6435-6440" Line="162" Message="Expression is always null" />
@@ -248,6 +598,11 @@
       <Issue TypeId="InvokeAsExtensionMethod" File="TESTS_MulticutInTrees\Utilities\UnitTestFisherYates.cs" Offset="1498-1514" Line="36" Message="Invoke as extension method" />
       <Issue TypeId="InvokeAsExtensionMethod" File="TESTS_MulticutInTrees\Utilities\UnitTestFisherYates.cs" Offset="1695-1702" Line="42" Message="Invoke as extension method" />
       <Issue TypeId="RedundantExplicitArraySize" File="TESTS_MulticutInTrees\Utilities\UnitTestFisherYates.cs" Offset="3769-3770" Line="105" Message="Redundant explicit array size specification" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Utilities\UnitTestUtils.cs" Offset="287-320" Line="4" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Utilities\UnitTestUtils.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="TESTS_MulticutInTrees\Utilities\UnitTestUtils.cs" Offset="395-428" Line="7" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestUtils.cs" Offset="1505-1514" Line="38" Message="Cannot access internal method 'NullCheck' here" />
+      <Issue TypeId="CSharpErrors" File="TESTS_MulticutInTrees\Utilities\UnitTestUtils.cs" Offset="1709-1718" Line="41" Message="Cannot access internal method 'NullCheck' here" />
     </Project>
   </Issues>
 </Report>

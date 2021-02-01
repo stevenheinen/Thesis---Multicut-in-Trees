@@ -12,7 +12,7 @@ namespace MulticutInTrees.ReductionRules
     /// <summary>
     /// Abstract class to be used as baseclass for each reduction rule.
     /// </summary>
-    internal abstract class ReductionRule
+    public abstract class ReductionRule
     {        
         /// <summary>
         /// The input <see cref="Tree{N}"/>.
@@ -35,7 +35,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="input">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
-        internal ReductionRule(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm)
+        public ReductionRule(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm)
         {
             Input = input;
             DemandPairs = demandPairs;
