@@ -15,7 +15,7 @@ namespace MulticutInTrees.ReductionRules
     /// <br/>
     /// Rule: If a demand path has length one, cut its edge e.
     /// </summary>
-    public class UnitPath : ReductionRule
+    internal class UnitPath : ReductionRule
     {
         /// <summary>
         /// Constructor for the <see cref="UnitPath"/> rule.
@@ -24,7 +24,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
-        public UnitPath(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm) : base(input, demandPairs, algorithm)
+        internal UnitPath(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm) : base(input, demandPairs, algorithm)
         {
             Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the Unit Path rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the Unit Path rule, but the list of demand pairs is null!");
@@ -46,7 +46,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        public override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to apply the Unit Path rule after a demand path was changed, but the list of changed demand pairs is null!");
 
@@ -70,7 +70,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        public override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
+        internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
         {
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the Unit Path rule after a demand path was removed, but the list of removed demand pairs is null!");
 
@@ -79,7 +79,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        public override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
         {
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), $"Trying to apply the Unit Path rule after an edge was contracted, but the list of contracted edges is null!");
 
@@ -105,7 +105,7 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        public override bool RunFirstIteration()
+        internal override bool RunFirstIteration()
         {
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair dp in DemandPairs)

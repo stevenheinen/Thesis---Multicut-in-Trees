@@ -129,7 +129,7 @@ namespace MulticutInTrees.Graphs
         /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
         /// <param name="parent">The <see cref="TreeNode"/> that is the parent of the new <see cref="TreeNode"/> instance.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> is <see langword="null"/>.</exception>
-        public TreeNode(uint id, TreeNode parent)
+        internal TreeNode(uint id, TreeNode parent)
         {
             Utils.NullCheck(parent, nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
 
@@ -149,7 +149,7 @@ namespace MulticutInTrees.Graphs
         /// <param name="parent">The <see cref="TreeNode"/> that is the parent of the new <see cref="TreeNode"/> instance.</param>
         /// <param name="children">The <see cref="IEnumerable{T}"/> of <see cref="TreeNode"/>s containing the children of this <see cref="TreeNode"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> or <paramref name="children"/> is <see langword="null"/>.</exception>
-        public TreeNode(uint id, TreeNode parent, IEnumerable<TreeNode> children)
+        internal TreeNode(uint id, TreeNode parent, IEnumerable<TreeNode> children)
         {
             Utils.NullCheck(parent, nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
             Utils.NullCheck(children, nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
@@ -170,7 +170,7 @@ namespace MulticutInTrees.Graphs
         /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
         /// <param name="children">The <see cref="IEnumerable{T}"/> of <see cref="TreeNode"/>s containing the children of this <see cref="TreeNode"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="children"/> is <see langword="null"/>.</exception>
-        public TreeNode(uint id, IEnumerable<TreeNode> children)
+        internal TreeNode(uint id, IEnumerable<TreeNode> children)
         {
             Utils.NullCheck(children, nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
 

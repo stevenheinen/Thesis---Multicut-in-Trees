@@ -57,7 +57,7 @@ namespace MulticutInTrees.Graphs
         /// <param name="neighbours">An <see cref="IEnumerable{T}"/> with <see cref="Node"/>s that are neighbours of this <see cref="Node"/>.</param>
         /// <param name="directed">Whether the connections to the <see cref="Node"/>s in <paramref name="neighbours"/> are directed.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> is <see langword="null"/>.</exception>
-        public Node(uint id, IEnumerable<Node> neighbours, bool directed = false)
+        internal Node(uint id, IEnumerable<Node> neighbours, bool directed = false)
         {
             Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
 

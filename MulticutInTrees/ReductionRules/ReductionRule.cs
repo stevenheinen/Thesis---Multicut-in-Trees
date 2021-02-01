@@ -12,7 +12,7 @@ namespace MulticutInTrees.ReductionRules
     /// <summary>
     /// Abstract class to be used as baseclass for each reduction rule.
     /// </summary>
-    public abstract class ReductionRule
+    internal abstract class ReductionRule
     {        
         /// <summary>
         /// The input <see cref="Tree{N}"/>.
@@ -35,7 +35,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="input">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
-        public ReductionRule(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm)
+        internal ReductionRule(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm)
         {
             Input = input;
             DemandPairs = demandPairs;
@@ -52,27 +52,27 @@ namespace MulticutInTrees.ReductionRules
         /// First iteration of this <see cref="ReductionRule"/>. There is no information about last iterations available.
         /// </summary>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        public abstract bool RunFirstIteration();
+        internal abstract bool RunFirstIteration();
 
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after one or more edges have been contracted in the last iteration.
         /// </summary>
         /// <param name="contractedEdgeNodeTupleList">An <see cref="IEnumerable{T}"/> with tuples consisting of a tuple of <see cref="TreeNode"/>s (the contracted edge), a <see cref="TreeNode"/> (the result of the edge contraction), and a <see cref="List{T}"/> of <see cref="DemandPair"/>s (the <see cref="DemandPair"/>s on the contracted edge).</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        public abstract bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList);
+        internal abstract bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList);
 
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after one or more <see cref="DemandPair"/>s have been removed in the last iteration.
         /// </summary>
         /// <param name="removedDemandPairs">The <see cref="IEnumerable{T}"/> of <see cref="DemandPair"/>s that were removed in the last iteration.</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        public abstract bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs);
+        internal abstract bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs);
 
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after the endpoint of one or more <see cref="DemandPair"/>s were changed in the last iteration.
         /// </summary>
         /// <param name="changedEdgesPerDemandPairList">The <see cref="IEnumerable{T}"/> with tuples with a <see cref="List{T}"/> with tuples of <see cref="TreeNode"/>s that represent the edges that were removed from the demand path, and a <see cref="DemandPair"/>.</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        public abstract bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
+        internal abstract bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
     }
 }

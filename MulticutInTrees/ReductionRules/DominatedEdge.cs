@@ -16,7 +16,7 @@ namespace MulticutInTrees.ReductionRules
     /// <br/>
     /// Rule: If all demand paths that pass through edge e_1 also pass through edge e_2, then contract e_1.
     /// </summary>
-    public class DominatedEdge : ReductionRule
+    internal class DominatedEdge : ReductionRule
     {
         /// <summary>
         /// A <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.
@@ -32,7 +32,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
+        internal DominatedEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
         {
             Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the DominatedEdge reduction rule, but the list of demand pairs is null!");
@@ -75,7 +75,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        public override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to apply the Dominated Edge rule after a demand path was changed, but the IEnumerable of changed demand paths is null!");
 
@@ -117,7 +117,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        public override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
+        internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
         {
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the Dominated Edge rule after a demand path was removed, but the IEnumerable of removed demand paths is null!");
 
@@ -159,7 +159,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        public override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
         {
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), $"Trying to apply the Dominated Edge rule after an edge was contracted, but the IEnumerable of contracted edges is null!");
 
@@ -167,7 +167,7 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        public override bool RunFirstIteration()
+        internal override bool RunFirstIteration()
         {
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
 

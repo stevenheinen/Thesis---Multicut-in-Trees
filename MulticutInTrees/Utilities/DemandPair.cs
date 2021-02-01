@@ -94,7 +94,7 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldEndpoint"/> or <paramref name="newEndpoint"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotOnDemandPathException">Thrown when <paramref name="oldEndpoint"/> is not equal to <see cref="Node1"/> or <see cref="Node2"/>.</exception>
         /// <exception cref="ZeroLengthDemandPathException">Thrown when <paramref name="newEndpoint"/> is equal to the endpoint that is not <paramref name="oldEndpoint"/>, meaning the result of this new <see cref="DemandPair"/> would be between the same two <see cref="TreeNode"/>s.</exception>
-        public void ChangeEndpoint(TreeNode oldEndpoint, TreeNode newEndpoint)
+        internal void ChangeEndpoint(TreeNode oldEndpoint, TreeNode newEndpoint)
         {
             Utils.NullCheck(oldEndpoint, nameof(oldEndpoint), $"Trying to change the endpoint of {this}, but the old endpoint is null!");
             Utils.NullCheck(newEndpoint, nameof(newEndpoint), $"Trying to change the endpoint of {this}, but the new endpoint is null!");
@@ -153,7 +153,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="contractedEdge"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
         /// <exception cref="ZeroLengthDemandPathException">Thrown when the contraction of <paramref name="contractedEdge"/> means this <see cref="DemandPair"/> now consists between the same nodes.</exception>
-        public void OnEdgeContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        internal void OnEdgeContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
         {
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");

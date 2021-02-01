@@ -15,7 +15,7 @@ namespace MulticutInTrees.ReductionRules
     /// <br/>
     /// Rule: If there is a tree edge with no demand path passing through it, contract this edge.
     /// </summary>
-    public class IdleEdge : ReductionRule
+    internal class IdleEdge : ReductionRule
     {
         /// <summary>
         /// A <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.
@@ -31,7 +31,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        public IdleEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
+        internal IdleEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
         {
             Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the IdleEdge rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the IdleEdge rule, but the list of demand pairs is null!");
@@ -69,7 +69,7 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        public override bool RunFirstIteration()
+        internal override bool RunFirstIteration()
         {
             // In the first iteration, check all edges in the input tree.
             List<(TreeNode, TreeNode)> edgesToBeContracted = new List<(TreeNode, TreeNode)>();
@@ -92,7 +92,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        public override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
         {
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), $"Trying to execute the IdleEdge rule after edges were contracted, but the IEnumerable with contracted edge information is null!");
 
@@ -101,7 +101,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        public override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
+        internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
         {
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to execute the IdleEdge rule after a demand pair was removed, but the list of removed demand pairs is null!");
 
@@ -131,7 +131,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        public override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to execute the IdleEdge rule after a demand pair was changed, but the list of changed demand pairs is null!");
 

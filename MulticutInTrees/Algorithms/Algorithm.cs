@@ -157,37 +157,37 @@ namespace MulticutInTrees.Algorithms
         /// Add this edge to the solution, remove all <see cref="DemandPair"/>s that go over this edge, and contract it.
         /// </summary>
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s representing the edge to be cut.</param>
-        public abstract void CutEdge((TreeNode, TreeNode) edge);
+        internal abstract void CutEdge((TreeNode, TreeNode) edge);
 
         /// <summary>
         /// Add multiple edges to the solution, remove all <see cref="DemandPair"/>s that go over these edges, and contract them.
         /// </summary>
         /// <param name="edges">The <see cref="IList{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges to be cut.</param>
-        public abstract void CutEdges(IList<(TreeNode, TreeNode)> edges);
+        internal abstract void CutEdges(IList<(TreeNode, TreeNode)> edges);
 
         /// <summary>
         /// Contract an edge.
         /// </summary>
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s representing the edge to be contracted.</param>
-        public abstract void ContractEdge((TreeNode, TreeNode) edge);
+        internal abstract void ContractEdge((TreeNode, TreeNode) edge);
 
         /// <summary>
         /// Contract multiple edges.
         /// </summary>
         /// <param name="edges">The <see cref="IList{T}"/> of tuples of <see cref="TreeNode"/>s representing the edges to be contracted.</param>
-        public abstract void ContractEdges(IList<(TreeNode, TreeNode)> edges);
+        internal abstract void ContractEdges(IList<(TreeNode, TreeNode)> edges);
 
         /// <summary>
         /// Remove a <see cref="DemandPair"/> from the problem instance.
         /// </summary>
         /// <param name="demandPair">The <see cref="DemandPair"/> to be removed.</param>
-        public abstract void RemoveDemandPair(DemandPair demandPair);
+        internal abstract void RemoveDemandPair(DemandPair demandPair);
 
         /// <summary>
         /// Remove multiple <see cref="DemandPair"/>s from the problem instance.
         /// </summary>
         /// <param name="demandPairs">The <see cref="IList{T}"/> of <see cref="DemandPair"/>s to be removed.</param>
-        public abstract void RemoveDemandPairs(IList<DemandPair> demandPairs);
+        internal abstract void RemoveDemandPairs(IList<DemandPair> demandPairs);
 
         /// <summary>
         /// Change an endpoint of a <see cref="DemandPair"/>.
@@ -195,12 +195,12 @@ namespace MulticutInTrees.Algorithms
         /// <param name="demandPair">The <see cref="DemandPair"/> whose endpoint changes.</param>
         /// <param name="oldEndpoint">The old endpoint of <paramref name="demandPair"/>.</param>
         /// <param name="newEndpoint">The new endpoint of <paramref name="demandPair"/>.</param>
-        public abstract void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint);
+        internal abstract void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint);
 
         /// <summary>
         /// Change an endpoint of multiple <see cref="DemandPair"/>s.
         /// </summary>
         /// <param name="demandPairEndpointTuples">The <see cref="IList{T}"/> of tuples containing the <see cref="DemandPair"/> that is changed, the <see cref="TreeNode"/> old endpoint and <see cref="TreeNode"/> new endpoint.</param>
-        public abstract void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples);
+        internal abstract void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples);
     }
 }

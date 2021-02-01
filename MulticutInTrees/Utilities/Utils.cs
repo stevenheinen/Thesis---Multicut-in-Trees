@@ -21,7 +21,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="paramName">The name of <paramref name="parameter"/> in the method this is called from.</param>
         /// <param name="message">Optional. The custom message that should be given to the <see cref="ArgumentNullException"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameter"/> is <see langword="null"/>.</exception>
-        public static void NullCheck<T>(T parameter, string paramName, string message = null)
+        internal static void NullCheck<T>(T parameter, string paramName, string message = null)
         {
             if (paramName is null)
             {

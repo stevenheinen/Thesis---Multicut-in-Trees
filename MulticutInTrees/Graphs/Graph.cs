@@ -73,7 +73,7 @@ namespace MulticutInTrees.Graphs
         /// Constructor for a <see cref="Graph{N}"/> from any type that implements <see cref="IGraph{N}"/>.
         /// </summary>
         /// <param name="interfaceGraph">The <see cref="IGraph{N}"/> to create this new <see cref="Graph{N}"/> from.</param>
-        public Graph(IGraph<N> interfaceGraph)
+        internal Graph(IGraph<N> interfaceGraph)
         {
             InternalNodes = new List<N>(interfaceGraph.Nodes);
             UniqueInternalNodes = new HashSet<N>(InternalNodes);
