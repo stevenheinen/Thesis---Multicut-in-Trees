@@ -42,6 +42,12 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>TESTS_MulticutInTrees</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
   </Target>
