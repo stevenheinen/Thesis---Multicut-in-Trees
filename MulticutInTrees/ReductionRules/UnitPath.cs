@@ -50,6 +50,11 @@ namespace MulticutInTrees.ReductionRules
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to apply the Unit Path rule after a demand path was changed, but the list of changed demand pairs is null!");
 
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Unit Path rule after a demand path was changed...");
+            }
+
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach ((List<(TreeNode, TreeNode)> _, DemandPair path) in changedEdgesPerDemandPairList)
             {
@@ -83,6 +88,11 @@ namespace MulticutInTrees.ReductionRules
         {
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), $"Trying to apply the Unit Path rule after an edge was contracted, but the list of contracted edges is null!");
 
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Unit Path rule after an edge was contracted...");
+            }
+
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (((TreeNode, TreeNode) _, TreeNode _, List<DemandPair> paths) in contractedEdgeNodeTupleList)
             {
@@ -107,6 +117,11 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Unit Path rule for the first time...");
+            }
+
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair dp in DemandPairs)
             {

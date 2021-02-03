@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.Exceptions;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
@@ -142,11 +143,32 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to cut an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to cut an edge, but the second item of this edge is null!");
+            if (!Input.HasEdge(edge))
+            {
+                throw new NotInGraphException($"Trying to cut edge {edge}, but this edge is not part of the tree!");
+            }
+            if (edge.Item1 == edge.Item2)
+            {
+                throw new InvalidEdgeException($"Trying to cut edge {edge}, but this edge is a self loop and should not exist!");
+            }
 
             PartialSolution.Add(edge);
             List<DemandPair> separatedDemandPairs = new List<DemandPair>(DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(edge)]);
+            
+
             RemoveDemandPairs(separatedDemandPairs);
-            return InternalContractEdge(edge);
+            TreeNode res = InternalContractEdge(edge);
+
+            foreach (DemandPair demandPair in separatedDemandPairs)
+            {
+                if (demandPair.EdgesOnDemandPath.Count == 1)
+                {
+                    continue;
+                }
+                demandPair.OnEdgeContracted(edge, res);
+            }
+
+            return res;
         }
 
         /// <inheritdoc/>
@@ -188,13 +210,25 @@ namespace MulticutInTrees.Algorithms
         /// <param name="edge">The edge to be contracted, represented by a tuple of two <see cref="TreeNode"/>s.</param>
         /// <returns>The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="edge"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotInGraphException">Thrown when <paramref name="edge"/> is not part of the input.</exception>
+        /// <exception cref="InvalidEdgeException">Thrown when <paramref name="edge"/> is a self-loop.</exception>
         private TreeNode InternalContractEdge((TreeNode, TreeNode) edge)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to contract an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item1), $"Trying to contract an edge, but the second item of this edge is null!");
+            if (!Input.HasEdge(edge))
+            {
+                throw new NotInGraphException($"Trying to contract edge {edge}, but this edge is not part of the tree!");
+            }
+            if (edge.Item1 == edge.Item2)
+            {
+                throw new InvalidEdgeException($"Trying to contract edge {edge}, but this edge is a self loop and should not exist!");
+            }
 
-            // todo: temp
-            Console.WriteLine($"Contracting edge {edge}!");
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine($"Contracting edge {edge}!");
+            }
 
             TreeNode parent = edge.Item1;
             TreeNode child = edge.Item2;
@@ -207,6 +241,82 @@ namespace MulticutInTrees.Algorithms
             Input.RemoveNode(child);
             TreeNode newNode = parent;
 
+            (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
+
+            List<DemandPair> pairsOnEdge = RemoveDemandPairsFromContractedEdge(usedEdge, newNode);
+            UpdateDemandPairsStartingAtContractedEdge(usedEdge, child, newNode, pairsOnEdge);
+            UpdateDemandPairsGoingThroughChild(child, newNode);
+
+            LastContractedEdges.Add((usedEdge, newNode, pairsOnEdge));
+            LastIterationEdgeContraction = true;
+
+            return newNode;
+        }
+
+        /// <summary>
+        /// Update the <see cref="DemandPair"/>s that pass through <paramref name="child"/>, but not over the edge that is being contracted.
+        /// </summary>
+        /// <param name="child">The <see cref="TreeNode"/> that will be removed by the contraction.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="child"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
+        private void UpdateDemandPairsGoingThroughChild(TreeNode child, TreeNode newNode)
+        {
+            Utils.NullCheck(child, nameof(child), $"Trying to update the demand pairs going through the child of an edge that will be contracted, but the child is null!");
+            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the demand pairs going through the child of an edge that will be contracted, but the new node is null!");
+
+            List<(TreeNode, TreeNode)> keysToBeRemoved = new List<(TreeNode, TreeNode)>();
+            List<(TreeNode, TreeNode)> oldKeys = DemandPairsPerEdge.Keys.Where(n => n.Item1 == child || n.Item2 == child).ToList();
+            foreach ((TreeNode, TreeNode) key in oldKeys)
+            {
+                foreach (DemandPair demandPair in DemandPairsPerEdge[key])
+                {
+                    demandPair.OnEdgeNextToNodeOnDemandPathContracted(child, newNode);
+                }
+
+                if (key.Item1 == child)
+                {
+                    (TreeNode, TreeNode) newKey = Utils.OrderEdgeSmallToLarge((key.Item2, newNode));
+                    if (!DemandPairsPerEdge.ContainsKey(newKey))
+                    {
+                        DemandPairsPerEdge[newKey] = new List<DemandPair>();
+                    }
+                    DemandPairsPerEdge[newKey].AddRange(DemandPairsPerEdge[key]);
+                    keysToBeRemoved.Add(key);
+                }
+                if (key.Item2 == child)
+                {
+                    (TreeNode, TreeNode) newKey = Utils.OrderEdgeSmallToLarge((key.Item1, newNode));
+                    if (!DemandPairsPerEdge.ContainsKey(newKey))
+                    {
+                        DemandPairsPerEdge[newKey] = new List<DemandPair>();
+                    }
+                    DemandPairsPerEdge[newKey].AddRange(DemandPairsPerEdge[key]);
+                    keysToBeRemoved.Add(key);
+                }
+            }
+            foreach ((TreeNode, TreeNode) key in keysToBeRemoved)
+            {
+                DemandPairsPerEdge.Remove(key);
+            }
+
+        }
+
+        /// <summary>
+        /// Update all <see cref="DemandPair"/>s that start at an edge that will be contracted.
+        /// </summary>
+        /// <param name="edge">The tuple of <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
+        /// <param name="child">The <see cref="TreeNode"/> that will be removed by the contraction.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
+        /// <param name="pairsOnEdge">The <see cref="List{T}"/> of <see cref="DemandPair"/>s that go over <paramref name="edge"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/> or <paramref name="pairsOnEdge"/> is <see langword="null"/>.</exception>
+        private void UpdateDemandPairsStartingAtContractedEdge((TreeNode, TreeNode) edge, TreeNode child, TreeNode newNode, List<DemandPair> pairsOnEdge)
+        {
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the first endpoint of the edge that will be contracted is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the second endpoint of the edge that will be contracted is null!");
+            Utils.NullCheck(child, nameof(child), $"Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the node that will be removed by the contraction is null!");
+            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the node that is the result of the contraction is null!");
+            Utils.NullCheck(pairsOnEdge, nameof(pairsOnEdge), $"Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the list of demand pairs going through the contracted edge is null!");
+
             if (DemandPairsPerNode.TryGetValue(child, out List<DemandPair> pairsAtChild))
             {
                 if (!DemandPairsPerNode.ContainsKey(newNode))
@@ -215,61 +325,44 @@ namespace MulticutInTrees.Algorithms
                 }
                 foreach (DemandPair demandPair in pairsAtChild)
                 {
-                    demandPair.ChangeEndpoint(child, newNode);
+                    if (pairsOnEdge.Contains(demandPair))
+                    {
+                        continue;
+                    }
+
+                    demandPair.OnEdgeNextToDemandPathEndpointsContracted(edge, newNode);
                     DemandPairsPerNode[newNode].Add(demandPair);
                 }
                 DemandPairsPerNode.Remove(child);
-
-                List<(TreeNode, TreeNode)> keysToBeRemoved = new List<(TreeNode, TreeNode)>();
-                List<(TreeNode, TreeNode)> oldKeys = new List<(TreeNode, TreeNode)>(DemandPairsPerEdge.Keys);
-                foreach ((TreeNode, TreeNode) key in oldKeys)
-                {
-                    if (key.Item1 == child)
-                    {
-                        (TreeNode, TreeNode) newKey = Utils.OrderEdgeSmallToLarge((key.Item2, newNode));
-                        if (!DemandPairsPerEdge.ContainsKey(newKey))
-                        {
-                            DemandPairsPerEdge[newKey] = new List<DemandPair>();
-                        }
-                        DemandPairsPerEdge[newKey].AddRange(DemandPairsPerEdge[key]);
-                        keysToBeRemoved.Add(key);
-                    }
-                    if (key.Item2 == child)
-                    {
-                        (TreeNode, TreeNode) newKey = Utils.OrderEdgeSmallToLarge((key.Item1, newNode));
-                        if (!DemandPairsPerEdge.ContainsKey(newKey))
-                        {
-                            DemandPairsPerEdge[newKey] = new List<DemandPair>();
-                        }
-                        DemandPairsPerEdge[newKey].AddRange(DemandPairsPerEdge[key]);
-                        keysToBeRemoved.Add(key);
-                    }
-                }
-                foreach ((TreeNode, TreeNode) key in keysToBeRemoved)
-                {
-                    DemandPairsPerEdge.Remove(key);
-                }
             }
+        }
 
-            (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
-            if (DemandPairsPerEdge.TryGetValue(usedEdge, out List<DemandPair> pairsOnEdge))
+        /// <summary>
+        /// Removes all <see cref="DemandPair"/>s from the edge that will be contracted.
+        /// </summary>
+        /// <param name="edge">The tuple of <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
+        /// <returns>A <see cref="List{T}"/> with all the <see cref="DemandPair"/>s that pass through <paramref name="edge"/>.</returns>
+        private List<DemandPair> RemoveDemandPairsFromContractedEdge((TreeNode, TreeNode) edge, TreeNode newNode)
+        {
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to remove all demand paths going through an edge, but the first endpoint of this edge is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to remove all demand paths going through an edge, but the second endpoint of this edge is null!");
+            Utils.NullCheck(newNode, nameof(newNode), $"Trying to remove all demand paths going through an edge, but the node that is the result of the contraction is null!");
+
+            if (DemandPairsPerEdge.TryGetValue(edge, out List<DemandPair> pairsOnEdge))
             {
                 foreach (DemandPair demandPair in pairsOnEdge)
                 {
                     demandPair.OnEdgeContracted(edge, newNode);
                 }
-                DemandPairsPerEdge.Remove(usedEdge);
+                DemandPairsPerEdge.Remove(edge);
             }
-
-            if (pairsOnEdge is null)
+            else
             {
                 pairsOnEdge = new List<DemandPair>();
             }
 
-            LastContractedEdges.Add((usedEdge, newNode, pairsOnEdge));
-            LastIterationEdgeContraction = true;
-
-            return newNode;
+            return pairsOnEdge;
         }
 
         /// <inheritdoc/>
@@ -288,8 +381,10 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(edges, nameof(edges), $"Trying to contract multiple edges, but the IEnumerable of edges is null!");
 
-            //todo: temp
-            Console.WriteLine($"Contracting edges {edges.Print()}");
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine($"Contracting edges {edges.Print()}");
+            }
 
             for (int i = 0; i < edges.Count(); i++)
             {
@@ -314,8 +409,10 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(demandPair, nameof(demandPair), $"Trying to remove a demand pair, but the demand pair is null!");
 
-            //todo: temp
-            Console.WriteLine($"Removing demand pair {demandPair}.");
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine($"Removing demand pair {demandPair}.");
+            }
 
             LastRemovedDemandPairs.Add(demandPair);
             LastIterationDemandPairRemoval = true;
@@ -347,8 +444,10 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to remove multiuple demand pairs, but the IEnumerable of demand pairs is null!");
 
-            //todo: temp
-            Console.WriteLine($"Removing demand pairs {demandPairs.Print()}.");
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine($"Removing demand pairs {demandPairs.Print()}.");
+            }
 
             foreach (DemandPair demandPair in demandPairs)
             {
@@ -364,8 +463,10 @@ namespace MulticutInTrees.Algorithms
             Utils.NullCheck(oldEndpoint, nameof(oldEndpoint), $"Trying to change an endpoint of a demand pair, but the old endpoint of the demand pair is null!");
             Utils.NullCheck(newEndpoint, nameof(newEndpoint), $"Trying to change an endpoint of a demand pair, but the new endpoint of the demand pair is null!");
 
-            // todo: temp
-            Console.WriteLine($"Changing endpoint of demandpair {demandPair} from {oldEndpoint} to {newEndpoint}.");
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine($"Changing endpoint of demandpair {demandPair} from {oldEndpoint} to {newEndpoint}.");
+            }
 
             List<(TreeNode, TreeNode)> oldEdges = new List<(TreeNode, TreeNode)>();
             if (oldEndpoint == demandPair.Node1)
@@ -403,8 +504,10 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(demandPairEndpointTuples, nameof(demandPairEndpointTuples), $"Trying to change the endpoints of multple demand pairs, but the IEnumerable with tuples with required information is null!");
 
-            //todo: temp
-            Console.WriteLine($"Changing endpoint of multiple demand pairs: {demandPairEndpointTuples.Print()}.");
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine($"Changing endpoint of multiple demand pairs: {demandPairEndpointTuples.Print()}.");
+            }
 
             foreach ((DemandPair, TreeNode, TreeNode) change in demandPairEndpointTuples)
             {

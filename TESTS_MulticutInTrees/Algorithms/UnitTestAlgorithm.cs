@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Utilities;
 
@@ -92,6 +93,45 @@ namespace TESTS_MulticutInTrees.Algorithms
                     Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item1.Nodes.Print()}.");
                 }
             }
+        }
+
+        [TestMethod]
+        public void TestRandomLargerInstance1()
+        {
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(500, tree);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 500);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+
+            Assert.IsNotNull(result.Item1);
+            Assert.IsNotNull(result.Item2);
+            Assert.IsNotNull(result.Item3);
+        }
+
+        [TestMethod]
+        public void TestRandomLargerInstance2()
+        {
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(2000, tree);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 2000);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+
+            Assert.IsNotNull(result.Item1);
+            Assert.IsNotNull(result.Item2);
+            Assert.IsNotNull(result.Item3);
+        }
+
+        [TestMethod]
+        public void TestRandomLargerInstance3()
+        {
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(400, tree);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 400);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+
+            Assert.IsNotNull(result.Item1);
+            Assert.IsNotNull(result.Item2);
+            Assert.IsNotNull(result.Item3);
         }
     }
 }

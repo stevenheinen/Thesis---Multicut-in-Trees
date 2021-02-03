@@ -258,7 +258,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
-            gnfpt.ContractEdges(new List<(TreeNode, TreeNode)>() { (node0, node2), (node3, node1) });
+            gnfpt.ContractEdges(new List<(TreeNode, TreeNode)>() { (node0, node2), (node4, node1) });
 
             Assert.AreEqual(4, tree.NumberOfNodes);
         }

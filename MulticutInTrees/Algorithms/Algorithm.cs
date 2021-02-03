@@ -93,10 +93,15 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         public (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
         {
-            bool successful = false;
+            bool successful;
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
             for (int i = 0; i < ReductionRules.Count; i++)
             {
+                if (Program.PRINT_DEBUG_INFORMATION)
+                {
+                    Console.WriteLine($"Now applying rule {i + 1}.");
+                }
+
                 if (PartialSolution.Count == K)
                 {
                     return (Input, PartialSolution, DemandPairs);
@@ -114,27 +119,29 @@ namespace MulticutInTrees.Algorithms
                     continue;
                 }
 
+                successful = false;
+
                 // We have already applied the i-th rule before. Try to apply it again, depending on what happened in the last iteration.
                 if (LastIterationDemandPairChange)
                 {
                     List<(List<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new List<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair);
                     LastChangedEdgesPerDemandPair = new List<(List<(TreeNode, TreeNode)>, DemandPair)>();
                     LastIterationDemandPairChange = false;
-                    successful = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair);
+                    successful = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair) || successful;
                 }
                 if (LastIterationDemandPairRemoval)
                 {
                     List<DemandPair> oldLastRemovedDemandPairs = new List<DemandPair>(LastRemovedDemandPairs);
                     LastRemovedDemandPairs = new List<DemandPair>();
                     LastIterationDemandPairRemoval = false;
-                    successful = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs);
+                    successful = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs) || successful;
                 }
                 if (LastIterationEdgeContraction)
                 {
                     List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> oldLastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>(LastContractedEdges);
                     LastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>();
                     LastIterationEdgeContraction = false;
-                    successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges);
+                    successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges) || successful;
                 }
 
                 // If we applied the rule successfully, go back to rule 0.

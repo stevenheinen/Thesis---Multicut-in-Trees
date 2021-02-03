@@ -71,13 +71,18 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Idle Edge rule for the first time...");
+            }
+
             // In the first iteration, check all edges in the input tree.
             List<(TreeNode, TreeNode)> edgesToBeContracted = new List<(TreeNode, TreeNode)>();
             foreach ((TreeNode, TreeNode) edge in Input.Edges)
             {
                 if (CanEdgeBeContracted(edge))
                 {
-                    edgesToBeContracted.Add(edge);
+                    edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
                 }
             }
 
@@ -105,6 +110,11 @@ namespace MulticutInTrees.ReductionRules
         {
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to execute the IdleEdge rule after a demand pair was removed, but the list of removed demand pairs is null!");
 
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Idle Edge rule after a demand path was removed...");
+            }
+
             // Find all edges that were on the removed demand path, and check if they can be contracted.
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair demandPair in removedDemandPairs)
@@ -113,7 +123,7 @@ namespace MulticutInTrees.ReductionRules
                 {
                     if (CanEdgeBeContracted(edge))
                     {
-                        edgesToBeContracted.Add(edge);
+                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
                     }
                 }
             }
@@ -135,6 +145,11 @@ namespace MulticutInTrees.ReductionRules
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to execute the IdleEdge rule after a demand pair was changed, but the list of changed demand pairs is null!");
 
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Idle Edge rule after a demand path was changed...");
+            }
+
             HashSet<(TreeNode, TreeNode)> contractableEdges = new HashSet<(TreeNode, TreeNode)>();
             foreach ((IEnumerable<(TreeNode, TreeNode)>, DemandPair) tuple in changedEdgesPerDemandPairList)
             {
@@ -142,7 +157,7 @@ namespace MulticutInTrees.ReductionRules
                 {
                     if (CanEdgeBeContracted(edge))
                     {
-                        contractableEdges.Add(edge);
+                        contractableEdges.Add(Utils.OrderEdgeSmallToLarge(edge));
                     }
                 }
             }

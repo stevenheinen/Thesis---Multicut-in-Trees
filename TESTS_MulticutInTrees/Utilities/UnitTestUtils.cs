@@ -40,5 +40,15 @@ namespace TESTS_MulticutInTrees.Utilities
 
             Assert.ThrowsException<ArgumentNullException>(() => Utils.NullCheck<Node>(null, null));
         }
+
+        [TestMethod]
+        public void TestPrint()
+        {
+            List<int> list = new List<int>();
+            Assert.AreEqual("IEnumerable with 0 elements.", list.Print());
+
+            list = new List<int>() { 4, 984, 8, 465, 8, 47, 643, 85, 6, 43, 54, 384, 3, 46, 74, -146785, 4, -4, -4, 4, 56, 1, 4, -49 };
+            Assert.AreEqual("IEnumerable with 24 elements: [4, 984, 8, 465, 8, 47, 643, 85, 6, 43, 54, 384, 3, 46, 74, -146785, 4, -4, -4, 4, 56, 1, 4, -49]", list.Print());
+        }
     }
 }

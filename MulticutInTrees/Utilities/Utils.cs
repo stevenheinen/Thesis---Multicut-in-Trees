@@ -59,17 +59,20 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Checks whether this <see cref="IEnumerable{T}"/> is a subset of another <see cref="IEnumerable{T}"/>.
+        /// Checks whether this <see cref="IList{T}"/> is a subset of another <see cref="IList{T}"/>.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the <see cref="IEnumerable{T}"/>s.</typeparam>
-        /// <param name="subset">The current <see cref="IEnumerable{T}"/>, the potential subset.</param>
-        /// <param name="largerSet">The other <see cref="IEnumerable{T}"/>, the potential superset.</param>
+        /// <typeparam name="T">The type of elements in the <see cref="IList{T}"/>s.</typeparam>
+        /// <param name="subset">The current <see cref="IList{T}"/>, the potential subset.</param>
+        /// <param name="largerSet">The other <see cref="IList{T}"/>, the potential superset.</param>
         /// <returns><see langword="true"/> if <paramref name="subset"/> is a subset of <paramref name="largerSet"/>, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either <paramref name="subset"/> or <paramref name="largerSet"/> is <see langword="null"/>.</exception>
-        public static bool IsSubsetOf<T>(this IEnumerable<T> subset, IEnumerable<T> largerSet)
+        public static bool IsSubsetOf<T>(this IList<T> subset, IList<T> largerSet)
         {
             NullCheck(subset, nameof(subset), $"Trying to see if an IEnumerable is a subset of another IEnumerable, but the first IEnumerable is null!");
             NullCheck(largerSet, nameof(largerSet), $"Trying to see if an IEnumerable is a subset of another IEnumerable, but the second IEnumerable is null!");
+
+            subset.Shuffle();
+            largerSet.Shuffle();
 
             if (subset.Count() > largerSet.Count())
             {
@@ -99,7 +102,15 @@ namespace MulticutInTrees.Utilities
                 sb.Append($"{elem}, ");
             }
             sb.Remove(sb.Length - 2, 2);
-            sb.Append("]");
+            if (list.Count() == 0)
+            {
+                sb.Remove(sb.Length - 1, 1);
+                sb.Append('.');
+            }
+            else
+            {
+                sb.Append("]");
+            }
             return sb.ToString();
         }
     }

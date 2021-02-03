@@ -56,7 +56,7 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(otherEdge.Item1, nameof(otherEdge.Item1), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the second edge is null!");
             Utils.NullCheck(otherEdge.Item2, nameof(otherEdge.Item2), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the second edge is null!");
 
-            return DemandPathsPerEdge[contractEdge].IsSubsetOf(DemandPathsPerEdge[otherEdge]);
+            return DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(contractEdge)].IsSubsetOf(DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(otherEdge)]);
         }
 
         /// <summary>
@@ -78,6 +78,11 @@ namespace MulticutInTrees.ReductionRules
         internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to apply the Dominated Edge rule after a demand path was changed, but the IEnumerable of changed demand paths is null!");
+
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Dominated Edge rule after a demand path was changed...");
+            } 
 
             HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
             foreach ((List<(TreeNode, TreeNode)> edges, DemandPair _) in changedEdgesPerDemandPairList)
@@ -120,6 +125,11 @@ namespace MulticutInTrees.ReductionRules
         internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
         {
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the Dominated Edge rule after a demand path was removed, but the IEnumerable of removed demand paths is null!");
+
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Dominated Edge rule after a demand path was removed...");
+            }
 
             HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair demandPair in removedDemandPairs)
@@ -169,23 +179,28 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
+            if (Program.PRINT_DEBUG_INFORMATION)
+            {
+                Console.WriteLine("Applying Dominated Edge rule for the first time...");
+            }
+
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
 
             for (int i = 0; i < Input.Edges.Count - 1; i++)
             {
                 for (int j = i + 1; j < Input.Edges.Count; j++)
                 {
-                    if (edgesToBeContracted.Contains(Input.Edges[i]) || edgesToBeContracted.Contains(Input.Edges[j]))
+                    if (edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(Input.Edges[i])) || edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(Input.Edges[j])))
                     {
                         continue;
                     }
                     if (AllDemandPairsPassThroughAnotherEdge(Input.Edges[i], Input.Edges[j]))
                     {
-                        edgesToBeContracted.Add(Input.Edges[i]);
+                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(Input.Edges[i]));
                     }
                     else if (AllDemandPairsPassThroughAnotherEdge(Input.Edges[j], Input.Edges[i]))
                     {
-                        edgesToBeContracted.Add(Input.Edges[j]);
+                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(Input.Edges[j]));
                     }
                 }
             }

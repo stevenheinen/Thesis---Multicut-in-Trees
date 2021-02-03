@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
@@ -18,10 +19,18 @@ namespace MulticutInTrees
     /// </summary>
     public class Program
     {
+        // TODO: Do not make singleton. Should be part of an instance.
+        // TODO: Create some way to give it a seed, do not start with a fixed one. Used now for debugging purposes.
         /// <summary>
         /// The global <see cref="System.Random"/> used throughout the entire program.
         /// </summary>
-        public readonly static Random Random = new Random();
+        public readonly static Random Random = new Random(1);
+
+        // TODO: Better solution
+        /// <summary>
+        /// <see cref="bool"/> that represents whether debug information should be printed to the console during execution of the algorithm.
+        /// </summary>
+        public readonly static bool PRINT_DEBUG_INFORMATION = false;
 
         /// <summary>
         /// The entry method for the program.
@@ -29,6 +38,20 @@ namespace MulticutInTrees
         public static void Main()
         {
             Console.WriteLine("Hello World!");
+
+            /*
+            int numberOfNodes = 500;
+            int numberOfDemandPairs = 300;
+            int k = 500;
+
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(numberOfNodes);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(numberOfDemandPairs, tree);
+
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, k);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+
+            //Console.WriteLine($"Result achieved!\nTree:\n{result.Item1}\nCut edges:\n{result.Item2.Print()}\nNumber of remaining Demand Pairs:\n{result.Item3.Count}");
+            */
 
             /*
             Tree<TreeNode> tree = new Tree<TreeNode>();

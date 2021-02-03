@@ -139,6 +139,7 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
+            // TODO: Should not be necessary.
             if (!shorter)
             {
                 InternalDemandPath = DFS.FindPathBetween(Node1, Node2);
@@ -167,6 +168,61 @@ namespace MulticutInTrees.Utilities
             UpdateEndpointsAfterEdgeContraction(contractedEdge, newNode);
             UpdateNodesOnPathAfterEdgeContraction(contractedEdge, newNode);
             UpdateEdgesOnPathAfterEdgeContraction(contractedEdge, newNode);
+        }
+
+        /// <summary>
+        /// Update this <see cref="DemandPair"/> when an edge incident to one of the <see cref="TreeNode"/>s on this <see cref="DemandPair"/>'s path is changed.
+        /// </summary>
+        /// <param name="oldNode">The <see cref="TreeNode"/> that is on this <see cref="DemandPair"/>, but will be removed by the edge contraction.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldNode"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
+        internal void OnEdgeNextToNodeOnDemandPathContracted(TreeNode oldNode, TreeNode newNode)
+        {
+            Utils.NullCheck(oldNode, nameof(oldNode), $"Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the old node is null!");
+            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the new node is null!");
+
+            // TODO: Should not be necessary.
+            if (oldNode == newNode)
+            {
+                return;
+            }
+
+            InternalDemandPath = InternalDemandPath.Select(n => oldNode == n ? newNode : n).ToList();
+            InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.Select(n => oldNode == n.Item1 ? (newNode, n.Item2) : n).Select(n => oldNode == n.Item2 ? (n.Item1, newNode) : n).ToList();
+        }
+
+        /// <summary>
+        /// Update this <see cref="DemandPair"/> when an edge that is next to either <see cref="Node1"/> or <see cref="Node2"/> is contracted.
+        /// </summary>
+        /// <param name="contractedEdge">The tuple of <see cref="TreeNode"/>s representing the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
+        internal void OnEdgeNextToDemandPathEndpointsContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        {
+            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
+            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
+            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
+            if ((contractedEdge.Item1 == Node1 && contractedEdge.Item2 == Node2) || (contractedEdge.Item1 == Node2 && contractedEdge.Item2 == Node1))
+            {
+                throw new ZeroLengthDemandPathException($"After contracting edge {contractedEdge}, {this} is now a demand pair of length zero!");
+            }
+
+            if (contractedEdge.Item1 == Node1 || contractedEdge.Item2 == Node1)
+            {
+                Node1 = newNode;
+                InternalDemandPath[0] = newNode;
+                InternalEdgesOnDemandPath[0] = (newNode, InternalEdgesOnDemandPath[0].Item2);
+            }
+            else if (contractedEdge.Item1 == Node2 || contractedEdge.Item2 == Node2)
+            {
+                Node2 = newNode;
+                InternalDemandPath[^1] = newNode;
+                InternalEdgesOnDemandPath[^1] = (InternalEdgesOnDemandPath[^1].Item1, newNode);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but this edge is not incident to the endpoints of this demand path!");
+            }
         }
 
         /// <summary>
