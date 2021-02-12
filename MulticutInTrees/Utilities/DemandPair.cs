@@ -59,20 +59,7 @@ namespace MulticutInTrees.Utilities
             Node1 = node1;
             Node2 = node2;
             InternalDemandPath = new List<TreeNode>(DFS.FindPathBetween(node1, node2));
-            InternalEdgesOnDemandPath = new List<(TreeNode, TreeNode)>();
-            CreateEdgesOnPath();
-        }
-
-        /// <summary>
-        /// Creates the <see cref="List{T}"/> of all edges on the path between <see cref="Node1"/> and <see cref="Node2"/> from <see cref="InternalDemandPath"/>.
-        /// </summary>
-        private void CreateEdgesOnPath()
-        {
-            InternalEdgesOnDemandPath.Clear();
-            for (int i = 0; i < InternalDemandPath.Count - 1; i++)
-            {
-                InternalEdgesOnDemandPath.Add((InternalDemandPath[i], InternalDemandPath[i + 1]));
-            }
+            InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
         }
 
         /// <summary>
@@ -143,7 +130,7 @@ namespace MulticutInTrees.Utilities
             if (!shorter)
             {
                 InternalDemandPath = DFS.FindPathBetween(Node1, Node2);
-                CreateEdgesOnPath();
+                InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
             }
         }
 

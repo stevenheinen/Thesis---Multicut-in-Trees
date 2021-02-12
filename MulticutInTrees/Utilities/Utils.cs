@@ -96,7 +96,7 @@ namespace MulticutInTrees.Utilities
             NullCheck(list, nameof(list), $"Trying to print an IEnumerable, but the IEnumerable is null!");
 
             StringBuilder sb = new StringBuilder();
-            sb.Append($"IEnumerable with {list.Count()} elements: [");
+            sb.Append($"{list.GetType()} with {list.Count()} elements: [");
             foreach (T elem in list)
             {
                 sb.Append($"{elem}, ");
@@ -112,6 +112,51 @@ namespace MulticutInTrees.Utilities
                 sb.Append("]");
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Checks whether a path is a simple path (i.e. does not contain cycles).
+        /// </summary>
+        /// <typeparam name="N">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="path">An <see cref="IEnumerable{T}"/> of tuples of <typeparamref name="N"/>s that represent the edges on the path.</param>
+        /// <returns><see langword="true"/> if <paramref name="path"/> is a simple path, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
+        public static bool IsSimplePath<N>(IEnumerable<(N, N)> path) where N : INode<N>
+        {
+            NullCheck(path, nameof(path), $"Trying to see whether a path is a simple path, but the path is null!");
+
+            for (int i = 0; i < path.Count() - 1; i++)
+            {
+                for (int j = i + 1; j < path.Count(); j++)
+                {
+                    if (path.ElementAt(i).Item1.Equals(path.ElementAt(j).Item2))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Transforms an <see cref="IEnumerable{T}"/> with <typeparamref name="N"/>s representing a path to a <see cref="List{T}"/> with tuples of two <typeparamref name="N"/>s representing the edges on the path.
+        /// </summary>
+        /// <typeparam name="N">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="path">An <see cref="IEnumerable{T}"/> with <typeparamref name="N"/>s we want to tranform to an <see cref="IEnumerable{T}"/> with the edges on the path.</param>
+        /// <returns>A <see cref="List{T}"/> with tuples of <typeparamref name="N"/>s representing the edges on <paramref name="path"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
+        public static List<(N, N)> NodePathToEdgePath<N>(List<N> path) where N : INode<N>
+        {
+            NullCheck(path, nameof(path), $"Trying to transform a node path to an edge path, but the path is null!");
+
+            List<(N, N)> result = new List<(N, N)>();
+            for (int i = 0; i < path.Count() - 1; i++)
+            {
+                result.Add((path.ElementAt(i), path.ElementAt(i + 1)));
+            }
+
+            return result;
         }
     }
 }

@@ -40,6 +40,68 @@ namespace MulticutInTrees
             Console.WriteLine("Hello World!");
 
             /*
+            int nrNodes = 500;
+            double chance = 0.01;
+
+            Graph<Node> graph = new Graph<Node>();
+
+            for (uint i = 0; i < nrNodes; i++)
+            {
+                graph.AddNode(new Node(i));
+            }
+
+            for (int i = 0; i < nrNodes - 1; i++)
+            {
+                for (int j = i + 1; j < nrNodes; j++)
+                {
+                    if (Program.Random.NextDouble() < chance)
+                    {
+                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
+                    }
+                }
+            }
+
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
+
+            for (int i = 0; i < components.Count - 1; i++)
+            {
+                for (int j = i + 1; j < components.Count; j++)
+                {
+                    graph.AddEdge(components[i][0], components[j][0]);
+                }
+            }
+
+            components = DFS.FindAllConnectedComponents(graph.Nodes);
+
+            if (components.Count != 1)
+            {
+                throw new Exception();
+            }
+
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+
+            Console.WriteLine(matching.Print());
+
+            HashSet<(Node, Node)> hashedMatching = new HashSet<(Node, Node)>(matching);
+            if (matching.Count != hashedMatching.Count)
+            {
+                throw new Exception();
+            }
+
+            HashSet<Node> matchedNodes = new HashSet<Node>();
+            foreach ((Node, Node) edge in matching)
+            {
+                matchedNodes.Add(edge.Item1);
+                matchedNodes.Add(edge.Item2);
+            }
+
+            if (graph.Nodes.Count != matchedNodes.Count)
+            {
+                throw new Exception();
+            }
+            */
+
+            /*
             int numberOfNodes = 500;
             int numberOfDemandPairs = 300;
             int k = 500;

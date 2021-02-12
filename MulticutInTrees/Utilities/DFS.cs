@@ -10,7 +10,7 @@ namespace MulticutInTrees.Utilities
     /// <summary>
     /// Class for Depth First Search
     /// </summary>
-    public class DFS
+    public static class DFS
     {
         /// <summary>
         /// Find all nodes that are connected to the given startnode.
