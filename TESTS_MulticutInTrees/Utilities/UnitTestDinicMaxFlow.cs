@@ -254,6 +254,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFlowMultipleSourceMultipleSink()
         {
+            Random random = new Random(34698);
             Graph<Node> graph = new Graph<Node>();
 
             Node node0 = new Node(0);
@@ -280,9 +281,9 @@ namespace TESTS_MulticutInTrees.Utilities
             };
 
             List<Node> sources = new List<Node>() { node0, node0, node0, node0, node1, node1, node1 };
-            sources.Shuffle();
+            sources.Shuffle(random);
             List<Node> sinks = new List<Node>() { node2, node2, node2, node2, node2, node3 };
-            sinks.Shuffle();
+            sinks.Shuffle(random);
 
             int flow = DinicMaxFlow.MaxFlowMultipleSourcesSinks(graph, sources, sinks, capacities);
             Assert.AreEqual(6, flow);
@@ -291,6 +292,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestNotEnoughCapacities()
         {
+            Random random = new Random(6541);
             Graph<Node> graph = new Graph<Node>();
 
             Node node0 = new Node(0);
@@ -305,9 +307,9 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(node1, node3);
 
             List<Node> sources = new List<Node>() { node0, node0, node0, node0, node1, node1, node1 };
-            sources.Shuffle();
+            sources.Shuffle(random);
             List<Node> sinks = new List<Node>() { node2, node2, node2, node2, node2, node3 };
-            sinks.Shuffle();
+            sinks.Shuffle(random);
 
             Dictionary<(uint, uint), int> capacities1 = new Dictionary<(uint, uint), int>()
             {

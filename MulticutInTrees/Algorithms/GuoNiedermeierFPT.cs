@@ -32,17 +32,11 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Constructor for <see cref="GuoNiedermeierFPT"/>.
         /// </summary>
-        /// <param name="tree">The <see cref="Tree{N}"/> with <see cref="TreeNode"/>s the algorithm should run on.</param>
-        /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s that exist in the instance.</param>
-        /// <param name="k">The size the cutset is allowed to be.</param>
-        public GuoNiedermeierFPT(Tree<TreeNode> tree, List<DemandPair> demandPairs, int k) : base(tree, demandPairs, k)
+        /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
+        public GuoNiedermeierFPT(MulticutInstance instance) : base(instance)
         {
-            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the GuoNiedermeierFPT algorithm, but the problem input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the GuoNiedermeierFPT algorithm, but the list of demand pairs is null!");
-            if (k <= 0)
-            {
-                throw new ArgumentException($"Trying to create an instance of the GuoNiedermeierFPT algorithm, but the allowed size of the cutset is smaller than or equal to 0!", nameof(k));
-            }
+            Utils.NullCheck(instance, nameof(instance), $"Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
 
             Preprocess();
         }
@@ -54,16 +48,16 @@ namespace MulticutInTrees.Algorithms
         {
             List<ReductionRule> reductionRules = new List<ReductionRule>();
 
-            IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
+            IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
             reductionRules.Add(idleEdge);
 
-            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
+            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this, Random);
             reductionRules.Add(unitPath);
 
-            DominatedEdge dominatedEdge = new DominatedEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
+            DominatedEdge dominatedEdge = new DominatedEdge(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
             reductionRules.Add(dominatedEdge);
 
-            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
 
             // TODO: add other reduction rules.

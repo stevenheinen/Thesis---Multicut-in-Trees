@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Utilities
@@ -382,30 +383,10 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCase4()
         {
-            int nrNodes = 500;
-            double chance = 0.3;
-            Graph<Node> graph = new Graph<Node>();
-
-            for (uint i = 0; i < nrNodes; i++)
-            {
-                graph.AddNode(new Node(i));
-            }
-
-            for (int i = 0; i < nrNodes - 1; i++)
-            {
-                for (int j = i + 1; j < nrNodes; j++)
-                {
-                    if (Program.Random.NextDouble() < chance)
-                    {
-                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
-                    }
-                }
-            }
+            Random random = new Random(685450);
+            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.3, random);
 
             int startEdges = graph.NumberOfEdges;
-            string edges = graph.Edges.Print();
-            List<(Node, Node)> origEdges = new List<(Node, Node)>(graph.Edges);
-
             List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
 
             for (int i = 0; i < components.Count - 1; i++)
@@ -426,32 +407,13 @@ namespace TESTS_MulticutInTrees.Utilities
             List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
             Assert.AreEqual(250, matching.Count);
 
-            Console.WriteLine($"Original edges:");
-            Console.WriteLine(edges);
-            Console.WriteLine($"Final edges:");
-            Console.WriteLine(graph.Edges.Print());
-
             HashSet<(Node, Node)> hashedMatching = new HashSet<(Node, Node)>(matching);
             Assert.AreEqual(matching.Count, hashedMatching.Count);
 
             HashSet<Node> matchedNodes = new HashSet<Node>();
 
-            List<(Node, Node)> origNotAfterContraction = graph.Edges.Except(origEdges).ToList();
-            List<(Node, Node)> notOrigAfterContraction = origEdges.Except(graph.Edges).ToList();
-
-            Console.WriteLine("Not in graph, but originally in graph:");
-            Console.WriteLine(origNotAfterContraction.Print());
-            Console.WriteLine("In graph, but not originally in graph:");
-            Console.WriteLine(notOrigAfterContraction.Print());
-
             foreach ((Node, Node) edge in matching)
             {
-                if (!graph.HasEdge(edge))
-                {
-                    Console.WriteLine($"Edge {edge} does not exist in graph {graph}");
-                    Console.WriteLine($"Edges: {graph.Edges.Print()}");
-                }
-
                 Assert.IsTrue(graph.HasEdge(edge));
 
                 matchedNodes.Add(edge.Item1);
@@ -465,25 +427,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCase5()
         {
-            int nrNodes = 500;
-            double chance = 0.8;
-            Graph<Node> graph = new Graph<Node>();
-
-            for (uint i = 0; i < nrNodes; i++)
-            {
-                graph.AddNode(new Node(i));
-            }
-
-            for (int i = 0; i < nrNodes - 1; i++)
-            {
-                for (int j = i + 1; j < nrNodes; j++)
-                {
-                    if (Program.Random.NextDouble() < chance)
-                    {
-                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
-                    }
-                }
-            }
+            Random random = new Random(9874);
+            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.8, random);
 
             int startEdges = graph.NumberOfEdges;
 
@@ -526,25 +471,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCase6()
         {
-            int nrNodes = 501;
-            double chance = 0.05;
-            Graph<Node> graph = new Graph<Node>();
-
-            for (uint i = 0; i < nrNodes; i++)
-            {
-                graph.AddNode(new Node(i));
-            }
-
-            for (int i = 0; i < nrNodes - 1; i++)
-            {
-                for (int j = i + 1; j < nrNodes; j++)
-                {
-                    if (Program.Random.NextDouble() < chance)
-                    {
-                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
-                    }
-                }
-            }
+            Random random = new Random(3);
+            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(501, 0.05, random);
 
             int startEdges = graph.NumberOfEdges;
 
@@ -622,26 +550,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestMatchingOfSizeTrue()
         {
-            int nrNodes = 500;
-            double chance = 0.2;
-            Graph<Node> graph = new Graph<Node>();
-
-            for (uint i = 0; i < nrNodes; i++)
-            {
-                graph.AddNode(new Node(i));
-            }
-
-            for (int i = 0; i < nrNodes - 1; i++)
-            {
-                for (int j = i + 1; j < nrNodes; j++)
-                {
-                    if (Program.Random.NextDouble() < chance)
-                    {
-                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
-                    }
-                }
-            }
-
+            Random random = new Random(243);
+            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.2, random);
             List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
 
             for (int i = 0; i < components.Count - 1; i++)
@@ -665,25 +575,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestMatchingOfSizeFalse()
         {
-            int nrNodes = 500;
-            double chance = 0.1;
-            Graph<Node> graph = new Graph<Node>();
-
-            for (uint i = 0; i < nrNodes; i++)
-            {
-                graph.AddNode(new Node(i));
-            }
-
-            for (int i = 0; i < nrNodes - 1; i++)
-            {
-                for (int j = i + 1; j < nrNodes; j++)
-                {
-                    if (Program.Random.NextDouble() < chance)
-                    {
-                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
-                    }
-                }
-            }
+            Random random = new Random(9846);
+            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.1, random);
 
             List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
 

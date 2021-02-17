@@ -24,10 +24,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             List<DemandPair> dps = new List<DemandPair>();
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 10);
+            Random random = new Random(564468);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 10, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>();
 
-            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
             Assert.IsNotNull(dominatedPath);
         }
 
@@ -36,13 +38,16 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             List<DemandPair> dps = new List<DemandPair>();
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 10);
+            Random random = new Random(546454);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 10, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(null, dps, gnfpt, demandPairsPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, null, gnfpt, demandPairsPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, dps, null, demandPairsPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(null, dps, gnfpt, random, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, null, gnfpt, random, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, dps, null, random, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, null, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, null); });
         }
 
         [TestMethod]
@@ -71,7 +76,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp5 = new DemandPair(node3, node1);
 
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 };
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 10);
+            Random random = new Random(6578489);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 10, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>()
             {
                 { (node0, node1), new List<DemandPair>(){ dp1 } },
@@ -80,7 +87,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node1, node4), new List<DemandPair>(){ dp3 } },
             };
 
-            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
             Assert.IsTrue(dominatedPath.RunFirstIteration());
             Assert.AreEqual(2, dps.Count);
         }
@@ -115,9 +122,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node2, node4), new List<DemandPair>() { dp2 } },
             };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 2);
+            Random random = new Random(96868648);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 2, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
-            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
             List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeInformation = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>()
             {
@@ -160,9 +169,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node3, node6), new List<DemandPair>() { dp3 } },
             };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 2);
+            Random random = new Random(648564);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 2, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
-            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
             List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeInformation = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>()
             {
@@ -201,9 +212,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node2, node4), new List<DemandPair>() { dp2 } },
             };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 2);
+            Random random = new Random(9869898);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 2, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
-            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
             List<DemandPair> removedDemandpairs = new List<DemandPair>() { dp3 };
 
@@ -244,9 +257,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node3, node5), new List<DemandPair>() { dp2 } },
             };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 2);
+            Random random = new Random(989871350);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 2, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
-            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
             List<(List<(TreeNode, TreeNode)>, DemandPair)> information = new List<(List<(TreeNode, TreeNode)>, DemandPair)>()
             {

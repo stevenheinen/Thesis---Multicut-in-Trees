@@ -18,16 +18,19 @@ namespace MulticutInTrees.InstanceGeneration
         /// Generates a random <see cref="Tree{N}"/> with <paramref name="numberOfNodes"/> <see cref="TreeNode"/>s using a random Prüfer sequence.
         /// </summary>
         /// <param name="numberOfNodes">The required number of nodes in the resulting tree. Should be at least 3.</param>
+        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns>A <see cref="Tree{N}"/> with <see cref="TreeNode"/>s that is randomly generated using a Prüfer sequence.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="numberOfNodes"/> is less than three.</exception>
-        public static Tree<TreeNode> GenerateTree(int numberOfNodes)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="random"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is less than three.</exception>
+        public static Tree<TreeNode> GenerateTree(int numberOfNodes, Random random)
         {
+            Utils.NullCheck(random, nameof(random), $"Trying to generate a random tree from a Prüfer sequence, but the random is null!");
             if (numberOfNodes < 3)
             {
-                throw new ArgumentException($"A tree generated with a Prüfer sequence should have at least 3 nodes!");
+                throw new ArgumentOutOfRangeException($"A tree generated with a Prüfer sequence should have at least 3 nodes!");
             }
 
-            List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes);
+            List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes, random);
 
             // Sort the edge tuples in the list from smallest to largest
             edges = edges.Select(n => n.Item1 < n.Item2 ? n : (n.Item2, n.Item1)).ToList();
@@ -66,10 +69,11 @@ namespace MulticutInTrees.InstanceGeneration
         /// Generate a <see cref="List{T}"/> with <see cref="int"/> tuples representing the edges in a tree with <paramref name="numberOfNodes"/> nodes.
         /// </summary>
         /// <param name="numberOfNodes">The required number of nodes in the resulting tree.</param>
+        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns>A <see cref="List{T}"/> with tuples of <see cref="int"/>s that represent the edges in the tree.</returns>
-        private static List<(int, int)> GenerateEdgesInTree(int numberOfNodes)
+        private static List<(int, int)> GenerateEdgesInTree(int numberOfNodes, Random random)
         {
-            int[] prufer = GeneratePruferSequence(numberOfNodes - 2);
+            int[] prufer = GeneratePruferSequence(numberOfNodes - 2, random);
             int[] vertices = new int[numberOfNodes];
 
             for (int i = 0; i < numberOfNodes - 2; i++)
@@ -115,13 +119,14 @@ namespace MulticutInTrees.InstanceGeneration
         /// Generate a random Prüfer sequence with length <paramref name="length"/>.
         /// </summary>
         /// <param name="length">The required length the sequence should be.</param>
+        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns>A randomly generated Prüfer sequence of length <paramref name="length"/>.</returns>
-        private static int[] GeneratePruferSequence(int length)
+        private static int[] GeneratePruferSequence(int length, Random random)
         {
             int[] prufer = new int[length];
             for (int i = 0; i < length; i++)
             {
-                prufer[i] = Program.Random.Next(length + 2);
+                prufer[i] = random.Next(length + 2);
             }
             return prufer;
         }

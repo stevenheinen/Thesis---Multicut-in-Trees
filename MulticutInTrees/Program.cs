@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
@@ -19,13 +20,6 @@ namespace MulticutInTrees
     /// </summary>
     public class Program
     {
-        // TODO: Do not make singleton. Should be part of an instance.
-        // TODO: Create some way to give it a seed, do not start with a fixed one. Used now for debugging purposes.
-        /// <summary>
-        /// The global <see cref="System.Random"/> used throughout the entire program.
-        /// </summary>
-        public readonly static Random Random = new Random(1);
-
         // TODO: Better solution
         /// <summary>
         /// <see cref="bool"/> that represents whether debug information should be printed to the console during execution of the algorithm.

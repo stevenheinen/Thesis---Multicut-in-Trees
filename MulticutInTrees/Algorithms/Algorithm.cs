@@ -73,17 +73,31 @@ namespace MulticutInTrees.Algorithms
         protected List<(List<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
 
         /// <summary>
+        /// The <see cref="System.Random"/> used for random number generation.
+        /// </summary>
+        protected Random Random { get; }
+
+        /// <summary>
+        /// Counter for the number of operations used during the execution of this <see cref="Algorithm"/>.
+        /// </summary>
+        protected long OperationsCounter { get; set; }
+
+        /// <summary>
         /// Constructor for an <see cref="Algorithm"/>.
         /// </summary>
-        /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
-        /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
-        /// <param name="k">The size the cutset is allowed to be.</param>
-        public Algorithm(Tree<TreeNode> tree, List<DemandPair> demandPairs, int k)
+        /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
+        public Algorithm(MulticutInstance instance)
         {
-            Tree = tree;
-            DemandPairs = demandPairs;
-            K = k;
+            Utils.NullCheck(instance, nameof(instance), $"Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
+
+            Tree = instance.Tree;
+            DemandPairs = instance.DemandPairs;
+            K = instance.K;
+            Random = instance.Random;
             PartialSolution = new List<(TreeNode, TreeNode)>();
+            
+            OperationsCounter = 0;
 
             LastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>();
             LastRemovedDemandPairs = new List<DemandPair>();
@@ -93,7 +107,8 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Try to solve the instance.
         /// </summary>
-        public (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
+        /// <returns>A tuple with the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated, and a <see cref="long"/> with the number of operations that were used during the computation.</returns>
+        public (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) Run()
         {
             bool successful;
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
@@ -101,11 +116,11 @@ namespace MulticutInTrees.Algorithms
             {
                 if (DemandPairs.Count == 0)
                 {
-                    return (Tree, PartialSolution, DemandPairs);
+                    return (Tree, PartialSolution, DemandPairs, OperationsCounter);
                 }
                 if (PartialSolution.Count == K)
                 {
-                    return (Tree, PartialSolution, DemandPairs);
+                    return (Tree, PartialSolution, DemandPairs, OperationsCounter);
                 }
 
                 if (Program.PRINT_DEBUG_INFORMATION)
@@ -173,7 +188,7 @@ namespace MulticutInTrees.Algorithms
                 }
             }
 
-            return (Tree, PartialSolution, DemandPairs);
+            return (Tree, PartialSolution, DemandPairs, OperationsCounter);
         }
 
         /// <summary>

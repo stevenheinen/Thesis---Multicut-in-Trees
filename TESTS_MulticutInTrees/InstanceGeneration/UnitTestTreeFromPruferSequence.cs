@@ -20,14 +20,16 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         [TestMethod]
         public void TestTree()
         {
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(525);
+            Random random = new Random(87867438);
+
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(525, random);
             Assert.IsNotNull(tree);
             Assert.AreEqual(525, tree.NumberOfNodes);
             Assert.IsTrue(tree.IsValid());
 
-            Assert.ThrowsException<ArgumentException>(() => TreeFromPruferSequence.GenerateTree(2));
-            Assert.ThrowsException<ArgumentException>(() => TreeFromPruferSequence.GenerateTree(0));
-            Assert.ThrowsException<ArgumentException>(() => TreeFromPruferSequence.GenerateTree(-5165));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => TreeFromPruferSequence.GenerateTree(2, random));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => TreeFromPruferSequence.GenerateTree(0, random));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => TreeFromPruferSequence.GenerateTree(-5165, random));
         }
     }
 }

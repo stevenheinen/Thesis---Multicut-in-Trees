@@ -19,6 +19,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRun1()
         {
+            Random random = new Random(574);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -33,8 +35,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.UpdateNodeTypes();
 
             DemandPair dp = new DemandPair(node0, node3);
-            GuoNiedermeierFPT g = new GuoNiedermeierFPT(tree, new List<DemandPair>() { dp }, 3);
-            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) solution = g.Run();
+            MulticutInstance instance = new MulticutInstance(tree, new List<DemandPair>() { dp }, 3, random);
+            GuoNiedermeierFPT g = new GuoNiedermeierFPT(instance);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) solution = g.Run();
             Assert.AreEqual(0, solution.Item1.NumberOfEdges);
             Assert.AreEqual(1, solution.Item2.Count);
             Assert.AreEqual(0, solution.Item3.Count);
@@ -44,6 +47,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRun2()
         {
+            Random random = new Random(83);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
 
             TreeNode node1 = new TreeNode(1);
@@ -84,9 +89,10 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             List<DemandPair> demandPairs = new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 3);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 3, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
-            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) result = gnfpt.Run();
 
             Assert.AreEqual(1, result.Item1.NumberOfNodes);
             Assert.AreEqual(3, result.Item2.Count);
@@ -104,10 +110,12 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRandomLargerInstance1()
         {
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000);
-            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(500, tree);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 500);
-            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            Random random = new Random(273);
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000, random);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(500, tree, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 500, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
             Assert.IsNotNull(result.Item2);
@@ -117,10 +125,12 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRandomLargerInstance2()
         {
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000);
-            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(2000, tree);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 2000);
-            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            Random random = new Random(789456);
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000, random);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(2000, tree, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2000, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
             Assert.IsNotNull(result.Item2);
@@ -130,10 +140,12 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRandomLargerInstance3()
         {
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500);
-            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(400, tree);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 400);
-            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            Random random = new Random(8765);
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(400, tree, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 400, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
             Assert.IsNotNull(result.Item2);

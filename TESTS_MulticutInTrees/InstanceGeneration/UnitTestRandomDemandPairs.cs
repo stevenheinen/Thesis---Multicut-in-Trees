@@ -21,16 +21,18 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         [TestMethod]
         public void TestGenerateRandomDemandPairs()
         {
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(100);
+            Random random = new Random(1357151375);
 
-            Assert.ThrowsException<ArgumentException>(() => RandomDemandPairs.GenerateRandomDemandPairs(-26, tree));
-            Assert.ThrowsException<ArgumentNullException>(() => RandomDemandPairs.GenerateRandomDemandPairs(5, null));
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(100, random);
 
-            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(0, tree);
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => RandomDemandPairs.GenerateRandomDemandPairs(-26, tree, random));
+            Assert.ThrowsException<ArgumentNullException>(() => RandomDemandPairs.GenerateRandomDemandPairs(5, null, random));
+
+            List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(0, tree, random);
             Assert.IsNotNull(demandPairs);
             Assert.AreEqual(0, demandPairs.Count);
 
-            demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(40, tree);
+            demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(40, tree, random);
             Assert.IsNotNull(demandPairs);
             Assert.AreEqual(40, demandPairs.Count);
 

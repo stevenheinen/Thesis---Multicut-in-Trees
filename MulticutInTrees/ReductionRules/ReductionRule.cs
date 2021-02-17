@@ -31,16 +31,29 @@ namespace MulticutInTrees.ReductionRules
         protected Algorithm Algorithm { get; }
 
         /// <summary>
+        /// The <see cref="System.Random"/> used for random number generation.
+        /// </summary>
+        protected Random Random { get; }
+
+        /// <summary>
         /// Constructor for a <see cref="ReductionRule"/>.
         /// </summary>
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
-        /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
-        public ReductionRule(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm)
+        /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
+        /// <param name="random">The <see cref="System.Random"/> used for random number generation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
+        public ReductionRule(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Random random)
         {
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create a reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create a reduction rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create a reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(random, nameof(random), $"Trying to create a reduction rule, but the random is null!");
+
             Tree = tree;
             DemandPairs = demandPairs;
             Algorithm = algorithm;
+            Random = random;
             Preprocess();
         }
 

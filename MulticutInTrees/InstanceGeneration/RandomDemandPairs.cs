@@ -19,25 +19,27 @@ namespace MulticutInTrees.InstanceGeneration
         /// </summary>
         /// <param name="numberOfDemandPairs">The required number of <see cref="DemandPair"/>s.</param>
         /// <param name="tree">The <see cref="Tree{N}"/> in which to generate the <see cref="DemandPair"/>s.</param>
+        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns>A <see cref="List{T}"/> of <paramref name="numberOfDemandPairs"/> random <see cref="DemandPair"/>s in <paramref name="tree"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="numberOfDemandPairs"/> is negative.</exception>
-        public static List<DemandPair> GenerateRandomDemandPairs(int numberOfDemandPairs, Tree<TreeNode> tree)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfDemandPairs"/> is negative.</exception>
+        public static List<DemandPair> GenerateRandomDemandPairs(int numberOfDemandPairs, Tree<TreeNode> tree, Random random)
         {
             Utils.NullCheck(tree, nameof(tree), $"Trying to generate random demand pairs in a tree, but the tree is null!");
+            Utils.NullCheck(random, nameof(random), $"Trying to generate random demand pairs in a tree, but the random is null!");
             if (numberOfDemandPairs < 0)
             {
-                throw new ArgumentException($"Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
+                throw new ArgumentOutOfRangeException($"Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
             }
 
             List<DemandPair> demandPairs = new List<DemandPair>();
             for (int i = 0; i < numberOfDemandPairs; i++)
             {
-                TreeNode endpoint1 = tree.Nodes[Program.Random.Next(tree.NumberOfNodes)];
+                TreeNode endpoint1 = tree.Nodes[random.Next(tree.NumberOfNodes)];
                 TreeNode endpoint2;
                 do
                 {
-                    endpoint2 = tree.Nodes[Program.Random.Next(tree.NumberOfNodes)];
+                    endpoint2 = tree.Nodes[random.Next(tree.NumberOfNodes)];
                 } while (endpoint2 == endpoint1);
 
                 demandPairs.Add(new DemandPair(endpoint1, endpoint2));

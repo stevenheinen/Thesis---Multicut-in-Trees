@@ -31,13 +31,15 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
+        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedEdge(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(tree, demandPairs, algorithm)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
+        public DominatedEdge(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Random random, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(tree, demandPairs, algorithm, random)
         {
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the DominatedEdge reduction rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the DominatedEdge reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(random, nameof(random), $"Trying to create an instance of the DominatedEdge reduction rule, but the random is null!");
             Utils.NullCheck(demandPathsPerEdge, nameof(demandPathsPerEdge), $"Trying to create an instance of the DominatedEdge reduction rule, but the dictionary with demand paths per edge is null!");
 
             DemandPathsPerEdge = demandPathsPerEdge;
@@ -57,7 +59,7 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(otherEdge.Item1, nameof(otherEdge.Item1), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the second edge is null!");
             Utils.NullCheck(otherEdge.Item2, nameof(otherEdge.Item2), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the second edge is null!");
 
-            return DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(contractEdge)].IsSubsetOf(DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(otherEdge)]);
+            return DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(contractEdge)].IsSubsetOf(DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(otherEdge)], Random);
         }
 
         /// <summary>

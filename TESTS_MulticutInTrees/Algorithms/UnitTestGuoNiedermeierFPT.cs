@@ -20,7 +20,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             List<DemandPair> demandPairs = new List<DemandPair>();
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2, new Random(7));
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
             Assert.IsNotNull(gnfpt);
             Assert.IsNotNull(gnfpt.ReductionRules);
@@ -61,18 +62,17 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestNullParameter()
         {
+            Random random = new Random(238512352);
             Tree<TreeNode> tree = new Tree<TreeNode>();
             List<DemandPair> demandPairs = new List<DemandPair>();
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             TreeNode node = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
             TreeNode node2 = new TreeNode(2);
             DemandPair dp = new DemandPair(node1, node2);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierFPT g = new GuoNiedermeierFPT(null, demandPairs, 100); });
-            Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierFPT g = new GuoNiedermeierFPT(tree, null, 100); });
-            Assert.ThrowsException<ArgumentException>(() => { GuoNiedermeierFPT g = new GuoNiedermeierFPT(tree, demandPairs, 0); });
-            Assert.ThrowsException<ArgumentException>(() => { GuoNiedermeierFPT g = new GuoNiedermeierFPT(tree, demandPairs, -56554); });
+            Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierFPT g = new GuoNiedermeierFPT(null); });
             Assert.ThrowsException<ArgumentNullException>(() => { gnfpt.ChangeEndpointOfDemandPair(null, node, node); });
             Assert.ThrowsException<ArgumentNullException>(() => { gnfpt.ChangeEndpointOfDemandPair(dp, null, node); });
             Assert.ThrowsException<ArgumentNullException>(() => { gnfpt.ChangeEndpointOfDemandPair(dp, node, null); });
@@ -92,6 +92,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestDemandPathsPerEdge()
         {
+            Random random = new Random(587);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -112,7 +114,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             Dictionary<(TreeNode, TreeNode), List<DemandPair>> dict = (Dictionary<(TreeNode, TreeNode), List<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
@@ -124,6 +127,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRemoveDemandPairFromEdge()
         {
+            Random random = new Random(153);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -144,7 +149,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             Dictionary<(TreeNode, TreeNode), List<DemandPair>> dict = (Dictionary<(TreeNode, TreeNode), List<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
@@ -161,6 +167,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCutEdge()
         {
+            Random random = new Random(64823);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -181,7 +189,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.CutEdge((node5, node2));
 
             PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -191,6 +200,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCutEdges()
         {
+            Random random = new Random(1359);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -211,7 +222,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.CutEdges(new List<(TreeNode, TreeNode)>() { (node0, node1), (node5, node2) });
             
             PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -221,6 +233,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestContractEdge()
         {
+            Random random = new Random(563135645);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -241,7 +255,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.ContractEdge((node0, node2));
 
             Assert.AreEqual(5, tree.NumberOfNodes);
@@ -250,6 +265,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestContractEdges()
         {
+            Random random = new Random(9684357);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -270,7 +287,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.ContractEdges(new List<(TreeNode, TreeNode)>() { (node0, node2), (node4, node1) });
 
             Assert.AreEqual(4, tree.NumberOfNodes);
@@ -279,6 +297,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestChangeEndpointOfDemandPair()
         {
+            Random random = new Random(8323);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -299,7 +319,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.ChangeEndpointOfDemandPair(dp3, node5, node2);
             Assert.AreEqual(3, dp3.EdgesOnDemandPath.Count);
 
@@ -310,6 +331,8 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestChangeEndpointOfDemandPairs()
         {
+            Random random = new Random(139);
+
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -330,7 +353,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
 
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
+            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.ChangeEndpointOfDemandPairs(new List<(DemandPair, TreeNode, TreeNode)>(){ (dp3, node5, node2), (dp1, node4, node0) });
             Assert.AreEqual(3, dp3.EdgesOnDemandPath.Count);
             Assert.AreEqual(1, dp1.EdgesOnDemandPath.Count);

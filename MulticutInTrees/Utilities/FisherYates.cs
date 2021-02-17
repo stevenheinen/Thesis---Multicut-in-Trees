@@ -15,11 +15,13 @@ namespace MulticutInTrees.Utilities
         /// </summary>
         /// <typeparam name="T">The type of elements in <paramref name="list"/>.</typeparam>
         /// <param name="list">The <see cref="IList{T}"/> to be shuffled. Cannot be readonly.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
+        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="list"/> is readonly.</exception>
-        public static void Shuffle<T>(this IList<T> list)
+        public static void Shuffle<T>(this IList<T> list, Random random)
         {
             Utils.NullCheck(list, nameof(list), $"Trying to shuffle an IList, but the IList is null!");
+            Utils.NullCheck(random, nameof(random), $"Trying to shuffle an IList, but the random is null!");
 
             if (list.IsReadOnly && !(list is T[]))
             {
@@ -28,7 +30,7 @@ namespace MulticutInTrees.Utilities
             
             for (int i = list.Count - 1; i > 0; i--)
             {
-                int j = Program.Random.Next(i + 1);
+                int j = random.Next(i + 1);
                 T temp = list[i];
                 list[i] = list[j];
                 list[j] = temp;
