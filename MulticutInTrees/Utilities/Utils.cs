@@ -158,5 +158,39 @@ namespace MulticutInTrees.Utilities
 
             return result;
         }
+
+        /// <summary>
+        /// Picks a random element from an <see cref="IEnumerable{T}"/> that fits a given condition.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <see cref="IEnumerable{T}"/>.</typeparam>
+        /// <param name="list">The <see cref="IEnumerable{T}"/> we want to pick a conditioned random element from.</param>
+        /// <param name="condition">The <see cref="Func{T, TResult}"/> that a <typeparamref name="T"/> in <paramref name="list"/> must return <see langword="true"/> on to be considered to be picked.</param>
+        /// <param name="random">The <see cref="Random"/> used to pick an arbitrary element.</param>
+        /// <returns>A uniform randomly picked <typeparamref name="T"/> that returns <see langword="true"/> on <paramref name="condition"/> from <paramref name="list"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/>, <paramref name="condition"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
+        public static T SelectRandomWhere<T>(this IEnumerable<T> list, Func<T, bool> condition, Random random)
+        {
+            NullCheck(list, nameof(list), $"Trying to pick a random element form an IEnumerable that fits a condition, but the IEnumerable is null!");
+            NullCheck(condition, nameof(condition), $"Trying to pick a random element form an IEnumerable that fits a condition, but the function with the condition is null!");
+            NullCheck(random, nameof(random), $"Trying to pick a random element form an IEnumerable that fits a condition, but the random number generator is null!");
+
+            return list.Where(n => condition(n)).PickRandom(random);
+        }
+
+        /// <summary>
+        /// Picks a random element from an <see cref="IEnumerable{T}"/>
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the <see cref="IEnumerable{T}"/>.</typeparam>
+        /// <param name="list">The <see cref="IEnumerable{T}"/> we want to pick a random element from.</param>
+        /// <param name="random">The <see cref="Random"/> used to pick an arbitrary element.</param>
+        /// <returns>A uniform randomly picked <typeparamref name="T"/> from <paramref name="list"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
+        public static T PickRandom<T>(this IEnumerable<T> list, Random random)
+        {
+            NullCheck(list, nameof(list), $"Trying to pick a random element from an IEnumerable, but the IEnumerable is null!");
+            NullCheck(random, nameof(random), $"Trying to pick a random element from an IEnumerable, but the random number generator is null!");
+
+            return list.ElementAt(random.Next(list.Count()));
+        }
     }
 }

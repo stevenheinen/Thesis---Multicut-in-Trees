@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Algorithms
@@ -28,7 +29,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(demandPairsProperty.GetGetMethod(true));
             Assert.AreEqual(demandPairs, demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { }));
 
-            PropertyInfo inputProperty = typeof(GuoNiedermeierFPT).GetProperty("Input", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo inputProperty = typeof(GuoNiedermeierFPT).GetProperty("Tree", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(inputProperty.GetGetMethod(true));
             Assert.AreEqual(tree, inputProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { }));
 
@@ -104,6 +105,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
 
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
@@ -133,6 +136,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3 });
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
+
+            tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
@@ -169,6 +174,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
 
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
@@ -196,6 +203,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3 });
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
+
+            tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
@@ -225,6 +234,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
 
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
@@ -252,6 +263,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
 
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
@@ -278,6 +291,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3 });
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
+
+            tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
@@ -307,6 +322,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3 });
             tree.AddChild(node1, node4);
             tree.AddChild(node2, node5);
+
+            tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);

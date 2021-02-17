@@ -2,12 +2,13 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
-using MulticutInTrees.Exceptions;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Algorithms
@@ -16,7 +17,7 @@ namespace TESTS_MulticutInTrees.Algorithms
     public class UnitTestAlgorithm
     {
         [TestMethod]
-        public void TestRun()
+        public void TestRun1()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
@@ -29,16 +30,19 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node0, node2);
             tree.AddChild(node1, node3);
 
+            tree.UpdateNodeTypes();
+
             DemandPair dp = new DemandPair(node0, node3);
             GuoNiedermeierFPT g = new GuoNiedermeierFPT(tree, new List<DemandPair>() { dp }, 3);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) solution = g.Run();
-            Assert.AreEqual(tree, solution.Item1);
-            Assert.AreEqual(0, solution.Item2.Count);
+            Assert.AreEqual(0, solution.Item1.NumberOfEdges);
+            Assert.AreEqual(1, solution.Item2.Count);
+            Assert.AreEqual(0, solution.Item3.Count);
         }
 
         
         [TestMethod]
-        public void TestRunMultipleReductionRules()
+        public void TestRun2()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
 
@@ -70,6 +74,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node7, node15);
             tree.AddChildren(node10, new List<TreeNode>() { node16, node17 });
 
+            tree.UpdateNodeTypes();
+
             DemandPair demandPair1 = new DemandPair(node1, node13);
             DemandPair demandPair2 = new DemandPair(node4, node5);
             DemandPair demandPair3 = new DemandPair(node7, node15);
@@ -82,9 +88,9 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
 
-            Assert.AreEqual(3, result.Item1.NumberOfNodes);
-            Assert.AreEqual(4, result.Item3.Count);
-            Assert.AreEqual(1, result.Item2.Count);
+            Assert.AreEqual(1, result.Item1.NumberOfNodes);
+            Assert.AreEqual(3, result.Item2.Count);
+            Assert.AreEqual(0, result.Item3.Count);
 
             foreach (DemandPair dp in result.Item3)
             {

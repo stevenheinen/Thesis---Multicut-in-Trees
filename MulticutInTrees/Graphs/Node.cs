@@ -34,6 +34,11 @@ namespace MulticutInTrees.Graphs
         public int Degree => InternalNeighbours.Count;
 
         /// <summary>
+        /// The <see cref="NodeType"/> of this <see cref="Node"/>.
+        /// </summary>
+        public NodeType Type { get; set; }
+
+        /// <summary>
         /// Constructor for a <see cref="Node"/>.
         /// <para>
         /// <b>Note:</b> Use this constructor when using this <see cref="Node"/> in combination with an <see cref="IGraph{N}"/>.
@@ -45,6 +50,7 @@ namespace MulticutInTrees.Graphs
             ID = id;
             InternalNeighbours = new List<Node>();
             InternalUniqueNeighbours = new HashSet<Node>();
+            Type = NodeType.Other;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.ReductionRules
@@ -17,7 +18,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// The input <see cref="Tree{N}"/>.
         /// </summary>
-        protected Tree<TreeNode> Input { get; }
+        protected Tree<TreeNode> Tree { get; }
 
         /// <summary>
         /// The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.
@@ -32,12 +33,12 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Constructor for a <see cref="ReductionRule"/>.
         /// </summary>
-        /// <param name="input">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
-        public ReductionRule(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm)
+        public ReductionRule(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm)
         {
-            Input = input;
+            Tree = tree;
             DemandPairs = demandPairs;
             Algorithm = algorithm;
             Preprocess();

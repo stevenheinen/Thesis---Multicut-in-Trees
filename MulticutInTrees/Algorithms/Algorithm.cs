@@ -3,8 +3,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
@@ -28,7 +30,7 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// The input <see cref="Tree{N}"/>.
         /// </summary>
-        protected Tree<TreeNode> Input { get; }
+        protected Tree<TreeNode> Tree { get; }
 
         /// <summary>
         /// The <see cref="List{T}"/> of tuples of <see cref="TreeNode"/>s that contains the already found part of the solution.
@@ -73,12 +75,12 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Constructor for an <see cref="Algorithm"/>.
         /// </summary>
-        /// <param name="input">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
-        public Algorithm(Tree<TreeNode> input, List<DemandPair> demandPairs, int k)
+        public Algorithm(Tree<TreeNode> tree, List<DemandPair> demandPairs, int k)
         {
-            Input = input;
+            Tree = tree;
             DemandPairs = demandPairs;
             K = k;
             PartialSolution = new List<(TreeNode, TreeNode)>();
@@ -97,14 +99,18 @@ namespace MulticutInTrees.Algorithms
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
             for (int i = 0; i < ReductionRules.Count; i++)
             {
+                if (DemandPairs.Count == 0)
+                {
+                    return (Tree, PartialSolution, DemandPairs);
+                }
+                if (PartialSolution.Count == K)
+                {
+                    return (Tree, PartialSolution, DemandPairs);
+                }
+
                 if (Program.PRINT_DEBUG_INFORMATION)
                 {
                     Console.WriteLine($"Now applying rule {i + 1}.");
-                }
-
-                if (PartialSolution.Count == K)
-                {
-                    return (Input, PartialSolution, DemandPairs);
                 }
 
                 // If we have not executed this rule before, execute it now.
@@ -128,6 +134,11 @@ namespace MulticutInTrees.Algorithms
                     LastChangedEdgesPerDemandPair = new List<(List<(TreeNode, TreeNode)>, DemandPair)>();
                     LastIterationDemandPairChange = false;
                     successful = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair) || successful;
+                    if (!successful)
+                    {
+                        LastIterationDemandPairChange = true;
+                        LastChangedEdgesPerDemandPair = oldLastChangedEdgesPerDemandPair;
+                    }
                 }
                 if (LastIterationDemandPairRemoval)
                 {
@@ -135,6 +146,11 @@ namespace MulticutInTrees.Algorithms
                     LastRemovedDemandPairs = new List<DemandPair>();
                     LastIterationDemandPairRemoval = false;
                     successful = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs) || successful;
+                    if (!successful)
+                    {
+                        LastIterationDemandPairRemoval = true;
+                        LastRemovedDemandPairs = oldLastRemovedDemandPairs;
+                    }
                 }
                 if (LastIterationEdgeContraction)
                 {
@@ -142,6 +158,11 @@ namespace MulticutInTrees.Algorithms
                     LastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>();
                     LastIterationEdgeContraction = false;
                     successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges) || successful;
+                    if (!successful)
+                    {
+                        LastIterationEdgeContraction = true;
+                        LastContractedEdges = oldLastContractedEdges;
+                    }
                 }
 
                 // If we applied the rule successfully, go back to rule 0.
@@ -152,7 +173,136 @@ namespace MulticutInTrees.Algorithms
                 }
             }
 
-            return (Input, PartialSolution, DemandPairs);
+            return (Tree, PartialSolution, DemandPairs);
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="TreeNode"/>s in the instance when an edge is contracted.
+        /// </summary>
+        /// <param name="contractedEdge">The tuple of two <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either element of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <see cref="TreeNode.Type"/> of either endpoint of <paramref name="contractedEdge"/> is <see cref="NodeType.Other"/>. In that case, please update the types of the nodes by calling <seealso cref="Tree{N}.UpdateNodeTypes()"/>.</exception>
+        protected void UpdateNodeTypesDuringEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        {
+            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
+            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
+            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
+            if (contractedEdge.Item1.Type == NodeType.Other)
+            {
+                throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Item1} is not known. Please make sure every node has a nodetype to start with!");
+            }
+            if (contractedEdge.Item2.Type == NodeType.Other)
+            {
+                throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Item2} is not known. Please make sure every node has a nodetype to start with!");
+            }
+
+            switch ((contractedEdge.Item1.Type, contractedEdge.Item2.Type))
+            {
+                // In case of a contraction of an edge between two I1-nodes, two I2-nodes, or two I3-nodes, no changes have to be made.
+                // We also do not need to change anything when contracting an edge between an L2-leaf and an I2-node, or between an L3-leaf and an I3-node.
+                case (NodeType.I1, NodeType.I2):
+                    newNode.Type = NodeType.I1;
+                    ChangeLeavesFromNodeToType(contractedEdge.Item2, NodeType.L2, NodeType.I1);
+                    break;
+                case (NodeType.I2, NodeType.I1):
+                    newNode.Type = NodeType.I1;
+                    ChangeLeavesFromNodeToType(contractedEdge.Item1, NodeType.L2, NodeType.I1);
+                    break;
+                case (NodeType.I1, NodeType.I3):
+                    UpdateNodeTypesEdgeContractionI1I3(contractedEdge.Item1, contractedEdge.Item2, newNode);
+                    break;
+                case (NodeType.I3, NodeType.I1):
+                    UpdateNodeTypesEdgeContractionI1I3(contractedEdge.Item2, contractedEdge.Item1, newNode);
+                    break;
+                case (NodeType.I2, NodeType.I3):
+                    newNode.Type = NodeType.I3;
+                    ChangeLeavesFromNodeToType(contractedEdge.Item1, NodeType.L2, NodeType.L3);
+                    break;
+                case (NodeType.I3, NodeType.I2):
+                    newNode.Type = NodeType.I3;
+                    ChangeLeavesFromNodeToType(contractedEdge.Item2, NodeType.L2, NodeType.L3);
+                    break;
+                case (NodeType.L1, NodeType.I1):
+                    UpdateNodeTypesEdgeContractionL1I1(contractedEdge.Item2, newNode);
+                    break;
+                case (NodeType.I1, NodeType.L1):
+                    UpdateNodeTypesEdgeContractionL1I1(contractedEdge.Item1, newNode);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="TreeNode"/>s in the instance when an edge between an <see cref="NodeType.I1"/>-node and an <see cref="NodeType.I3"/>-node is contracted.
+        /// </summary>
+        /// <param name="contractedEdgeI1Node">The <see cref="NodeType.I1"/>-node that is the endpoint of the contracted edge.</param>
+        /// <param name="contractedEdgeI3Node">The <see cref="NodeType.I3"/>-node that is the endpoint of the contracted edge.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
+        private void UpdateNodeTypesEdgeContractionI1I3(TreeNode contractedEdgeI1Node, TreeNode contractedEdgeI3Node, TreeNode newNode)
+        {
+            // If the I3-node has exactly three internal neighbours, the result of this edge contraction will be an I2-node.
+            // If it has more than three internal neighbours, the result will be an I3-node.
+
+            bool hasAtLeastFourInternalNeighbours = contractedEdgeI3Node.Neighbours.Count(n => n.Neighbours.Count > 1) > 3;
+            NodeType contractedType;
+            NodeType leafType;
+
+            if (hasAtLeastFourInternalNeighbours)
+            {
+                contractedType = NodeType.I3;
+                leafType = NodeType.L3;
+            }
+            else
+            {
+                contractedType = NodeType.I2;
+                leafType = NodeType.L2;
+                ChangeLeavesFromNodeToType(contractedEdgeI3Node, NodeType.L3, leafType);
+            }
+
+            newNode.Type = contractedType;
+            ChangeLeavesFromNodeToType(contractedEdgeI1Node, NodeType.L1, leafType);
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="TreeNode"/>s in the instance when an edge between an <see cref="NodeType.I1"/>-node and an <see cref="NodeType.L1"/>-leaf is contracted.
+        /// </summary>
+        /// <param name="contractedEdgeI1Node">The <see cref="NodeType.I1"/>-node that is the endpoint of the contracted edge.</param>
+        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
+        private void UpdateNodeTypesEdgeContractionL1I1(TreeNode contractedEdgeI1Node, TreeNode newNode)
+        {
+            // If the I1-node has exactly one leaf (which is also the edge that is contracted), the resulting node will be a leaf. 
+            // The type of this leaf depends on the type of the (unique) internal neighbour of the I1-node.
+            bool hasExactlyOneLeaf = contractedEdgeI1Node.Neighbours.Count(n => n.Neighbours.Count == 1) == 1;
+            if (hasExactlyOneLeaf)
+            {
+                TreeNode internalNeighbour = contractedEdgeI1Node.Neighbours.First(n => n.Neighbours.Count > 1);
+                if (internalNeighbour.Type == NodeType.I1)
+                {
+                    newNode.Type = NodeType.L1;
+                }
+                else if (internalNeighbour.Type == NodeType.I2)
+                {
+                    newNode.Type = NodeType.L2;
+                }
+                else
+                {
+                    newNode.Type = NodeType.L3;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of all the leaves of <paramref name="parentNode"/>.
+        /// </summary>
+        /// <param name="parentNode">The <see cref="TreeNode"/> for which we want to change the <see cref="NodeType"/> of its leaves.</param>
+        /// <param name="oldType">The old <see cref="NodeType"/> of the leaves of <paramref name="parentNode"/>. Is equal to Lx, where Ix is the <see cref="TreeNode.Type"/> of <paramref name="parentNode"/>.</param>
+        /// <param name="newType">The new <see cref="NodeType"/> of the leaves of <paramref name="parentNode"/>.</param>
+        private void ChangeLeavesFromNodeToType(TreeNode parentNode, NodeType oldType, NodeType newType)
+        {
+            foreach (TreeNode leaf in parentNode.Neighbours.Where(n => n.Type == oldType))
+            {
+                leaf.Type = newType;
+            }
         }
 
         /// <summary>

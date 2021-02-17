@@ -374,5 +374,95 @@ namespace MulticutInTrees.Graphs
             
             return DFS.IsAcyclicTree<Tree<N>, N>(this) && DFS.FindAllConnectedComponents(Nodes).Count == 1;
         }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/> for all the nodes in this <see cref="Tree{N}"/>.
+        /// </summary>
+        public void UpdateNodeTypes()
+        {
+            FindLeaves(out List<N> leaves, out HashSet<N> leafSet, out List<N> internalNodes);
+            DetermineTypesOfInternalNodes(leafSet, internalNodes);
+            DetermineTypesOfLeaves(leaves);
+        }
+
+        /// <summary>
+        /// Find all the leaves in this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="leaves">The resulting <see cref="List{T}"/> with all leaves.</param>
+        /// <param name="leafSet">The resulting <see cref="HashSet{T}"/> with all leaves.</param>
+        /// <param name="internalNodes">The resulting <see cref="List{T}"/> with all internal nodes.</param>
+        private void FindLeaves(out List<N> leaves, out HashSet<N> leafSet, out List<N> internalNodes)
+        {
+            leaves = new List<N>();
+            leafSet = new HashSet<N>();
+            internalNodes = new List<N>();
+
+            foreach (N node in Nodes)
+            {
+                if (node.Neighbours.Count == 1)
+                {
+                    leaves.Add(node);
+                    leafSet.Add(node);
+                }
+                else
+                {
+                    internalNodes.Add(node);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines the <see cref="NodeType"/> of all internal nodes.
+        /// </summary>
+        /// <param name="leaves">The <see cref="HashSet{T}"/> with all leaves.</param>
+        /// <param name="internalNodes">The <see cref="List{T}"/> with internal nodes.</param>
+        private void DetermineTypesOfInternalNodes(HashSet<N> leaves, List<N> internalNodes)
+        {
+            foreach (N node in internalNodes)
+            {
+                int internalNeighbours = node.Neighbours.Count(n => !leaves.Contains(n));
+                if (internalNeighbours <= 1)
+                {
+                    node.Type = NodeType.I1;
+                }
+                else if (internalNeighbours == 2)
+                {
+                    node.Type = NodeType.I2;
+                }
+                else
+                {
+                    node.Type = NodeType.I3;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines the <see cref="NodeType"/> of all leaves.
+        /// </summary>
+        /// <param name="leaves">The <see cref="List{T}"/> with all leaves.</param>
+        private void DetermineTypesOfLeaves(List<N> leaves)
+        {
+            foreach (N leaf in leaves)
+            {
+                N parent = leaf.Parent;
+                if (parent is null)
+                {
+                    parent = leaf.Children[0];
+                }
+
+                if (parent.Type == NodeType.I1)
+                {
+                    leaf.Type = NodeType.L1;
+                }
+                else if (parent.Type == NodeType.I2)
+                {
+                    leaf.Type = NodeType.L2;
+                }
+                else
+                {
+                    leaf.Type = NodeType.L3;
+                }
+            }
+        }
     }
 }

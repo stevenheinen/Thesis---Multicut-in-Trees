@@ -58,6 +58,7 @@ namespace MulticutInTrees.InstanceGeneration
                 }
             }
 
+            tree.UpdateNodeTypes();
             return tree;
         }
 

@@ -25,6 +25,11 @@ namespace MulticutInTrees.Graphs
 
         /// <inheritdoc/>
         public ReadOnlyCollection<TreeNode> Children => InternalChildren.AsReadOnly();
+        
+        /// <summary>
+        /// The <see cref="NodeType"/> of this <see cref="TreeNode"/>.
+        /// </summary>
+        public NodeType Type { get; set; }
 
         /// <summary>
         /// The number of neighbours (children + parent) this <see cref="TreeNode"/> has.
@@ -118,66 +123,7 @@ namespace MulticutInTrees.Graphs
             ID = id;
             InternalChildren = new List<TreeNode>();
             InternalUniqueChildren = new HashSet<TreeNode>();
-        }
-
-        /// <summary>
-        /// Constructor for a <see cref="TreeNode"/>.
-        /// <para>
-        /// <b>Note:</b> DO NOT use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
-        /// </para>
-        /// </summary>
-        /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
-        /// <param name="parent">The <see cref="TreeNode"/> that is the parent of the new <see cref="TreeNode"/> instance.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> is <see langword="null"/>.</exception>
-        internal TreeNode(uint id, TreeNode parent)
-        {
-            Utils.NullCheck(parent, nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
-
-            ID = id;
-            InternalChildren = new List<TreeNode>();
-            InternalUniqueChildren = new HashSet<TreeNode>();
-            parent.AddChild(this);
-        }
-
-        /// <summary>
-        /// Constructor for a <see cref="TreeNode"/>.
-        /// <para>
-        /// <b>Note:</b> DO NOT use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
-        /// </para>
-        /// </summary>
-        /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
-        /// <param name="parent">The <see cref="TreeNode"/> that is the parent of the new <see cref="TreeNode"/> instance.</param>
-        /// <param name="children">The <see cref="IEnumerable{T}"/> of <see cref="TreeNode"/>s containing the children of this <see cref="TreeNode"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> or <paramref name="children"/> is <see langword="null"/>.</exception>
-        internal TreeNode(uint id, TreeNode parent, IEnumerable<TreeNode> children)
-        {
-            Utils.NullCheck(parent, nameof(parent), $"Trying to create a new instance of {GetType()} with a predefined parent, but parent is null!");
-            Utils.NullCheck(children, nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
-
-            ID = id;
-            InternalChildren = new List<TreeNode>();
-            InternalUniqueChildren = new HashSet<TreeNode>();
-            AddChildren(children);
-            parent.AddChild(this);
-        }
-
-        /// <summary>
-        /// Constructor for a <see cref="TreeNode"/>.
-        /// <para>
-        /// <b>Note:</b> DO NOT use this constructor when using this <see cref="TreeNode"/> in combination with an <see cref="IGraph{N}"/>.
-        /// </para>
-        /// </summary>
-        /// <param name="id">The unique identifier of this <see cref="TreeNode"/>.</param>
-        /// <param name="children">The <see cref="IEnumerable{T}"/> of <see cref="TreeNode"/>s containing the children of this <see cref="TreeNode"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="children"/> is <see langword="null"/>.</exception>
-        internal TreeNode(uint id, IEnumerable<TreeNode> children)
-        {
-            Utils.NullCheck(children, nameof(children), $"Trying to create a new instance of {GetType()} with predefined children, but the IEnumberable of children is null!");
-
-            ID = id;
-            InternalChildren = new List<TreeNode>();
-            InternalUniqueChildren = new HashSet<TreeNode>();
-            AddChildren(children);
+            Type = NodeType.Other;
         }
 
         /// <summary>

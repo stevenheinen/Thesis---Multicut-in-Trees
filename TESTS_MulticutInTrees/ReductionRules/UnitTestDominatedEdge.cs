@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
@@ -30,6 +31,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddRoot(node0);
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
             tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+
+            tree.UpdateNodeTypes();
 
             DemandPair demandPair = new DemandPair(node2, node4);
             List<DemandPair> demandPairs = new List<DemandPair>() { demandPair };
@@ -59,6 +62,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddRoot(node0);
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
             tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+
+            tree.UpdateNodeTypes();
 
             DemandPair demandPair = new DemandPair(node2, node4);
             List<DemandPair> demandPairs = new List<DemandPair>() { demandPair };
@@ -97,6 +102,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
             tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
 
+            tree.UpdateNodeTypes();
+
             DemandPair demandPair1 = new DemandPair(node2, node4);
             DemandPair demandPair2 = new DemandPair(node3, node0);
             List<DemandPair> demandPairs = new List<DemandPair>() { demandPair1, demandPair2 };
@@ -111,7 +118,6 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(tree, demandPairs, 100), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.RunFirstIteration());
-
 
             DemandPair demandPair3 = new DemandPair(node1, node4);
             DemandPair demandPair4 = new DemandPair(node3, node1);
@@ -145,6 +151,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddRoot(node0);
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
             tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+
+            tree.UpdateNodeTypes();
 
             DemandPair demandPair1 = new DemandPair(node2, node4);
             DemandPair demandPair2 = new DemandPair(node3, node0);
@@ -187,6 +195,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
             tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
 
+            tree.UpdateNodeTypes();
+
             DemandPair demandPair1 = new DemandPair(node2, node4);
             DemandPair demandPair3 = new DemandPair(node2, node0);
             DemandPair demandPair4 = new DemandPair(node2, node0);
@@ -220,6 +230,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node0, node1);
             tree.AddChild(node1, node2);
             tree.AddChild(node2, node3);
+
+            tree.UpdateNodeTypes();
 
             DemandPair demandPair1 = new DemandPair(node1, node0);
             DemandPair demandPair2 = new DemandPair(node3, node2);
@@ -255,6 +267,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node1, node2);
             tree.AddChild(node2, node3);
             tree.AddChild(node3, node4);
+
+            tree.UpdateNodeTypes();
 
             DemandPair demandPair1 = new DemandPair(node0, node3);
             DemandPair demandPair2 = new DemandPair(node1, node2);
@@ -292,6 +306,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node2, node3);
             tree.AddChild(node3, node4);
 
+            tree.UpdateNodeTypes();
+
             DemandPair demandPair1 = new DemandPair(node0, node3);
             DemandPair demandPair2 = new DemandPair(node1, node2);
             DemandPair demandPair3 = new DemandPair(node0, node1);
@@ -327,6 +343,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node0, node1);
             tree.AddChild(node1, node2);
             tree.AddChild(node2, node3);
+
+            tree.UpdateNodeTypes();
 
             DemandPair demandPair1 = new DemandPair(node1, node0);
             DemandPair demandPair2 = new DemandPair(node3, node2);

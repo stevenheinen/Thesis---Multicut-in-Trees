@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.InstanceGeneration

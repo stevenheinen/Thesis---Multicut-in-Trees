@@ -30,7 +30,7 @@ namespace MulticutInTrees
         /// <summary>
         /// <see cref="bool"/> that represents whether debug information should be printed to the console during execution of the algorithm.
         /// </summary>
-        public readonly static bool PRINT_DEBUG_INFORMATION = false;
+        public readonly static bool PRINT_DEBUG_INFORMATION = true;
 
         /// <summary>
         /// The entry method for the program.
@@ -38,6 +38,55 @@ namespace MulticutInTrees
         public static void Main()
         {
             Console.WriteLine("Hello World!");
+
+            /*
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+            TreeNode node5 = new TreeNode(5);
+            TreeNode node6 = new TreeNode(6);
+            TreeNode node7 = new TreeNode(7);
+            TreeNode node8 = new TreeNode(8);
+            TreeNode node9 = new TreeNode(9);
+            TreeNode node10 = new TreeNode(10);
+            TreeNode node11 = new TreeNode(11);
+            TreeNode node12 = new TreeNode(12);
+            TreeNode node13 = new TreeNode(13);
+            TreeNode node14 = new TreeNode(14);
+            TreeNode node15 = new TreeNode(15);
+            TreeNode node16 = new TreeNode(16);
+            TreeNode node17 = new TreeNode(17);
+            TreeNode node18 = new TreeNode(18);
+            TreeNode node19 = new TreeNode(19);
+            TreeNode node20 = new TreeNode(20);
+            TreeNode node21 = new TreeNode(21);
+            TreeNode node22 = new TreeNode(22);
+
+            List<TreeNode> nodes = new List<TreeNode>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15, node16, node17, node18, node19, node20, node21, node22 };
+
+            tree.AddRoot(node0);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node5 });
+            tree.AddChildren(node1, new List<TreeNode>() { node2, node3 });
+            tree.AddChild(node3, node4);
+            tree.AddChildren(node5, new List<TreeNode>() { node6, node10, node13, node22 });
+            tree.AddChildren(node6, new List<TreeNode>() { node7, node8 });
+            tree.AddChild(node8, node9);
+            tree.AddChildren(node10, new List<TreeNode>() { node11, node12 });
+            tree.AddChildren(node13, new List<TreeNode>() { node14, node15 });
+            tree.AddChildren(node15, new List<TreeNode>() { node16, node17 });
+            tree.AddChildren(node17, new List<TreeNode>() { node18, node20, node21 });
+            tree.AddChild(node18, node19);
+
+            tree.UpdateNodeTypes();
+
+            foreach (TreeNode node in nodes)
+            {
+                Console.WriteLine($"{node.ID}:\t{node.Type}");
+            }
+            */
 
             /*
             int nrNodes = 500;

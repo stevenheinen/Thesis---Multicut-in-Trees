@@ -1,4 +1,4 @@
 echo Inspecting code...
-C:\Users\steve\.dotnet\tools\jb inspectcode "MulticutInTrees.sln" -o=".\Resharper\inspectcode.xml"
+C:\Users\steve\.dotnet\tools\jb inspectcode "MulticutInTrees\MulticutInTrees.csproj" -o=".\Resharper\inspectcode.xml"
 echo Detecting duplicates...
-C:\Users\steve\.dotnet\tools\jb dupfinder "MulticutInTrees.sln" -o=".\Resharper\dupfinder.xml"
+C:\Users\steve\.dotnet\tools\jb dupfinder "MulticutInTrees\MulticutInTrees.csproj" -o=".\Resharper\dupfinder.xml"

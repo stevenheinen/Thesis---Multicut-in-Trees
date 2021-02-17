@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.Utilities;
 
-namespace MulticutInTrees.Utilities
+namespace MulticutInTrees.MulticutProblem
 {
     /// <summary>
     /// Class that represents a demand pair in the input.
@@ -24,6 +25,11 @@ namespace MulticutInTrees.Utilities
         /// The private <see cref="List{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
         /// </summary>
         private List<(TreeNode, TreeNode)> InternalEdgesOnDemandPath { get; set; }
+        
+        /// <summary>
+        /// The private <see cref="HashSet{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
+        /// </summary>
+        private HashSet<(TreeNode, TreeNode)> InternalEdgesOnDemandPathSet { get; set; }
 
         /// <summary>
         /// The first endpoint of this <see cref="DemandPair"/>.
@@ -60,6 +66,7 @@ namespace MulticutInTrees.Utilities
             Node2 = node2;
             InternalDemandPath = new List<TreeNode>(DFS.FindPathBetween(node1, node2));
             InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
+            InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
         }
 
         /// <summary>
@@ -69,6 +76,20 @@ namespace MulticutInTrees.Utilities
         public override string ToString()
         {
             return $"Demand pair ({Node1}, {Node2})";
+        }
+
+        /// <summary>
+        /// Checks whether <paramref name="edge"/> is on the path between the endpoints of this <see cref="DemandPair"/>.
+        /// </summary>
+        /// <param name="edge">The tuple of two <see cref="TreeNode"/>s for which we want to know whether it is part of this demand path.</param>
+        /// <returns><see langword="true"/> if <paramref name="edge"/> is part of the path of this <see cref="DemandPair"/>, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
+        public bool EdgeIsPartOfPath((TreeNode, TreeNode) edge)
+        {
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
+
+            return InternalEdgesOnDemandPathSet.Contains(edge) || InternalEdgesOnDemandPathSet.Contains((edge.Item2, edge.Item1));
         }
 
         /// <summary>
@@ -108,6 +129,7 @@ namespace MulticutInTrees.Utilities
                 {
                     InternalDemandPath = InternalDemandPath.SkipWhile(n => n != Node1).ToList();
                     InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.SkipWhile(n => n.Item1 != Node1).ToList();
+                    InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
                 }
             }
             else if (oldEndpoint == Node2)
@@ -123,6 +145,7 @@ namespace MulticutInTrees.Utilities
                     InternalDemandPath = InternalDemandPath.TakeWhile(n => n != Node2).ToList();
                     InternalDemandPath.Add(Node2);
                     InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.TakeWhile(n => n.Item1 != Node2).ToList();
+                    InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
                 }
             }
 
@@ -131,6 +154,7 @@ namespace MulticutInTrees.Utilities
             {
                 InternalDemandPath = DFS.FindPathBetween(Node1, Node2);
                 InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
+                InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
             }
         }
 
@@ -176,6 +200,7 @@ namespace MulticutInTrees.Utilities
 
             InternalDemandPath = InternalDemandPath.Select(n => oldNode == n ? newNode : n).ToList();
             InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.Select(n => oldNode == n.Item1 ? (newNode, n.Item2) : n).Select(n => oldNode == n.Item2 ? (n.Item1, newNode) : n).ToList();
+            InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
         }
 
         /// <summary>
@@ -198,13 +223,17 @@ namespace MulticutInTrees.Utilities
             {
                 Node1 = newNode;
                 InternalDemandPath[0] = newNode;
+                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[0]);
                 InternalEdgesOnDemandPath[0] = (newNode, InternalEdgesOnDemandPath[0].Item2);
+                InternalEdgesOnDemandPathSet.Add((newNode, InternalEdgesOnDemandPath[0].Item2));
             }
             else if (contractedEdge.Item1 == Node2 || contractedEdge.Item2 == Node2)
             {
                 Node2 = newNode;
                 InternalDemandPath[^1] = newNode;
+                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[^1]);
                 InternalEdgesOnDemandPath[^1] = (InternalEdgesOnDemandPath[^1].Item1, newNode);
+                InternalEdgesOnDemandPathSet.Add((InternalEdgesOnDemandPath[^1].Item1, newNode));
             }
             else
             {
@@ -294,12 +323,17 @@ namespace MulticutInTrees.Utilities
             }
             if (index < InternalEdgesOnDemandPath.Count - 1)
             {
+                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index + 1]);
                 InternalEdgesOnDemandPath[index + 1] = (newNode, InternalEdgesOnDemandPath[index + 1].Item2);
+                InternalEdgesOnDemandPathSet.Remove((newNode, InternalEdgesOnDemandPath[index + 1].Item2));
             }
             if (index > 0)
             {
+                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index - 1]);
                 InternalEdgesOnDemandPath[index - 1] = (InternalEdgesOnDemandPath[index - 1].Item1, newNode);
+                InternalEdgesOnDemandPathSet.Remove((InternalEdgesOnDemandPath[index - 1].Item1, newNode));
             }
+            InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index]);
             InternalEdgesOnDemandPath.RemoveAt(index);
         }
     }

@@ -1,391 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>111164</CodebaseCost>
-    <TotalDuplicatesCost>13467</TotalDuplicatesCost>
-    <TotalFragmentsCost>32774</TotalFragmentsCost>
+    <CodebaseCost>50983</CodebaseCost>
+    <TotalDuplicatesCost>1308</TotalDuplicatesCost>
+    <TotalFragmentsCost>2616</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
-    <Duplicate Cost="580">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="17124" End="18281"></OffsetRange>
-        <LineRange Start="485" End="513"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="19414" End="20571"></OffsetRange>
-        <LineRange Start="551" End="579"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="552">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="5809" End="6907"></OffsetRange>
-        <LineRange Start="158" End="184"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="11999" End="13097"></OffsetRange>
-        <LineRange Start="345" End="371"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="13699" End="14797"></OffsetRange>
-        <LineRange Start="393" End="419"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="15461" End="16559"></OffsetRange>
-        <LineRange Start="441" End="467"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="546">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="6348" End="7554"></OffsetRange>
-        <LineRange Start="94" End="115"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="7849" End="9055"></OffsetRange>
-        <LineRange Start="124" End="145"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="534">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs</FileName>
-        <OffsetRange Start="791" End="1942"></OffsetRange>
-        <LineRange Start="22" End="44"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs</FileName>
-        <OffsetRange Start="2083" End="3234"></OffsetRange>
-        <LineRange Start="51" End="73"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs</FileName>
-        <OffsetRange Start="5003" End="6154"></OffsetRange>
-        <LineRange Start="94" End="116"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="514">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="11434" End="12670"></OffsetRange>
-        <LineRange Start="219" End="238"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="17224" End="18460"></OffsetRange>
-        <LineRange Start="326" End="345"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="506">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="8273" End="9254"></OffsetRange>
-        <LineRange Start="158" End="182"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="9761" End="10742"></OffsetRange>
-        <LineRange Start="197" End="221"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="484">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="796" End="1813"></OffsetRange>
-        <LineRange Start="22" End="42"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="2109" End="3126"></OffsetRange>
-        <LineRange Start="51" End="71"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="434">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="1759" End="2666"></OffsetRange>
-        <LineRange Start="53" End="71"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="10425" End="11320"></OffsetRange>
-        <LineRange Start="272" End="290"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="12084" End="12979"></OffsetRange>
-        <LineRange Start="313" End="331"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="14156" End="15051"></OffsetRange>
-        <LineRange Start="370" End="388"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="422">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="21747" End="22711"></OffsetRange>
-        <LineRange Start="612" End="637"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="23199" End="24151"></OffsetRange>
-        <LineRange Start="651" End="676"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="404">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="9630" End="10499"></OffsetRange>
-        <LineRange Start="159" End="177"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="10922" End="11791"></OffsetRange>
-        <LineRange Start="187" End="205"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="12284" End="13153"></OffsetRange>
-        <LineRange Start="215" End="233"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="13358" End="14227"></OffsetRange>
-        <LineRange Start="242" End="260"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="14499" End="15368"></OffsetRange>
-        <LineRange Start="269" End="287"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="15741" End="16610"></OffsetRange>
-        <LineRange Start="298" End="316"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="373">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="5410" End="6198"></OffsetRange>
-        <LineRange Start="141" End="158"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="7040" End="7828"></OffsetRange>
-        <LineRange Start="188" End="205"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="346">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="12973" End="13799"></OffsetRange>
-        <LineRange Start="245" End="263"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="14898" End="15724"></OffsetRange>
-        <LineRange Start="281" End="299"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="326">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="8621" End="9205"></OffsetRange>
-        <LineRange Start="244" End="259"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="10603" End="11187"></OffsetRange>
-        <LineRange Start="306" End="321"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="320">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="2566" End="3172"></OffsetRange>
-        <LineRange Start="68" End="81"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="3471" End="4077"></OffsetRange>
-        <LineRange Start="92" End="105"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="4637" End="5243"></OffsetRange>
-        <LineRange Start="125" End="138"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="310">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="5117" End="5808"></OffsetRange>
-        <LineRange Start="117" End="132"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="6617" End="7308"></OffsetRange>
-        <LineRange Start="150" End="165"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="283">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="4423" End="5031"></OffsetRange>
-        <LineRange Start="88" End="101"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="7012" End="7620"></OffsetRange>
-        <LineRange Start="137" End="150"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="275">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="4187" End="4787"></OffsetRange>
-        <LineRange Start="107" End="121"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="8849" End="9449"></OffsetRange>
-        <LineRange Start="227" End="241"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="258">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="9274" End="9814"></OffsetRange>
-        <LineRange Start="178" End="190"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs</FileName>
-        <OffsetRange Start="6430" End="6970"></OffsetRange>
-        <LineRange Start="124" End="136"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="256">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="26011" End="26503"></OffsetRange>
-        <LineRange Start="712" End="726"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="14053" End="14545"></OffsetRange>
-        <LineRange Start="361" End="375"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="239">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="3021" End="3580"></OffsetRange>
-        <LineRange Start="67" End="80"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="4372" End="4931"></OffsetRange>
-        <LineRange Start="96" End="109"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="234">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="12012" End="12456"></OffsetRange>
-        <LineRange Start="257" End="268"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="13348" End="13792"></OffsetRange>
-        <LineRange Start="294" End="305"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="16805" End="17249"></OffsetRange>
-        <LineRange Start="392" End="403"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="17491" End="17935"></OffsetRange>
-        <LineRange Start="412" End="423"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="233">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs</FileName>
-        <OffsetRange Start="8035" End="8505"></OffsetRange>
-        <LineRange Start="157" End="167"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="12125" End="12595"></OffsetRange>
-        <LineRange Start="325" End="335"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="232">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="9923" End="10412"></OffsetRange>
-        <LineRange Start="193" End="203"></LineRange>
+        <OffsetRange Start="10109" End="10598"></OffsetRange>
+        <LineRange Start="196" End="206"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="21604" End="22093"></OffsetRange>
-        <LineRange Start="392" End="402"></LineRange>
+        <OffsetRange Start="21862" End="22351"></OffsetRange>
+        <LineRange Start="394" End="404"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="230">
       <Fragment>
-        <FileName>MulticutInTrees\Utilities\DemandPair.cs</FileName>
-        <OffsetRange Start="8651" End="9663"></OffsetRange>
-        <LineRange Start="159" End="165"></LineRange>
+        <FileName>MulticutInTrees\MulticutProblem\DemandPair.cs</FileName>
+        <OffsetRange Start="10150" End="11162"></OffsetRange>
+        <LineRange Start="170" End="176"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>MulticutInTrees\Utilities\DemandPair.cs</FileName>
-        <OffsetRange Start="12332" End="13344"></OffsetRange>
-        <LineRange Start="202" End="208"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="217">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="672" End="1171"></OffsetRange>
-        <LineRange Start="18" End="31"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="2139" End="2638"></OffsetRange>
-        <LineRange Start="57" End="70"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="3783" End="4282"></OffsetRange>
-        <LineRange Start="99" End="112"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="6607" End="7106"></OffsetRange>
-        <LineRange Start="169" End="182"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="204">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
-        <OffsetRange Start="7527" End="8394"></OffsetRange>
-        <LineRange Start="96" End="120"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
-        <OffsetRange Start="9493" End="10360"></OffsetRange>
-        <LineRange Start="143" End="167"></LineRange>
+        <FileName>MulticutInTrees\MulticutProblem\DemandPair.cs</FileName>
+        <OffsetRange Start="13937" End="14949"></OffsetRange>
+        <LineRange Start="214" End="220"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="194">
@@ -400,206 +42,16 @@
         <LineRange Start="143" End="149"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="191">
+    <Duplicate Cost="131">
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="12515" End="12835"></OffsetRange>
-        <LineRange Start="270" End="280"></LineRange>
+        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierBranching.cs</FileName>
+        <OffsetRange Start="4820" End="5350"></OffsetRange>
+        <LineRange Start="96" End="105"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="14115" End="14435"></OffsetRange>
-        <LineRange Start="312" End="322"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="182">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="5679" End="6074"></OffsetRange>
-        <LineRange Start="93" End="103"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="6777" End="7172"></OffsetRange>
-        <LineRange Start="122" End="132"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="162">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="26911" End="27199"></OffsetRange>
-        <LineRange Start="744" End="751"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="11168" End="11444"></OffsetRange>
-        <LineRange Start="234" End="241"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="151">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="12852" End="13099"></OffsetRange>
-        <LineRange Start="282" End="285"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="13808" End="14055"></OffsetRange>
-        <LineRange Start="307" End="310"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="147">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs</FileName>
-        <OffsetRange Start="1701" End="2016"></OffsetRange>
-        <LineRange Start="45" End="51"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="11902" End="12217"></OffsetRange>
-        <LineRange Start="367" End="373"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="144">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="9529" End="9801"></OffsetRange>
-        <LineRange Start="302" End="306"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="15303" End="15575"></OffsetRange>
-        <LineRange Start="466" End="470"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="135">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="16928" End="17208"></OffsetRange>
-        <LineRange Start="318" End="324"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="2729" End="3007"></OffsetRange>
-        <LineRange Start="61" End="66"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="126">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="990" End="1210"></OffsetRange>
-        <LineRange Start="30" End="35"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="6680" End="6900"></OffsetRange>
-        <LineRange Start="114" End="119"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="126">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="9895" End="10163"></OffsetRange>
-        <LineRange Start="312" End="317"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="10831" End="11099"></OffsetRange>
-        <LineRange Start="340" End="345"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="118">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="791" End="1061"></OffsetRange>
-        <LineRange Start="22" End="26"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="1205" End="1475"></OffsetRange>
-        <LineRange Start="34" End="38"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="114">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs</FileName>
-        <OffsetRange Start="764" End="995"></OffsetRange>
-        <LineRange Start="21" End="25"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="11185" End="11418"></OffsetRange>
-        <LineRange Start="212" End="217"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="113">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="3649" End="3924"></OffsetRange>
-        <LineRange Start="70" End="71"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="3940" End="4215"></OffsetRange>
-        <LineRange Start="73" End="74"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="113">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="4717" End="4992"></OffsetRange>
-        <LineRange Start="80" End="81"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="5008" End="5283"></OffsetRange>
-        <LineRange Start="83" End="84"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="113">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs</FileName>
-        <OffsetRange Start="4685" End="4906"></OffsetRange>
-        <LineRange Start="104" End="108"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs</FileName>
-        <OffsetRange Start="5281" End="5502"></OffsetRange>
-        <LineRange Start="117" End="121"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestAlgorithm.cs</FileName>
-        <OffsetRange Start="5874" End="6095"></OffsetRange>
-        <LineRange Start="130" End="134"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="106">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="14624" End="14785"></OffsetRange>
-        <LineRange Start="275" End="275"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="16657" End="16818"></OffsetRange>
-        <LineRange Start="312" End="312"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="104">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestIdleEdge.cs</FileName>
-        <OffsetRange Start="9737" End="9950"></OffsetRange>
-        <LineRange Start="189" End="193"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="714" End="931"></OffsetRange>
-        <LineRange Start="20" End="26"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="1339" End="1556"></OffsetRange>
-        <LineRange Start="40" End="46"></LineRange>
+        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
+        <OffsetRange Start="4732" End="5262"></OffsetRange>
+        <LineRange Start="98" End="107"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="103">
@@ -614,115 +66,16 @@
         <LineRange Start="85" End="90"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="102">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="9352" End="9593"></OffsetRange>
-        <LineRange Start="185" End="190"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="10756" End="10997"></OffsetRange>
-        <LineRange Start="222" End="227"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="101">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestNode.cs</FileName>
-        <OffsetRange Start="3238" End="3412"></OffsetRange>
-        <LineRange Start="105" End="109"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestNode.cs</FileName>
-        <OffsetRange Start="3900" End="4074"></OffsetRange>
-        <LineRange Start="127" End="131"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestNode.cs</FileName>
-        <OffsetRange Start="5997" End="6181"></OffsetRange>
-        <LineRange Start="191" End="194"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="99">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="7844" End="8005"></OffsetRange>
-        <LineRange Start="207" End="209"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="8021" End="8182"></OffsetRange>
-        <LineRange Start="211" End="213"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="96">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="4921" End="5153"></OffsetRange>
-        <LineRange Start="126" End="129"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="5453" End="5685"></OffsetRange>
-        <LineRange Start="136" End="139"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="90">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="14773" End="15071"></OffsetRange>
-        <LineRange Start="279" End="284"></LineRange>
+        <OffsetRange Start="15023" End="15321"></OffsetRange>
+        <LineRange Start="281" End="286"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="15274" End="15572"></OffsetRange>
-        <LineRange Start="289" End="294"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="89">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="737" End="934"></OffsetRange>
-        <LineRange Start="20" End="22"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Algorithms\UnitTestGuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="3812" End="4009"></OffsetRange>
-        <LineRange Start="63" End="65"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="89">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="6737" End="6950"></OffsetRange>
-        <LineRange Start="207" End="213"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="8341" End="8554"></OffsetRange>
-        <LineRange Start="263" End="269"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="14221" End="14434"></OffsetRange>
-        <LineRange Start="431" End="437"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTreeNode.cs</FileName>
-        <OffsetRange Start="17038" End="17251"></OffsetRange>
-        <LineRange Start="516" End="522"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="88">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="8389" End="8563"></OffsetRange>
-        <LineRange Start="217" End="218"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestTree.cs</FileName>
-        <OffsetRange Start="8577" End="8751"></OffsetRange>
-        <LineRange Start="219" End="220"></LineRange>
+        <OffsetRange Start="15524" End="15822"></OffsetRange>
+        <LineRange Start="291" End="296"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">
@@ -749,30 +102,6 @@
         <LineRange Start="341" End="354"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="85">
-      <Fragment>
-        <FileName>MulticutInTrees\Graphs\TreeNode.cs</FileName>
-        <OffsetRange Start="6991" End="7295"></OffsetRange>
-        <LineRange Start="155" End="159"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\Graphs\TreeNode.cs</FileName>
-        <OffsetRange Start="8141" End="8445"></OffsetRange>
-        <LineRange Start="175" End="179"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="84">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestNode.cs</FileName>
-        <OffsetRange Start="5348" End="5490"></OffsetRange>
-        <LineRange Start="174" End="177"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="9346" End="9488"></OffsetRange>
-        <LineRange Start="248" End="251"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="81">
       <Fragment>
         <FileName>MulticutInTrees\Graphs\Graph.cs</FileName>
@@ -785,88 +114,16 @@
         <LineRange Start="318" End="322"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="81">
+    <Duplicate Cost="76">
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="2603" End="2784"></OffsetRange>
-        <LineRange Start="60" End="60"></LineRange>
+        <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
+        <OffsetRange Start="5708" End="6120"></OffsetRange>
+        <LineRange Start="84" End="94"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDemandPair.cs</FileName>
-        <OffsetRange Start="2892" End="3073"></OffsetRange>
-        <LineRange Start="63" End="63"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="80">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="4966" End="5140"></OffsetRange>
-        <LineRange Start="78" End="81"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="5288" End="5462"></OffsetRange>
-        <LineRange Start="84" End="87"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="80">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="5605" End="5779"></OffsetRange>
-        <LineRange Start="90" End="93"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDinicMaxFlow.cs</FileName>
-        <OffsetRange Start="5921" End="6095"></OffsetRange>
-        <LineRange Start="96" End="99"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="78">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="20905" End="21067"></OffsetRange>
-        <LineRange Start="586" End="589"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="21083" End="21245"></OffsetRange>
-        <LineRange Start="591" End="594"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="75">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="7702" End="7892"></OffsetRange>
-        <LineRange Start="152" End="154"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestDominatedEdge.cs</FileName>
-        <OffsetRange Start="9896" End="10086"></OffsetRange>
-        <LineRange Start="192" End="194"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="72">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="7089" End="7207"></OffsetRange>
-        <LineRange Start="192" End="195"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Graphs\UnitTestGraph.cs</FileName>
-        <OffsetRange Start="7826" End="7944"></OffsetRange>
-        <LineRange Start="219" End="222"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="72">
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\ReductionRules\UnitTestUnitPath.cs</FileName>
-        <OffsetRange Start="4174" End="4311"></OffsetRange>
-        <LineRange Start="92" End="94"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>TESTS_MulticutInTrees\Utilities\UnitTestDFS.cs</FileName>
-        <OffsetRange Start="15036" End="15175"></OffsetRange>
-        <LineRange Start="393" End="396"></LineRange>
+        <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
+        <OffsetRange Start="6284" End="6696"></OffsetRange>
+        <LineRange Start="96" End="106"></LineRange>
       </Fragment>
     </Duplicate>
   </Duplicates>

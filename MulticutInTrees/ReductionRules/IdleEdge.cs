@@ -4,9 +4,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
-using MulticutInTrees.Algorithms;
+using MulticutInTrees.MulticutProblem;
 
 namespace MulticutInTrees.ReductionRules
 {
@@ -26,14 +27,14 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Constructor for <see cref="IdleEdge"/>.
         /// </summary>
-        /// <param name="input">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        public IdleEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
+        public IdleEdge(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(tree, demandPairs, algorithm)
         {
-            Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the IdleEdge rule, but the input tree is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the IdleEdge rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the IdleEdge rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the IdleEdge rule, but the algorithm it is part of is null!");
             Utils.NullCheck(demandPathsPerEdge, nameof(demandPathsPerEdge), $"Trying to create an instance of the IdleEdge rule, but the dictionary with demand paths per edge is null!");
@@ -55,7 +56,7 @@ namespace MulticutInTrees.ReductionRules
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
 
             // If this edge is not in the dictionary with demand paths per edge, or it is, but there are no demand paths going through this edge, we can contract this edge.
-            if ((!DemandPathsPerEdge.ContainsKey(usedEdge) || DemandPathsPerEdge[usedEdge].Count == 0) && Input.HasNode(edge.Item1) && Input.HasNode(edge.Item2) && Input.HasEdge(edge))
+            if (Tree.HasNode(edge.Item1) && Tree.HasNode(edge.Item2) && Tree.HasEdge(edge) && (!DemandPathsPerEdge.ContainsKey(usedEdge) || DemandPathsPerEdge[usedEdge].Count == 0))
             {
                 return true;
             }
@@ -78,7 +79,7 @@ namespace MulticutInTrees.ReductionRules
 
             // In the first iteration, check all edges in the input tree.
             List<(TreeNode, TreeNode)> edgesToBeContracted = new List<(TreeNode, TreeNode)>();
-            foreach ((TreeNode, TreeNode) edge in Input.Edges)
+            foreach ((TreeNode, TreeNode) edge in Tree.Edges)
             {
                 if (CanEdgeBeContracted(edge))
                 {
@@ -151,7 +152,7 @@ namespace MulticutInTrees.ReductionRules
             }
 
             HashSet<(TreeNode, TreeNode)> contractableEdges = new HashSet<(TreeNode, TreeNode)>();
-            foreach ((IEnumerable<(TreeNode, TreeNode)>, DemandPair) tuple in changedEdgesPerDemandPairList)
+            foreach ((List<(TreeNode, TreeNode)>, DemandPair) tuple in changedEdgesPerDemandPairList)
             {
                 foreach ((TreeNode, TreeNode) edge in tuple.Item1)
                 {

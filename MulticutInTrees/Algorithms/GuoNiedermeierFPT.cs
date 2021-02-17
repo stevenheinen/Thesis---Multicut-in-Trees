@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
@@ -31,12 +32,12 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Constructor for <see cref="GuoNiedermeierFPT"/>.
         /// </summary>
-        /// <param name="input">The <see cref="Tree{N}"/> with <see cref="TreeNode"/>s the algorithm should run on.</param>
+        /// <param name="tree">The <see cref="Tree{N}"/> with <see cref="TreeNode"/>s the algorithm should run on.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s that exist in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
-        public GuoNiedermeierFPT(Tree<TreeNode> input, List<DemandPair> demandPairs, int k) : base(input, demandPairs, k)
+        public GuoNiedermeierFPT(Tree<TreeNode> tree, List<DemandPair> demandPairs, int k) : base(tree, demandPairs, k)
         {
-            Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the GuoNiedermeierFPT algorithm, but the problem input tree is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the GuoNiedermeierFPT algorithm, but the problem input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the GuoNiedermeierFPT algorithm, but the list of demand pairs is null!");
             if (k <= 0)
             {
@@ -53,14 +54,17 @@ namespace MulticutInTrees.Algorithms
         {
             List<ReductionRule> reductionRules = new List<ReductionRule>();
 
-            IdleEdge idleEdge = new IdleEdge(Input, DemandPairs, this, DemandPairsPerEdge);
+            IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(idleEdge);
 
-            UnitPath unitPath = new UnitPath(Input, DemandPairs, this);
+            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
 
-            DominatedEdge dominatedEdge = new DominatedEdge(Input, DemandPairs, this, DemandPairsPerEdge);
+            DominatedEdge dominatedEdge = new DominatedEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedEdge);
+
+            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);
+            reductionRules.Add(dominatedPath);
 
             // TODO: add other reduction rules.
             // ...
@@ -143,7 +147,7 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to cut an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to cut an edge, but the second item of this edge is null!");
-            if (!Input.HasEdge(edge))
+            if (!Tree.HasEdge(edge))
             {
                 throw new NotInGraphException($"Trying to cut edge {edge}, but this edge is not part of the tree!");
             }
@@ -155,7 +159,6 @@ namespace MulticutInTrees.Algorithms
             PartialSolution.Add(edge);
             List<DemandPair> separatedDemandPairs = new List<DemandPair>(DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(edge)]);
             
-
             RemoveDemandPairs(separatedDemandPairs);
             TreeNode res = InternalContractEdge(edge);
 
@@ -216,7 +219,7 @@ namespace MulticutInTrees.Algorithms
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to contract an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item1), $"Trying to contract an edge, but the second item of this edge is null!");
-            if (!Input.HasEdge(edge))
+            if (!Tree.HasEdge(edge))
             {
                 throw new NotInGraphException($"Trying to contract edge {edge}, but this edge is not part of the tree!");
             }
@@ -238,11 +241,10 @@ namespace MulticutInTrees.Algorithms
                 child = edge.Item1;
             }
 
-            Input.RemoveNode(child);
             TreeNode newNode = parent;
-
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
-
+            UpdateNodeTypesDuringEdgeContraction(usedEdge, newNode);
+            Tree.RemoveNode(child);
             List<DemandPair> pairsOnEdge = RemoveDemandPairsFromContractedEdge(usedEdge, newNode);
             UpdateDemandPairsStartingAtContractedEdge(usedEdge, child, newNode, pairsOnEdge);
             UpdateDemandPairsGoingThroughChild(child, newNode);
@@ -325,10 +327,10 @@ namespace MulticutInTrees.Algorithms
                 }
                 foreach (DemandPair demandPair in pairsAtChild)
                 {
-                    if (pairsOnEdge.Contains(demandPair))
-                    {
-                        continue;
-                    }
+                    //if (pairsOnEdge.Contains(demandPair))
+                    //{
+                    //    continue;
+                    //}
 
                     demandPair.OnEdgeNextToDemandPathEndpointsContracted(edge, newNode);
                     DemandPairsPerNode[newNode].Add(demandPair);

@@ -33,6 +33,11 @@ namespace MulticutInTrees.Graphs
         public int Degree { get; }
 
         /// <summary>
+        /// The <see cref="NodeType"/> of this <see cref="INode{N}"/>.
+        /// </summary>
+        public NodeType Type { get; set; }
+
+        /// <summary>
         /// Add an <typeparamref name="N"/> as neighbour to this <see cref="INode{N}"/>.
         /// </summary>
         /// <para>

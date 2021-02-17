@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.ReductionRules
@@ -27,14 +28,14 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Constructor for <see cref="IdleEdge"/>.
         /// </summary>
-        /// <param name="input">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
         /// <param name="demandPathsPerEdge">The <see cref="Dictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedEdge(Tree<TreeNode> input, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(input, demandPairs, algorithm)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
+        public DominatedEdge(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(tree, demandPairs, algorithm)
         {
-            Utils.NullCheck(input, nameof(input), $"Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the DominatedEdge reduction rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the DominatedEdge reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(demandPathsPerEdge, nameof(demandPathsPerEdge), $"Trying to create an instance of the DominatedEdge reduction rule, but the dictionary with demand paths per edge is null!");
@@ -69,7 +70,12 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to find all edges on the shortest demand path through this edge, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to find all edges on the shortest demand path through this edge, but the second endpoint of the edge is null!");
 
-            DemandPair shortestPathThroughThisEdge = DemandPathsPerEdge[edge].Aggregate((n, m) => n.EdgesOnDemandPath.Count < m.EdgesOnDemandPath.Count ? n : m);
+            if (!DemandPathsPerEdge.TryGetValue(edge, out List<DemandPair> demandPathsOnEdge)) 
+            {
+                return new List<(TreeNode, TreeNode)>().AsReadOnly();
+            }
+
+            DemandPair shortestPathThroughThisEdge = demandPathsOnEdge.Aggregate((n, m) => n.EdgesOnDemandPath.Count < m.EdgesOnDemandPath.Count ? n : m);
             return shortestPathThroughThisEdge.EdgesOnDemandPath.Select(n => Utils.OrderEdgeSmallToLarge(n)).ToList().AsReadOnly();
         }
 
@@ -134,19 +140,28 @@ namespace MulticutInTrees.ReductionRules
             HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair demandPair in removedDemandPairs)
             {
+                if (demandPair.EdgesOnDemandPath.Count == 0)
+                {
+                    continue;
+                }
+
                 foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath)
                 {
                     edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
                 }
             }
 
-            List<(TreeNode, TreeNode)> edgesToBeContracted = new List<(TreeNode, TreeNode)>();
+            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
 
             foreach ((TreeNode, TreeNode) edge in edgesToBeChecked)
             {
+                if (edgesToBeContracted.Contains(edge))
+                {
+                    continue;
+                }
                 foreach ((TreeNode, TreeNode) otherEdge in FindEdgesOnShortestDemandPathThroughEdge(edge))
                 {
-                    if (edge == otherEdge)
+                    if (edge == otherEdge || edgesToBeContracted.Contains(otherEdge))
                     {
                         continue;
                     }
@@ -163,7 +178,7 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            Algorithm.ContractEdges(edgesToBeContracted);
+            Algorithm.ContractEdges(edgesToBeContracted.ToList());
             return true;
         }
 
@@ -186,21 +201,26 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
 
-            for (int i = 0; i < Input.Edges.Count - 1; i++)
+            for (int i = 0; i < Tree.Edges.Count - 1; i++)
             {
-                for (int j = i + 1; j < Input.Edges.Count; j++)
+                if (edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(Tree.Edges[i])))
                 {
-                    if (edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(Input.Edges[i])) || edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(Input.Edges[j])))
+                    continue;
+                }
+                for (int j = i + 1; j < Tree.Edges.Count; j++)
+                {
+                    if (edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(Tree.Edges[j])))
                     {
                         continue;
                     }
-                    if (AllDemandPairsPassThroughAnotherEdge(Input.Edges[i], Input.Edges[j]))
+                    if (AllDemandPairsPassThroughAnotherEdge(Tree.Edges[i], Tree.Edges[j]))
                     {
-                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(Input.Edges[i]));
+                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(Tree.Edges[i]));
+                        break;
                     }
-                    else if (AllDemandPairsPassThroughAnotherEdge(Input.Edges[j], Input.Edges[i]))
+                    if (AllDemandPairsPassThroughAnotherEdge(Tree.Edges[j], Tree.Edges[i]))
                     {
-                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(Input.Edges[j]));
+                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(Tree.Edges[j]));
                     }
                 }
             }

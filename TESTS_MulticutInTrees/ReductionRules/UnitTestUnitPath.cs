@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
@@ -70,6 +71,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node0, node1);
             tree.AddChild(node1, node3);
             tree.AddChild(node3, node5);
+
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node0, node5);
             DemandPair dp2 = new DemandPair(node1, node3);
 
@@ -99,6 +103,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node0, node1);
             tree.AddChild(node1, node3);
             tree.AddChild(node3, node5);
+
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node0, node5);
             DemandPair dp2 = new DemandPair(node1, node3);
 
@@ -128,6 +135,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node2, node3);
             tree.AddChild(node3, node4);
             tree.AddChild(node3, node5);
+
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node0, node4);
             DemandPair dp2 = new DemandPair(node1, node2);
 
@@ -161,6 +171,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node2, node3);
             tree.AddChild(node3, node4);
             tree.AddChild(node3, node5);
+
+            tree.UpdateNodeTypes();
+
             DemandPair dp1 = new DemandPair(node0, node4);
             DemandPair dp2 = new DemandPair(node1, node2);
 
@@ -176,6 +189,5 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Assert.IsFalse(unitPath1.RunFirstIteration());
             Assert.IsTrue(unitPath2.RunFirstIteration());
         }
-
     }
 }
