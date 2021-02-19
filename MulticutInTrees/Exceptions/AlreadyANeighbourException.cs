@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="AlreadyANeighbourException"/>.
         /// </summary>
-        public AlreadyANeighbourException() : base()
+        public AlreadyANeighbourException()
         {
 
         }

@@ -3,7 +3,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -52,8 +51,8 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than or equal to zero.</exception>
         public GuoNiedermeierBranching(Tree<TreeNode> tree, List<DemandPair> demandPairs, int k)
         {
-            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the GuoNiedermeier branching algorithm, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the GuoNiedermeier branching algorithm, but the list of demand pairs is null!");
+            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the GuoNiedermeier branching algorithm, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the GuoNiedermeier branching algorithm, but the list of demand pairs is null!");
             if (k <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(k), $"Trying to create an instance of the GuoNiedermeier branching algorithm, but the parameter k is equal to {k}. It must be larger than 0!");
@@ -223,7 +222,7 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         private List<TreeNode> FindAllAncestors(TreeNode node)
         {
-            Utils.NullCheck(node, nameof(node), $"Trying to find all ancestors of a treenode, but the treenode is null!");
+            Utils.NullCheck(node, nameof(node), "Trying to find all ancestors of a treenode, but the treenode is null!");
 
             List<TreeNode> ancestors = new List<TreeNode>() { node };
             while (node.Parent != null)

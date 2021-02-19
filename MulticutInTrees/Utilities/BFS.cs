@@ -2,7 +2,6 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
@@ -24,15 +23,15 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/> or <paramref name="targetSet"/> is <see langword="null"/>.</exception>
         public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, HashSet <N> seen = null) where N : INode<N>
         {
-            Utils.NullCheck(startNode, nameof(startNode), $"Trying to find the shortest path to a set, but the start node is null!");
-            Utils.NullCheck(targetSet, nameof(targetSet), $"Trying to find the shortest path to a set, but the set is null!");
+            Utils.NullCheck(startNode, nameof(startNode), "Trying to find the shortest path to a set, but the start node is null!");
+            Utils.NullCheck(targetSet, nameof(targetSet), "Trying to find the shortest path to a set, but the set is null!");
             if (targetSet.Count == 0)
             {
-                throw new InvalidOperationException($"Trying to find the shortest path to a set, but the set has no elements!");
+                throw new InvalidOperationException("Trying to find the shortest path to a set, but the set has no elements!");
             }
             if (targetSet.Contains(startNode))
             {
-                throw new InvalidOperationException($"Trying to find the shortest path to a set, but the startnode is already part of the set!");
+                throw new InvalidOperationException("Trying to find the shortest path to a set, but the startnode is already part of the set!");
             }
 
             if (seen is null)

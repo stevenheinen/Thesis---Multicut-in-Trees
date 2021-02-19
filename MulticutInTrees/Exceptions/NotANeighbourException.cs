@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="NotANeighbourException"/>.
         /// </summary>
-        public NotANeighbourException() : base()
+        public NotANeighbourException()
         {
 
         }

@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="AlreadyInGraphException"/>.
         /// </summary>
-        public AlreadyInGraphException() : base()
+        public AlreadyInGraphException()
         {
 
         }

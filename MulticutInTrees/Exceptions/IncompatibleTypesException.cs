@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="IncompatibleTypesException"/>.
         /// </summary>
-        public IncompatibleTypesException() : base()
+        public IncompatibleTypesException()
         {
 
         }

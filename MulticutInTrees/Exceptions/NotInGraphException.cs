@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="NotInGraphException"/>.
         /// </summary>
-        public NotInGraphException() : base()
+        public NotInGraphException()
         {
 
         }

@@ -298,7 +298,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when either <paramref name="parent"/> or <paramref name="children"/> is <see langword="null"/>.</exception>
         public void AddChildren(N parent, IEnumerable<N> children)
         {
-            Utils.NullCheck(parent, nameof(parent), $"Trying to add multiple children to a parent, but the parent is null!");
+            Utils.NullCheck(parent, nameof(parent), "Trying to add multiple children to a parent, but the parent is null!");
             Utils.NullCheck(children, nameof(children), $"Trying to add multiple children to {parent}, but the IEnumerable of children is null!");
 
             foreach (N child in children)

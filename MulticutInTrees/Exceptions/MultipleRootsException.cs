@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="MultipleRootsException"/>.
         /// </summary>
-        public MultipleRootsException() : base()
+        public MultipleRootsException()
         {
 
         }

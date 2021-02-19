@@ -3,7 +3,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
@@ -34,11 +33,11 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
         public DominatedPath(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Random random, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random)
         {
-            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the dominated path reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the dominated path reduction rule, but the list with demand paths is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the dominated path reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(random, nameof(random), $"Trying to create an instance of the dominated path reduction rule, but the random is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the dominated path reduction rule, but the dictionary with demand pairs per edge is null!");
+            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the dominated path reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the dominated path reduction rule, but the list with demand paths is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the dominated path reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(random, nameof(random), "Trying to create an instance of the dominated path reduction rule, but the random is null!");
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the dominated path reduction rule, but the dictionary with demand pairs per edge is null!");
 
             DemandPairsPerEdge = demandPairsPerEdge;
         }
@@ -52,8 +51,8 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="subsetPair"/> or <paramref name="largerPair"/> is <see langword="null"/>.</exception>
         private bool PathIsContainedIn(DemandPair subsetPair, DemandPair largerPair)
         {
-            Utils.NullCheck(subsetPair, nameof(subsetPair), $"Trying to see if the path of a demand pair is contained in the path of another demand pair, but the first demand pair is null!");
-            Utils.NullCheck(largerPair, nameof(largerPair), $"Trying to see if the path of a demand pair is contained in the path of another demand pair, but the second demand pair is null!");
+            Utils.NullCheck(subsetPair, nameof(subsetPair), "Trying to see if the path of a demand pair is contained in the path of another demand pair, but the first demand pair is null!");
+            Utils.NullCheck(largerPair, nameof(largerPair), "Trying to see if the path of a demand pair is contained in the path of another demand pair, but the second demand pair is null!");
 
             return largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath[0]) && largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath[^1]);
         }
@@ -67,7 +66,7 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to apply the Dominated Path reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
+            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Dominated Path reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -120,7 +119,7 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
         {
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the Dominated Path reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Dominated Path reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
 
             return false;
         }
@@ -128,7 +127,7 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
         {
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), $"Trying to apply the Dominated Path reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
+            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Dominated Path reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {

@@ -342,6 +342,8 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestNullArgument()
         {
             Node n = new Node(0);
+            List<Node> list = new List<Node>();
+            HashSet<(Node, Node)> hashSet = new HashSet<(Node, Node)>();
 
             Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(null, n));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(n, null));
@@ -353,6 +355,8 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(null));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(n, null));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(null, n));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(null, hashSet));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(list, null));
         }
         
         [TestMethod]
@@ -410,6 +414,55 @@ namespace TESTS_MulticutInTrees.Utilities
             node1.AddChild(node2);
 
             Assert.IsFalse(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree));
+        }
+
+        [TestMethod]
+        public void TestFreeNodes()
+        {
+            Graph<Node> graph = new Graph<Node>();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
+
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6 });
+
+            graph.AddEdges(new List<(Node, Node)>()
+            {
+                (node0, node1),
+                (node0, node2),
+                (node1, node2),
+                (node1, node3),
+                (node1, node6),
+                (node2, node3),
+                (node2, node4),
+                (node3, node5),
+                (node4, node5),
+                (node5, node6)
+            });
+
+            HashSet<(Node, Node)> matching = new HashSet<(Node, Node)>()
+            {
+                (node0, node1),
+                (node2, node3),
+                (node5, node6)
+            };
+
+            List<Node> unmatchedNodes = new List<Node>() { node4 };
+
+            List<Node> freeNodes = DFS.FreeNodes(unmatchedNodes, matching);
+            Console.WriteLine(freeNodes.Print());
+            Assert.AreEqual(3, freeNodes.Count);
+            Assert.IsTrue(freeNodes.Contains(node0));
+            Assert.IsTrue(freeNodes.Contains(node3));
+            Assert.IsTrue(freeNodes.Contains(node6));
+            Assert.IsFalse(freeNodes.Contains(node1));
+            Assert.IsFalse(freeNodes.Contains(node2));
+            Assert.IsFalse(freeNodes.Contains(node4));
+            Assert.IsFalse(freeNodes.Contains(node5));
         }
     }
 }

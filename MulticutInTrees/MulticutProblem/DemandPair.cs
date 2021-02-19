@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
@@ -59,8 +58,8 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/> or <paramref name="node2"/> is <see langword="null"/>.</exception>
         public DemandPair(TreeNode node1, TreeNode node2)
         {
-            Utils.NullCheck(node1, nameof(node1), $"Trying to create a DemandPair, but the first endpoint of this demandpair is null!");
-            Utils.NullCheck(node2, nameof(node2), $"Trying to create a DemandPair, but the second endpoint of this demandpair is null!");
+            Utils.NullCheck(node1, nameof(node1), "Trying to create a DemandPair, but the first endpoint of this demandpair is null!");
+            Utils.NullCheck(node2, nameof(node2), "Trying to create a DemandPair, but the second endpoint of this demandpair is null!");
 
             Node1 = node1;
             Node2 = node2;
@@ -86,8 +85,8 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
         public bool EdgeIsPartOfPath((TreeNode, TreeNode) edge)
         {
-            Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
-            Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
 
             return InternalEdgesOnDemandPathSet.Contains(edge) || InternalEdgesOnDemandPathSet.Contains((edge.Item2, edge.Item1));
         }
@@ -189,8 +188,8 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldNode"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
         internal void OnEdgeNextToNodeOnDemandPathContracted(TreeNode oldNode, TreeNode newNode)
         {
-            Utils.NullCheck(oldNode, nameof(oldNode), $"Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the old node is null!");
-            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the new node is null!");
+            Utils.NullCheck(oldNode, nameof(oldNode), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the old node is null!");
+            Utils.NullCheck(newNode, nameof(newNode), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the new node is null!");
 
             // TODO: Should not be necessary.
             if (oldNode == newNode)

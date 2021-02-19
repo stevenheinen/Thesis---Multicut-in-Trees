@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
@@ -87,9 +86,9 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
-        public Algorithm(MulticutInstance instance)
+        protected Algorithm(MulticutInstance instance)
         {
-            Utils.NullCheck(instance, nameof(instance), $"Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
+            Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
 
             Tree = instance.Tree;
             DemandPairs = instance.DemandPairs;
@@ -200,9 +199,9 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="NotSupportedException">Thrown when the <see cref="TreeNode.Type"/> of either endpoint of <paramref name="contractedEdge"/> is <see cref="NodeType.Other"/>. In that case, please update the types of the nodes by calling <seealso cref="Tree{N}.UpdateNodeTypes()"/>.</exception>
         protected void UpdateNodeTypesDuringEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
         {
-            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
-            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
-            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
+            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
+            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
+            Utils.NullCheck(newNode, nameof(newNode), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
             if (contractedEdge.Item1.Type == NodeType.Other)
             {
                 throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Item1} is not known. Please make sure every node has a nodetype to start with!");

@@ -12,7 +12,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="AddNeighbourToSelfException"/>.
         /// </summary>
-        public AddParentAsChildException() : base()
+        public AddParentAsChildException()
         {
 
         }

@@ -1,8 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -24,14 +22,18 @@ namespace MulticutInTrees.InstanceGeneration
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> or <paramref name="chancePerEdge"/> is negative.</exception>
         public static Graph<Node> CreateErdosRenyiGraph(int numberOfNodes, double chancePerEdge, Random random)
         {
-            Utils.NullCheck(random, nameof(random), $"Trying to create an Erdos-Renyi graph, but the random is null!");
+            Utils.NullCheck(random, nameof(random), "Trying to create an Erdos-Renyi graph, but the random is null!");
             if (numberOfNodes < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(numberOfNodes), $"Trying to create an Erdos-Renyi graph with less than zero nodes!");
+                throw new ArgumentOutOfRangeException(nameof(numberOfNodes), "Trying to create an Erdos-Renyi graph with less than zero nodes!");
             }
             if (chancePerEdge < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(chancePerEdge), $"Trying to create an Erdos-Renyi graph with a negative chance per possible edge!");
+                throw new ArgumentOutOfRangeException(nameof(chancePerEdge), "Trying to create an Erdos-Renyi graph with a negative chance per possible edge!");
+            }
+            if (chancePerEdge > 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(chancePerEdge), "Trying to create an Erdos-Renyi graph with a change of larger than 1 per possible edge!");
             }
 
             Graph<Node> graph = new Graph<Node>();

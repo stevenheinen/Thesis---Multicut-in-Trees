@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
@@ -36,11 +35,11 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPathsPerEdge"/> is <see langword="null"/>.</exception>
         public DominatedEdge(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Random random, Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPathsPerEdge) : base(tree, demandPairs, algorithm, random)
         {
-            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the DominatedEdge reduction rule, but the list of demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the DominatedEdge reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(random, nameof(random), $"Trying to create an instance of the DominatedEdge reduction rule, but the random is null!");
-            Utils.NullCheck(demandPathsPerEdge, nameof(demandPathsPerEdge), $"Trying to create an instance of the DominatedEdge reduction rule, but the dictionary with demand paths per edge is null!");
+            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the DominatedEdge reduction rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the DominatedEdge reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(random, nameof(random), "Trying to create an instance of the DominatedEdge reduction rule, but the random is null!");
+            Utils.NullCheck(demandPathsPerEdge, nameof(demandPathsPerEdge), "Trying to create an instance of the DominatedEdge reduction rule, but the dictionary with demand paths per edge is null!");
 
             DemandPathsPerEdge = demandPathsPerEdge;
         }
@@ -54,10 +53,10 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="contractEdge"/> or <paramref name="otherEdge"/> is <see langword="null"/>.</exception>
         private bool AllDemandPairsPassThroughAnotherEdge((TreeNode, TreeNode) contractEdge, (TreeNode, TreeNode) otherEdge)
         {
-            Utils.NullCheck(contractEdge.Item1, nameof(contractEdge.Item1), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the first edge is null!");
-            Utils.NullCheck(contractEdge.Item2, nameof(contractEdge.Item2), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the first edge is null!");
-            Utils.NullCheck(otherEdge.Item1, nameof(otherEdge.Item1), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the second edge is null!");
-            Utils.NullCheck(otherEdge.Item2, nameof(otherEdge.Item2), $"Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the second edge is null!");
+            Utils.NullCheck(contractEdge.Item1, nameof(contractEdge.Item1), "Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the first edge is null!");
+            Utils.NullCheck(contractEdge.Item2, nameof(contractEdge.Item2), "Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the first edge is null!");
+            Utils.NullCheck(otherEdge.Item1, nameof(otherEdge.Item1), "Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the second edge is null!");
+            Utils.NullCheck(otherEdge.Item2, nameof(otherEdge.Item2), "Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the second edge is null!");
 
             return DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(contractEdge)].IsSubsetOf(DemandPathsPerEdge[Utils.OrderEdgeSmallToLarge(otherEdge)], Random);
         }
@@ -69,8 +68,8 @@ namespace MulticutInTrees.ReductionRules
         /// <returns></returns>
         private ReadOnlyCollection<(TreeNode, TreeNode)> FindEdgesOnShortestDemandPathThroughEdge((TreeNode, TreeNode) edge)
         {
-            Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to find all edges on the shortest demand path through this edge, but the first endpoint of the edge is null!");
-            Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to find all edges on the shortest demand path through this edge, but the second endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to find all edges on the shortest demand path through this edge, but the first endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to find all edges on the shortest demand path through this edge, but the second endpoint of the edge is null!");
 
             if (!DemandPathsPerEdge.TryGetValue(edge, out List<DemandPair> demandPathsOnEdge)) 
             {
@@ -85,7 +84,7 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), $"Trying to apply the Dominated Edge rule after a demand path was changed, but the IEnumerable of changed demand paths is null!");
+            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Dominated Edge rule after a demand path was changed, but the IEnumerable of changed demand paths is null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -132,7 +131,7 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
         {
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the Dominated Edge rule after a demand path was removed, but the IEnumerable of removed demand paths is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Dominated Edge rule after a demand path was removed, but the IEnumerable of removed demand paths is null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -188,7 +187,7 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
         {
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), $"Trying to apply the Dominated Edge rule after an edge was contracted, but the IEnumerable of contracted edges is null!");
+            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Dominated Edge rule after an edge was contracted, but the IEnumerable of contracted edges is null!");
 
             return false;
         }

@@ -3,7 +3,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -24,10 +23,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is less than three.</exception>
         public static Tree<TreeNode> GenerateTree(int numberOfNodes, Random random)
         {
-            Utils.NullCheck(random, nameof(random), $"Trying to generate a random tree from a Prüfer sequence, but the random is null!");
+            Utils.NullCheck(random, nameof(random), "Trying to generate a random tree from a Prüfer sequence, but the random is null!");
             if (numberOfNodes < 3)
             {
-                throw new ArgumentOutOfRangeException($"A tree generated with a Prüfer sequence should have at least 3 nodes!");
+                throw new ArgumentOutOfRangeException("A tree generated with a Prüfer sequence should have at least 3 nodes!");
             }
 
             List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes, random);

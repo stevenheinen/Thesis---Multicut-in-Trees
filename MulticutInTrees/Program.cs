@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 

@@ -2,7 +2,6 @@
 
 ﻿using System;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.Exceptions
 {
@@ -14,7 +13,7 @@ namespace MulticutInTrees.Exceptions
         /// <summary>
         /// Constructor for <see cref="ZeroLengthDemandPathException"/>.
         /// </summary>
-        public ZeroLengthDemandPathException() : base()
+        public ZeroLengthDemandPathException()
         {
 
         }

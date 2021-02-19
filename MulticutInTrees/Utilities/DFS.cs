@@ -37,7 +37,7 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/> is <see langword="null"/>.</exception>
         public static bool IsAcyclicGraph<G, N>(G inputGraph) where G : IGraph<N> where N : INode<N>
         {
-            Utils.NullCheck(inputGraph, nameof(inputGraph), $"Trying to see if a graph is acyclic, but the graph is null!");
+            Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to see if a graph is acyclic, but the graph is null!");
 
             if (inputGraph.NumberOfNodes < 2)
             {
@@ -57,7 +57,7 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="NoRootException">Thrown when the <see cref="ITree{N}.Root"/> of <paramref name="inputTree"/> is <see langword="null"/>.</exception>
         public static bool IsAcyclicTree<T, N>(T inputTree) where T : ITree<N> where N : ITreeNode<N>
         {
-            Utils.NullCheck(inputTree, nameof(inputTree), $"Trying to see if a tree is acyclic, but the tree is null!");
+            Utils.NullCheck(inputTree, nameof(inputTree), "Trying to see if a tree is acyclic, but the tree is null!");
 
             if (inputTree.Root is null)
             {
@@ -286,6 +286,59 @@ namespace MulticutInTrees.Utilities
                     stack.Push(child);
                 }
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Finds all <typeparamref name="N"/>s that are "free" considering <paramref name="unmatchedNodes"/> and <paramref name="matching"/>.
+        /// </summary>
+        /// <typeparam name="N">The type of nodes in the problem instance. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="unmatchedNodes"><see cref="List{T}"/> of <typeparamref name="N"/>s that are unmatched considering <paramref name="matching"/>.</param>
+        /// <param name="matching"><see cref="HashSet{T}"/> with tuples of two <typeparamref name="N"/>s representing edges in the current matching.</param>
+        /// <returns>A <see cref="List{T}"/> of <typeparamref name="N"/>s that are reachable from any <typeparamref name="N"/> in <paramref name="unmatchedNodes"/> considering <paramref name="matching"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="unmatchedNodes"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
+        public static List<N> FreeNodes<N>(List<N> unmatchedNodes, HashSet<(N, N)> matching) where N : INode<N>
+        {
+            Utils.NullCheck(unmatchedNodes, nameof(unmatchedNodes), "Trying to find all free nodes, but the list with unmatched nodes is null!");
+            Utils.NullCheck(matching, nameof(matching), "Trying to find all free nodes, but the list with the current matching is null!");
+
+            HashSet<N> seen = new HashSet<N>();
+            List<N> result = new List<N>();
+
+            // Bool in the stack means: NextShouldBeInMatching
+            Stack<(N, bool, int)> stack = new Stack<(N, bool, int)>();
+            foreach (N node in unmatchedNodes)
+            {
+                stack.Push((node, false, 1));
+                seen.Add(node);
+            }
+
+            while (stack.Count > 0)
+            {
+                (N node, bool nextShouldBeMatched, int pathLength) = stack.Pop();
+                foreach (N neighbour in node.Neighbours)
+                {
+                    if (seen.Contains(neighbour))
+                    {
+                        continue;
+                    }
+                    if (!nextShouldBeMatched && (matching.Contains((node, neighbour)) || matching.Contains((neighbour, node))))
+                    {
+                        continue;
+                    }
+                    if (nextShouldBeMatched && !matching.Contains((node, neighbour)) && !matching.Contains((neighbour, node)))
+                    {
+                        continue;
+                    }
+                    seen.Add(neighbour);
+                    stack.Push((neighbour, !nextShouldBeMatched, pathLength + 1));
+                    if (pathLength % 2 == 0)
+                    {
+                        result.Add(neighbour);
+                    }
+                }
+            }
+
             return result;
         }
     }
