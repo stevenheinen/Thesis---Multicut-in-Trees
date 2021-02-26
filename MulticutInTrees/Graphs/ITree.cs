@@ -28,20 +28,20 @@ namespace MulticutInTrees.Graphs
         public int Height { get; }
 
         /// <summary>
-        /// The <see cref="ReadOnlyCollection{T}"/> of all edges in the graph. Cannot be edited directly.
+        /// The <see cref="IEnumerable{T}"/> of all edges in the graph. Cannot be edited directly.
         /// <para>
         /// See also: <seealso cref="AddChild(N, N)"/>, <seealso cref="AddChildren(N, IEnumerable{N})"/>, <seealso cref="AddRoot(N)"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
         /// </para>
         /// </summary>
-        public ReadOnlyCollection<(N, N)> Edges { get; }
+        public IEnumerable<(N, N)> Edges { get; }
 
         /// <summary>
-        /// The <see cref="ReadOnlyCollection{T}"/> of all nodes in the graph. Cannot be edited directly.
+        /// The <see cref="IEnumerable{T}"/> of all nodes in the graph. Cannot be edited directly.
         /// <para>
         /// See also: <seealso cref="AddChild(N, N)"/>, <seealso cref="AddChildren(N, IEnumerable{N})"/>, <seealso cref="AddRoot(N)"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
         /// </para>
         /// </summary>
-        public ReadOnlyCollection<N> Nodes { get; }
+        public IEnumerable<N> Nodes { get; }
 
         /// <summary>
         /// Checks whether <paramref name="node"/> is part of this <see cref="ITree{N}"/>.

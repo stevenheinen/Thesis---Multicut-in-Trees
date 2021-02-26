@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
@@ -23,11 +24,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestConstructor()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
-            List<DemandPair> dps = new List<DemandPair>();
+            CountedList<DemandPair> dps = new CountedList<DemandPair>();
             Random random = new Random(564468);
             MulticutInstance instance = new MulticutInstance(tree, dps, 10, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>();
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
             Assert.IsNotNull(dominatedPath);
@@ -37,11 +38,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestNullParameter()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
-            List<DemandPair> dps = new List<DemandPair>();
+            CountedList<DemandPair> dps = new CountedList<DemandPair>();
             Random random = new Random(546454);
             MulticutInstance instance = new MulticutInstance(tree, dps, 10, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>();
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
 
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(null, dps, gnfpt, random, demandPairsPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, null, gnfpt, random, demandPairsPerEdge); });
@@ -75,16 +76,16 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new DemandPair(node1, node3);
             DemandPair dp5 = new DemandPair(node3, node1);
 
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3, dp4, dp5 };
             Random random = new Random(6578489);
             MulticutInstance instance = new MulticutInstance(tree, dps, 10, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                { (node0, node1), new List<DemandPair>(){ dp1 } },
-                { (node0, node2), new List<DemandPair>(){ dp1, dp2 } },
-                { (node1, node3), new List<DemandPair>(){ dp3, dp4, dp5 } },
-                { (node1, node4), new List<DemandPair>(){ dp3 } },
+                { (node0, node1), new CountedList<DemandPair>(){ dp1 } },
+                { (node0, node2), new CountedList<DemandPair>(){ dp1, dp2 } },
+                { (node1, node3), new CountedList<DemandPair>(){ dp3, dp4, dp5 } },
+                { (node1, node4), new CountedList<DemandPair>(){ dp3 } },
             };
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
@@ -112,14 +113,14 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DemandPair dp1 = new DemandPair(node0, node2);
             DemandPair dp2 = new DemandPair(node3, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2 };
 
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                { (node0, node1), new List<DemandPair>() { dp1 } },
-                { (node1, node2), new List<DemandPair>() { dp1 } },
-                { (node2, node3), new List<DemandPair>() { dp2 } },
-                { (node2, node4), new List<DemandPair>() { dp2 } },
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp2 } },
+                { (node2, node4), new CountedList<DemandPair>() { dp2 } },
             };
 
             Random random = new Random(96868648);
@@ -128,9 +129,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
-            List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeInformation = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>()
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeInformation = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>()
             {
-                ((node3, node5), node3, new List<DemandPair>() { dp2 } )
+                ((node3, node5), node3, new CountedList<DemandPair>() { dp2 } )
             };
 
             Assert.IsFalse(dominatedPath.AfterEdgeContraction(contractedEdgeInformation));
@@ -158,15 +159,15 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node2);
             DemandPair dp2 = new DemandPair(node3, node4);
             DemandPair dp3 = new DemandPair(node4, node6);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                { (node0, node1), new List<DemandPair>() { dp1 } },
-                { (node1, node2), new List<DemandPair>() { dp1 } },
-                { (node2, node3), new List<DemandPair>() { dp2, dp3 } },
-                { (node2, node4), new List<DemandPair>() { dp2, dp3 } },
-                { (node3, node6), new List<DemandPair>() { dp3 } },
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp2, dp3 } },
+                { (node2, node4), new CountedList<DemandPair>() { dp2, dp3 } },
+                { (node3, node6), new CountedList<DemandPair>() { dp3 } },
             };
 
             Random random = new Random(648564);
@@ -175,9 +176,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
-            List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeInformation = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>()
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeInformation = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>()
             {
-                ((node3, node5), node3, new List<DemandPair>() { dp2 } )
+                ((node3, node5), node3, new CountedList<DemandPair>() { dp2 } )
             };
 
             Assert.IsTrue(dominatedPath.AfterEdgeContraction(contractedEdgeInformation));
@@ -202,14 +203,14 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node2);
             DemandPair dp2 = new DemandPair(node3, node4);
             DemandPair dp3 = new DemandPair(node1, node3);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2 };
 
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                { (node0, node1), new List<DemandPair>() { dp1 } },
-                { (node1, node2), new List<DemandPair>() { dp1 } },
-                { (node2, node3), new List<DemandPair>() { dp2 } },
-                { (node2, node4), new List<DemandPair>() { dp2 } },
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp2 } },
+                { (node2, node4), new CountedList<DemandPair>() { dp2 } },
             };
 
             Random random = new Random(9869898);
@@ -218,7 +219,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
-            List<DemandPair> removedDemandpairs = new List<DemandPair>() { dp3 };
+            CountedList<DemandPair> removedDemandpairs = new CountedList<DemandPair>() { dp3 };
 
             Assert.IsFalse(dominatedPath.AfterDemandPathRemove(removedDemandpairs));
         }
@@ -246,15 +247,15 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node2);
             DemandPair dp2 = new DemandPair(node5, node4);
             DemandPair dp3 = new DemandPair(node4, node3);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> demandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                { (node0, node1), new List<DemandPair>() { dp1 } },
-                { (node1, node2), new List<DemandPair>() { dp1 } },
-                { (node2, node3), new List<DemandPair>() { dp2, dp3 } },
-                { (node2, node4), new List<DemandPair>() { dp2, dp3 } },
-                { (node3, node5), new List<DemandPair>() { dp2 } },
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp2, dp3 } },
+                { (node2, node4), new CountedList<DemandPair>() { dp2, dp3 } },
+                { (node3, node5), new CountedList<DemandPair>() { dp2 } },
             };
 
             Random random = new Random(989871350);
@@ -263,7 +264,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, random, demandPairsPerEdge);
 
-            List<(List<(TreeNode, TreeNode)>, DemandPair)> information = new List<(List<(TreeNode, TreeNode)>, DemandPair)>()
+            CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> information = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>()
             {
                 (new List<(TreeNode, TreeNode)>(){ (node3, node6) }, dp3)
             };

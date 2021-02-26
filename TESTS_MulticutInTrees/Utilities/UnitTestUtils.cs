@@ -21,9 +21,8 @@ namespace TESTS_MulticutInTrees.Utilities
             Random random = new Random(0);
             Assert.ThrowsException<ArgumentNullException>(() => Utils.OrderEdgeSmallToLarge((null, n)));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.OrderEdgeSmallToLarge((n, null)));
-            Assert.ThrowsException<ArgumentNullException>(() => Utils.IsSubsetOf(null, list, random));
-            Assert.ThrowsException<ArgumentNullException>(() => Utils.IsSubsetOf(list, null, random));
-            Assert.ThrowsException<ArgumentNullException>(() => Utils.IsSubsetOf(list, list, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.IsSubsetOf(null, list));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.IsSubsetOf(list, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.Print<int>(null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.Print<Node>(null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.NodePathToEdgePath<Node>(null));

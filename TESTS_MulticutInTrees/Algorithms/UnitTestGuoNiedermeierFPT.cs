@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.MulticutProblem;
@@ -19,7 +20,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         public void TestConstructor()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
-            List<DemandPair> demandPairs = new List<DemandPair>();
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2, new Random(7));
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
@@ -64,7 +65,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Random random = new Random(238512352);
             Tree<TreeNode> tree = new Tree<TreeNode>();
-            List<DemandPair> demandPairs = new List<DemandPair>();
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             TreeNode node = new TreeNode(0);
@@ -112,13 +113,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> dict = (Dictionary<(TreeNode, TreeNode), List<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
             Assert.AreEqual(2, dict[(node2, node5)].Count);
             Assert.AreEqual(1, dict[(node0, node2)].Count);
             Assert.AreEqual(2, dict[(node0, node1)].Count);
@@ -147,13 +148,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            Dictionary<(TreeNode, TreeNode), List<DemandPair>> dict = (Dictionary<(TreeNode, TreeNode), List<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
 
             MethodInfo method = typeof(GuoNiedermeierFPT).GetMethod("RemoveDemandPairFromEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(gnfpt, new object[] { (node1, node0), dp3 });
@@ -187,14 +188,14 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.CutEdge((node5, node2));
 
             PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.AreEqual(1, ((List<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count);
+            Assert.AreEqual(1, ((CountedList<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count);
         }
 
         [TestMethod]
@@ -220,14 +221,14 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.CutEdges(new List<(TreeNode, TreeNode)>() { (node0, node1), (node5, node2) });
             
             PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.AreEqual(0, ((List<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count);
+            Assert.AreEqual(0, ((CountedList<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count);
         }
 
         [TestMethod]
@@ -253,7 +254,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
@@ -285,7 +286,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
@@ -317,7 +318,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
@@ -351,7 +352,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            List<DemandPair> dps = new List<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> dps = new CountedList<DemandPair>() { dp1, dp2, dp3 };
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);

@@ -64,24 +64,20 @@ namespace MulticutInTrees.Utilities
         /// <typeparam name="T">The type of elements in the <see cref="IList{T}"/>s.</typeparam>
         /// <param name="subset">The current <see cref="IList{T}"/>, the potential subset.</param>
         /// <param name="largerSet">The other <see cref="IList{T}"/>, the potential superset.</param>
-        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns><see langword="true"/> if <paramref name="subset"/> is a subset of <paramref name="largerSet"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="subset"/>, <paramref name="largerSet"/>, or <paramref name="random"/> is <see langword="null"/>.</exception>
-        public static bool IsSubsetOf<T>(this IList<T> subset, IList<T> largerSet, Random random)
+        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="subset"/> or<paramref name="largerSet"/> is <see langword="null"/>.</exception>
+        public static bool IsSubsetOf<T>(this IEnumerable<T> subset, IEnumerable<T> largerSet)
         {
             NullCheck(subset, nameof(subset), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the first IEnumerable is null!");
             NullCheck(largerSet, nameof(largerSet), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the second IEnumerable is null!");
-            NullCheck(random, nameof(random), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the random is null!");
-
-            subset.Shuffle(random);
-            largerSet.Shuffle(random);
 
             if (subset.Count() > largerSet.Count())
             {
                 return false;
             }
 
-            return subset.All(n => largerSet.Contains(n));
+            HashSet<T> larger = new HashSet<T>(largerSet);
+            return subset.All(n => larger.Contains(n));
         }
 
         /// <summary>

@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
@@ -425,7 +426,7 @@ namespace TESTS_MulticutInTrees.Graphs
                 MethodInfo m = nodesProperty.GetSetMethod(true);
                 TreeNode node2 = new TreeNode(2);
                 TreeNode node3 = new TreeNode(3);
-                m.Invoke(tree, new object[1] { new List<TreeNode>() { node2, node3 } });
+                m.Invoke(tree, new object[1] { new CountedCollection<TreeNode>() { node2, node3 } });
                 method.Invoke(tree, new object[0]);
             });
             Assert.IsInstanceOfType(u.InnerException, typeof(MultipleRootsException));
@@ -486,7 +487,7 @@ namespace TESTS_MulticutInTrees.Graphs
             property.GetSetMethod(true).Invoke(node3, new object[] { node2 });
 
             PropertyInfo nodeproperty = typeof(Tree<TreeNode>).GetProperty("InternalNodes", BindingFlags.NonPublic | BindingFlags.Instance);
-            nodeproperty.GetSetMethod(true).Invoke(tree, new object[] { new List<TreeNode>() { node0, node1, node2, node3 } });
+            nodeproperty.GetSetMethod(true).Invoke(tree, new object[] { new CountedCollection<TreeNode>() { node0, node1, node2, node3 } });
 
             Assert.IsFalse(tree.IsValid());
 

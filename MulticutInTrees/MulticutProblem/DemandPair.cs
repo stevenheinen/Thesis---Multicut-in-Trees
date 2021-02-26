@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
@@ -15,20 +16,22 @@ namespace MulticutInTrees.MulticutProblem
     /// </summary>
     public class DemandPair
     {
-        /// <summary>
-        /// The private <see cref="List{T}"/> of <see cref="TreeNode"/>s that represent all nodes on the path between the endpoints of this <see cref="DemandPair"/>.
-        /// </summary>
-        private List<TreeNode> InternalDemandPath { get; set; }
+        private CountedCollection<(TreeNode, TreeNode)> Path { get; set; }
 
-        /// <summary>
-        /// The private <see cref="List{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
-        /// </summary>
-        private List<(TreeNode, TreeNode)> InternalEdgesOnDemandPath { get; set; }
+        ///// <summary>
+        ///// The private <see cref="List{T}"/> of <see cref="TreeNode"/>s that represent all nodes on the path between the endpoints of this <see cref="DemandPair"/>.
+        ///// </summary>
+        //private List<TreeNode> InternalDemandPath { get; set; }
+
+        ///// <summary>
+        ///// The private <see cref="List{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
+        ///// </summary>
+        //private List<(TreeNode, TreeNode)> InternalEdgesOnDemandPath { get; set; }
         
-        /// <summary>
-        /// The private <see cref="HashSet{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
-        /// </summary>
-        private HashSet<(TreeNode, TreeNode)> InternalEdgesOnDemandPathSet { get; set; }
+        ///// <summary>
+        ///// The private <see cref="HashSet{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
+        ///// </summary>
+        //private HashSet<(TreeNode, TreeNode)> InternalEdgesOnDemandPathSet { get; set; }
 
         /// <summary>
         /// The first endpoint of this <see cref="DemandPair"/>.
@@ -40,15 +43,15 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         public TreeNode Node2 { get; private set; }
 
-        /// <summary>
-        /// The publically visible <see cref="ReadOnlyCollection{T}"/> of all <see cref="TreeNode"/>s on the path between the endpoints of this <see cref="DemandPair"/>.
-        /// </summary>
-        public ReadOnlyCollection<TreeNode> DemandPath => InternalDemandPath.AsReadOnly();
+        ///// <summary>
+        ///// The publically visible <see cref="ReadOnlyCollection{T}"/> of all <see cref="TreeNode"/>s on the path between the endpoints of this <see cref="DemandPair"/>.
+        ///// </summary>
+        //public ReadOnlyCollection<TreeNode> DemandPath => InternalDemandPath.AsReadOnly();
 
         /// <summary>
-        /// The publically visible <see cref="ReadOnlyCollection{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
+        /// The publically visible <see cref="IEnumerable{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
         /// </summary>
-        public ReadOnlyCollection<(TreeNode, TreeNode)> EdgesOnDemandPath => InternalEdgesOnDemandPath.AsReadOnly();
+        public CountedCollection<(TreeNode, TreeNode)> EdgesOnDemandPath => Path;
 
         /// <summary>
         /// Constructor for a <see cref="DemandPair"/>.
@@ -63,9 +66,10 @@ namespace MulticutInTrees.MulticutProblem
 
             Node1 = node1;
             Node2 = node2;
-            InternalDemandPath = new List<TreeNode>(DFS.FindPathBetween(node1, node2));
-            InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
-            InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
+            //InternalDemandPath = new List<TreeNode>(DFS.FindPathBetween(node1, node2));
+            //InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
+            //InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
+            Path = new CountedCollection<(TreeNode, TreeNode)>(Utils.NodePathToEdgePath(DFS.FindPathBetween(node1, node2)));
         }
 
         /// <summary>
@@ -88,7 +92,8 @@ namespace MulticutInTrees.MulticutProblem
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
 
-            return InternalEdgesOnDemandPathSet.Contains(edge) || InternalEdgesOnDemandPathSet.Contains((edge.Item2, edge.Item1));
+            //return InternalEdgesOnDemandPathSet.Contains(edge) || InternalEdgesOnDemandPathSet.Contains((edge.Item2, edge.Item1));
+            return Path.Contains(edge) || Path.Contains((edge.Item2, edge.Item1));
         }
 
         /// <summary>
@@ -110,12 +115,6 @@ namespace MulticutInTrees.MulticutProblem
                 throw new NotOnDemandPathException($"Trying to change the endpoint of {this}, but the old endpoint given as argument is not on this demand path!");
             }
 
-            bool shorter = false;
-            if (InternalDemandPath.Contains(newEndpoint))
-            {
-                shorter = true;
-            }
-
             if (oldEndpoint == Node1)
             {
                 if (newEndpoint == Node2)
@@ -124,12 +123,13 @@ namespace MulticutInTrees.MulticutProblem
                 }
                 Node1 = newEndpoint;
 
-                if (shorter)
-                {
-                    InternalDemandPath = InternalDemandPath.SkipWhile(n => n != Node1).ToList();
-                    InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.SkipWhile(n => n.Item1 != Node1).ToList();
-                    InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
-                }
+                Path.RemoveFromStartWhile(n => n.Item1 != Node1);
+
+                /*
+                InternalDemandPath = InternalDemandPath.SkipWhile(n => n != Node1).ToList();
+                InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.SkipWhile(n => n.Item1 != Node1).ToList();
+                InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
+                */
             }
             else if (oldEndpoint == Node2)
             {
@@ -139,21 +139,14 @@ namespace MulticutInTrees.MulticutProblem
                 }
                 Node2 = newEndpoint;
 
-                if (shorter)
-                {
-                    InternalDemandPath = InternalDemandPath.TakeWhile(n => n != Node2).ToList();
-                    InternalDemandPath.Add(Node2);
-                    InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.TakeWhile(n => n.Item1 != Node2).ToList();
-                    InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
-                }
-            }
-
-            // TODO: Should not be necessary.
-            if (!shorter)
-            {
-                InternalDemandPath = DFS.FindPathBetween(Node1, Node2);
-                InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
+                Path.RemoveFromEndWhile(n => n.Item2 != Node2);
+                
+                /*
+                InternalDemandPath = InternalDemandPath.TakeWhile(n => n != Node2).ToList();
+                InternalDemandPath.Add(Node2);
+                InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.TakeWhile(n => n.Item1 != Node2).ToList();
                 InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
+                */
             }
         }
 
@@ -176,7 +169,7 @@ namespace MulticutInTrees.MulticutProblem
 
             // Update the nodes and edges of the demand path.
             UpdateEndpointsAfterEdgeContraction(contractedEdge, newNode);
-            UpdateNodesOnPathAfterEdgeContraction(contractedEdge, newNode);
+            //UpdateNodesOnPathAfterEdgeContraction(contractedEdge, newNode);
             UpdateEdgesOnPathAfterEdgeContraction(contractedEdge, newNode);
         }
 
@@ -197,9 +190,13 @@ namespace MulticutInTrees.MulticutProblem
                 return;
             }
 
+            Path.ChangeOccurrence(edge => edge.Item1 == oldNode ? (newNode, edge.Item2) : edge.Item2 == oldNode ? (edge.Item1, newNode) : edge);
+
+            /*
             InternalDemandPath = InternalDemandPath.Select(n => oldNode == n ? newNode : n).ToList();
             InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.Select(n => oldNode == n.Item1 ? (newNode, n.Item2) : n).Select(n => oldNode == n.Item2 ? (n.Item1, newNode) : n).ToList();
             InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
+            */
         }
 
         /// <summary>
@@ -221,18 +218,30 @@ namespace MulticutInTrees.MulticutProblem
             if (contractedEdge.Item1 == Node1 || contractedEdge.Item2 == Node1)
             {
                 Node1 = newNode;
+
+                (TreeNode, TreeNode) firstElement = Path.First;
+                Path.ChangeElement(firstElement, (newNode, firstElement.Item2));
+
+                /*
                 InternalDemandPath[0] = newNode;
                 InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[0]);
                 InternalEdgesOnDemandPath[0] = (newNode, InternalEdgesOnDemandPath[0].Item2);
                 InternalEdgesOnDemandPathSet.Add((newNode, InternalEdgesOnDemandPath[0].Item2));
+                */
             }
             else if (contractedEdge.Item1 == Node2 || contractedEdge.Item2 == Node2)
             {
                 Node2 = newNode;
+
+                (TreeNode, TreeNode) lastElement = Path.Last;
+                Path.ChangeElement(lastElement, (lastElement.Item1, newNode));
+
+                /*
                 InternalDemandPath[^1] = newNode;
                 InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[^1]);
                 InternalEdgesOnDemandPath[^1] = (InternalEdgesOnDemandPath[^1].Item1, newNode);
                 InternalEdgesOnDemandPathSet.Add((InternalEdgesOnDemandPath[^1].Item1, newNode));
+                */
             }
             else
             {
@@ -262,6 +271,7 @@ namespace MulticutInTrees.MulticutProblem
             }
         }
 
+        /*
         /// <summary>
         /// Update the nodes on the path of this <see cref="DemandPair"/> after an edge was contracted.
         /// </summary>
@@ -299,6 +309,7 @@ namespace MulticutInTrees.MulticutProblem
                 throw new NotOnDemandPathException($"Trying to update the nodes on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but {contractedEdge.Item1} and {contractedEdge.Item2} are not next to each other on the demand path of {this}!");
             }
         }
+        */
 
         /// <summary>
         /// Update the edges on the path of this <see cref="DemandPair"/> after an edge was contracted.
@@ -312,13 +323,33 @@ namespace MulticutInTrees.MulticutProblem
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
-            
+
             // Update the list of edges on this demand path.
-            (TreeNode, TreeNode) flippedEdge = (contractedEdge.Item2, contractedEdge.Item1);
+            (TreeNode, TreeNode) usedEdge = contractedEdge;
+            if (!Path.Contains(usedEdge))
+            {
+                usedEdge = (contractedEdge.Item2, contractedEdge.Item1);
+                if (!Path.Contains(usedEdge))
+                {
+                    throw new NotOnDemandPathException($"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but this edge is not part of the demand path of {this}!");
+                }
+            }
+
+            ((TreeNode, TreeNode) before, (TreeNode, TreeNode) after) = Path.ElementBeforeAndAfter(usedEdge);
+            if (!(before.Item1 is null || before.Item2 is null))
+            {
+                Path.ChangeElement(before, (before.Item1, newNode));
+            }
+            if (!(after.Item1 is null || after.Item2 is null))
+            {
+                Path.ChangeElement(after, (newNode, after.Item2));
+            }
+            Path.Remove(usedEdge);
+
+            /*
             int index = InternalEdgesOnDemandPath.FindIndex(n => n == contractedEdge || n == flippedEdge);
             if (index == -1)
             {
-                throw new NotOnDemandPathException($"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but this edge is not part of the demand path of {this}!");
             }
             if (index < InternalEdgesOnDemandPath.Count - 1)
             {
@@ -334,6 +365,7 @@ namespace MulticutInTrees.MulticutProblem
             }
             InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index]);
             InternalEdgesOnDemandPath.RemoveAt(index);
+            */
         }
     }
 }

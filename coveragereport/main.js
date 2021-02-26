@@ -224,9 +224,14 @@ var assemblies = [
   {
     "name": "MulticutInTrees",
     "classes": [
-      { "name": "MulticutInTrees.Algorithms.Algorithm", "rp": "MulticutInTrees_Algorithm.html", "cl": 146, "ucl": 17, "cal": 163, "tl": 377, "ct": "LineCoverage", "mc": "-", "cb": 55, "tb": 61, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Algorithms.GuoNiedermeierBranching", "rp": "MulticutInTrees_GuoNiedermeierBranching.html", "cl": 123, "ucl": 1, "cal": 124, "tl": 236, "ct": "LineCoverage", "mc": "-", "cb": 38, "tb": 38, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Algorithms.GuoNiedermeierFPT", "rp": "MulticutInTrees_GuoNiedermeierFPT.html", "cl": 303, "ucl": 11, "cal": 314, "tl": 514, "ct": "LineCoverage", "mc": "-", "cb": 100, "tb": 106, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Algorithms.Algorithm", "rp": "MulticutInTrees_Algorithm.html", "cl": 185, "ucl": 47, "cal": 232, "tl": 466, "ct": "LineCoverage", "mc": "-", "cb": 66, "tb": 81, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Algorithms.GuoNiedermeierBranching", "rp": "MulticutInTrees_GuoNiedermeierBranching.html", "cl": 134, "ucl": 3, "cal": 137, "tl": 257, "ct": "LineCoverage", "mc": "-", "cb": 41, "tb": 42, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Algorithms.GuoNiedermeierFPT", "rp": "MulticutInTrees_GuoNiedermeierFPT.html", "cl": 300, "ucl": 26, "cal": 326, "tl": 534, "ct": "LineCoverage", "mc": "-", "cb": 96, "tb": 106, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.CountedDatastructures.CountedCollection`1", "rp": "MulticutInTrees_CountedCollection_1.html", "cl": 112, "ucl": 16, "cal": 128, "tl": 279, "ct": "LineCoverage", "mc": "-", "cb": 20, "tb": 22, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.CountedDatastructures.CountedDictionary`2", "rp": "MulticutInTrees_CountedDictionary_2.html", "cl": 47, "ucl": 30, "cal": 77, "tl": 188, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 2, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.CountedDatastructures.CountedEnumerator`1", "rp": "MulticutInTrees_CountedEnumerator_1.html", "cl": 0, "ucl": 26, "cal": 26, "tl": 79, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.CountedDatastructures.CountedList`1", "rp": "MulticutInTrees_CountedList_1.html", "cl": 66, "ucl": 45, "cal": 111, "tl": 247, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 6, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.CountedDatastructures.Counter", "rp": "MulticutInTrees_Counter.html", "cl": 16, "ucl": 8, "cal": 24, "tl": 82, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.AddNeighbourToSelfException", "rp": "MulticutInTrees_AddNeighbourToSelfException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.AddParentAsChildException", "rp": "MulticutInTrees_AddParentAsChildException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Exceptions.AlreadyANeighbourException", "rp": "MulticutInTrees_AlreadyANeighbourException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 39, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
@@ -241,35 +246,41 @@ var assemblies = [
       { "name": "MulticutInTrees.Exceptions.ZeroLengthDemandPathException", "rp": "MulticutInTrees_ZeroLengthDemandPathException.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 40, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Graphs.Graph`1", "rp": "MulticutInTrees_Graph_1.html", "cl": 161, "ucl": 0, "cal": 161, "tl": 378, "ct": "LineCoverage", "mc": "-", "cb": 52, "tb": 52, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Graphs.Node", "rp": "MulticutInTrees_Node.html", "cl": 85, "ucl": 1, "cal": 86, "tl": 225, "ct": "LineCoverage", "mc": "-", "cb": 22, "tb": 22, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Graphs.Tree`1", "rp": "MulticutInTrees_Tree_1.html", "cl": 236, "ucl": 0, "cal": 236, "tl": 468, "ct": "LineCoverage", "mc": "-", "cb": 68, "tb": 68, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Graphs.Tree`1", "rp": "MulticutInTrees_Tree_1.html", "cl": 217, "ucl": 0, "cal": 217, "tl": 483, "ct": "LineCoverage", "mc": "-", "cb": 66, "tb": 66, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Graphs.TreeNode", "rp": "MulticutInTrees_TreeNode.html", "cl": 139, "ucl": 0, "cal": 139, "tl": 355, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.InstanceGeneration.ErdosRenyiGraph", "rp": "MulticutInTrees_ErdosRenyiGraph.html", "cl": 28, "ucl": 0, "cal": 28, "tl": 60, "ct": "LineCoverage", "mc": "-", "cb": 14, "tb": 14, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.InstanceGeneration.RandomDemandPairs", "rp": "MulticutInTrees_RandomDemandPairs.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 59, "ct": "LineCoverage", "mc": "-", "cb": 6, "tb": 6, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.InstanceGeneration.RandomDemandPairs", "rp": "MulticutInTrees_RandomDemandPairs.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 60, "ct": "LineCoverage", "mc": "-", "cb": 6, "tb": 6, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.InstanceGeneration.TreeFromPruferSequence", "rp": "MulticutInTrees_TreeFromPruferSequence.html", "cl": 76, "ucl": 0, "cal": 76, "tl": 133, "ct": "LineCoverage", "mc": "-", "cb": 36, "tb": 36, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.MulticutProblem.DemandPair", "rp": "MulticutInTrees_DemandPair.html", "cl": 164, "ucl": 11, "cal": 175, "tl": 339, "ct": "LineCoverage", "mc": "-", "cb": 77, "tb": 82, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.MulticutProblem.MulticutInstance", "rp": "MulticutInTrees_MulticutInstance.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 60, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 2, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 272, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.ReductionRules.DominatedEdge", "rp": "MulticutInTrees_DominatedEdge.html", "cl": 135, "ucl": 4, "cal": 139, "tl": 244, "ct": "LineCoverage", "mc": "-", "cb": 60, "tb": 62, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.ReductionRules.DominatedPath", "rp": "MulticutInTrees_DominatedPath.html", "cl": 118, "ucl": 18, "cal": 136, "tl": 226, "ct": "LineCoverage", "mc": "-", "cb": 55, "tb": 66, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.ReductionRules.IdleEdge", "rp": "MulticutInTrees_IdleEdge.html", "cl": 91, "ucl": 0, "cal": 91, "tl": 176, "ct": "LineCoverage", "mc": "-", "cb": 38, "tb": 38, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.ReductionRules.ReductionRule", "rp": "MulticutInTrees_ReductionRule.html", "cl": 16, "ucl": 0, "cal": 16, "tl": 91, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.ReductionRules.UnitPath", "rp": "MulticutInTrees_UnitPath.html", "cl": 80, "ucl": 0, "cal": 80, "tl": 151, "ct": "LineCoverage", "mc": "-", "cb": 26, "tb": 26, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.MulticutProblem.DemandPair", "rp": "MulticutInTrees_DemandPair.html", "cl": 113, "ucl": 6, "cal": 119, "tl": 371, "ct": "LineCoverage", "mc": "-", "cb": 60, "tb": 64, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.MulticutProblem.MulticutInstance", "rp": "MulticutInTrees_MulticutInstance.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 61, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 2, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Program", "rp": "MulticutInTrees_Program.html", "cl": 42, "ucl": 0, "cal": 42, "tl": 342, "ct": "LineCoverage", "mc": "-", "cb": 4, "tb": 4, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.ReductionRules.DominatedEdge", "rp": "MulticutInTrees_DominatedEdge.html", "cl": 136, "ucl": 13, "cal": 149, "tl": 270, "ct": "LineCoverage", "mc": "-", "cb": 55, "tb": 60, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.ReductionRules.DominatedPath", "rp": "MulticutInTrees_DominatedPath.html", "cl": 126, "ucl": 21, "cal": 147, "tl": 252, "ct": "LineCoverage", "mc": "-", "cb": 51, "tb": 62, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.ReductionRules.IdleEdge", "rp": "MulticutInTrees_IdleEdge.html", "cl": 93, "ucl": 9, "cal": 102, "tl": 200, "ct": "LineCoverage", "mc": "-", "cb": 31, "tb": 34, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.ReductionRules.ReductionRule", "rp": "MulticutInTrees_ReductionRule.html", "cl": 30, "ucl": 1, "cal": 31, "tl": 131, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.ReductionRules.UnitPath", "rp": "MulticutInTrees_UnitPath.html", "cl": 93, "ucl": 9, "cal": 102, "tl": 197, "ct": "LineCoverage", "mc": "-", "cb": 23, "tb": 26, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Utilities.BFS", "rp": "MulticutInTrees_BFS.html", "cl": 49, "ucl": 0, "cal": 49, "tl": 88, "ct": "LineCoverage", "mc": "-", "cb": 16, "tb": 16, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Utilities.DFS", "rp": "MulticutInTrees_DFS.html", "cl": 188, "ucl": 2, "cal": 190, "tl": 345, "ct": "LineCoverage", "mc": "-", "cb": 74, "tb": 76, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Utilities.DinicMaxFlow", "rp": "MulticutInTrees_DinicMaxFlow.html", "cl": 162, "ucl": 0, "cal": 162, "tl": 315, "ct": "LineCoverage", "mc": "-", "cb": 60, "tb": 60, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Utilities.EdmondsMatching", "rp": "MulticutInTrees_EdmondsMatching.html", "cl": 336, "ucl": 7, "cal": 343, "tl": 640, "ct": "LineCoverage", "mc": "-", "cb": 137, "tb": 142, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Utilities.FisherYates", "rp": "MulticutInTrees_FisherYates.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 40, "ct": "LineCoverage", "mc": "-", "cb": 6, "tb": 6, "lch": [], "bch": [], "hc": [] },
       { "name": "MulticutInTrees.Utilities.MaximumMultiCommodityFlowInTrees", "rp": "MulticutInTrees_MaximumMultiCommodityFlowInTrees.html", "cl": 190, "ucl": 6, "cal": 196, "tl": 446, "ct": "LineCoverage", "mc": "-", "cb": 73, "tb": 76, "lch": [], "bch": [], "hc": [] },
-      { "name": "MulticutInTrees.Utilities.Utils", "rp": "MulticutInTrees_Utils.html", "cl": 82, "ucl": 0, "cal": 82, "tl": 198, "ct": "LineCoverage", "mc": "-", "cb": 22, "tb": 22, "lch": [], "bch": [], "hc": [] },
+      { "name": "MulticutInTrees.Utilities.Utils", "rp": "MulticutInTrees_Utils.html", "cl": 80, "ucl": 0, "cal": 80, "tl": 194, "ct": "LineCoverage", "mc": "-", "cb": 22, "tb": 22, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 
 var historicCoverageExecutionTimes = [];
 
 var riskHotspotMetrics = [
+      { "name": "Cyclomatic complexity", "explanationUrl": "https://en.wikipedia.org/wiki/Cyclomatic_complexity" },
 ];
 
 var riskHotspots = [
+  {
+    "assembly": "MulticutInTrees", "class": "MulticutInTrees.Algorithms.Algorithm", "reportPath": "MulticutInTrees_Algorithm.html", "methodName": "Run()", "methodShortName": "Run()", "fileIndex": 0, "line": 115,
+    "metrics": [
+      { "value": 40, "exceeded": true },
+    ]},
 ];
 
 var branchCoverageAvailable = true;

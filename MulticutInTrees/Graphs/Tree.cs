@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Utilities;
 
@@ -14,25 +15,35 @@ namespace MulticutInTrees.Graphs
     /// </summary>
     public class Tree<N> : ITree<N> where N : ITreeNode<N>
     {
-        /// <summary>
-        /// The internal <see cref="List{T}"/> of edges in this <see cref="Tree{N}"/>.
-        /// </summary>
-        protected List<(N, N)> InternalEdges { get; set; }
+        ///// <summary>
+        ///// The internal <see cref="List{T}"/> of edges in this <see cref="Tree{N}"/>.
+        ///// </summary>
+        //protected List<(N, N)> InternalEdges { get; set; }
+
+        ///// <summary>
+        ///// The internal <see cref="HashSet{T}"/> of edges in this <see cref="Tree{N}"/>.
+        ///// </summary>
+        //protected HashSet<(N, N)> UniqueInternalEdges { get; set; }
+
+        ///// <summary>
+        ///// The internal <see cref="HashSet{T}"/> of nodes in this <see cref="Tree{N}"/>
+        ///// </summary>
+        //protected HashSet<N> UniqueInternalNodes { get; set; }
+
+        ///// <summary>
+        ///// The internal <see cref="List{T}"/> of nodes in this <see cref="Tree{N}"/>.
+        ///// </summary>
+        //protected List<N> InternalNodes { get; set; }
 
         /// <summary>
-        /// The internal <see cref="HashSet{T}"/> of edges in this <see cref="Tree{N}"/>.
+        /// The <see cref="CountedCollection{T}"/> of edges in this <see cref="Tree{N}"/>.
         /// </summary>
-        protected HashSet<(N, N)> UniqueInternalEdges { get; set; }
+        protected CountedCollection<(N, N)> InternalEdges { get; set; }
 
         /// <summary>
-        /// The internal <see cref="HashSet{T}"/> of nodes in this <see cref="Tree{N}"/>
+        /// The <see cref="CountedCollection{T}"/> of nodes in this <see cref="Tree{N}"/>.
         /// </summary>
-        protected HashSet<N> UniqueInternalNodes { get; set; }
-
-        /// <summary>
-        /// The internal <see cref="List{T}"/> of nodes in this <see cref="Tree{N}"/>.
-        /// </summary>
-        protected List<N> InternalNodes { get; set; }
+        protected CountedCollection<N> InternalNodes { get; set; }
 
         /// <summary>
         /// The number of nodes in this <see cref="Tree{N}"/>.
@@ -49,14 +60,14 @@ namespace MulticutInTrees.Graphs
         /// <br/>
         /// See also: <seealso cref="AddRoot(N)"/>, <seealso cref="AddChild(N, N)"/>, <seealso cref="AddChildren(N, IEnumerable{N})"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
         /// </summary>
-        public ReadOnlyCollection<(N, N)> Edges => InternalEdges.AsReadOnly();
+        public IEnumerable<(N, N)> Edges => InternalEdges.GetLinkedList();
 
         /// <summary>
         /// The publically visible collection of nodes in this <see cref="Tree{N}"/>. Nodes cannot be edited directly.
         /// <br/>
         /// See also: <seealso cref="AddRoot(N)"/>, <seealso cref="AddChild(N, N)"/>, <seealso cref="AddChildren(N, IEnumerable{N})"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
         /// </summary>
-        public ReadOnlyCollection<N> Nodes => InternalNodes.AsReadOnly();
+        public IEnumerable<N> Nodes => InternalNodes.GetLinkedList();
 
         /// <summary>
         /// The root of this <see cref="Tree{N}"/>.
@@ -83,10 +94,15 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         public Tree()
         {
+            InternalNodes = new CountedCollection<N>();
+            InternalEdges = new CountedCollection<(N, N)>();
+
+            /*
             InternalNodes = new List<N>();
             UniqueInternalNodes = new HashSet<N>();
             InternalEdges = new List<(N, N)>();
             UniqueInternalEdges = new HashSet<(N, N)>();
+            */
         }
 
         /// <summary>
@@ -140,7 +156,6 @@ namespace MulticutInTrees.Graphs
                 }
 
                 InternalEdges.Remove((Root, node));
-                UniqueInternalEdges.Remove((Root, node));
                 if (node.Children.Count == 1)
                 {
                     Root = node.Children[0];
@@ -153,14 +168,18 @@ namespace MulticutInTrees.Graphs
             else
             {
                 InternalEdges.Remove((node.Parent, node));
-                UniqueInternalEdges.Remove((node.Parent, node));
+                //UniqueInternalEdges.Remove((node.Parent, node));
 
-                InternalEdges.RemoveAll(edge => edge.Item1.Equals(node));
+                //InternalEdges.RemoveAll(edge => edge.Item1.Equals(node));
                 foreach (N child in node.Children) 
                 {
+                    InternalEdges.ChangeElement((node, child), (node.Parent, child));
+
+                    /*
                     UniqueInternalEdges.Remove((node, child));
                     InternalEdges.Add((node.Parent, child));
                     UniqueInternalEdges.Add((node.Parent, child));
+                    */
                 }
 
                 node.Parent.AddChildren(node.Children);
@@ -178,7 +197,7 @@ namespace MulticutInTrees.Graphs
         {
             Utils.NullCheck(node, nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
 
-            return UniqueInternalNodes.Contains(node);
+            return InternalNodes.Contains(node);
         }
 
         /// <summary>
@@ -201,7 +220,7 @@ namespace MulticutInTrees.Graphs
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the child of the edge is not part of {this}!");
             }
 
-            return UniqueInternalEdges.Contains((parent, child));
+            return InternalEdges.Contains((parent, child));
         }
 
         /// <summary>
@@ -236,7 +255,7 @@ namespace MulticutInTrees.Graphs
                 }
             }
 
-            return UniqueInternalEdges.Contains((parent, child));
+            return InternalEdges.Contains((parent, child));
         }
 
 
@@ -253,11 +272,11 @@ namespace MulticutInTrees.Graphs
             {
                 newRoot.AddChild(Root);
                 InternalEdges.Add((newRoot, Root));
-                UniqueInternalEdges.Add((newRoot, Root));
+                //UniqueInternalEdges.Add((newRoot, Root));
             }
 
             InternalNodes.Add(newRoot);
-            UniqueInternalNodes.Add(newRoot);
+            //UniqueInternalNodes.Add(newRoot);
             Root = newRoot;
         }
 
@@ -284,10 +303,10 @@ namespace MulticutInTrees.Graphs
 
             parent.AddChild(child);
             InternalNodes.Add(child);
-            UniqueInternalNodes.Add(child);
+            //UniqueInternalNodes.Add(child);
             (N, N) edge = (parent, child);
             InternalEdges.Add(edge);
-            UniqueInternalEdges.Add(edge);
+            //UniqueInternalEdges.Add(edge);
         }
 
         /// <summary>
@@ -320,11 +339,7 @@ namespace MulticutInTrees.Graphs
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");
             }
-            bool wasRoot = false;
-            if (node.Equals(Root))
-            {
-                wasRoot = true;
-            }
+            bool wasRoot = node.Equals(Root);
 
             AddChildrenToParent(node);
 
@@ -332,10 +347,10 @@ namespace MulticutInTrees.Graphs
             {
                 node.Parent.RemoveChild(node);
                 InternalEdges.Remove((node.Parent, node));
-                UniqueInternalEdges.Remove((node.Parent, node));
+                //UniqueInternalEdges.Remove((node.Parent, node));
             }
             InternalNodes.Remove(node);
-            UniqueInternalNodes.Remove(node);
+            //UniqueInternalNodes.Remove(node);
         }
 
         /// <summary>

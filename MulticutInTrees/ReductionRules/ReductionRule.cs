@@ -2,7 +2,9 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -20,14 +22,34 @@ namespace MulticutInTrees.ReductionRules
         protected Tree<TreeNode> Tree { get; }
 
         /// <summary>
-        /// The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.
+        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.
         /// </summary>
-        protected List<DemandPair> DemandPairs { get; }
+        protected CountedList<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.
         /// </summary>
         protected Algorithm Algorithm { get; }
+
+        /// <summary>
+        /// <see cref="Counter"/> that counts how many edges this <see cref="ReductionRule"/> contracted.
+        /// </summary>
+        protected Counter ContractedEdgesCounter { get; set; }
+
+        /// <summary>
+        /// <see cref="Counter"/> that counts how many <see cref="DemandPair"/>s this <see cref="ReductionRule"/> removed.
+        /// </summary>
+        protected Counter RemovedDemandPairsCounter { get; set; }
+
+        /// <summary>
+        /// <see cref="Counter"/> that counts how many <see cref="DemandPair"/>s this <see cref="ReductionRule"/> changed.
+        /// </summary>
+        protected Counter ChangedDemandPairsCounter { get; set; }
+
+        /// <summary>
+        /// <see cref="Stopwatch"/> that keeps track of the time spent checking whether this <see cref="ReductionRule"/> is applicable.
+        /// </summary>
+        protected Stopwatch TimeSpentCheckingApplicability { get; }
 
         /// <summary>
         /// The <see cref="System.Random"/> used for random number generation.
@@ -38,11 +60,11 @@ namespace MulticutInTrees.ReductionRules
         /// Constructor for a <see cref="ReductionRule"/>.
         /// </summary>
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
-        /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
         /// <param name="random">The <see cref="System.Random"/> used for random number generation.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
-        protected ReductionRule(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Random random)
+        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random)
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a reduction rule, but the list of demand pairs is null!");
@@ -50,9 +72,15 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(random, nameof(random), "Trying to create a reduction rule, but the random is null!");
 
             Tree = tree;
-            DemandPairs = demandPairs;
+            DemandPairs = new CountedList<DemandPair>(demandPairs);
             Algorithm = algorithm;
             Random = random;
+
+            ContractedEdgesCounter = new Counter();
+            RemovedDemandPairsCounter = new Counter();
+            ChangedDemandPairsCounter = new Counter();
+            TimeSpentCheckingApplicability = new Stopwatch();
+
             Preprocess();
         }
 
@@ -60,6 +88,18 @@ namespace MulticutInTrees.ReductionRules
         /// Everything that needs to happen before the reduction rule can be executed.
         /// </summary>
         protected abstract void Preprocess();
+
+        /// <summary>
+        /// Print all counters that this <see cref="ReductionRule"/> needed.
+        /// </summary>
+        internal virtual void PrintCounters()
+        {
+            Console.WriteLine($"DemandPairs:          {DemandPairs.OperationsCounter}");
+            Console.WriteLine($"Contracted edges:     {ContractedEdgesCounter}");
+            Console.WriteLine($"Removed demand pairs: {RemovedDemandPairsCounter}");
+            Console.WriteLine($"Changed demand pairs: {ChangedDemandPairsCounter}");
+            Console.WriteLine($"Time spent checking whether this rule is applicable: {TimeSpentCheckingApplicability.ElapsedTicks} ticks");
+        }
 
         /// <summary>
         /// First iteration of this <see cref="ReductionRule"/>. There is no information about last iterations available.
@@ -70,22 +110,22 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after one or more edges have been contracted in the last iteration.
         /// </summary>
-        /// <param name="contractedEdgeNodeTupleList">An <see cref="IEnumerable{T}"/> with tuples consisting of a tuple of <see cref="TreeNode"/>s (the contracted edge), a <see cref="TreeNode"/> (the result of the edge contraction), and a <see cref="List{T}"/> of <see cref="DemandPair"/>s (the <see cref="DemandPair"/>s on the contracted edge).</param>
+        /// <param name="contractedEdgeNodeTupleList">An <see cref="CountedList{T}"/> with tuples consisting of a tuple of <see cref="TreeNode"/>s (the contracted edge), a <see cref="TreeNode"/> (the result of the edge contraction), and a <see cref="List{T}"/> of <see cref="DemandPair"/>s (the <see cref="DemandPair"/>s on the contracted edge).</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList);
+        internal abstract bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList);
 
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after one or more <see cref="DemandPair"/>s have been removed in the last iteration.
         /// </summary>
-        /// <param name="removedDemandPairs">The <see cref="IEnumerable{T}"/> of <see cref="DemandPair"/>s that were removed in the last iteration.</param>
+        /// <param name="removedDemandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s that were removed in the last iteration.</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs);
+        internal abstract bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs);
 
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after the endpoint of one or more <see cref="DemandPair"/>s were changed in the last iteration.
         /// </summary>
-        /// <param name="changedEdgesPerDemandPairList">The <see cref="IEnumerable{T}"/> with tuples with a <see cref="List{T}"/> with tuples of <see cref="TreeNode"/>s that represent the edges that were removed from the demand path, and a <see cref="DemandPair"/>.</param>
+        /// <param name="changedEdgesPerDemandPairList">The <see cref="CountedList{T}"/> with tuples with a <see cref="List{T}"/> with tuples of <see cref="TreeNode"/>s that represent the edges that were removed from the demand path, and a <see cref="DemandPair"/>.</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
+        internal abstract bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
     }
 }

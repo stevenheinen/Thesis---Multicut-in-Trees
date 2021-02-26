@@ -31,7 +31,6 @@ namespace TESTS_MulticutInTrees.Utilities
 
             Assert.AreEqual(node0, dp.Node1);
             Assert.AreEqual(node1, dp.Node2);
-            Assert.AreEqual(2, dp.DemandPath.Count);
             Assert.AreEqual(1, dp.EdgesOnDemandPath.Count);
         }
 
@@ -67,15 +66,15 @@ namespace TESTS_MulticutInTrees.Utilities
             t = Assert.ThrowsException<TargetInvocationException>(() => { updateEndpointsAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node1, node0), null }); });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
-            MethodInfo updateNodesOnPathAfterEdgeContraction = typeof(DemandPair).GetMethod("UpdateNodesOnPathAfterEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
-            t = Assert.ThrowsException<TargetInvocationException>(() => { updateNodesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(null, node0), node1 }); });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
+            //MethodInfo updateNodesOnPathAfterEdgeContraction = typeof(DemandPair).GetMethod("UpdateNodesOnPathAfterEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
+            //t = Assert.ThrowsException<TargetInvocationException>(() => { updateNodesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(null, node0), node1 }); });
+            //Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
-            t = Assert.ThrowsException<TargetInvocationException>(() => { updateNodesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node0, null), node1 }); });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
+            //t = Assert.ThrowsException<TargetInvocationException>(() => { updateNodesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node0, null), node1 }); });
+            //Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
-            t = Assert.ThrowsException<TargetInvocationException>(() => { updateNodesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node1, node0), null }); });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
+            //t = Assert.ThrowsException<TargetInvocationException>(() => { updateNodesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node1, node0), null }); });
+            //Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             
             MethodInfo updateEdgesOnPathAfterEdgeContraction = typeof(DemandPair).GetMethod("UpdateEdgesOnPathAfterEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
             t = Assert.ThrowsException<TargetInvocationException>(() => { updateEdgesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(null, node0), node1 }); });

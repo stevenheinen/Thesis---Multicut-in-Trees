@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
@@ -21,12 +22,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestConstructor()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
-            List<DemandPair> demandPairs = new List<DemandPair>();
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             Random random = new Random(648468);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random, demandPairsPerEdge);
 
             Assert.IsNotNull(unitPath);
         }
@@ -35,19 +37,21 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestNullParameter()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
-            List<DemandPair> demandPairs = new List<DemandPair>();
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             Random random = new Random(8465210);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random, demandPairsPerEdge);
 
             Assert.IsNotNull(unitPath);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(null, demandPairs, gnfpt, random); });
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, null, gnfpt, random); });
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, null, random); });
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, gnfpt, null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(null, demandPairs, gnfpt, random, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, null, gnfpt, random, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, null, random, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, gnfpt, null, demandPairsPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, gnfpt, random, null); });
 
             Assert.ThrowsException<ArgumentNullException>(() => unitPath.AfterDemandPathChanged(null));
             Assert.ThrowsException<ArgumentNullException>(() => unitPath.AfterDemandPathRemove(null));
@@ -82,18 +86,24 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node5);
             DemandPair dp2 = new DemandPair(node1, node3);
 
-            List<DemandPair> demandPairs = new List<DemandPair>() { dp1, dp2 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2 };
 
             Random random = new Random(68468);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            {
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node3), new CountedList<DemandPair>() { dp1, dp2 } },
+                { (node3, node5), new CountedList<DemandPair>() { dp1 } },
+            };
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random, demandPairsPerEdge);
 
-            List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> list = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>() { ((node2, node1), node1, new List<DemandPair>() { dp1, dp2 }) };
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>() { ((node2, node1), node1, new CountedList<DemandPair>() { dp1, dp2 }) };
             Assert.IsTrue(unitPath.AfterEdgeContraction(list));
 
-            list = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>() { ((node4, node5), node5, new List<DemandPair>() { dp1 }) };
+            list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>() { ((node4, node5), node5, new CountedList<DemandPair>() { dp1 }) };
             Assert.IsFalse(unitPath.AfterEdgeContraction(list));
         }
 
@@ -116,13 +126,19 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node5);
             DemandPair dp2 = new DemandPair(node1, node3);
 
-            List<DemandPair> demandPairs = new List<DemandPair>() { dp1, dp2 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2 };
 
             Random random = new Random(61521645);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            {
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node3), new CountedList<DemandPair>() { dp1, dp2 } },
+                { (node3, node5), new CountedList<DemandPair>() { dp1 } },
+            };
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random, demandPairsPerEdge);
 
             Assert.IsFalse(unitPath.AfterDemandPathRemove(demandPairs));
         }
@@ -150,18 +166,25 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node4);
             DemandPair dp2 = new DemandPair(node1, node2);
 
-            List<DemandPair> demandPairs = new List<DemandPair>() { dp1, dp2 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2 };
 
             Random random = new Random(6546);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            {
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1, dp2 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp1 } },
+                { (node3, node4), new CountedList<DemandPair>() { dp1 } },
+            };
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt, random, demandPairsPerEdge);
 
-            List<(List<(TreeNode, TreeNode)>, DemandPair)> list = new List<(List<(TreeNode, TreeNode)>, DemandPair)>() { (new List<(TreeNode, TreeNode)>() { (node4, node5) }, dp1) };
+            CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> list = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>() { (new List<(TreeNode, TreeNode)>() { (node4, node5) }, dp1) };
             Assert.IsFalse(unitPath.AfterDemandPathChanged(list));
 
-            list = new List<(List<(TreeNode, TreeNode)>, DemandPair)>() { (new List<(TreeNode, TreeNode)>() { (node3, node2) }, dp2) };
+            list = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>() { (new List<(TreeNode, TreeNode)>() { (node3, node2) }, dp2) };
             Assert.IsTrue(unitPath.AfterDemandPathChanged(list));
         }
 
@@ -188,8 +211,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(node0, node4);
             DemandPair dp2 = new DemandPair(node1, node2);
 
-            List<DemandPair> demandPairs1 = new List<DemandPair>() { dp1 };
-            List<DemandPair> demandPairs2 = new List<DemandPair>() { dp2 };
+            CountedList<DemandPair> demandPairs1 = new CountedList<DemandPair>() { dp1 };
+            CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>() { dp2 };
 
             Random random1 = new Random(684);
             Random random2 = new Random(684);
@@ -197,9 +220,23 @@ namespace TESTS_MulticutInTrees.ReductionRules
             MulticutInstance instance2 = new MulticutInstance(tree, demandPairs2, 1, random2);
             GuoNiedermeierFPT gnfpt1 = new GuoNiedermeierFPT(instance1);
             GuoNiedermeierFPT gnfpt2 = new GuoNiedermeierFPT(instance2);
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge1 = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            {
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1, dp2 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp1 } },
+                { (node3, node4), new CountedList<DemandPair>() { dp1 } },
+            };
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge2 = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            {
+                { (node0, node1), new CountedList<DemandPair>() { dp1 } },
+                { (node1, node2), new CountedList<DemandPair>() { dp1, dp2 } },
+                { (node2, node3), new CountedList<DemandPair>() { dp1 } },
+                { (node3, node4), new CountedList<DemandPair>() { dp1 } },
+            };
 
-            UnitPath unitPath1 = new UnitPath(tree, demandPairs1, gnfpt1, random1);
-            UnitPath unitPath2 = new UnitPath(tree, demandPairs2, gnfpt2, random2);
+            UnitPath unitPath1 = new UnitPath(tree, demandPairs1, gnfpt1, random1, demandPairsPerEdge1);
+            UnitPath unitPath2 = new UnitPath(tree, demandPairs2, gnfpt2, random2, demandPairsPerEdge2);
 
             Assert.IsFalse(unitPath1.RunFirstIteration());
             Assert.IsTrue(unitPath2.RunFirstIteration());

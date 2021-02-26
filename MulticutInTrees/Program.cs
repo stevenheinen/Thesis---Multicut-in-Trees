@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
@@ -25,7 +27,7 @@ namespace MulticutInTrees
         /// <summary>
         /// <see cref="bool"/> that represents whether debug information should be printed to the console during execution of the algorithm.
         /// </summary>
-        public readonly static bool PRINT_DEBUG_INFORMATION = true;
+        public readonly static bool PRINT_DEBUG_INFORMATION = false;
 
         /// <summary>
         /// The entry method for the program.
@@ -33,6 +35,74 @@ namespace MulticutInTrees
         public static void Main()
         {
             Console.WriteLine("Hello World!");
+
+            CountedCollection<int> c = new CountedCollection<int>();
+            c.Add(1);
+            c.Add(2);
+            c.Add(3);
+            c.Add(4);
+            c.Add(5);
+
+            Counter counter = new Counter();
+
+            foreach (int ding in c.GetCountedEnumerable(counter))
+            {
+                Console.WriteLine(ding);
+                if (ding == 3)
+                {
+                    break;
+                }
+            }
+
+            Assert.AreEqual(3, counter.Value);
+
+
+
+            Random random = new Random(0);
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree, random));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 21, random);
+            
+            Random random2 = new Random(0);
+            Tree<TreeNode> tree2 = TreeFromPruferSequence.GenerateTree(500, random2);
+            CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree2, random2));
+            MulticutInstance instance2 = new MulticutInstance(tree2, demandPairs2, 21, random2);
+
+            GuoNiedermeierBranching gnBranching = new GuoNiedermeierBranching(instance);
+            GuoNiedermeierFPT gnFPT = new GuoNiedermeierFPT(instance2);
+
+            /*
+            Stopwatch branchWatch = new Stopwatch();
+            branchWatch.Start();
+            (bool branchSolved, List<(TreeNode, TreeNode)> branchEdges) = gnBranching.Run();
+            branchWatch.Stop();
+            */
+
+            Stopwatch fptWatch = new Stopwatch();
+            fptWatch.Start();
+            (bool fptSolved, Tree<TreeNode> fptTree, List<(TreeNode, TreeNode)> fptEdges, List<DemandPair> fptDemandPairs) = gnFPT.Run();
+            fptWatch.Stop();
+
+            /*
+            Console.WriteLine();
+            Console.WriteLine("Branching algorithm:");
+            Console.WriteLine("========================================");
+            Console.WriteLine($"Solved:          {branchSolved}");
+            Console.WriteLine($"Edges:           {branchEdges.Print()}");
+            Console.WriteLine($"Time:            {branchWatch.Elapsed}");
+            Console.WriteLine();
+            */
+
+            Console.WriteLine();
+            Console.WriteLine("FPT algorithm:");
+            Console.WriteLine("========================================");
+            Console.WriteLine($"Solved:          {fptSolved}");
+            Console.WriteLine($"Edges:           {fptEdges.Print()}");
+            Console.WriteLine($"Remaining tree:  {fptTree}");
+            Console.WriteLine($"Remaining edges: {fptTree.Edges.Print()}");
+            Console.WriteLine($"Remaining dps:   {fptDemandPairs.Print()}");
+            Console.WriteLine($"Time:            {fptWatch.Elapsed}");
+            Console.WriteLine();
 
             /*
             Tree<TreeNode> tree = new Tree<TreeNode>();

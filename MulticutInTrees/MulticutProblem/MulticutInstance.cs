@@ -2,6 +2,7 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -20,7 +21,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.
         /// </summary>
-        public List<DemandPair> DemandPairs { get; }
+        public CountedList<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The maximum size the cutset is allowed to be.
@@ -36,12 +37,12 @@ namespace MulticutInTrees.MulticutProblem
         /// Constructor for a <see cref="MulticutInstance"/>.
         /// </summary>
         /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
-        /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
         /// <param name="random">The <see cref="System.Random"/> that should be used during computation.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than or equal to zero.</exception>
-        public MulticutInstance(Tree<TreeNode> tree, List<DemandPair> demandPairs, int k, Random random)
+        public MulticutInstance(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int k, Random random)
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create a multicut instance, but the tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");

@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -17,20 +18,29 @@ namespace MulticutInTrees.ReductionRules
     /// </summary>
     public class UnitPath : ReductionRule
     {
+        // todo: only necessary for updating the counters
+        /// <summary>
+        /// <see cref="Dictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
+        /// </summary>
+        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; set; }
+
         /// <summary>
         /// Constructor for the <see cref="UnitPath"/> rule.
         /// </summary>
         /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
-        /// <param name="demandPairs">The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, or <paramref name="random"/> is <see langword="null"/>.</exception>
-        public UnitPath(Tree<TreeNode> tree, List<DemandPair> demandPairs, Algorithm algorithm, Random random) : base(tree, demandPairs, algorithm, random)
+        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random)
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Unit Path rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Unit Path rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Unit Path rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the Unit Path rule, but the random is null!");
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the Unit Path rule, but the dictionary with demand pairs per edge is null!");
+
+            DemandPairsPerEdge = demandPairsPerEdge;
         }
 
         /// <summary>
@@ -47,8 +57,18 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
+        internal override void PrintCounters()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Unit Path counters");
+            Console.WriteLine("==============================");
+            base.PrintCounters();
+            Console.WriteLine();
+        }
+
+        /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(IEnumerable<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Unit Path rule after a demand path was changed, but the list of changed demand pairs is null!");
 
@@ -57,27 +77,25 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Unit Path rule after a demand path was changed...");
             }
 
+            TimeSpentCheckingApplicability.Start();
+
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach ((List<(TreeNode, TreeNode)> _, DemandPair path) in changedEdgesPerDemandPairList)
+            foreach ((List<(TreeNode, TreeNode)> _, DemandPair path) in changedEdgesPerDemandPairList.GetCountedEnumerable(new Counter()))
             {
                 if (DemandPathHasLengthOne(path))
                 {
-                    edgesToBeCut.Add(path.EdgesOnDemandPath[0]);
+                    edgesToBeCut.Add(path.EdgesOnDemandPath.First);
                 }
             }
 
-            if (edgesToBeCut.Count == 0)
-            {
-                return false;
-            }
+            TimeSpentCheckingApplicability.Stop();
 
-            Algorithm.CutEdges(edgesToBeCut.ToList());
-            return true;
+            return TryCutEdges(edgesToBeCut);
         }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathRemove(IEnumerable<DemandPair> removedDemandPairs)
+        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Unit Path rule after a demand path was removed, but the list of removed demand pairs is null!");
 
@@ -86,7 +104,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(IEnumerable<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
         {
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Unit Path rule after an edge was contracted, but the list of contracted edges is null!");
 
@@ -95,25 +113,23 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Unit Path rule after an edge was contracted...");
             }
 
+            TimeSpentCheckingApplicability.Start();
+
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (((TreeNode, TreeNode) _, TreeNode _, List<DemandPair> paths) in contractedEdgeNodeTupleList)
+            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedList<DemandPair> pairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(new Counter()))
             {
-                foreach (DemandPair path in paths)
+                foreach (DemandPair path in pairs.GetCountedEnumerable(new Counter()))
                 {
                     if (DemandPathHasLengthOne(path))
                     {
-                        edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath[0]));
+                        edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath.First));
                     }
                 }
             }
 
-            if (edgesToBeCut.Count == 0)
-            {
-                return false;
-            }
+            TimeSpentCheckingApplicability.Stop();
 
-            Algorithm.CutEdges(edgesToBeCut.ToList());
-            return true;
+            return TryCutEdges(edgesToBeCut);
         }
 
         /// <inheritdoc/>
@@ -124,28 +140,58 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Unit Path rule for the first time...");
             }
 
+            TimeSpentCheckingApplicability.Start();
+
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (DemandPair dp in DemandPairs)
+            foreach (DemandPair dp in DemandPairs.GetCountedEnumerable(new Counter()))
             {
                 if (DemandPathHasLengthOne(dp))
                 {
-                    edgesToBeCut.Add(dp.EdgesOnDemandPath[0]);
+                    edgesToBeCut.Add(dp.EdgesOnDemandPath.First);
                 }
             }
 
-            if (edgesToBeCut.Count == 0)
-            {
-                return false;
-            }
+            TimeSpentCheckingApplicability.Stop();
 
-            Algorithm.CutEdges(edgesToBeCut.ToList());
-            return true;
+            return TryCutEdges(edgesToBeCut);
         }
 
         /// <inheritdoc/>
         protected override void Preprocess()
         {
             return;
+        }
+
+        /// <summary>
+        /// Cut all edges in <paramref name="edgesToBeCut"/>.
+        /// </summary>
+        /// <param name="edgesToBeCut">The <see cref="HashSet{T}"/> with all edges to be cut.</param>
+        /// <returns><see langword="true"/> if <paramref name="edgesToBeCut"/> has any elements, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeCut"/> is <see langword="null"/>.</exception>
+        private bool TryCutEdges(HashSet<(TreeNode, TreeNode)> edgesToBeCut)
+        {
+            Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), $"Trying to cut edges, but the Hashset with edges is null!");
+
+            if (edgesToBeCut.Count == 0)
+            {
+                return false;
+            }
+
+            // todo: only necessary for the counters, should not update the number of operations... Maybe move somewhere else?
+            HashSet<DemandPair> removedDemandPairs = new HashSet<DemandPair>();
+            foreach ((TreeNode, TreeNode) edge in edgesToBeCut)
+            {
+                foreach (DemandPair demandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(edge)].GetCountedEnumerable(new Counter()))
+                {
+                    removedDemandPairs.Add(demandPair);
+                }
+            }
+
+            RemovedDemandPairsCounter += removedDemandPairs.Count;
+            ContractedEdgesCounter += edgesToBeCut.Count();
+
+            Algorithm.CutEdges(edgesToBeCut.ToList());
+            return true;
         }
     }
 }

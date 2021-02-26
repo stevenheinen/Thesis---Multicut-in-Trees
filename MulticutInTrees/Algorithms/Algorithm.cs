@@ -3,7 +3,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
@@ -22,9 +24,9 @@ namespace MulticutInTrees.Algorithms
         public ReadOnlyCollection<ReductionRule> ReductionRules { get; protected set; }
 
         /// <summary>
-        /// The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the input.
+        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the input.
         /// </summary>
-        protected List<DemandPair> DemandPairs { get; }
+        protected CountedList<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The input <see cref="Tree{N}"/>.
@@ -59,27 +61,27 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// A <see cref="List{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
         /// </summary>
-        protected List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> LastContractedEdges { get; set; }
+        protected CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> LastContractedEdges { get; set; }
 
         /// <summary>
         /// A <see cref="List{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
         /// </summary>
-        protected List<DemandPair> LastRemovedDemandPairs { get; set; }
+        protected CountedList<DemandPair> LastRemovedDemandPairs { get; set; }
 
         /// <summary>
         /// A <see cref="List{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
         /// </summary>
-        protected List<(List<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
+        protected CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
 
         /// <summary>
         /// The <see cref="System.Random"/> used for random number generation.
         /// </summary>
         protected Random Random { get; }
 
-        /// <summary>
-        /// Counter for the number of operations used during the execution of this <see cref="Algorithm"/>.
-        /// </summary>
-        protected long OperationsCounter { get; set; }
+        // TODO: temp
+        private readonly Counter lastContractedEdgesCounter;
+        private readonly Counter LastRemovedDemandPairsCounter;
+        private readonly Counter LastChangedEdgesPerDemandPairCounter;
 
         /// <summary>
         /// Constructor for an <see cref="Algorithm"/>.
@@ -95,43 +97,59 @@ namespace MulticutInTrees.Algorithms
             K = instance.K;
             Random = instance.Random;
             PartialSolution = new List<(TreeNode, TreeNode)>();
-            
-            OperationsCounter = 0;
 
-            LastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>();
-            LastRemovedDemandPairs = new List<DemandPair>();
-            LastChangedEdgesPerDemandPair = new List<(List<(TreeNode, TreeNode)>, DemandPair)>();
+            lastContractedEdgesCounter = new Counter();
+            LastRemovedDemandPairsCounter = new Counter();
+            LastChangedEdgesPerDemandPairCounter = new Counter();
+
+            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(lastContractedEdgesCounter);
+            LastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairsCounter);
+            LastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPairCounter);
         }
 
         /// <summary>
         /// Try to solve the instance.
         /// </summary>
-        /// <returns>A tuple with the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated, and a <see cref="long"/> with the number of operations that were used during the computation.</returns>
-        public (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, long) Run()
+        /// <returns>A tuple with a <see cref="bool"/> that states whether the instance is solvable, the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
+        public virtual (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
         {
-            bool successful;
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
+            Stopwatch[] stopwatches = new Stopwatch[ReductionRules.Count];
+            for (int i = 0; i < ReductionRules.Count; i++)
+            {
+                stopwatches[i] = new Stopwatch();
+            }
+
             for (int i = 0; i < ReductionRules.Count; i++)
             {
                 if (DemandPairs.Count == 0)
                 {
-                    return (Tree, PartialSolution, DemandPairs, OperationsCounter);
+                    PrintCounters();
+                    return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
                 }
                 if (PartialSolution.Count == K)
                 {
-                    return (Tree, PartialSolution, DemandPairs, OperationsCounter);
+                    PrintCounters();
+                    return (false, Tree, PartialSolution, DemandPairs.GetInternalList());
                 }
 
                 if (Program.PRINT_DEBUG_INFORMATION)
                 {
                     Console.WriteLine($"Now applying rule {i + 1}.");
+                    Console.WriteLine($"In the last iteration we?");
+                    Console.WriteLine($"Contracted an edge: {LastIterationEdgeContraction}");
+                    Console.WriteLine($"Changed a dem path: {LastIterationDemandPairChange}");
+                    Console.WriteLine($"Removed a dem path: {LastIterationDemandPairRemoval}");
                 }
 
                 // If we have not executed this rule before, execute it now.
                 if (!appliedReductionRule[i])
                 {
                     appliedReductionRule[i] = true;
-                    if (ReductionRules[i].RunFirstIteration())
+                    stopwatches[i].Start();
+                    bool success = ReductionRules[i].RunFirstIteration();
+                    stopwatches[i].Stop();
+                    if (success)
                     {
                         // If the first application of the i-th reduction rule was a success, start again at rule 0.
                         i = -1;
@@ -139,55 +157,122 @@ namespace MulticutInTrees.Algorithms
                     continue;
                 }
 
-                successful = false;
+                bool successfulAfterDemandPairChanged = false;
+                bool successfulAfterDemandPairRemoved = false;
+                bool successfulAfterEdgeContracted = false;
 
                 // We have already applied the i-th rule before. Try to apply it again, depending on what happened in the last iteration.
                 if (LastIterationDemandPairChange)
                 {
-                    List<(List<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new List<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair);
-                    LastChangedEdgesPerDemandPair = new List<(List<(TreeNode, TreeNode)>, DemandPair)>();
-                    LastIterationDemandPairChange = false;
-                    successful = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair) || successful;
-                    if (!successful)
+                    if (Program.PRINT_DEBUG_INFORMATION)
                     {
+                        Console.WriteLine($"Applying rule {i + 1} after a demand pair changed.");
+                    }
+
+                    CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair, LastChangedEdgesPerDemandPairCounter);
+                    LastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPairCounter);
+                    LastIterationDemandPairChange = false;
+                    stopwatches[i].Start();
+                    successfulAfterDemandPairChanged = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair);
+                    stopwatches[i].Stop();
+                    if (!successfulAfterDemandPairChanged)
+                    {
+                        if (Program.PRINT_DEBUG_INFORMATION)
+                        {
+                            Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                        }
+
                         LastIterationDemandPairChange = true;
                         LastChangedEdgesPerDemandPair = oldLastChangedEdgesPerDemandPair;
                     }
                 }
                 if (LastIterationDemandPairRemoval)
                 {
-                    List<DemandPair> oldLastRemovedDemandPairs = new List<DemandPair>(LastRemovedDemandPairs);
-                    LastRemovedDemandPairs = new List<DemandPair>();
-                    LastIterationDemandPairRemoval = false;
-                    successful = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs) || successful;
-                    if (!successful)
+                    if (Program.PRINT_DEBUG_INFORMATION)
                     {
+                        Console.WriteLine($"Applying rule {i + 1} after a demand pair was removed.");
+                    }
+
+                    CountedList<DemandPair> oldLastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairs, LastRemovedDemandPairsCounter);
+                    LastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairsCounter);
+                    LastIterationDemandPairRemoval = false;
+                    stopwatches[i].Start();
+                    successfulAfterDemandPairRemoved = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs);
+                    stopwatches[i].Stop();
+                    if (!successfulAfterDemandPairRemoved)
+                    {
+                        if (Program.PRINT_DEBUG_INFORMATION)
+                        {
+                            Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                        }
+
                         LastIterationDemandPairRemoval = true;
                         LastRemovedDemandPairs = oldLastRemovedDemandPairs;
                     }
                 }
                 if (LastIterationEdgeContraction)
                 {
-                    List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)> oldLastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>(LastContractedEdges);
-                    LastContractedEdges = new List<((TreeNode, TreeNode), TreeNode, List<DemandPair>)>();
-                    LastIterationEdgeContraction = false;
-                    successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges) || successful;
-                    if (!successful)
+                    if (Program.PRINT_DEBUG_INFORMATION)
                     {
-                        LastIterationEdgeContraction = true;
+                        Console.WriteLine($"Applying rule {i + 1} after an edge was contracted.");
+                    }
+
+                    CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(LastContractedEdges, lastContractedEdgesCounter);
+                    LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(lastContractedEdgesCounter);
+                    LastIterationEdgeContraction = false;
+                    stopwatches[i].Start();
+                    successfulAfterEdgeContracted = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges);
+                    stopwatches[i].Stop();
+                    if (!successfulAfterEdgeContracted)
+                    {
+                        if (Program.PRINT_DEBUG_INFORMATION)
+                        {
+                            Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                            }
+
+                            LastIterationEdgeContraction = true;
                         LastContractedEdges = oldLastContractedEdges;
                     }
                 }
 
                 // If we applied the rule successfully, go back to rule 0.
-                if (successful)
+                if (successfulAfterDemandPairChanged || successfulAfterDemandPairRemoved || successfulAfterEdgeContracted)
                 {
                     i = -1;
                     continue;
                 }
             }
 
-            return (Tree, PartialSolution, DemandPairs, OperationsCounter);
+            PrintStopwatches(stopwatches);
+            PrintCounters();
+            return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
+        }
+
+        /// <summary>
+        /// Print the elapsed time of the <see cref="Stopwatch"/> each <see cref="ReductionRule"/> took to the console.
+        /// </summary>
+        /// <param name="stopwatches"></param>
+        private void PrintStopwatches(Stopwatch[] stopwatches)
+        {
+            for (int i = 0; i < stopwatches.Length; i++)
+            {
+                Console.WriteLine($"{ReductionRules[i].GetType()} needed {stopwatches[i].ElapsedTicks} ticks");
+            }
+        }
+
+        /// <summary>
+        /// Print all counters that are used by this <see cref="Algorithm"/>.
+        /// </summary>
+        protected virtual void PrintCounters()
+        {
+            Console.WriteLine($"DemandPairs: {DemandPairs.OperationsCounter}");
+            Console.WriteLine($"Ops on removed demand pairs: {LastRemovedDemandPairsCounter}");
+            Console.WriteLine($"Ops on changed demand pairs: {LastChangedEdgesPerDemandPairCounter}");
+            Console.WriteLine($"Ops on contracted edges:     {lastContractedEdgesCounter}");
+            foreach (ReductionRule reductionRule in ReductionRules)
+            {
+                reductionRule.PrintCounters();
+            }
         }
 
         /// <summary>
@@ -289,8 +374,12 @@ namespace MulticutInTrees.Algorithms
             bool hasExactlyOneLeaf = contractedEdgeI1Node.Neighbours.Count(n => n.Neighbours.Count == 1) == 1;
             if (hasExactlyOneLeaf)
             {
-                TreeNode internalNeighbour = contractedEdgeI1Node.Neighbours.First(n => n.Neighbours.Count > 1);
-                if (internalNeighbour.Type == NodeType.I1)
+                TreeNode internalNeighbour = contractedEdgeI1Node.Neighbours.FirstOrDefault(n => n.Neighbours.Count > 1);
+                if (internalNeighbour is default(TreeNode))
+                {
+                    newNode.Type = NodeType.I1;
+                }
+                else if (internalNeighbour.Type == NodeType.I1)
                 {
                     newNode.Type = NodeType.L1;
                 }

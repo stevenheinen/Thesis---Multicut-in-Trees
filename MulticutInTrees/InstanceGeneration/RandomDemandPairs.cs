@@ -2,6 +2,7 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -49,8 +50,8 @@ namespace MulticutInTrees.InstanceGeneration
                     index2++;
                 }
 
-                TreeNode endpoint1 = tree.Nodes[index1];
-                TreeNode endpoint2 = tree.Nodes[index2];
+                TreeNode endpoint1 = tree.Nodes.ElementAt(index1);
+                TreeNode endpoint2 = tree.Nodes.ElementAt(index2);
                 demandPairs.Add(new DemandPair(endpoint1, endpoint2));
             }
             return demandPairs;
