@@ -18,12 +18,6 @@ namespace MulticutInTrees.ReductionRules
     /// </summary>
     public class UnitPath : ReductionRule
     {
-        // todo: only necessary for updating the counters
-        /// <summary>
-        /// <see cref="Dictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
-        /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; set; }
-
         /// <summary>
         /// Constructor for the <see cref="UnitPath"/> rule.
         /// </summary>
@@ -32,15 +26,12 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, or <paramref name="random"/> is <see langword="null"/>.</exception>
-        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random)
+        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random) : base(tree, demandPairs, algorithm, random, "Unit Path")
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Unit Path rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Unit Path rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Unit Path rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the Unit Path rule, but the random is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the Unit Path rule, but the dictionary with demand pairs per edge is null!");
-
-            DemandPairsPerEdge = demandPairsPerEdge;
         }
 
         /// <summary>
@@ -53,9 +44,10 @@ namespace MulticutInTrees.ReductionRules
         {
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to check whether a demand pair has a path of length 1, but the demand pair is null!");
 
-            return demandPair.EdgesOnDemandPath.Count == 1;
+            return demandPair.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) == 1;
         }
 
+        /*
         /// <inheritdoc/>
         internal override void PrintCounters()
         {
@@ -65,6 +57,7 @@ namespace MulticutInTrees.ReductionRules
             base.PrintCounters();
             Console.WriteLine();
         }
+        */
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
@@ -77,18 +70,18 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Unit Path rule after a demand path was changed...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach ((List<(TreeNode, TreeNode)> _, DemandPair path) in changedEdgesPerDemandPairList.GetCountedEnumerable(new Counter()))
             {
                 if (DemandPathHasLengthOne(path))
                 {
-                    edgesToBeCut.Add(path.EdgesOnDemandPath.First);
+                    edgesToBeCut.Add(path.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter));
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryCutEdges(edgesToBeCut);
         }
@@ -113,7 +106,7 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Unit Path rule after an edge was contracted...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (((TreeNode, TreeNode) _, TreeNode _, CountedList<DemandPair> pairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(new Counter()))
@@ -122,12 +115,12 @@ namespace MulticutInTrees.ReductionRules
                 {
                     if (DemandPathHasLengthOne(path))
                     {
-                        edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath.First));
+                        edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter)));
                     }
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryCutEdges(edgesToBeCut);
         }
@@ -140,18 +133,18 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Unit Path rule for the first time...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair dp in DemandPairs.GetCountedEnumerable(new Counter()))
             {
                 if (DemandPathHasLengthOne(dp))
                 {
-                    edgesToBeCut.Add(dp.EdgesOnDemandPath.First);
+                    edgesToBeCut.Add(dp.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter));
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryCutEdges(edgesToBeCut);
         }
@@ -177,20 +170,7 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            // todo: only necessary for the counters, should not update the number of operations... Maybe move somewhere else?
-            HashSet<DemandPair> removedDemandPairs = new HashSet<DemandPair>();
-            foreach ((TreeNode, TreeNode) edge in edgesToBeCut)
-            {
-                foreach (DemandPair demandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(edge)].GetCountedEnumerable(new Counter()))
-                {
-                    removedDemandPairs.Add(demandPair);
-                }
-            }
-
-            RemovedDemandPairsCounter += removedDemandPairs.Count;
-            ContractedEdgesCounter += edgesToBeCut.Count();
-
-            Algorithm.CutEdges(edgesToBeCut.ToList());
+            Algorithm.CutEdges(edgesToBeCut.ToList(), Measurements);
             return true;
         }
     }

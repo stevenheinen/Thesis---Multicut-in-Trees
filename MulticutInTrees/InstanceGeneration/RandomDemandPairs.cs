@@ -3,6 +3,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -32,11 +33,13 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new ArgumentOutOfRangeException("Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
             }
 
+            Counter counter = new Counter();
+
             List<DemandPair> demandPairs = new List<DemandPair>();
             for (int i = 0; i < numberOfDemandPairs; i++)
             {
                 // Pick a random index for the first endpoint
-                int index1 = random.Next(tree.NumberOfNodes);
+                int index1 = random.Next(tree.NumberOfNodes(counter));
 
                 // Pick a random index for the second enpoint. Call the index for the first endpoint i.
                 // This second index can be in the range 0, ..., i-1, i+1, ..., n.
@@ -44,7 +47,7 @@ namespace MulticutInTrees.InstanceGeneration
                 // To compensate for that, increment the random number with 1 if it is equal to or larger than i.
                 // Now index1 and index2 are both picked uniform randomly, and are unique.
                 // Plus, there is no unnecessary random looping until a correct number is found.
-                int index2 = random.Next(tree.NumberOfNodes - 1);
+                int index2 = random.Next(tree.NumberOfNodes(counter) - 1);
                 if (index2 >= index1)
                 {
                     index2++;

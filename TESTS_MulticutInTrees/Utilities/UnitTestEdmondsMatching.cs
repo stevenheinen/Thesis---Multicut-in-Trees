@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
@@ -17,6 +18,8 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestEdmondsMatching
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestArgumentNull()
         {
@@ -387,7 +390,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.3, random);
 
             int startEdges = graph.NumberOfEdges;
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
@@ -397,7 +400,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes);
+            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             if (components.Count != 1)
             {
@@ -432,7 +435,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             int startEdges = graph.NumberOfEdges;
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
@@ -442,7 +445,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes);
+            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             if (components.Count != 1)
             {
@@ -476,7 +479,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             int startEdges = graph.NumberOfEdges;
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
@@ -486,7 +489,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes);
+            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             if (components.Count != 1)
             {
@@ -552,7 +555,7 @@ namespace TESTS_MulticutInTrees.Utilities
         {
             Random random = new Random(243);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.2, random);
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
@@ -562,7 +565,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes);
+            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             if (components.Count != 1)
             {
@@ -578,7 +581,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Random random = new Random(9846);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.1, random);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
@@ -588,7 +591,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes);
+            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
 
             if (components.Count != 1)
             {

@@ -14,7 +14,7 @@ namespace MulticutInTrees.CountedDatastructures
         /// <summary>
         /// The value of this <see cref="Counter"/>.
         /// </summary>
-        public long Value { get; set; }
+        public long Value { get; private set; }
 
         /// <summary>
         /// Constructor for a <see cref="Counter"/>.

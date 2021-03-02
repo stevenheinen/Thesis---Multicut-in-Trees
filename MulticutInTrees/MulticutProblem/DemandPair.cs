@@ -2,8 +2,6 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
@@ -16,22 +14,10 @@ namespace MulticutInTrees.MulticutProblem
     /// </summary>
     public class DemandPair
     {
+        /// <summary>
+        /// The <see cref="CountedCollection{T}"/> containing the edges on the demand path of this <see cref="DemandPair"/>.
+        /// </summary>
         private CountedCollection<(TreeNode, TreeNode)> Path { get; set; }
-
-        ///// <summary>
-        ///// The private <see cref="List{T}"/> of <see cref="TreeNode"/>s that represent all nodes on the path between the endpoints of this <see cref="DemandPair"/>.
-        ///// </summary>
-        //private List<TreeNode> InternalDemandPath { get; set; }
-
-        ///// <summary>
-        ///// The private <see cref="List{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
-        ///// </summary>
-        //private List<(TreeNode, TreeNode)> InternalEdgesOnDemandPath { get; set; }
-        
-        ///// <summary>
-        ///// The private <see cref="HashSet{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
-        ///// </summary>
-        //private HashSet<(TreeNode, TreeNode)> InternalEdgesOnDemandPathSet { get; set; }
 
         /// <summary>
         /// The first endpoint of this <see cref="DemandPair"/>.
@@ -43,15 +29,15 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         public TreeNode Node2 { get; private set; }
 
-        ///// <summary>
-        ///// The publically visible <see cref="ReadOnlyCollection{T}"/> of all <see cref="TreeNode"/>s on the path between the endpoints of this <see cref="DemandPair"/>.
-        ///// </summary>
-        //public ReadOnlyCollection<TreeNode> DemandPath => InternalDemandPath.AsReadOnly();
-
         /// <summary>
         /// The publically visible <see cref="IEnumerable{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
         /// </summary>
         public CountedCollection<(TreeNode, TreeNode)> EdgesOnDemandPath => Path;
+
+        /// <summary>
+        /// <see cref="Counter"/> that can be used for modifications that should not impact the performance of an <see cref="Algorithms.Algorithm"/> or <see cref="ReductionRules.ReductionRule"/>.
+        /// </summary>
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for a <see cref="DemandPair"/>.
@@ -64,12 +50,10 @@ namespace MulticutInTrees.MulticutProblem
             Utils.NullCheck(node1, nameof(node1), "Trying to create a DemandPair, but the first endpoint of this demandpair is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to create a DemandPair, but the second endpoint of this demandpair is null!");
 
+            MockCounter = new Counter();
             Node1 = node1;
             Node2 = node2;
-            //InternalDemandPath = new List<TreeNode>(DFS.FindPathBetween(node1, node2));
-            //InternalEdgesOnDemandPath = Utils.NodePathToEdgePath(InternalDemandPath);
-            //InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
-            Path = new CountedCollection<(TreeNode, TreeNode)>(Utils.NodePathToEdgePath(DFS.FindPathBetween(node1, node2)));
+            Path = new CountedCollection<(TreeNode, TreeNode)>(Utils.NodePathToEdgePath(DFS.FindPathBetween(node1, node2, MockCounter)), MockCounter);
         }
 
         /// <summary>
@@ -85,15 +69,16 @@ namespace MulticutInTrees.MulticutProblem
         /// Checks whether <paramref name="edge"/> is on the path between the endpoints of this <see cref="DemandPair"/>.
         /// </summary>
         /// <param name="edge">The tuple of two <see cref="TreeNode"/>s for which we want to know whether it is part of this demand path.</param>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
         /// <returns><see langword="true"/> if <paramref name="edge"/> is part of the path of this <see cref="DemandPair"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        public bool EdgeIsPartOfPath((TreeNode, TreeNode) edge)
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool EdgeIsPartOfPath((TreeNode, TreeNode) edge, Counter counter)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to see if an edge is part of a demandpair, but the counter is null!");
 
-            //return InternalEdgesOnDemandPathSet.Contains(edge) || InternalEdgesOnDemandPathSet.Contains((edge.Item2, edge.Item1));
-            return Path.Contains(edge) || Path.Contains((edge.Item2, edge.Item1));
+            return Path.Contains(edge, counter) || Path.Contains((edge.Item2, edge.Item1), counter);
         }
 
         /// <summary>
@@ -103,13 +88,15 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         /// <param name="oldEndpoint">The old endpoint of this <see cref="DemandPair"/>.</param>
         /// <param name="newEndpoint">The new endpoint of this <see cref="DemandPair"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldEndpoint"/> or <paramref name="newEndpoint"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldEndpoint"/>, <paramref name="newEndpoint"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotOnDemandPathException">Thrown when <paramref name="oldEndpoint"/> is not equal to <see cref="Node1"/> or <see cref="Node2"/>.</exception>
         /// <exception cref="ZeroLengthDemandPathException">Thrown when <paramref name="newEndpoint"/> is equal to the endpoint that is not <paramref name="oldEndpoint"/>, meaning the result of this new <see cref="DemandPair"/> would be between the same two <see cref="TreeNode"/>s.</exception>
-        internal void ChangeEndpoint(TreeNode oldEndpoint, TreeNode newEndpoint)
+        internal void ChangeEndpoint(TreeNode oldEndpoint, TreeNode newEndpoint, Counter counter)
         {
             Utils.NullCheck(oldEndpoint, nameof(oldEndpoint), $"Trying to change the endpoint of {this}, but the old endpoint is null!");
             Utils.NullCheck(newEndpoint, nameof(newEndpoint), $"Trying to change the endpoint of {this}, but the new endpoint is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to change the endpoint of {this}, but the counter is null!");
             if (oldEndpoint != Node1 && oldEndpoint != Node2)
             {
                 throw new NotOnDemandPathException($"Trying to change the endpoint of {this}, but the old endpoint given as argument is not on this demand path!");
@@ -123,13 +110,7 @@ namespace MulticutInTrees.MulticutProblem
                 }
                 Node1 = newEndpoint;
 
-                Path.RemoveFromStartWhile(n => n.Item1 != Node1);
-
-                /*
-                InternalDemandPath = InternalDemandPath.SkipWhile(n => n != Node1).ToList();
-                InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.SkipWhile(n => n.Item1 != Node1).ToList();
-                InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
-                */
+                Path.RemoveFromStartWhile(n => n.Item1 != Node1, counter);
             }
             else if (oldEndpoint == Node2)
             {
@@ -139,14 +120,7 @@ namespace MulticutInTrees.MulticutProblem
                 }
                 Node2 = newEndpoint;
 
-                Path.RemoveFromEndWhile(n => n.Item2 != Node2);
-                
-                /*
-                InternalDemandPath = InternalDemandPath.TakeWhile(n => n != Node2).ToList();
-                InternalDemandPath.Add(Node2);
-                InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.TakeWhile(n => n.Item1 != Node2).ToList();
-                InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
-                */
+                Path.RemoveFromEndWhile(n => n.Item2 != Node2, counter);
             }
         }
 
@@ -155,22 +129,22 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         /// <param name="contractedEdge">The tuple of <see cref="TreeNode"/>s that represents the edge that was contracted.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="contractedEdge"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/>, <paramref name="newNode"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="ZeroLengthDemandPathException">Thrown when the contraction of <paramref name="contractedEdge"/> means this <see cref="DemandPair"/> now consists between the same nodes.</exception>
-        internal void OnEdgeContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        internal void OnEdgeContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode, Counter counter)
         {
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the counter is null!");
             if ((contractedEdge.Item1 == Node1 && contractedEdge.Item2 == Node2) || (contractedEdge.Item1 == Node2 && contractedEdge.Item2 == Node1))
             {
                 throw new ZeroLengthDemandPathException($"After contracting edge {contractedEdge}, {this} is now a demand pair of length zero!");
             }
 
-            // Update the nodes and edges of the demand path.
             UpdateEndpointsAfterEdgeContraction(contractedEdge, newNode);
-            //UpdateNodesOnPathAfterEdgeContraction(contractedEdge, newNode);
-            UpdateEdgesOnPathAfterEdgeContraction(contractedEdge, newNode);
+            UpdateEdgesOnPathAfterEdgeContraction(contractedEdge, newNode, counter);
         }
 
         /// <summary>
@@ -178,11 +152,13 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         /// <param name="oldNode">The <see cref="TreeNode"/> that is on this <see cref="DemandPair"/>, but will be removed by the edge contraction.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldNode"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
-        internal void OnEdgeNextToNodeOnDemandPathContracted(TreeNode oldNode, TreeNode newNode)
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldNode"/>, <paramref name="newNode"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        internal void OnEdgeNextToNodeOnDemandPathContracted(TreeNode oldNode, TreeNode newNode, Counter counter)
         {
             Utils.NullCheck(oldNode, nameof(oldNode), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the old node is null!");
             Utils.NullCheck(newNode, nameof(newNode), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the new node is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the counter is null!");
 
             // TODO: Should not be necessary.
             if (oldNode == newNode)
@@ -190,13 +166,7 @@ namespace MulticutInTrees.MulticutProblem
                 return;
             }
 
-            Path.ChangeOccurrence(edge => edge.Item1 == oldNode ? (newNode, edge.Item2) : edge.Item2 == oldNode ? (edge.Item1, newNode) : edge);
-
-            /*
-            InternalDemandPath = InternalDemandPath.Select(n => oldNode == n ? newNode : n).ToList();
-            InternalEdgesOnDemandPath = InternalEdgesOnDemandPath.Select(n => oldNode == n.Item1 ? (newNode, n.Item2) : n).Select(n => oldNode == n.Item2 ? (n.Item1, newNode) : n).ToList();
-            InternalEdgesOnDemandPathSet = new HashSet<(TreeNode, TreeNode)>(InternalEdgesOnDemandPath);
-            */
+            Path.ChangeOccurrence(edge => edge.Item1 == oldNode ? (newNode, edge.Item2) : edge.Item2 == oldNode ? (edge.Item1, newNode) : edge, counter);
         }
 
         /// <summary>
@@ -204,12 +174,14 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         /// <param name="contractedEdge">The tuple of <see cref="TreeNode"/>s representing the edge that is being contracted.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
-        internal void OnEdgeNextToDemandPathEndpointsContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="contractedEdge"/>, <paramref name="newNode"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        internal void OnEdgeNextToDemandPathEndpointsContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode, Counter counter)
         {
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the counter is null!");
             if ((contractedEdge.Item1 == Node1 && contractedEdge.Item2 == Node2) || (contractedEdge.Item1 == Node2 && contractedEdge.Item2 == Node1))
             {
                 throw new ZeroLengthDemandPathException($"After contracting edge {contractedEdge}, {this} is now a demand pair of length zero!");
@@ -219,29 +191,15 @@ namespace MulticutInTrees.MulticutProblem
             {
                 Node1 = newNode;
 
-                (TreeNode, TreeNode) firstElement = Path.First;
-                Path.ChangeElement(firstElement, (newNode, firstElement.Item2));
-
-                /*
-                InternalDemandPath[0] = newNode;
-                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[0]);
-                InternalEdgesOnDemandPath[0] = (newNode, InternalEdgesOnDemandPath[0].Item2);
-                InternalEdgesOnDemandPathSet.Add((newNode, InternalEdgesOnDemandPath[0].Item2));
-                */
+                (TreeNode, TreeNode) firstElement = Path.First(counter);
+                Path.ChangeElement(firstElement, (newNode, firstElement.Item2), counter);
             }
             else if (contractedEdge.Item1 == Node2 || contractedEdge.Item2 == Node2)
             {
                 Node2 = newNode;
 
-                (TreeNode, TreeNode) lastElement = Path.Last;
-                Path.ChangeElement(lastElement, (lastElement.Item1, newNode));
-
-                /*
-                InternalDemandPath[^1] = newNode;
-                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[^1]);
-                InternalEdgesOnDemandPath[^1] = (InternalEdgesOnDemandPath[^1].Item1, newNode);
-                InternalEdgesOnDemandPathSet.Add((InternalEdgesOnDemandPath[^1].Item1, newNode));
-                */
+                (TreeNode, TreeNode) lastElement = Path.Last(counter);
+                Path.ChangeElement(lastElement, (lastElement.Item1, newNode), counter);
             }
             else
             {
@@ -271,101 +229,42 @@ namespace MulticutInTrees.MulticutProblem
             }
         }
 
-        /*
-        /// <summary>
-        /// Update the nodes on the path of this <see cref="DemandPair"/> after an edge was contracted.
-        /// </summary>
-        /// <param name="contractedEdge">The tuple of <see cref="TreeNode"/>s that represents the edge that was contracted.</param>
-        /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="contractedEdge"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
-        /// <exception cref="NotOnDemandPathException">Thrown when <paramref name="contractedEdge"/> was not part of this <see cref="DemandPair"/>.</exception>
-        private void UpdateNodesOnPathAfterEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
-        {
-            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the nodes on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
-            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the nodes on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
-            Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the nodes on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
-            
-            // Find the index of the first index of the contracted edge.
-            int index = InternalDemandPath.FindIndex(n => n == contractedEdge.Item1);
-            if (index == -1)
-            {
-                throw new NotOnDemandPathException($"Trying to update the nodes on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but {contractedEdge.Item1} is not part of the demand path of {this}!");
-            }
-            if (index > 0 && InternalDemandPath[index - 1] == contractedEdge.Item2)
-            {
-                // If the second node of the contracted edge is in front of the first node.
-                InternalDemandPath[index - 1] = newNode;
-                InternalDemandPath.RemoveAt(index);
-            }
-            else if (index < InternalDemandPath.Count - 1 && InternalDemandPath[index + 1] == contractedEdge.Item2)
-            {
-                // If the second node of the contracted edge is after the first node.
-                InternalDemandPath[index] = newNode;
-                InternalDemandPath.RemoveAt(index + 1);
-            }
-            else
-            {
-                // We were either not able to find the second endpoint of the contracted edge, or the contracted edge is not part of this demand path.
-                throw new NotOnDemandPathException($"Trying to update the nodes on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but {contractedEdge.Item1} and {contractedEdge.Item2} are not next to each other on the demand path of {this}!");
-            }
-        }
-        */
-
         /// <summary>
         /// Update the edges on the path of this <see cref="DemandPair"/> after an edge was contracted.
         /// </summary>
         /// <param name="contractedEdge">The tuple of <see cref="TreeNode"/>s that represents the edge that was contracted.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="contractedEdge"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/>, <paramref name="newNode"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotOnDemandPathException">Thrown when <paramref name="contractedEdge"/> was not part of this <see cref="DemandPair"/>.</exception>
-        private void UpdateEdgesOnPathAfterEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        private void UpdateEdgesOnPathAfterEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode, Counter counter)
         {
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the counter is null!");
 
             // Update the list of edges on this demand path.
             (TreeNode, TreeNode) usedEdge = contractedEdge;
-            if (!Path.Contains(usedEdge))
+            if (!Path.Contains(usedEdge, counter))
             {
                 usedEdge = (contractedEdge.Item2, contractedEdge.Item1);
-                if (!Path.Contains(usedEdge))
+                if (!Path.Contains(usedEdge, counter))
                 {
                     throw new NotOnDemandPathException($"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but this edge is not part of the demand path of {this}!");
                 }
             }
 
-            ((TreeNode, TreeNode) before, (TreeNode, TreeNode) after) = Path.ElementBeforeAndAfter(usedEdge);
+            ((TreeNode, TreeNode) before, (TreeNode, TreeNode) after) = Path.ElementBeforeAndAfter(usedEdge, counter);
             if (!(before.Item1 is null || before.Item2 is null))
             {
-                Path.ChangeElement(before, (before.Item1, newNode));
+                Path.ChangeElement(before, (before.Item1, newNode), counter);
             }
             if (!(after.Item1 is null || after.Item2 is null))
             {
-                Path.ChangeElement(after, (newNode, after.Item2));
+                Path.ChangeElement(after, (newNode, after.Item2), counter);
             }
-            Path.Remove(usedEdge);
-
-            /*
-            int index = InternalEdgesOnDemandPath.FindIndex(n => n == contractedEdge || n == flippedEdge);
-            if (index == -1)
-            {
-            }
-            if (index < InternalEdgesOnDemandPath.Count - 1)
-            {
-                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index + 1]);
-                InternalEdgesOnDemandPath[index + 1] = (newNode, InternalEdgesOnDemandPath[index + 1].Item2);
-                InternalEdgesOnDemandPathSet.Remove((newNode, InternalEdgesOnDemandPath[index + 1].Item2));
-            }
-            if (index > 0)
-            {
-                InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index - 1]);
-                InternalEdgesOnDemandPath[index - 1] = (InternalEdgesOnDemandPath[index - 1].Item1, newNode);
-                InternalEdgesOnDemandPathSet.Remove((InternalEdgesOnDemandPath[index - 1].Item1, newNode));
-            }
-            InternalEdgesOnDemandPathSet.Remove(InternalEdgesOnDemandPath[index]);
-            InternalEdgesOnDemandPath.RemoveAt(index);
-            */
+            Path.Remove(usedEdge, counter);
         }
     }
 }

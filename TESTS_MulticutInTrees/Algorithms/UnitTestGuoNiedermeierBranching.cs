@@ -1,7 +1,5 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿// This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,6 +16,8 @@ namespace TESTS_MulticutInTrees.Algorithms
     [TestClass]
     public class UnitTestGuoNiedermeierBranching
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestConstructor()
         {
@@ -54,11 +54,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node9 = new TreeNode(9);
             TreeNode node10 = new TreeNode(10);
 
-            tree.AddRoot(node1);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 });
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 });
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 });
-            tree.AddChild(node4, node10);
+            tree.AddRoot(node1, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
+            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
+            tree.AddChild(node4, node10, counter);
 
             DemandPair dp1 = new DemandPair(node1, node5);
             DemandPair dp2 = new DemandPair(node7, node8);
@@ -91,11 +91,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node9 = new TreeNode(9);
             TreeNode node10 = new TreeNode(10);
 
-            tree.AddRoot(node1);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 });
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 });
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 });
-            tree.AddChild(node4, node10);
+            tree.AddRoot(node1, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
+            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
+            tree.AddChild(node4, node10, counter);
 
             DemandPair dp1 = new DemandPair(node1, node6);
             DemandPair dp2 = new DemandPair(node4, node5);
@@ -129,9 +129,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node10 = new TreeNode(10);
             TreeNode node11 = new TreeNode(11);
 
-            tree.AddRoot(node0);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3, node4, node5, node6 });
-            tree.AddChildren(node1, new List<TreeNode>() { node7, node8, node9, node10, node11 });
+            tree.AddRoot(node0, counter);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3, node4, node5, node6 }, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node7, node8, node9, node10, node11 }, counter);
 
             DemandPair dp1 = new DemandPair(node2, node11);
             DemandPair dp2 = new DemandPair(node4, node9);
@@ -170,15 +170,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node16 = new TreeNode(16);
             TreeNode node17 = new TreeNode(17);
 
-            tree.AddRoot(node1);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 });
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 });
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 });
-            tree.AddChild(node4, node10);
-            tree.AddChildren(node5, new List<TreeNode>() { node11, node12 });
-            tree.AddChildren(node6, new List<TreeNode>() { node13, node14 });
-            tree.AddChild(node7, node15);
-            tree.AddChildren(node10, new List<TreeNode>() { node16, node17 });
+            tree.AddRoot(node1, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
+            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
+            tree.AddChild(node4, node10, counter);
+            tree.AddChildren(node5, new List<TreeNode>() { node11, node12 }, counter);
+            tree.AddChildren(node6, new List<TreeNode>() { node13, node14 }, counter);
+            tree.AddChild(node7, node15, counter);
+            tree.AddChildren(node10, new List<TreeNode>() { node16, node17 }, counter);
 
             DemandPair dp1 = new DemandPair(node1, node13);
             DemandPair dp2 = new DemandPair(node4, node5);
@@ -208,8 +208,8 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node5 = new TreeNode(5);
             TreeNode node6 = new TreeNode(6);
 
-            tree.AddRoot(node1);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4, node5, node6 });
+            tree.AddRoot(node1, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4, node5, node6 }, counter);
 
             DemandPair dp1 = new DemandPair(node1, node2);
             DemandPair dp2 = new DemandPair(node3, node1);

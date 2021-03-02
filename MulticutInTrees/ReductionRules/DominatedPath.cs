@@ -32,7 +32,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random)
+        public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, "Dominated Edge")
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the dominated path reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the dominated path reduction rule, but the list with demand paths is null!");
@@ -55,7 +55,7 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(subsetPair, nameof(subsetPair), "Trying to see if the path of a demand pair is contained in the path of another demand pair, but the first demand pair is null!");
             Utils.NullCheck(largerPair, nameof(largerPair), "Trying to see if the path of a demand pair is contained in the path of another demand pair, but the second demand pair is null!");
 
-            return largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath.First) && largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath.Last);
+            return largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter), Measurements.DemandPairsOperationsCounter) && largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath.Last(Measurements.DemandPairsOperationsCounter), Measurements.DemandPairsOperationsCounter);
         }
 
         /// <inheritdoc/>
@@ -64,6 +64,7 @@ namespace MulticutInTrees.ReductionRules
             return;
         }
 
+        /*
         /// <inheritdoc/>
         internal override void PrintCounters()
         {
@@ -74,6 +75,7 @@ namespace MulticutInTrees.ReductionRules
             base.PrintCounters();
             Console.WriteLine();
         }
+        */
 
         /// <inheritdoc/>
         internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
@@ -85,7 +87,7 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Dominated Path rule after a demand path changed...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             List<DemandPair> pairsToBeRemoved = new List<DemandPair>();
 
@@ -95,7 +97,7 @@ namespace MulticutInTrees.ReductionRules
                 {
                     continue;
                 }
-                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.First)].GetCountedEnumerable(new Counter()))
+                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter))].GetCountedEnumerable(new Counter()))
                 {
                     if (changedPath.Item2 == otherDemandPair || pairsToBeRemoved.Contains(otherDemandPair))
                     {
@@ -107,7 +109,7 @@ namespace MulticutInTrees.ReductionRules
                         break;
                     }
                 }
-                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.Last)].GetCountedEnumerable(new Counter()))
+                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.Last(Measurements.DemandPairsOperationsCounter))].GetCountedEnumerable(new Counter()))
                 {
                     if (changedPath.Item2 == otherDemandPair || pairsToBeRemoved.Contains(otherDemandPair))
                     {
@@ -121,7 +123,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryRemoveDemandPairs(pairsToBeRemoved);
         }
@@ -144,14 +146,14 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Dominated Path rule after an edge was contracted...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
 
             foreach (((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>) contraction in contractedEdgeNodeTupleList.GetCountedEnumerable(new Counter())) 
             {
                 HashSet<DemandPair> otherDemandPairs = new HashSet<DemandPair>();
-                foreach (TreeNode neighbour in contraction.Item2.Neighbours)
+                foreach (TreeNode neighbour in contraction.Item2.Neighbours(Measurements.TreeOperationsCounter))
                 {
                     if (!DemandPairsPerEdge.TryGetValue(Utils.OrderEdgeSmallToLarge((contraction.Item2, neighbour)), out CountedList<DemandPair> pairsOnEdge))
                     {
@@ -183,7 +185,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryRemoveDemandPairs(pairsToBeRemoved.ToList());
         }
@@ -196,7 +198,7 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Dominated Path rule for the first time...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
             for (int i = 0; i < DemandPairs.Count - 1; i++)
@@ -224,7 +226,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryRemoveDemandPairs(pairsToBeRemoved.ToList());
         }
@@ -244,8 +246,7 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            RemovedDemandPairsCounter += pairsToBeRemoved.Count;
-            Algorithm.RemoveDemandPairs(pairsToBeRemoved);
+            Algorithm.RemoveDemandPairs(pairsToBeRemoved, Measurements);
             return true;
         }
     }

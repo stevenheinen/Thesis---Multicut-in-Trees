@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Utilities;
 
@@ -26,12 +27,6 @@ namespace MulticutInTrees.Graphs
         /// <inheritdoc/>
         /// <value>The value of this identifier is given as paramter in the constructor.</value>
         public uint ID { get; }
-
-        /// <inheritdoc/>
-        public ReadOnlyCollection<Node> Neighbours => InternalNeighbours.AsReadOnly();
-
-        /// <inheritdoc/>
-        public int Degree => InternalNeighbours.Count;
 
         /// <summary>
         /// The <see cref="NodeType"/> of this <see cref="Node"/>.
@@ -142,7 +137,7 @@ namespace MulticutInTrees.Graphs
         {
             if (!directed)
             {
-                foreach (Node neighbour in Neighbours)
+                foreach (Node neighbour in Neighbours(new Counter()))
                 {
                     neighbour.RemoveNeighbour(this, true);
                 }
@@ -220,6 +215,34 @@ namespace MulticutInTrees.Graphs
         public override string ToString()
         {
             return $"Node {ID}";
+        }
+
+        // todo: counter should also be used during enumeration
+        /// <summary>
+        /// Returns the neighbours of this <see cref="Node"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> used for this operation.</param>
+        /// <returns>The neighbours of this <see cref="Node"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public IEnumerable<Node> Neighbours(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the neighbours of {this}, but the counter is null!");
+
+            return InternalNeighbours;
+        }
+
+        /// <summary>
+        /// Returns the number of neighbours of this <see cref="Node"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the number of neighbours of this <see cref="Node"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int Degree(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the degree of {this}, but the counter is null!");
+
+            _ = counter++;
+            return InternalNeighbours.Count;
         }
     }
 }

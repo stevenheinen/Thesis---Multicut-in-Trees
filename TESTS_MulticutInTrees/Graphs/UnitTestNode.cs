@@ -3,6 +3,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
@@ -11,6 +12,8 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestNode
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestConstructorNoNeighbours()
         {
@@ -28,8 +31,8 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.IsNotNull(node1);
             Assert.IsTrue(node1.HasNeighbour(node0));
             Assert.IsTrue(node0.HasNeighbour(node1));
-            Assert.AreEqual(1, node1.Degree);
-            Assert.AreEqual(1, node0.Degree);
+            Assert.AreEqual(1, node1.Degree(counter));
+            Assert.AreEqual(1, node0.Degree(counter));
         }
 
         [TestMethod]
@@ -41,8 +44,8 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.IsNotNull(node1);
             Assert.IsTrue(node1.HasNeighbour(node0));
             Assert.IsFalse(node0.HasNeighbour(node1));
-            Assert.AreEqual(1, node1.Degree);
-            Assert.AreEqual(0, node0.Degree);
+            Assert.AreEqual(1, node1.Degree(counter));
+            Assert.AreEqual(0, node0.Degree(counter));
         }
 
         [TestMethod]
@@ -65,7 +68,7 @@ namespace TESTS_MulticutInTrees.Graphs
         public void TestNeighbours()
         {
             Node node = new Node(0);
-            Assert.IsNotNull(node.Neighbours);
+            Assert.IsNotNull(node.Neighbours(counter));
         }
 
         [TestMethod]
@@ -234,10 +237,10 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node0 = new Node(0);
             Node node1 = new Node(1);
 
-            Assert.IsNotNull(node0.Neighbours);
+            Assert.IsNotNull(node0.Neighbours(counter));
             node0.AddNeighbour(node1);
-            Assert.IsNotNull(node0.Neighbours);
-            Assert.IsTrue(node0.Neighbours.Contains(node1));
+            Assert.IsNotNull(node0.Neighbours(counter));
+            Assert.IsTrue(new List<Node>(node0.Neighbours(counter)).Contains(node1));
         }
 
         [TestMethod]
@@ -252,22 +255,22 @@ namespace TESTS_MulticutInTrees.Graphs
                 new Node(4) 
             };
 
-            Assert.AreEqual(nodes[0].Degree, 0);
+            Assert.AreEqual(nodes[0].Degree(counter), 0);
 
             nodes[0].AddNeighbour(nodes[1]);
-            Assert.AreEqual(nodes[0].Degree, 1);
+            Assert.AreEqual(nodes[0].Degree(counter), 1);
 
             nodes[0].AddNeighbour(nodes[2]);
-            Assert.AreEqual(nodes[0].Degree, 2);
+            Assert.AreEqual(nodes[0].Degree(counter), 2);
 
             nodes[0].AddNeighbours(new List<Node>() { nodes[3], nodes[4] });
-            Assert.AreEqual(nodes[0].Degree, 4);
+            Assert.AreEqual(nodes[0].Degree(counter), 4);
 
             nodes[0].RemoveNeighbour(nodes[1]);
-            Assert.AreEqual(nodes[0].Degree, 3);
+            Assert.AreEqual(nodes[0].Degree(counter), 3);
 
             nodes[0].RemoveNeighbours(new List<Node>() { nodes[3], nodes[4] });
-            Assert.AreEqual(nodes[0].Degree, 1);
+            Assert.AreEqual(nodes[0].Degree(counter), 1);
 
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
@@ -281,7 +284,7 @@ namespace TESTS_MulticutInTrees.Graphs
 
             nodes[0].AddNeighbours(new List<Node>() { nodes[3], nodes[4] });
             nodes[0].RemoveAllNeighbours();
-            Assert.AreEqual(nodes[0].Degree, 0);
+            Assert.AreEqual(nodes[0].Degree(counter), 0);
         }
 
         [TestMethod]

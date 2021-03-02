@@ -2,7 +2,9 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
@@ -11,6 +13,8 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestTreeNode
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestConstructorID()
         {
@@ -38,10 +42,10 @@ namespace TESTS_MulticutInTrees.Graphs
             TreeNode parent = new TreeNode(0);
             TreeNode child = new TreeNode(1);
             TreeNode node = new TreeNode(2);
-            parent.AddChild(node);
-            node.AddChild(child);
-            Assert.AreEqual(child.Parent, node);
-            Assert.AreEqual(node.Parent, parent);
+            parent.AddChild(node, counter);
+            node.AddChild(child, counter);
+            Assert.AreEqual(child.GetParent(counter), node);
+            Assert.AreEqual(node.GetParent(counter), parent);
         }
 
         [TestMethod]
@@ -49,9 +53,9 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             TreeNode root = new TreeNode(0);
             TreeNode notRoot = new TreeNode(1);
-            root.AddChild(notRoot);
-            Assert.IsTrue(root.IsRoot());
-            Assert.IsFalse(notRoot.IsRoot());
+            root.AddChild(notRoot, counter);
+            Assert.IsTrue(root.IsRoot(counter));
+            Assert.IsFalse(notRoot.IsRoot(counter));
         }
 
         [TestMethod]
@@ -59,17 +63,17 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
-            node0.AddChild(node1);
-            Assert.IsTrue(node0.HasChild(node1));
-            Assert.IsFalse(node1.HasChild(node0));
+            node0.AddChild(node1, counter);
+            Assert.IsTrue(node0.HasChild(node1, counter));
+            Assert.IsFalse(node1.HasChild(node0, counter));
 
             TreeNode node2 = new TreeNode(2);
-            node2.AddChild(node0);
-            Assert.IsTrue(node2.HasChild(node0));
-            Assert.IsFalse(node0.HasChild(node2));
+            node2.AddChild(node0, counter);
+            Assert.IsTrue(node2.HasChild(node0, counter));
+            Assert.IsFalse(node0.HasChild(node2, counter));
 
-            Assert.IsFalse(node2.HasChild(node1));
-            Assert.IsFalse(node1.HasChild(node2));
+            Assert.IsFalse(node2.HasChild(node1, counter));
+            Assert.IsFalse(node1.HasChild(node2, counter));
         }
 
         [TestMethod]
@@ -78,7 +82,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 TreeNode node = new TreeNode(0);
-                node.HasChild(null);
+                node.HasChild(null, counter);
             });
         }
 
@@ -96,30 +100,30 @@ namespace TESTS_MulticutInTrees.Graphs
             TreeNode node1 = new TreeNode(1);
             TreeNode node2 = new TreeNode(2);
 
-            node0.AddChild(node1);
-            node0.AddChild(node2);
+            node0.AddChild(node1, counter);
+            node0.AddChild(node2, counter);
 
-            Assert.IsTrue(node0.HasChild(node1));
-            Assert.IsTrue(node0.HasChild(node2));
+            Assert.IsTrue(node0.HasChild(node1, counter));
+            Assert.IsTrue(node0.HasChild(node2, counter));
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                node1.AddChild(null);
+                node1.AddChild(null, counter);
             });
 
             Assert.ThrowsException<AlreadyANeighbourException>(() =>
             {
-                node0.AddChild(node2);
+                node0.AddChild(node2, counter);
             });
 
             Assert.ThrowsException<AddNeighbourToSelfException>(() =>
             {
-                node0.AddChild(node0);
+                node0.AddChild(node0, counter);
             });
 
             Assert.ThrowsException<AddParentAsChildException>(() =>
             {
-                node1.AddChild(node0);
+                node1.AddChild(node0, counter);
             });
         }
 
@@ -135,16 +139,16 @@ namespace TESTS_MulticutInTrees.Graphs
                 new TreeNode(4),
             };
 
-            parent.AddChildren(children);
+            parent.AddChildren(children, counter);
             foreach (TreeNode child in children)
             {
-                Assert.IsTrue(parent.HasChild(child));
-                Assert.IsTrue(child.Parent == parent);
+                Assert.IsTrue(parent.HasChild(child, counter));
+                Assert.IsTrue(child.GetParent(counter) == parent);
             }
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                parent.AddChildren(null);
+                parent.AddChildren(null, counter);
             });
         }
 
@@ -153,31 +157,31 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             TreeNode parent = new TreeNode(0);
             TreeNode child = new TreeNode(1);
-            parent.AddChild(child);
+            parent.AddChild(child, counter);
             TreeNode nonChild = new TreeNode(2);
 
-            parent.RemoveChild(child);
+            parent.RemoveChild(child, counter);
 
-            Assert.IsTrue(child.Parent is null);
+            Assert.IsTrue(child.GetParent(counter) is null);
 
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
-                parent.RemoveChild(child);
+                parent.RemoveChild(child, counter);
             });
 
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
-                parent.RemoveChild(nonChild);
+                parent.RemoveChild(nonChild, counter);
             });
 
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
-                parent.RemoveChild(parent);
+                parent.RemoveChild(parent, counter);
             });
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                parent.RemoveChild(null);
+                parent.RemoveChild(null, counter);
             });
         }
 
@@ -193,24 +197,24 @@ namespace TESTS_MulticutInTrees.Graphs
             };
             TreeNode parent = new TreeNode(0);
             TreeNode child = new TreeNode(5);
-            parent.AddChildren(children);
-            parent.AddChild(child);
+            parent.AddChildren(children, counter);
+            parent.AddChild(child, counter);
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                parent.RemoveChildren(null);
+                parent.RemoveChildren(null, counter);
             });
 
-            parent.RemoveChildren(children);
+            parent.RemoveChildren(children, counter);
 
             foreach (TreeNode _child in children)
             {
-                Assert.IsTrue(_child.Parent is null);
-                Assert.IsFalse(parent.HasChild(_child));
+                Assert.IsTrue(_child.GetParent(counter) is null);
+                Assert.IsFalse(parent.HasChild(_child, counter));
             }
 
-            Assert.IsTrue(parent.HasChild(child));
-            Assert.IsTrue(child.Parent == parent);
+            Assert.IsTrue(parent.HasChild(child, counter));
+            Assert.IsTrue(child.GetParent(counter) == parent);
         }
 
         [TestMethod]
@@ -222,15 +226,15 @@ namespace TESTS_MulticutInTrees.Graphs
                 new TreeNode(2),
             };
             TreeNode parent = new TreeNode(0);
-            parent.AddChildren(children);
+            parent.AddChildren(children, counter);
 
-            parent.RemoveAllChildren();
+            parent.RemoveAllChildren(counter);
 
-            Assert.IsTrue(parent.Children.Count == 0);
-            Assert.IsFalse(parent.HasChild(children[0]));
-            Assert.IsFalse(parent.HasChild(children[1]));
-            Assert.IsTrue(children[0].Parent is null);
-            Assert.IsTrue(children[1].Parent is null);
+            Assert.IsTrue(parent.Children.Count() == 0);
+            Assert.IsFalse(parent.HasChild(children[0], counter));
+            Assert.IsFalse(parent.HasChild(children[1], counter));
+            Assert.IsTrue(children[0].GetParent(counter) is null);
+            Assert.IsTrue(children[1].GetParent(counter) is null);
         }
 
         [TestMethod]
@@ -243,22 +247,22 @@ namespace TESTS_MulticutInTrees.Graphs
             TreeNode node4 = new TreeNode(4);
             TreeNode node5 = new TreeNode(5);
 
-            Assert.AreEqual(node0.Degree, 0);
+            Assert.AreEqual(node0.Degree(counter), 0);
 
-            node0.AddChildren(new List<TreeNode>() { node1, node2, node3 });
-            Assert.AreEqual(node0.Degree, 3);
-            Assert.AreEqual(node1.Degree, 1);
+            node0.AddChildren(new List<TreeNode>() { node1, node2, node3 }, counter);
+            Assert.AreEqual(node0.Degree(counter), 3);
+            Assert.AreEqual(node1.Degree(counter), 1);
 
-            node0.RemoveChild(node1);
-            Assert.AreEqual(node0.Degree, 2);
-            Assert.AreEqual(node1.Degree, 0);
+            node0.RemoveChild(node1, counter);
+            Assert.AreEqual(node0.Degree(counter), 2);
+            Assert.AreEqual(node1.Degree(counter), 0);
 
-            node4.AddChild(node0);
-            Assert.AreEqual(node0.Degree, 3);
+            node4.AddChild(node0, counter);
+            Assert.AreEqual(node0.Degree(counter), 3);
 
-            node0.AddChild(node5);
-            node0.RemoveChild(node2);
-            Assert.AreEqual(node0.Degree, 3);
+            node0.AddChild(node5, counter);
+            node0.RemoveChild(node2, counter);
+            Assert.AreEqual(node0.Degree(counter), 3);
         }
 
         [TestMethod]
@@ -272,19 +276,19 @@ namespace TESTS_MulticutInTrees.Graphs
             TreeNode node5 = new TreeNode(5);
             TreeNode node6 = new TreeNode(6);
 
-            node0.AddChildren(new List<TreeNode>() { node1, node2, node3 });
-            node2.AddChild(node4);
-            node4.AddChild(node5);
-            node3.AddChild(node6);
-            node3.RemoveChild(node6);
+            node0.AddChildren(new List<TreeNode>() { node1, node2, node3 }, counter);
+            node2.AddChild(node4, counter);
+            node4.AddChild(node5, counter);
+            node3.AddChild(node6, counter);
+            node3.RemoveChild(node6, counter);
 
-            Assert.AreEqual(node0.DepthFromRoot, 0);
-            Assert.AreEqual(node1.DepthFromRoot, 1);
-            Assert.AreEqual(node2.DepthFromRoot, 1);
-            Assert.AreEqual(node3.DepthFromRoot, 1);
-            Assert.AreEqual(node4.DepthFromRoot, 2);
-            Assert.AreEqual(node5.DepthFromRoot, 3);
-            Assert.AreEqual(node6.DepthFromRoot, 0);
+            Assert.AreEqual(node0.DepthFromRoot(counter), 0);
+            Assert.AreEqual(node1.DepthFromRoot(counter), 1);
+            Assert.AreEqual(node2.DepthFromRoot(counter), 1);
+            Assert.AreEqual(node3.DepthFromRoot(counter), 1);
+            Assert.AreEqual(node4.DepthFromRoot(counter), 2);
+            Assert.AreEqual(node5.DepthFromRoot(counter), 3);
+            Assert.AreEqual(node6.DepthFromRoot(counter), 0);
         }
 
         [TestMethod]
@@ -299,22 +303,22 @@ namespace TESTS_MulticutInTrees.Graphs
             TreeNode node6 = new TreeNode(6);
             TreeNode node7 = new TreeNode(7);
 
-            node0.AddChildren(new List<TreeNode>() { node1, node2 });
-            node1.AddChild(node3);
-            node2.AddChild(node4);
-            node4.AddChild(node5);
-            node3.AddChild(node6);
-            node6.AddChild(node7);
-            node3.RemoveChild(node6);
+            node0.AddChildren(new List<TreeNode>() { node1, node2 }, counter);
+            node1.AddChild(node3, counter);
+            node2.AddChild(node4, counter);
+            node4.AddChild(node5, counter);
+            node3.AddChild(node6, counter);
+            node6.AddChild(node7, counter);
+            node3.RemoveChild(node6, counter);
 
-            Assert.AreEqual(node0.HeightOfSubtree, 3);
-            Assert.AreEqual(node1.HeightOfSubtree, 1);
-            Assert.AreEqual(node2.HeightOfSubtree, 2);
-            Assert.AreEqual(node3.HeightOfSubtree, 0);
-            Assert.AreEqual(node4.HeightOfSubtree, 1);
-            Assert.AreEqual(node5.HeightOfSubtree, 0);
-            Assert.AreEqual(node6.HeightOfSubtree, 1);
-            Assert.AreEqual(node7.HeightOfSubtree, 0);
+            Assert.AreEqual(node0.HeightOfSubtree(counter), 3);
+            Assert.AreEqual(node1.HeightOfSubtree(counter), 1);
+            Assert.AreEqual(node2.HeightOfSubtree(counter), 2);
+            Assert.AreEqual(node3.HeightOfSubtree(counter), 0);
+            Assert.AreEqual(node4.HeightOfSubtree(counter), 1);
+            Assert.AreEqual(node5.HeightOfSubtree(counter), 0);
+            Assert.AreEqual(node6.HeightOfSubtree(counter), 1);
+            Assert.AreEqual(node7.HeightOfSubtree(counter), 0);
         }
 
         [TestMethod]
@@ -327,8 +331,8 @@ namespace TESTS_MulticutInTrees.Graphs
             node0.AddNeighbour((TreeNode)node1);
             node0.AddNeighbour((TreeNode)node2);
 
-            Assert.IsTrue(node0.HasChild((TreeNode)node1));
-            Assert.IsTrue(node0.HasChild((TreeNode)node2));
+            Assert.IsTrue(node0.HasChild((TreeNode)node1, counter));
+            Assert.IsTrue(node0.HasChild((TreeNode)node2, counter));
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
@@ -366,8 +370,8 @@ namespace TESTS_MulticutInTrees.Graphs
             parent.AddNeighbours(children);
             foreach (TreeNode child in children)
             {
-                Assert.IsTrue(parent.HasChild(child));
-                Assert.IsTrue(child.Parent == parent);
+                Assert.IsTrue(parent.HasChild(child, counter));
+                Assert.IsTrue(child.GetParent(counter) == parent);
             }
 
             Assert.ThrowsException<ArgumentNullException>(() =>
@@ -386,18 +390,18 @@ namespace TESTS_MulticutInTrees.Graphs
                 new TreeNode(2),
             };
             ITreeNode<TreeNode> parent = new TreeNode(0);
-            parent.AddChildren(children);
-            uberParent.AddChild((TreeNode)parent);
+            parent.AddChildren(children, counter);
+            uberParent.AddChild((TreeNode)parent, counter);
 
             parent.RemoveAllNeighbours();
 
-            Assert.IsTrue(parent.Children.Count == 0);
-            Assert.IsFalse(parent.HasChild(children[0]));
-            Assert.IsFalse(parent.HasChild(children[1]));
-            Assert.IsTrue(children[0].Parent is null);
-            Assert.IsTrue(children[1].Parent is null);
-            Assert.IsFalse(uberParent.HasChild((TreeNode)parent));
-            Assert.IsTrue(parent.Parent is null);
+            Assert.IsTrue(parent.Children.Count() == 0);
+            Assert.IsFalse(parent.HasChild(children[0], counter));
+            Assert.IsFalse(parent.HasChild(children[1], counter));
+            Assert.IsTrue(children[0].GetParent(counter) is null);
+            Assert.IsTrue(children[1].GetParent(counter) is null);
+            Assert.IsFalse(uberParent.HasChild((TreeNode)parent, counter));
+            Assert.IsTrue(parent.GetParent(counter) is null);
         }
 
         [TestMethod]
@@ -405,18 +409,18 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             ITreeNode<TreeNode> parent = new TreeNode(0);
             TreeNode child = new TreeNode(1);
-            parent.AddChild(child);
+            parent.AddChild(child, counter);
             TreeNode nonChild = new TreeNode(2);
             TreeNode uberParent = new TreeNode(3);
-            uberParent.AddChild((TreeNode)parent);
-            Assert.IsTrue(parent.Parent == uberParent);
+            uberParent.AddChild((TreeNode)parent, counter);
+            Assert.IsTrue(parent.GetParent(counter) == uberParent);
             
             parent.RemoveNeighbour(child);
 
-            Assert.IsTrue(child.Parent is null);
+            Assert.IsTrue(child.GetParent(counter) is null);
 
             parent.RemoveNeighbour(uberParent);
-            Assert.IsTrue(parent.Parent is null);
+            Assert.IsTrue(parent.GetParent(counter) is null);
 
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
@@ -450,11 +454,11 @@ namespace TESTS_MulticutInTrees.Graphs
                 new TreeNode(4),
             };
             ITreeNode<TreeNode> parent = new TreeNode(0);
-            parent.AddChildren(children);
+            parent.AddChildren(children, counter);
             TreeNode child = new TreeNode(5);
-            parent.AddChild(child);
+            parent.AddChild(child, counter);
             TreeNode uberParent = new TreeNode(6);
-            uberParent.AddChild((TreeNode)parent);
+            uberParent.AddChild((TreeNode)parent, counter);
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
@@ -465,15 +469,15 @@ namespace TESTS_MulticutInTrees.Graphs
 
             foreach (TreeNode _child in children)
             {
-                Assert.IsTrue(_child.Parent is null);
-                Assert.IsFalse(parent.HasChild(_child));
+                Assert.IsTrue(_child.GetParent(counter) is null);
+                Assert.IsFalse(parent.HasChild(_child, counter));
             }
 
-            Assert.IsFalse(uberParent.HasChild((TreeNode)parent));
-            Assert.IsTrue(parent.Parent is null);
+            Assert.IsFalse(uberParent.HasChild((TreeNode)parent, counter));
+            Assert.IsTrue(parent.GetParent(counter) is null);
 
-            Assert.IsTrue(parent.HasChild(child));
-            Assert.IsTrue(child.Parent == parent);
+            Assert.IsTrue(parent.HasChild(child, counter));
+            Assert.IsTrue(child.GetParent(counter) == parent);
         }
 
         [TestMethod]
@@ -481,9 +485,9 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             TreeNode node0 = new TreeNode(0);
             ITreeNode<TreeNode> node1 = new TreeNode(1);
-            node0.AddChild((TreeNode)node1);
+            node0.AddChild((TreeNode)node1, counter);
             TreeNode node2 = new TreeNode(2);
-            node1.AddChild(node2);
+            node1.AddChild(node2, counter);
             Assert.IsTrue(node1.HasNeighbour(node2));
             Assert.IsTrue(node1.HasNeighbour(node0));
 
@@ -501,12 +505,19 @@ namespace TESTS_MulticutInTrees.Graphs
         public void TestNullArgument()
         {
             TreeNode t = new TreeNode(0);
+            TreeNode n1 = new TreeNode(1);
+            List<TreeNode> list = new List<TreeNode>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => t.AddChild(null));
-            Assert.ThrowsException<ArgumentNullException>(() => t.AddChildren(null));
-            Assert.ThrowsException<ArgumentNullException>(() => t.HasChild(null));
-            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChild(null));
-            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChildren(null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.AddChild(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => t.AddChildren(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => t.HasChild(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChild(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChildren(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => t.AddChild(n1, null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.AddChildren(list, null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.HasChild(n1, null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChild(n1, null));
+            Assert.ThrowsException<ArgumentNullException>(() => t.RemoveChildren(list, null));
         }
     }
 }

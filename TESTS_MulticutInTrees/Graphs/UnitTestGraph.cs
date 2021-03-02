@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
@@ -12,6 +13,8 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestGraph
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestConstructor()
         {
@@ -371,7 +374,7 @@ namespace TESTS_MulticutInTrees.Graphs
             graph.AddEdge(node7, node8);
 
             graph.RemoveNode(node4);
-            Assert.AreEqual(0, node4.Neighbours.Count);
+            Assert.AreEqual(0, node4.Degree(counter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
@@ -419,7 +422,7 @@ namespace TESTS_MulticutInTrees.Graphs
             graph.AddEdge(node7, node8);
 
             graph.RemoveNodes(new List<Node>() { node0, node4, node8 });
-            Assert.AreEqual(0, node4.Neighbours.Count);
+            Assert.AreEqual(0, node4.Degree(counter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
@@ -467,7 +470,7 @@ namespace TESTS_MulticutInTrees.Graphs
             graph.AddEdge(node7, node8);
 
             graph.RemoveAllEdgesOfNode(node4);
-            Assert.AreEqual(0, node4.Neighbours.Count);
+            Assert.AreEqual(0, node4.Degree(counter));
             Assert.IsFalse(graph.HasEdge(node3, node4));
             Assert.AreEqual(10, graph.NumberOfNodes);
             Assert.IsFalse(node5.HasNeighbour(node4));
@@ -607,84 +610,6 @@ namespace TESTS_MulticutInTrees.Graphs
         }
 
         [TestMethod]
-        public void TestUpdateNodesInGraph()
-        {
-            Graph<Node> graph = new Graph<Node>();
-            
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
-            Node node9 = new Node(9);
-
-            node0.AddNeighbour(node1);
-            node0.AddNeighbour(node2);
-            node0.AddNeighbour(node3);
-            node1.AddNeighbour(node2);
-            node1.AddNeighbour(node5);
-            node2.AddNeighbour(node5);
-            node3.AddNeighbour(node4);
-            node4.AddNeighbour(node5);
-            node4.AddNeighbour(node6);
-            node5.AddNeighbour(node7);
-            node5.AddNeighbour(node9);
-            node6.AddNeighbour(node8);
-            node7.AddNeighbour(node8);
-
-            MethodInfo method = typeof(Graph<Node>).GetMethod("UpdateNodesInGraph", BindingFlags.NonPublic | BindingFlags.Instance);
-            method.Invoke(graph, new object[0]);
-            Assert.AreEqual(0, graph.NumberOfNodes);
-
-            graph.AddNode(node4);
-            method.Invoke(graph, new object[0]);
-            Assert.AreEqual(10, graph.NumberOfNodes);
-        }
-
-        [TestMethod]
-        public void TestUpdateEdgesInGraph()
-        {
-            Graph<Node> graph = new Graph<Node>();
-
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
-            Node node9 = new Node(9);
-
-            node0.AddNeighbour(node1);
-            node0.AddNeighbour(node2);
-            node0.AddNeighbour(node3);
-            node1.AddNeighbour(node2);
-            node1.AddNeighbour(node5);
-            node2.AddNeighbour(node5);
-            node3.AddNeighbour(node4);
-            node4.AddNeighbour(node5);
-            node4.AddNeighbour(node6);
-            node5.AddNeighbour(node7);
-            node5.AddNeighbour(node9);
-            node6.AddNeighbour(node8);
-            node7.AddNeighbour(node8);
-
-            MethodInfo method = typeof(Graph<Node>).GetMethod("UpdateEdgesInGraph", BindingFlags.NonPublic | BindingFlags.Instance);
-            method.Invoke(graph, new object[0]);
-            Assert.AreEqual(0, graph.NumberOfEdges);
-
-            graph.AddNode(node4);
-            method.Invoke(graph, new object[0]);
-            Assert.AreEqual(13, graph.NumberOfEdges);
-        }
-
-        [TestMethod]
         public void TestArgumentNull()
         {
             Graph<Node> g = new Graph<Node>();
@@ -725,17 +650,17 @@ namespace TESTS_MulticutInTrees.Graphs
                 (node3, node0)
             });
 
-            Assert.IsFalse(graph.IsAcyclic());
+            Assert.IsFalse(graph.IsAcyclic(counter));
 
             graph.RemoveEdge(node0, node3);
 
-            Assert.IsTrue(graph.IsAcyclic());
+            Assert.IsTrue(graph.IsAcyclic(counter));
 
             graph.RemoveNode(node1);
             graph.RemoveNode(node2);
             graph.RemoveNode(node3);
 
-            Assert.IsTrue(graph.IsAcyclic());
+            Assert.IsTrue(graph.IsAcyclic(counter));
         }
 
         [TestMethod]
@@ -756,11 +681,11 @@ namespace TESTS_MulticutInTrees.Graphs
                 (node2, node3),
             });
 
-            Assert.IsTrue(graph.IsConnected());
+            Assert.IsTrue(graph.IsConnected(counter));
 
             graph.RemoveNode(node1);
 
-            Assert.IsFalse(graph.IsConnected());
+            Assert.IsFalse(graph.IsConnected(counter));
         }
     }
 }

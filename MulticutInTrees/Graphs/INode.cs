@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MulticutInTrees.CountedDatastructures;
 
 namespace MulticutInTrees.Graphs
 {
@@ -17,20 +18,22 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         public uint ID { get; }
 
+        // todo: comment, nullcheck, move
         /// <summary>
-        /// The <see cref="ReadOnlyCollection{T}"/> of neighbours this <see cref="INode{N}"/> is connected to. Cannot be edited directly.
+        /// The <see cref="IEnumerable{T}"/> of neighbours this <see cref="INode{N}"/> is connected to. Cannot be edited directly.
         /// <para>
         /// When using this <see cref="INode{N}"/> in combination with an <see cref="IGraph{N}"/>, refer to <seealso cref="IGraph{N}.AddEdge(N, N, bool)"/>, <seealso cref="IGraph{N}.AddEdges(IEnumerable{ValueTuple{N, N}}, bool)"/>, <seealso cref="IGraph{N}.RemoveEdge(N, N, bool)"/>, <seealso cref="IGraph{N}.RemoveEdges(IList{ValueTuple{N, N}}, bool)"/> and <seealso cref="IGraph{N}.RemoveAllEdgesOfNode(N, bool)"/>.
         /// <br/>
         /// When using this <see cref="INode{N}"/> without an <see cref="IGraph{N}"/>, refer to <seealso cref="AddNeighbour(N, bool)"/>, <seealso cref="AddNeighbours(IEnumerable{N}, bool)"/>, <seealso cref="RemoveNeighbour(N, bool)"/>, <seealso cref="RemoveNeighbours(IEnumerable{N}, bool)"/> and <seealso cref="RemoveAllNeighbours(bool)"/>.
         /// </para>
         /// </summary>
-        public ReadOnlyCollection<N> Neighbours { get; }
+        public IEnumerable<N> Neighbours(Counter counter);
 
+        // todo: comment, nullcheck, move
         /// <summary>
         /// The degree of this <see cref="INode{N}"/> in the graph.
         /// </summary>
-        public int Degree { get; }
+        public int Degree(Counter counter);
 
         /// <summary>
         /// The <see cref="NodeType"/> of this <see cref="INode{N}"/>.

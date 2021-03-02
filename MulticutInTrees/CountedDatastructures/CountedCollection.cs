@@ -3,7 +3,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using MulticutInTrees.Exceptions;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.CountedDatastructures
@@ -12,13 +13,8 @@ namespace MulticutInTrees.CountedDatastructures
     /// Custom data structure that uses a <see cref="LinkedList{T}"/> and a <see cref="Dictionary{TKey, TValue}"/> for fast operations, and counts the number of operations it performs.
     /// </summary>
     /// <typeparam name="T">The type of elements in this <see cref="CountedCollection{T}"/>.</typeparam>
-    public class CountedCollection<T> : IEnumerable<T>, ICollection<T>
+    public class CountedCollection<T>
     {
-        /// <summary>
-        /// The <see cref="Counter"/> that counts the number of operations this <see cref="CountedCollection{T}"/> performs.
-        /// </summary>
-        public Counter OperationsCounter { get; private set; }
-
         /// <summary>
         /// The internal <see cref="Dictionary{TKey, TValue}"/> from <typeparamref name="T"/> to <see cref="LinkedListNode{T}"/>.
         /// </summary>
@@ -34,7 +30,6 @@ namespace MulticutInTrees.CountedDatastructures
         /// </summary>
         public CountedCollection()
         {
-            OperationsCounter = new Counter();
             Dictionary = new Dictionary<T, LinkedListNode<T>>();
             LinkedList = new LinkedList<T>();
         }
@@ -42,72 +37,147 @@ namespace MulticutInTrees.CountedDatastructures
         /// <summary>
         /// Constructor for a <see cref="CountedCollection{T}"/> with all the elements in <paramref name="collection"/>.
         /// </summary>
-        /// <param name="collection"></param>
+        /// <param name="collection">The <see cref="IEnumerable"/> with elements that should be added to this <see cref="CountedCollection{T}"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used to count the operations needed to add the elements of <paramref name="collection"/> to this new <see cref="CountedCollection{T}"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="collection"/> is <see langword="null"/>.</exception>
-        public CountedCollection(IEnumerable<T> collection) : this()
+        public CountedCollection(IEnumerable<T> collection, Counter counter) : this()
         {
-            Utils.NullCheck(collection, nameof(collection), $"Trying to create a new CountedCollection containing elements of an IEnumerable, but the IEnumerable is null!");
+            Utils.NullCheck(collection, nameof(collection), "Trying to create a new CountedCollection containing elements of an IEnumerable, but the IEnumerable is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to create a CountedCollection containing elements of an IEnumerable, but the Counter is null!");
 
             foreach (T item in collection)
             {
-                Add(item);
+                Add(item, counter);
             }
         }
 
-        /// <inheritdoc/>
-        public int Count
+        /// <summary>
+        /// Returns the number of elements in this <see cref="CountedCollection{T}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that represents the number of elements in this <see cref="CountedCollection{T}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int Count(Counter counter)
         {
-            get
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements in a CountedCollection, but the Counter is null!");
+
+            _ = counter++;
+            return LinkedList.Count;
+        }
+
+        /// <summary>
+        /// Counts the number of elements in this <see cref="CountedCollection{T}"/> that return <see langword="true"/> on <paramref name="predicate"/>.
+        /// </summary>
+        /// <param name="predicate">The <see cref="Func{T, TResult}"/> that functions as the counting condition.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that represents the number of elements in this <see cref="CountedCollection{T}"/> that fit <paramref name="predicate"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int Count(Func<T, bool> predicate, Counter counter)
+        {
+            Utils.NullCheck(predicate, nameof(predicate), "Trying to get the number of elements that fit a function in a CountedCollection, but the function is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements that fit a function in a CountedCollection, but the Counter is null!");
+
+            int res = LinkedList.Count(predicate);
+            _ = counter += res;
+            return res;
+        }
+
+        /// <summary>
+        /// Returns the first element in this <see cref="CountedCollection{T}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/> that is the first element in this <see cref="CountedCollection{T}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public T First(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the first element of a CountedCollection, but the Counter is null!");
+
+            _ = counter++;
+            return LinkedList.First.Value;
+        }
+
+        /// <summary>
+        /// Returns the first element in this <see cref="CountedCollection{T}"/> that fits <paramref name="predicate"/>.
+        /// </summary>
+        /// <param name="predicate">The condition that determines which element we return.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/> that is the first element in this <see cref="CountedCollection{T}"/> that passes <paramref name="predicate"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public T First(Func<T, bool> predicate, Counter counter)
+        {
+            Utils.NullCheck(predicate, nameof(predicate), "Trying to get the first element of a CountedCollection that fits a condition, but the condition-function is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the first element of a CountedCollection that fits a condition, but the Counter is null!");
+
+            return LinkedList.First(elem =>
             {
-                OperationsCounter++;
-                return LinkedList.Count;
-            }
+                _ = counter++;
+                return predicate(elem);
+            });
         }
 
-        /// <inheritdoc cref="LinkedList{T}.First"/>
-        public T First
+        /// <summary>
+        /// Returns the last element in this <see cref="CountedCollection{T}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/> that is the last element in this <see cref="CountedCollection{T}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public T Last(Counter counter)
         {
-            get
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the last element of a CountedCollection, but the Counter is null!");
+
+            _ = counter++;
+            return LinkedList.Last.Value;
+        }
+
+        /// <summary>
+        /// Adds an item to this <see cref="CountedCollection{T}"/>.
+        /// </summary>
+        /// <param name="item">The <typeparamref name="T"/> to be added.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        /// <exception cref="AlreadyPresentException">Thrown when <paramref name="item"/> is already present in this <see cref="CountedCollection{T}"/>.</exception>
+        public void Add(T item, Counter counter)
+        {
+            Utils.NullCheck(item, nameof(item), "Trying to add an item to a CountedCollection, but the item is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to add an element to a CountedCollection, but the Counter is null!");
+            if (Dictionary.ContainsKey(item))
             {
-                OperationsCounter++;
-                return LinkedList.First.Value;
+                throw new AlreadyPresentException($"Trying to add {item} to a CountedCollection, but {item} is already present in this CountedCollection!");
             }
-        }
 
-        /// <inheritdoc cref="LinkedList{T}.Last"/>
-        public T Last
-        {
-            get
-            {
-                OperationsCounter++;
-                return LinkedList.Last.Value;
-            }
-        }
-
-        /// <inheritdoc/>
-        bool ICollection<T>.IsReadOnly => throw new NotImplementedException();
-
-        /// <inheritdoc/>
-        public void Add(T item)
-        {
-            OperationsCounter++;
+            _ = counter++;
             LinkedListNode<T> node = new LinkedListNode<T>(item);
             Dictionary[item] = node;
             LinkedList.AddLast(node);
         }
 
-        /// <inheritdoc/>
-        public void Clear()
+        /// <summary>
+        /// Removes all elements in this <see cref="CountedCollection{T}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void Clear(Counter counter)
         {
-            OperationsCounter += Dictionary.Count;
+            Utils.NullCheck(counter, nameof(counter), "Trying to clear a CountedCollection, but the Counter is null!");
+            
+            _ = counter += Dictionary.Count;
             Dictionary.Clear();
             LinkedList.Clear();
         }
 
-        /// <inheritdoc/>
-        public bool Contains(T item)
+        /// <summary>
+        /// Checks whether this <see cref="CountedCollection{T}"/> contains <paramref name="item"/>.
+        /// </summary>
+        /// <param name="item">The <typeparamref name="T"/> for which we want to know if it is part of this <see cref="CountedCollection{T}"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns><see langword="true"/> if this <see cref="CountedCollection{T}"/> contains <paramref name="item"/>, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool Contains(T item, Counter counter)
         {
-            OperationsCounter++;
+            Utils.NullCheck(item, nameof(item), "Trying to check whether a CountedCollection contains an element, but the item is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to check whether a CountedCollection contains an element, but the Counter is null!");
+            
+            _ = counter++;
             return Dictionary.ContainsKey(item);
         }
 
@@ -124,22 +194,24 @@ namespace MulticutInTrees.CountedDatastructures
 
             foreach (T item in LinkedList)
             {
-                counter++;
+                _ = counter++;
                 yield return item;
             }
         }
 
-        /// <inheritdoc/>
-        public IEnumerator<T> GetEnumerator()
+        /// <summary>
+        /// Removes <paramref name="item"/> from this <see cref="CountedCollection{T}"/>.
+        /// </summary>
+        /// <param name="item">The <typeparamref name="T"/> to be removed.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns><see langword="true"/> if we successfully removed <paramref name="item"/>, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool Remove(T item, Counter counter)
         {
-            throw new NotSupportedException("Counted Collections should use GetCountedEnumerable to count the number of operations.");
-            //return new CountedEnumerator<T>(LinkedList.GetEnumerator(), OperationsCounter);
-        }
+            Utils.NullCheck(item, nameof(item), "Trying to remove an item from a CountedCollection, but the item is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to remove an element from a CountedCollection, but the Counter is null!");
 
-        /// <inheritdoc/>
-        public bool Remove(T item)
-        {
-            OperationsCounter++;
+            _ = counter++;
             if (!Dictionary.ContainsKey(item))
             {
                 return false;
@@ -154,15 +226,17 @@ namespace MulticutInTrees.CountedDatastructures
         /// Removes elements from the start of this <see cref="CountedCollection{T}"/> while <paramref name="predicate"/> is <see langword="true"/>.
         /// </summary>
         /// <param name="predicate"><see cref="Func{T, TResult}"/> that is used to determine which elements to remove.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> is <see langword="null"/>.</exception>
-        public void RemoveFromStartWhile(Func<T, bool> predicate)
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void RemoveFromStartWhile(Func<T, bool> predicate, Counter counter)
         {
             Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the start of a CountedCollection, but the Counter is null!");
 
             while (predicate(LinkedList.First.Value))
             {
-                OperationsCounter++;
-                Remove(LinkedList.First.Value);
+                _ = counter++;
+                Remove(LinkedList.First.Value, counter);
             }
         }
 
@@ -170,15 +244,17 @@ namespace MulticutInTrees.CountedDatastructures
         /// Removes elements from the end of this <see cref="CountedCollection{T}"/> while <paramref name="predicate"/> is <see langword="true"/>.
         /// </summary>
         /// <param name="predicate"><see cref="Func{T, TResult}"/> that is used to determine which elements to remove.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> is <see langword="null"/>.</exception>
-        public void RemoveFromEndWhile(Func<T, bool> predicate)
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void RemoveFromEndWhile(Func<T, bool> predicate, Counter counter)
         {
-            Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
+            Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the end of a CountedCollection, but the predicate is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from end start of a CountedCollection, but the Counter is null!");
 
             while (predicate(LinkedList.Last.Value))
             {
-                OperationsCounter++;
-                Remove(LinkedList.Last.Value);
+                _ = counter++;
+                Remove(LinkedList.Last.Value, counter);
             }
         }
 
@@ -187,18 +263,20 @@ namespace MulticutInTrees.CountedDatastructures
         /// </summary>
         /// <param name="oldElement">The <typeparamref name="T"/> that will be replaced.</param>
         /// <param name="newElement">The <typeparamref name="T"/> that <paramref name="oldElement"/> should be replaced with.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldElement"/> or <paramref name="newElement"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldElement"/>, <paramref name="newElement"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="oldElement"/> is not part of this <see cref="CountedCollection{T}"/>.</exception>
-        public void ChangeElement(T oldElement, T newElement)
+        public void ChangeElement(T oldElement, T newElement, Counter counter)
         {
             Utils.NullCheck(oldElement, nameof(oldElement), "Trying to replace an element by another in a CountedCollection, but the old element is null!");
             Utils.NullCheck(newElement, nameof(newElement), "Trying to replace an element by another in a CountedCollection, but the new element is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to replace an element by another in a CountedCollection, but the counter is null!");
             if (!Dictionary.ContainsKey(oldElement))
             {
                 throw new InvalidOperationException($"Trying to change {oldElement} to {newElement} in {this}, but {oldElement} is not part of this collection!");
             }
 
-            OperationsCounter++;
+            _ = counter++;
             if (oldElement.Equals(newElement))
             {
                 return;
@@ -212,16 +290,18 @@ namespace MulticutInTrees.CountedDatastructures
         /// Change each element in this <see cref="CountedCollection{T}"/> according to <paramref name="function"/>.
         /// </summary>
         /// <param name="function">The <see cref="Func{T, TResult}"/> that determines for each element what it should be replaced with.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
-        public void ChangeOccurrence(Func<T, T> function)
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void ChangeOccurrence(Func<T, T> function, Counter counter)
         {
             Utils.NullCheck(function, nameof(function), "Trying to change all elements in a CountedCollection according to a function, but the function is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to change all elements in a CountedCollection according to a function, but the counter is null!");
 
             foreach (T node in LinkedList)
             {
-                OperationsCounter++;
+                _ = counter++;
                 T newNode = function(node);
-                ChangeElement(node, newNode);
+                ChangeElement(node, newNode, counter);
             }
         }
 
@@ -229,17 +309,20 @@ namespace MulticutInTrees.CountedDatastructures
         /// Returns the elements before and after <paramref name="element"/> in this <see cref="CountedCollection{T}"/>.
         /// </summary>
         /// <param name="element">The element for which we want to know the elements before and after it.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
         /// <returns>A tuple with two <typeparamref name="T"/>s: the <typeparamref name="T"/> before <paramref name="element"/> and the <typeparamref name="T"/> after <paramref name="element"/>. If either of these does not exist, <see langword="default"/> is returned in that tuple spot instead.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="element"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="element"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="element"/> is not part of this <see cref="CountedCollection{T}"/>.</exception>
-        public (T, T) ElementBeforeAndAfter(T element)
+        public (T, T) ElementBeforeAndAfter(T element, Counter counter)
         {
             Utils.NullCheck(element, nameof(element), "Trying to find the element before and after an element in a CountedCollection, but the element is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to find the element before and after an element in a CountedCollection, but the counter is null!");
             if (!Dictionary.ContainsKey(element))
             {
                 throw new InvalidOperationException($"Trying to find the element before and after {element} in {this}, but {element} is not part of this CountedCollection!");
             }
 
+            _ = counter += 2;
             LinkedListNode<T> node = Dictionary[element];
             T before = default;
             T after = default;
@@ -262,18 +345,6 @@ namespace MulticutInTrees.CountedDatastructures
         public LinkedList<T> GetLinkedList()
         {
             return LinkedList;
-        }
-
-        /// <inheritdoc/>
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotSupportedException("Counted Collections should use GetCountedEnumerable to count the number of operations.");
         }
     }
 }

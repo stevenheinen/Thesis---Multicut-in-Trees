@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Utilities;
 
@@ -143,31 +144,6 @@ namespace MulticutInTrees.Graphs
             return $"Graph with {NumberOfNodes} nodes and {NumberOfEdges} edges.";
         }
 
-        // TODO: Should not be necessary.
-        /// <summary>
-        /// Update the nodes in this <see cref="Graph{N}"/>.
-        /// </summary>
-        protected void UpdateNodesInGraph()
-        {
-            if (InternalNodes.Count == 0)
-            {
-                return;
-            }
-
-            InternalNodes = new List<N>(DFS.FindConnectedComponent(InternalNodes[0]));
-            UniqueInternalNodes = new HashSet<N>(InternalNodes);
-        }
-
-        // TODO: Should not be necessary.
-        /// <summary>
-        /// Update the edges in this <see cref="Graph{N}"/>.
-        /// </summary>
-        protected void UpdateEdgesInGraph()
-        {
-            InternalEdges = new List<(N, N)>(DFS.FindAllEdgesGraph<Graph<N>, N>(this));
-            UniqueInternalEdges = new HashSet<(N, N)>(InternalEdges);
-        }
-
         /// <summary>
         /// Add a new <typeparamref name="N"/> <paramref name="node"/> to this <see cref="Graph{N}"/>.
         /// </summary>
@@ -295,7 +271,8 @@ namespace MulticutInTrees.Graphs
                 throw new NotInGraphException($"Trying to remove all edges of {node} from {this}, but {node} is not part of {this}!");
             }
 
-            RemoveEdges(node.Neighbours.Select(neighbour => (node, neighbour)).ToList(), directed);
+            // TODO: correct counter
+            RemoveEdges(node.Neighbours(new Counter()).Select(neighbour => (node, neighbour)).ToList(), directed);
         }
 
         /// <summary>
@@ -360,19 +337,27 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// Checks whether this <see cref="Graph{N}"/> is acyclic.
         /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used during this operation.</param>
         /// <returns><see langword="true"/> if this <see cref="Graph{N}"/> is acyclic, <see langword="false"/> if it is cyclic.</returns>
-        public bool IsAcyclic()
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool IsAcyclic(Counter counter)
         {
-            return DFS.IsAcyclicGraph<Graph<N>, N>(this);
+            Utils.NullCheck(counter, nameof(counter), "Trying to find out whether a graph is acyclic, but the counter is null!");
+
+            return DFS.IsAcyclicGraph<Graph<N>, N>(this, counter);
         }
 
         /// <summary>
         /// Checks whether this <see cref="Graph{N}"/> is connected.
         /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used during this operation.</param>
         /// <returns><see langword="true"/> if this <see cref="Graph{N}"/> is connected, <see langword="false"/> otherwise.</returns>
-        public bool IsConnected()
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool IsConnected(Counter counter)
         {
-            return DFS.FindAllConnectedComponents(Nodes, null).Count == 1;
+            Utils.NullCheck(counter, nameof(counter), "Trying to find out whether a graph is connected, but the counter is null!");
+
+            return DFS.FindAllConnectedComponents(Nodes, counter).Count == 1;
         }
     }
 }

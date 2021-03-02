@@ -30,7 +30,7 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         private CountedDictionary<TreeNode, List<DemandPair>> DemandPairsPerNode { get; set; }
 
-        // todo: comment
+        // todo: delete
         private Counter DemandPairsPerEdgeValueCounter { get; }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace MulticutInTrees.Algorithms
             IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
             reductionRules.Add(idleEdge);
 
-            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
+            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this, Random);
             reductionRules.Add(unitPath);
 
             DominatedEdge dominatedEdge = new DominatedEdge(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
@@ -151,16 +151,18 @@ namespace MulticutInTrees.Algorithms
         }
 
         /// <summary>
-        /// Internal method for cutting an edge. Also returns the <see cref="TreeNode"/> that is the result of the edge contraction. See also: <seealso cref="CutEdge(ValueTuple{TreeNode, TreeNode})"/>.
+        /// Internal method for cutting an edge. Also returns the <see cref="TreeNode"/> that is the result of the edge contraction. See also: <seealso cref="CutEdge(ValueTuple{TreeNode, TreeNode}, PerformanceMeasurements)"/>.
         /// </summary>
         /// <param name="edge">The edge to be cut, represented by a tuple of two <see cref="TreeNode"/>s.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used for this modification.</param>
         /// <returns>The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="edge"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        private TreeNode InternalCutEdge((TreeNode, TreeNode) edge)
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        private TreeNode InternalCutEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to cut an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to cut an edge, but the second item of this edge is null!");
-            if (!Tree.HasEdge(edge))
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to cut an edge, but the performance measures to be used are null!");
+            if (!Tree.HasEdge(edge, MockCounter))
             {
                 throw new NotInGraphException($"Trying to cut edge {edge}, but this edge is not part of the tree!");
             }
@@ -172,40 +174,42 @@ namespace MulticutInTrees.Algorithms
             PartialSolution.Add(edge);
             List<DemandPair> separatedDemandPairs = new List<DemandPair>(DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(edge)]);
             
-            RemoveDemandPairs(separatedDemandPairs);
-            TreeNode res = InternalContractEdge(edge);
+            RemoveDemandPairs(separatedDemandPairs, measurements);
+            TreeNode res = InternalContractEdge(edge, measurements);
 
             foreach (DemandPair demandPair in separatedDemandPairs)
             {
-                if (demandPair.EdgesOnDemandPath.Count == 1)
+                if (demandPair.EdgesOnDemandPath.Count(measurements.DemandPairsOperationsCounter) == 1)
                 {
                     continue;
                 }
-                demandPair.OnEdgeContracted(edge, res);
+                demandPair.OnEdgeContracted(edge, res, measurements.DemandPairsOperationsCounter);
             }
 
             return res;
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when either item of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        internal override void CutEdge((TreeNode, TreeNode) edge)
+        /// <exception cref="ArgumentNullException">Thrown when either item of <paramref name="edge"/>, or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void CutEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to cut an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to cut an edge, but the second item of this edge is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to cut an edge, but the performance measures to be used are null!");
 
-            InternalCutEdge(edge);
+            InternalCutEdge(edge, measurements);
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
-        internal override void CutEdges(IList<(TreeNode, TreeNode)> edges)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void CutEdges(IList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edges, nameof(edges), "Trying to cut multiple edges, but the IEnumerable of edges is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to cut multiple edges, but the performance measures to be used are null!");
 
             for (int i = 0; i < edges.Count(); i++)
             {
-                TreeNode newNode = InternalCutEdge(edges[i]);
+                TreeNode newNode = InternalCutEdge(edges[i], measurements);
                 for (int j = i + 1; j < edges.Count(); j++)
                 {
                     if (edges[i].Item1 == edges[j].Item1 || edges[i].Item2 == edges[j].Item1)
@@ -221,18 +225,20 @@ namespace MulticutInTrees.Algorithms
         }
 
         /// <summary>
-        /// Internal method for contracting an edge. Also returns the <see cref="TreeNode"/> that is the result of the edge contraction. See also: <seealso cref="ContractEdge(ValueTuple{TreeNode, TreeNode})"/>.
+        /// Internal method for contracting an edge. Also returns the <see cref="TreeNode"/> that is the result of the edge contraction. See also: <seealso cref="ContractEdge(ValueTuple{TreeNode, TreeNode}, PerformanceMeasurements)"/>.
         /// </summary>
         /// <param name="edge">The edge to be contracted, represented by a tuple of two <see cref="TreeNode"/>s.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used for this modification.</param>
         /// <returns>The <see cref="TreeNode"/> that is the result of the contraction of <paramref name="edge"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, or <paramref name="measurements"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="edge"/> is not part of the input.</exception>
         /// <exception cref="InvalidEdgeException">Thrown when <paramref name="edge"/> is a self-loop.</exception>
-        private TreeNode InternalContractEdge((TreeNode, TreeNode) edge)
+        private TreeNode InternalContractEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to contract an edge, but the first item of this edge is null!");
-            Utils.NullCheck(edge.Item2, nameof(edge.Item1), "Trying to contract an edge, but the second item of this edge is null!");
-            if (!Tree.HasEdge(edge))
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to contract an edge, but the second item of this edge is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to contract an edge, but performance measures to be used are null!");
+            if (!Tree.HasEdge(edge, MockCounter))
             {
                 throw new NotInGraphException($"Trying to contract edge {edge}, but this edge is not part of the tree!");
             }
@@ -248,7 +254,7 @@ namespace MulticutInTrees.Algorithms
 
             TreeNode parent = edge.Item1;
             TreeNode child = edge.Item2;
-            if (parent.Parent == child)
+            if (parent.GetParent(measurements.TreeOperationsCounter) == child)
             {
                 parent = edge.Item2;
                 child = edge.Item1;
@@ -257,10 +263,10 @@ namespace MulticutInTrees.Algorithms
             TreeNode newNode = parent;
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
             UpdateNodeTypesDuringEdgeContraction(usedEdge, newNode);
-            Tree.RemoveNode(child);
-            CountedList<DemandPair> pairsOnEdge = RemoveDemandPairsFromContractedEdge(usedEdge, newNode);
-            UpdateDemandPairsStartingAtContractedEdge(usedEdge, child, newNode, pairsOnEdge);
-            UpdateDemandPairsGoingThroughChild(child, newNode);
+            Tree.RemoveNode(child, measurements.TreeOperationsCounter);
+            CountedList<DemandPair> pairsOnEdge = RemoveDemandPairsFromContractedEdge(usedEdge, newNode, measurements);
+            UpdateDemandPairsStartingAtContractedEdge(usedEdge, child, newNode, pairsOnEdge, measurements);
+            UpdateDemandPairsGoingThroughChild(child, newNode, measurements);
 
             LastContractedEdges.Add((usedEdge, newNode, pairsOnEdge));
             LastIterationEdgeContraction = true;
@@ -273,11 +279,13 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="child">The <see cref="TreeNode"/> that will be removed by the contraction.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="child"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
-        private void UpdateDemandPairsGoingThroughChild(TreeNode child, TreeNode newNode)
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used for this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="child"/>, <paramref name="newNode"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        private void UpdateDemandPairsGoingThroughChild(TreeNode child, TreeNode newNode, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(child, nameof(child), "Trying to update the demand pairs going through the child of an edge that will be contracted, but the child is null!");
             Utils.NullCheck(newNode, nameof(newNode), "Trying to update the demand pairs going through the child of an edge that will be contracted, but the new node is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to update the demand pairs going through the child of an edge that will be contracted, but the performance measures to be used are null!");
 
             List<(TreeNode, TreeNode)> keysToBeRemoved = new List<(TreeNode, TreeNode)>();
             List<(TreeNode, TreeNode)> oldKeys = DemandPairsPerEdge.Keys.Where(n => n.Item1 == child || n.Item2 == child).ToList();
@@ -285,7 +293,7 @@ namespace MulticutInTrees.Algorithms
             {
                 foreach (DemandPair demandPair in DemandPairsPerEdge[key].GetCountedEnumerable(new Counter()))
                 {
-                    demandPair.OnEdgeNextToNodeOnDemandPathContracted(child, newNode);
+                    demandPair.OnEdgeNextToNodeOnDemandPathContracted(child, newNode, measurements.DemandPairsOperationsCounter);
                 }
 
                 if (key.Item1 == child)
@@ -323,14 +331,16 @@ namespace MulticutInTrees.Algorithms
         /// <param name="child">The <see cref="TreeNode"/> that will be removed by the contraction.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
         /// <param name="pairsOnEdge">The <see cref="List{T}"/> of <see cref="DemandPair"/>s that go over <paramref name="edge"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/> or <paramref name="pairsOnEdge"/> is <see langword="null"/>.</exception>
-        private void UpdateDemandPairsStartingAtContractedEdge((TreeNode, TreeNode) edge, TreeNode child, TreeNode newNode, CountedList<DemandPair> pairsOnEdge)
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/>, <paramref name="pairsOnEdge"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        private void UpdateDemandPairsStartingAtContractedEdge((TreeNode, TreeNode) edge, TreeNode child, TreeNode newNode, CountedList<DemandPair> pairsOnEdge, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the first endpoint of the edge that will be contracted is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the second endpoint of the edge that will be contracted is null!");
             Utils.NullCheck(child, nameof(child), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the node that will be removed by the contraction is null!");
             Utils.NullCheck(newNode, nameof(newNode), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the node that is the result of the contraction is null!");
             Utils.NullCheck(pairsOnEdge, nameof(pairsOnEdge), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the list of demand pairs going through the contracted edge is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the performance measures to be used are null!");
 
             if (DemandPairsPerNode.TryGetValue(child, out List<DemandPair> pairsAtChild))
             {
@@ -340,13 +350,7 @@ namespace MulticutInTrees.Algorithms
                 }
                 foreach (DemandPair demandPair in pairsAtChild)
                 {
-                    // todo: delete?
-                    //if (pairsOnEdge.Contains(demandPair))
-                    //{
-                    //    continue;
-                    //}
-
-                    demandPair.OnEdgeNextToDemandPathEndpointsContracted(edge, newNode);
+                    demandPair.OnEdgeNextToDemandPathEndpointsContracted(edge, newNode, measurements.DemandPairsOperationsCounter);
                     DemandPairsPerNode[newNode].Add(demandPair);
                 }
                 DemandPairsPerNode.Remove(child);
@@ -358,18 +362,21 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
         /// <returns>A <see cref="List{T}"/> with all the <see cref="DemandPair"/>s that pass through <paramref name="edge"/>.</returns>
-        private CountedList<DemandPair> RemoveDemandPairsFromContractedEdge((TreeNode, TreeNode) edge, TreeNode newNode)
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="newNode"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        private CountedList<DemandPair> RemoveDemandPairsFromContractedEdge((TreeNode, TreeNode) edge, TreeNode newNode, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to remove all demand paths going through an edge, but the first endpoint of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to remove all demand paths going through an edge, but the second endpoint of this edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), "Trying to remove all demand paths going through an edge, but the node that is the result of the contraction is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to remove all demand paths going through an edge, but the performance measures to be used are null!");
 
             if (DemandPairsPerEdge.TryGetValue(edge, out CountedList<DemandPair> pairsOnEdge))
             {
                 foreach (DemandPair demandPair in pairsOnEdge.GetCountedEnumerable(new Counter()))
                 {
-                    demandPair.OnEdgeContracted(edge, newNode);
+                    demandPair.OnEdgeContracted(edge, newNode, measurements.DemandPairsOperationsCounter);
                 }
                 DemandPairsPerEdge.Remove(edge);
             }
@@ -382,20 +389,22 @@ namespace MulticutInTrees.Algorithms
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when either item of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        internal override void ContractEdge((TreeNode, TreeNode) edge)
+        /// <exception cref="ArgumentNullException">Thrown when either item of <paramref name="edge"/>, or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void ContractEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to contract an edge, but the first item of this edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item1), "Trying to contract an edge, but the second item of this edge is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to contract an edge, but the performance measures to be used are null!");
 
-            InternalContractEdge(edge);
+            InternalContractEdge(edge, measurements);
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
-        internal override void ContractEdges(IList<(TreeNode, TreeNode)> edges)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void ContractEdges(IList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(edges, nameof(edges), "Trying to contract multiple edges, but the IEnumerable of edges is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to contract multiple edges, but the performance measures to be used are null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -404,7 +413,7 @@ namespace MulticutInTrees.Algorithms
 
             for (int i = 0; i < edges.Count(); i++)
             {
-                TreeNode newNode = InternalContractEdge(edges[i]);
+                TreeNode newNode = InternalContractEdge(edges[i], measurements);
                 for (int j = i + 1; j < edges.Count(); j++)
                 {
                     if (edges[i].Item1 == edges[j].Item1 || edges[i].Item2 == edges[j].Item1)
@@ -420,10 +429,11 @@ namespace MulticutInTrees.Algorithms
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/> is <see langword="null"/>.</exception>
-        internal override void RemoveDemandPair(DemandPair demandPair)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void RemoveDemandPair(DemandPair demandPair, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to remove a demand pair, but the demand pair is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to remove a demand pair, but the performance measures to be used are null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -455,10 +465,11 @@ namespace MulticutInTrees.Algorithms
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
-        internal override void RemoveDemandPairs(IList<DemandPair> demandPairs)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPairs"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void RemoveDemandPairs(IList<DemandPair> demandPairs, PerformanceMeasurements measurements)
         {
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to remove multiuple demand pairs, but the IEnumerable of demand pairs is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to remove multiple demand pairs, but the IEnumerable of demand pairs is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to remove multiple demand pairs, but the performance measures to be used are null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -467,17 +478,18 @@ namespace MulticutInTrees.Algorithms
 
             foreach (DemandPair demandPair in demandPairs)
             {
-                RemoveDemandPair(demandPair);
+                RemoveDemandPair(demandPair, measurements);
             }
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/>, <paramref name="oldEndpoint"/> or <paramref name="newEndpoint"/> is <see langword="null"/>.</exception>
-        internal override void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/>, <paramref name="oldEndpoint"/>, <paramref name="newEndpoint"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to change an endpoint of a demand pair, but the demand pair is null!");
             Utils.NullCheck(oldEndpoint, nameof(oldEndpoint), "Trying to change an endpoint of a demand pair, but the old endpoint of the demand pair is null!");
             Utils.NullCheck(newEndpoint, nameof(newEndpoint), "Trying to change an endpoint of a demand pair, but the new endpoint of the demand pair is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to change an endpoint of a demand pair, but the performance measures to be used are null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -511,14 +523,15 @@ namespace MulticutInTrees.Algorithms
             {
                 RemoveDemandPairFromEdge(edge, demandPair);
             }
-            demandPair.ChangeEndpoint(oldEndpoint, newEndpoint);
+            demandPair.ChangeEndpoint(oldEndpoint, newEndpoint, measurements.DemandPairsOperationsCounter);
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPairEndpointTuples"/> is <see langword="null"/>.</exception>
-        internal override void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPairEndpointTuples"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        internal override void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples, PerformanceMeasurements measurements)
         {
             Utils.NullCheck(demandPairEndpointTuples, nameof(demandPairEndpointTuples), "Trying to change the endpoints of multple demand pairs, but the IEnumerable with tuples with required information is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to change the endpoints of multple demand pairs, but the performance measures to be used are null!");
 
             if (Program.PRINT_DEBUG_INFORMATION)
             {
@@ -527,7 +540,7 @@ namespace MulticutInTrees.Algorithms
 
             foreach ((DemandPair, TreeNode, TreeNode) change in demandPairEndpointTuples)
             {
-                ChangeEndpointOfDemandPair(change.Item1, change.Item2, change.Item3);
+                ChangeEndpointOfDemandPair(change.Item1, change.Item2, change.Item3, measurements);
             }
         }
     }

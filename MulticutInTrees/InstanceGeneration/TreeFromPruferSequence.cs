@@ -3,6 +3,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -29,6 +30,8 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new ArgumentOutOfRangeException("A tree generated with a Prüfer sequence should have at least 3 nodes!");
             }
 
+            Counter counter = new Counter();
+
             List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes, random);
 
             // Sort the edge tuples in the list from smallest to largest
@@ -43,7 +46,7 @@ namespace MulticutInTrees.InstanceGeneration
                 nodes[i] = new TreeNode(i);
             }
 
-            tree.AddRoot(nodes[0]);
+            tree.AddRoot(nodes[0], counter);
 
             Queue<TreeNode> queue = new Queue<TreeNode>();
             queue.Enqueue(nodes[0]);
@@ -53,7 +56,7 @@ namespace MulticutInTrees.InstanceGeneration
                 TreeNode node = queue.Dequeue();
                 List<TreeNode> children = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]).ToList();
                 edges = edges.Where(n => n.Item1 != node.ID && n.Item2 != node.ID).ToList();
-                tree.AddChildren(node, children);
+                tree.AddChildren(node, children, counter);
                 foreach (TreeNode child in children)
                 {
                     queue.Enqueue(child);

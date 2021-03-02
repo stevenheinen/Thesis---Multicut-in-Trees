@@ -36,25 +36,22 @@ namespace MulticutInTrees
         {
             Console.WriteLine("Hello World!");
 
-            CountedCollection<int> c = new CountedCollection<int>();
-            c.Add(1);
-            c.Add(2);
-            c.Add(3);
-            c.Add(4);
-            c.Add(5);
+            PerformanceMeasurements op = new PerformanceMeasurements("testName");
+            Console.WriteLine(op);
 
             Counter counter = new Counter();
+            CountedCollection<int> c = new CountedCollection<int>();
+            c.Add(1, counter);
+            c.Add(2, counter);
+            c.Add(3, counter);
+            c.Add(4, counter);
+            c.Add(5, counter);
 
-            foreach (int ding in c.GetCountedEnumerable(counter))
-            {
-                Console.WriteLine(ding);
-                if (ding == 3)
-                {
-                    break;
-                }
-            }
+            Assert.AreEqual(5, counter.Value);
 
-            Assert.AreEqual(3, counter.Value);
+            int first = c.First(n => n == 3, counter);
+            Assert.AreEqual(8, counter.Value);
+
 
 
 

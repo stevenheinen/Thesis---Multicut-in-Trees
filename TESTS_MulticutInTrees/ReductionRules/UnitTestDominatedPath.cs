@@ -20,6 +20,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
     [TestClass]
     public class UnitTestDominatedPath
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestConstructor()
         {
@@ -62,11 +64,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
-            tree.AddChild(node0, node2);
-            tree.AddChild(node1, node3);
-            tree.AddChild(node1, node4);
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
+            tree.AddChild(node0, node2, counter);
+            tree.AddChild(node1, node3, counter);
+            tree.AddChild(node1, node4, counter);
 
             tree.UpdateNodeTypes();
 
@@ -105,10 +107,10 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node4 = new TreeNode(4);
             TreeNode node5 = new TreeNode(5);
 
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
-            tree.AddChild(node1, node2);
-            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
+            tree.AddChild(node1, node2, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 }, counter);
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node2);
@@ -149,11 +151,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node5 = new TreeNode(5);
             TreeNode node6 = new TreeNode(6);
 
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
-            tree.AddChild(node1, node2);
-            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 });
-            tree.AddChild(node3, node6);
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
+            tree.AddChild(node1, node2, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 }, counter);
+            tree.AddChild(node3, node6, counter);
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node2);
@@ -194,10 +196,10 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
-            tree.AddChild(node1, node2);
-            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
+            tree.AddChild(node1, node2, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 }, counter);
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node2);
@@ -236,12 +238,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node5 = new TreeNode(5);
             TreeNode node6 = new TreeNode(6);
 
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
-            tree.AddChild(node1, node2);
-            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 });
-            tree.AddChild(node3, node5);
-            tree.AddChild(node3, node6);
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
+            tree.AddChild(node1, node2, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node3, node4 }, counter);
+            tree.AddChild(node3, node5, counter);
+            tree.AddChild(node3, node6, counter);
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node2);

@@ -2,6 +2,7 @@
 
 ﻿using System;
 using System.Collections.Generic;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
@@ -18,13 +19,15 @@ namespace MulticutInTrees.Utilities
         /// <typeparam name="N">Implementation of <see cref="INode{N}"/>.</typeparam>
         /// <param name="startNode">The <typeparamref name="N"/> to start with.</param>
         /// <param name="targetSet">The <see cref="HashSet{T}"/> of <typeparamref name="N"/>s that need to be found.</param>
+        /// <param name="treeCounter">The <see cref="Counter"/> for graph operations that should count this BFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the BFS.</param>
         /// <returns>A <see cref="List{T}"/> with the shortest path from <paramref name="startNode"/> to any <typeparamref name="N"/> in <paramref name="targetSet"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/> or <paramref name="targetSet"/> is <see langword="null"/>.</exception>
-        public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, HashSet <N> seen = null) where N : INode<N>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/>, <paramref name="targetSet"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
+        public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, Counter treeCounter, HashSet <N> seen = null) where N : INode<N>
         {
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find the shortest path to a set, but the start node is null!");
             Utils.NullCheck(targetSet, nameof(targetSet), "Trying to find the shortest path to a set, but the set is null!");
+            Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to find the shortest path to a set, but the counter is null!");
             if (targetSet.Count == 0)
             {
                 throw new InvalidOperationException("Trying to find the shortest path to a set, but the set has no elements!");
@@ -33,6 +36,8 @@ namespace MulticutInTrees.Utilities
             {
                 throw new InvalidOperationException("Trying to find the shortest path to a set, but the startnode is already part of the set!");
             }
+
+            Counter mockCounter = new Counter();
 
             if (seen is null)
             {
@@ -50,10 +55,11 @@ namespace MulticutInTrees.Utilities
 
             while (queue.Count > 0)
             {
+                _ = treeCounter++;
                 N node = queue.Dequeue();
 
                 // Potentially push this node's neighbours onto the stack.
-                foreach (N neighbour in node.Neighbours)
+                foreach (N neighbour in node.Neighbours(mockCounter))
                 {
                     if (seen.Contains(neighbour))
                     {

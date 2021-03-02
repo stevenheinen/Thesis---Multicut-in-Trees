@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
@@ -12,14 +13,17 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestBFS
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestNullParameter()
         {
             Node node = new Node(0);
             HashSet<Node> target = new HashSet<Node>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(null, target));
-            Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(node, null));
+            Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(null, target, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(node, null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(node, target, null));
         }
 
         [TestMethod]
@@ -49,9 +53,9 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(node3, node7);
             graph.AddEdge(node6, node7);
 
-            Assert.ThrowsException<InvalidOperationException>(() => BFS.FindShortestPath(node0, new HashSet<Node>()));
-            Assert.ThrowsException<InvalidOperationException>(() => BFS.FindShortestPath(node0, new HashSet<Node>() { node0, node2, node8 }));
-            Assert.ThrowsException<NotInGraphException>(() => BFS.FindShortestPath(node0, new HashSet<Node>() { node8 }));
+            Assert.ThrowsException<InvalidOperationException>(() => BFS.FindShortestPath(node0, new HashSet<Node>(), counter));
+            Assert.ThrowsException<InvalidOperationException>(() => BFS.FindShortestPath(node0, new HashSet<Node>() { node0, node2, node8 }, counter));
+            Assert.ThrowsException<NotInGraphException>(() => BFS.FindShortestPath(node0, new HashSet<Node>() { node8 }, counter));
         }
 
         [TestMethod]
@@ -82,7 +86,7 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(node6, node7);
             graph.AddEdge(node6, node8);
 
-            List<Node> path = BFS.FindShortestPath(node0, new HashSet<Node>() { node8 });
+            List<Node> path = BFS.FindShortestPath(node0, new HashSet<Node>() { node8 }, counter);
             List<Node> expectedPath = new List<Node>() { node0, node2, node6, node8 };
 
             CollectionAssert.AreEqual(expectedPath, path);

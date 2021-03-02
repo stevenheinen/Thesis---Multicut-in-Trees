@@ -3,6 +3,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MulticutInTrees.CountedDatastructures;
 
 namespace MulticutInTrees.Graphs
 {
@@ -126,13 +127,15 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// Checks whether this <see cref="IGraph{N}"/> is acyclic.
         /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used during this operation.</param>
         /// <returns><see langword="true"/> if this <see cref="IGraph{N}"/> is acyclic, <see langword="false"/> if it is cyclic.</returns>
-        public bool IsAcyclic();
+        public bool IsAcyclic(Counter counter);
 
         /// <summary>
         /// Checks whether this <see cref="IGraph{N}"/> is connected.
         /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used during this operation.</param>
         /// <returns><see langword="true"/> if this <see cref="IGraph{N}"/> is connected, <see langword="false"/> otherwise.</returns>
-        public bool IsConnected();
+        public bool IsConnected(Counter counter);
     }
 }

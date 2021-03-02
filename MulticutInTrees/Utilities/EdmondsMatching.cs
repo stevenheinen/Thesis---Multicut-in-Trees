@@ -3,16 +3,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
 namespace MulticutInTrees.Utilities
 {
+    // todo: add counters
     /// <summary>
     /// Class that uses Edmond's Blossom algorithm to find a maximum matching in a graph.
     /// </summary>
     public static class EdmondsMatching
     {
+        // todo: replace with correct counters
+        private readonly static Counter counter = new Counter();
+
         /// <summary>
         /// Finds a maximum matching in <paramref name="graph"/>.
         /// </summary>
@@ -158,7 +163,7 @@ namespace MulticutInTrees.Utilities
                 }
 
                 // Loop through all neighbours of the node to find an edge that can be added to the matching.
-                foreach (N neighbour in node.Neighbours)
+                foreach (N neighbour in node.Neighbours(counter))
                 {
                     // If we already matched this neighbour, go to the next one.
                     if (matched[neighbour])
@@ -216,7 +221,7 @@ namespace MulticutInTrees.Utilities
             HashSet<N> adjacentVertices = new HashSet<N>();
             foreach (N vertex in unmatchedVertices)
             {
-                foreach (N neighbour in vertex.Neighbours)
+                foreach (N neighbour in vertex.Neighbours(counter))
                 {
                     adjacentVertices.Add(neighbour);
                 }
@@ -277,7 +282,7 @@ namespace MulticutInTrees.Utilities
             List<(N, N)> pathPPrime;
             try
             {
-                List<Node> pathInD = BFS.FindShortestPath(start, target);
+                List<Node> pathInD = BFS.FindShortestPath(start, target, counter);
 
                 pathPPrime = new List<(N, N)>();
                 for (int i = 0; i < pathInD.Count - 1; i++)
@@ -290,7 +295,7 @@ namespace MulticutInTrees.Utilities
                     pathPPrime.Add((x, orig2));
                 }
 
-                pathPPrime.Add((pathPPrime[^1].Item2, pathPPrime[^1].Item2.Neighbours.First(n => unmatchedVertices.Contains(n))));
+                pathPPrime.Add((pathPPrime[^1].Item2, pathPPrime[^1].Item2.Neighbours(counter).First(n => unmatchedVertices.Contains(n))));
             }
             catch (NotInGraphException)
             {
@@ -436,7 +441,7 @@ namespace MulticutInTrees.Utilities
             HashSet<N> neighbours = new HashSet<N>();
             foreach (N node in blossom)
             {
-                foreach (N neighbour in node.Neighbours)
+                foreach (N neighbour in node.Neighbours(counter))
                 {
                     originalEdges.Add(Utils.OrderEdgeSmallToLarge((node, neighbour)));
 
@@ -532,11 +537,11 @@ namespace MulticutInTrees.Utilities
             {
                 if (matched)
                 {
-                    enterNode = enterNode.Neighbours.FirstOrDefault(n => matching.Contains((n, enterNode)) || matching.Contains((enterNode, n)));
+                    enterNode = enterNode.Neighbours(counter).FirstOrDefault(n => matching.Contains((n, enterNode)) || matching.Contains((enterNode, n)));
                 }
                 else
                 {
-                    enterNode = enterNode.Neighbours.FirstOrDefault(n => !matching.Contains((n, enterNode)) && !matching.Contains((enterNode, n)));
+                    enterNode = enterNode.Neighbours(counter).FirstOrDefault(n => !matching.Contains((n, enterNode)) && !matching.Contains((enterNode, n)));
                 }
 
                 if (enterNode is null)
@@ -581,7 +586,7 @@ namespace MulticutInTrees.Utilities
             IEnumerable<(N, N)> afterBlossom = contractedPath.Skip(contractedPath.Select(n => n.Item2).ToList().IndexOf(firstNodeAfterBlossom) + 1);
 
             List<(N, N)> path1 = new List<(N, N)>(beforeBlossom);
-            List<(N, N)> shortest = Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<N>() { firstNodeAfterBlossom }, new HashSet<N>(seen)));
+            List<(N, N)> shortest = Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<N>() { firstNodeAfterBlossom }, counter, new HashSet<N>(seen)));
             path1.AddRange(shortest);
             path1.AddRange(afterBlossom);
 
@@ -592,7 +597,7 @@ namespace MulticutInTrees.Utilities
 
             seen.Add(shortest[1].Item2);
             List<(N, N)> path2 = new List<(N, N)>(beforeBlossom);
-            path2.AddRange(Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<N>() { firstNodeAfterBlossom }, seen)));
+            path2.AddRange(Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<N>() { firstNodeAfterBlossom }, counter, seen)));
             path2.AddRange(afterBlossom);
             return path2;
         }

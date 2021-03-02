@@ -78,6 +78,11 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         protected Random Random { get; }
 
+        /// <summary>
+        /// <see cref="Counter"/> that can be used for operations that should <b>NOT</b> be counted for the performance of this <see cref="Algorithm"/>.
+        /// </summary>
+        protected Counter MockCounter { get; }
+
         // TODO: temp
         private readonly Counter lastContractedEdgesCounter;
         private readonly Counter LastRemovedDemandPairsCounter;
@@ -97,6 +102,7 @@ namespace MulticutInTrees.Algorithms
             K = instance.K;
             Random = instance.Random;
             PartialSolution = new List<(TreeNode, TreeNode)>();
+            MockCounter = new Counter();
 
             lastContractedEdgesCounter = new Counter();
             LastRemovedDemandPairsCounter = new Counter();
@@ -114,11 +120,6 @@ namespace MulticutInTrees.Algorithms
         public virtual (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
         {
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
-            Stopwatch[] stopwatches = new Stopwatch[ReductionRules.Count];
-            for (int i = 0; i < ReductionRules.Count; i++)
-            {
-                stopwatches[i] = new Stopwatch();
-            }
 
             for (int i = 0; i < ReductionRules.Count; i++)
             {
@@ -146,9 +147,7 @@ namespace MulticutInTrees.Algorithms
                 if (!appliedReductionRule[i])
                 {
                     appliedReductionRule[i] = true;
-                    stopwatches[i].Start();
                     bool success = ReductionRules[i].RunFirstIteration();
-                    stopwatches[i].Stop();
                     if (success)
                     {
                         // If the first application of the i-th reduction rule was a success, start again at rule 0.
@@ -172,9 +171,7 @@ namespace MulticutInTrees.Algorithms
                     CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair, LastChangedEdgesPerDemandPairCounter);
                     LastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPairCounter);
                     LastIterationDemandPairChange = false;
-                    stopwatches[i].Start();
                     successfulAfterDemandPairChanged = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair);
-                    stopwatches[i].Stop();
                     if (!successfulAfterDemandPairChanged)
                     {
                         if (Program.PRINT_DEBUG_INFORMATION)
@@ -196,9 +193,7 @@ namespace MulticutInTrees.Algorithms
                     CountedList<DemandPair> oldLastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairs, LastRemovedDemandPairsCounter);
                     LastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairsCounter);
                     LastIterationDemandPairRemoval = false;
-                    stopwatches[i].Start();
                     successfulAfterDemandPairRemoved = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs);
-                    stopwatches[i].Stop();
                     if (!successfulAfterDemandPairRemoved)
                     {
                         if (Program.PRINT_DEBUG_INFORMATION)
@@ -220,17 +215,15 @@ namespace MulticutInTrees.Algorithms
                     CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(LastContractedEdges, lastContractedEdgesCounter);
                     LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(lastContractedEdgesCounter);
                     LastIterationEdgeContraction = false;
-                    stopwatches[i].Start();
                     successfulAfterEdgeContracted = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges);
-                    stopwatches[i].Stop();
                     if (!successfulAfterEdgeContracted)
                     {
                         if (Program.PRINT_DEBUG_INFORMATION)
                         {
                             Console.WriteLine($"The application of rule {i + 1} was not successful...");
-                            }
+                        }
 
-                            LastIterationEdgeContraction = true;
+                        LastIterationEdgeContraction = true;
                         LastContractedEdges = oldLastContractedEdges;
                     }
                 }
@@ -243,21 +236,8 @@ namespace MulticutInTrees.Algorithms
                 }
             }
 
-            PrintStopwatches(stopwatches);
             PrintCounters();
             return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
-        }
-
-        /// <summary>
-        /// Print the elapsed time of the <see cref="Stopwatch"/> each <see cref="ReductionRule"/> took to the console.
-        /// </summary>
-        /// <param name="stopwatches"></param>
-        private void PrintStopwatches(Stopwatch[] stopwatches)
-        {
-            for (int i = 0; i < stopwatches.Length; i++)
-            {
-                Console.WriteLine($"{ReductionRules[i].GetType()} needed {stopwatches[i].ElapsedTicks} ticks");
-            }
         }
 
         /// <summary>
@@ -265,10 +245,6 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         protected virtual void PrintCounters()
         {
-            Console.WriteLine($"DemandPairs: {DemandPairs.OperationsCounter}");
-            Console.WriteLine($"Ops on removed demand pairs: {LastRemovedDemandPairsCounter}");
-            Console.WriteLine($"Ops on changed demand pairs: {LastChangedEdgesPerDemandPairCounter}");
-            Console.WriteLine($"Ops on contracted edges:     {lastContractedEdgesCounter}");
             foreach (ReductionRule reductionRule in ReductionRules)
             {
                 reductionRule.PrintCounters();
@@ -342,7 +318,7 @@ namespace MulticutInTrees.Algorithms
             // If the I3-node has exactly three internal neighbours, the result of this edge contraction will be an I2-node.
             // If it has more than three internal neighbours, the result will be an I3-node.
 
-            bool hasAtLeastFourInternalNeighbours = contractedEdgeI3Node.Neighbours.Count(n => n.Neighbours.Count > 1) > 3;
+            bool hasAtLeastFourInternalNeighbours = contractedEdgeI3Node.Neighbours(MockCounter).Count(n => n.Neighbours(MockCounter).Count() > 1) > 3;
             NodeType contractedType;
             NodeType leafType;
 
@@ -371,10 +347,10 @@ namespace MulticutInTrees.Algorithms
         {
             // If the I1-node has exactly one leaf (which is also the edge that is contracted), the resulting node will be a leaf. 
             // The type of this leaf depends on the type of the (unique) internal neighbour of the I1-node.
-            bool hasExactlyOneLeaf = contractedEdgeI1Node.Neighbours.Count(n => n.Neighbours.Count == 1) == 1;
+            bool hasExactlyOneLeaf = contractedEdgeI1Node.Neighbours(MockCounter).Count(n => n.Neighbours(MockCounter).Count() == 1) == 1;
             if (hasExactlyOneLeaf)
             {
-                TreeNode internalNeighbour = contractedEdgeI1Node.Neighbours.FirstOrDefault(n => n.Neighbours.Count > 1);
+                TreeNode internalNeighbour = contractedEdgeI1Node.Neighbours(MockCounter).FirstOrDefault(n => n.Neighbours(MockCounter).Count() > 1);
                 if (internalNeighbour is default(TreeNode))
                 {
                     newNode.Type = NodeType.I1;
@@ -402,7 +378,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="newType">The new <see cref="NodeType"/> of the leaves of <paramref name="parentNode"/>.</param>
         private void ChangeLeavesFromNodeToType(TreeNode parentNode, NodeType oldType, NodeType newType)
         {
-            foreach (TreeNode leaf in parentNode.Neighbours.Where(n => n.Type == oldType))
+            foreach (TreeNode leaf in parentNode.Neighbours(MockCounter).Where(n => n.Type == oldType))
             {
                 leaf.Type = newType;
             }
@@ -417,37 +393,43 @@ namespace MulticutInTrees.Algorithms
         /// Add this edge to the solution, remove all <see cref="DemandPair"/>s that go over this edge, and contract it.
         /// </summary>
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s representing the edge to be cut.</param>
-        internal abstract void CutEdge((TreeNode, TreeNode) edge);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void CutEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Add multiple edges to the solution, remove all <see cref="DemandPair"/>s that go over these edges, and contract them.
         /// </summary>
         /// <param name="edges">The <see cref="IList{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges to be cut.</param>
-        internal abstract void CutEdges(IList<(TreeNode, TreeNode)> edges);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void CutEdges(IList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Contract an edge.
         /// </summary>
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s representing the edge to be contracted.</param>
-        internal abstract void ContractEdge((TreeNode, TreeNode) edge);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void ContractEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Contract multiple edges.
         /// </summary>
         /// <param name="edges">The <see cref="IList{T}"/> of tuples of <see cref="TreeNode"/>s representing the edges to be contracted.</param>
-        internal abstract void ContractEdges(IList<(TreeNode, TreeNode)> edges);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void ContractEdges(IList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Remove a <see cref="DemandPair"/> from the problem instance.
         /// </summary>
         /// <param name="demandPair">The <see cref="DemandPair"/> to be removed.</param>
-        internal abstract void RemoveDemandPair(DemandPair demandPair);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void RemoveDemandPair(DemandPair demandPair, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Remove multiple <see cref="DemandPair"/>s from the problem instance.
         /// </summary>
         /// <param name="demandPairs">The <see cref="IList{T}"/> of <see cref="DemandPair"/>s to be removed.</param>
-        internal abstract void RemoveDemandPairs(IList<DemandPair> demandPairs);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void RemoveDemandPairs(IList<DemandPair> demandPairs, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Change an endpoint of a <see cref="DemandPair"/>.
@@ -455,12 +437,14 @@ namespace MulticutInTrees.Algorithms
         /// <param name="demandPair">The <see cref="DemandPair"/> whose endpoint changes.</param>
         /// <param name="oldEndpoint">The old endpoint of <paramref name="demandPair"/>.</param>
         /// <param name="newEndpoint">The new endpoint of <paramref name="demandPair"/>.</param>
-        internal abstract void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Change an endpoint of multiple <see cref="DemandPair"/>s.
         /// </summary>
         /// <param name="demandPairEndpointTuples">The <see cref="IList{T}"/> of tuples containing the <see cref="DemandPair"/> that is changed, the <see cref="TreeNode"/> old endpoint and <see cref="TreeNode"/> new endpoint.</param>
-        internal abstract void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples);
+        /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
+        internal abstract void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples, PerformanceMeasurements measurements);
     }
 }

@@ -2,7 +2,6 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
@@ -15,25 +14,19 @@ namespace MulticutInTrees.Graphs
     /// </summary>
     public class Tree<N> : ITree<N> where N : ITreeNode<N>
     {
-        ///// <summary>
-        ///// The internal <see cref="List{T}"/> of edges in this <see cref="Tree{N}"/>.
-        ///// </summary>
-        //protected List<(N, N)> InternalEdges { get; set; }
+        /// <summary>
+        /// The publically visible collection of edges in this <see cref="Tree{N}"/>. Edges cannot be edited directly.
+        /// <br/>
+        /// See also: <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
+        /// </summary>
+        public IEnumerable<(N, N)> Edges => InternalEdges.GetLinkedList();
 
-        ///// <summary>
-        ///// The internal <see cref="HashSet{T}"/> of edges in this <see cref="Tree{N}"/>.
-        ///// </summary>
-        //protected HashSet<(N, N)> UniqueInternalEdges { get; set; }
-
-        ///// <summary>
-        ///// The internal <see cref="HashSet{T}"/> of nodes in this <see cref="Tree{N}"/>
-        ///// </summary>
-        //protected HashSet<N> UniqueInternalNodes { get; set; }
-
-        ///// <summary>
-        ///// The internal <see cref="List{T}"/> of nodes in this <see cref="Tree{N}"/>.
-        ///// </summary>
-        //protected List<N> InternalNodes { get; set; }
+        /// <summary>
+        /// The publically visible collection of nodes in this <see cref="Tree{N}"/>. Nodes cannot be edited directly.
+        /// <br/>
+        /// See also: <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
+        /// </summary>
+        public IEnumerable<N> Nodes => InternalNodes.GetLinkedList();
 
         /// <summary>
         /// The <see cref="CountedCollection{T}"/> of edges in this <see cref="Tree{N}"/>.
@@ -46,48 +39,14 @@ namespace MulticutInTrees.Graphs
         protected CountedCollection<N> InternalNodes { get; set; }
 
         /// <summary>
-        /// The number of nodes in this <see cref="Tree{N}"/>.
+        /// <see cref="Counter"/> that can be used for modifications that should not impact the performance of an <see cref="Algorithms.Algorithm"/> or <see cref="ReductionRules.ReductionRule"/>.
         /// </summary>
-        public int NumberOfNodes => InternalNodes.Count;
-
-        /// <summary>
-        /// The number of edges in this <see cref="Tree{N}"/>.
-        /// </summary>
-        public int NumberOfEdges => InternalEdges.Count;
-
-        /// <summary>
-        /// The publically visible collection of edges in this <see cref="Tree{N}"/>. Edges cannot be edited directly.
-        /// <br/>
-        /// See also: <seealso cref="AddRoot(N)"/>, <seealso cref="AddChild(N, N)"/>, <seealso cref="AddChildren(N, IEnumerable{N})"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
-        /// </summary>
-        public IEnumerable<(N, N)> Edges => InternalEdges.GetLinkedList();
-
-        /// <summary>
-        /// The publically visible collection of nodes in this <see cref="Tree{N}"/>. Nodes cannot be edited directly.
-        /// <br/>
-        /// See also: <seealso cref="AddRoot(N)"/>, <seealso cref="AddChild(N, N)"/>, <seealso cref="AddChildren(N, IEnumerable{N})"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
-        /// </summary>
-        public IEnumerable<N> Nodes => InternalNodes.GetLinkedList();
+        protected Counter MockCounter { get; }
 
         /// <summary>
         /// The root of this <see cref="Tree{N}"/>.
         /// </summary>
-        public N Root { get; private set; }
-
-        /// <summary>
-        /// The depth of this <see cref="Tree{N}"/>. Equal to the depth of the subtree of the <see cref="Root"/> of this <see cref="Tree{N}"/>.
-        /// </summary>
-        public int Height
-        {
-            get
-            {
-                if (Root is null)
-                {
-                    return 0;
-                }
-                return Root.HeightOfSubtree;
-            }
-        }
+        protected N Root { get; set; }
 
         /// <summary>
         /// Constructor for a <see cref="Tree{N}"/>.
@@ -96,13 +55,79 @@ namespace MulticutInTrees.Graphs
         {
             InternalNodes = new CountedCollection<N>();
             InternalEdges = new CountedCollection<(N, N)>();
+            MockCounter = new Counter();
+        }
 
-            /*
-            InternalNodes = new List<N>();
-            UniqueInternalNodes = new HashSet<N>();
-            InternalEdges = new List<(N, N)>();
-            UniqueInternalEdges = new HashSet<(N, N)>();
-            */
+        /// <summary>
+        /// The depth of this <see cref="Tree{N}"/>. Equal to the depth of the subtree of the <see cref="Root"/> of this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int Height(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the height of a tree, but the counter is null!");
+
+            if (Root is null)
+            {
+                _ = counter++;
+                return 0;
+            }
+            return Root.HeightOfSubtree(counter);
+        }
+
+        /// <summary>
+        /// Returns the root of this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>The <typeparamref name="N"/> that is the root of this <see cref="Tree{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public N GetRoot(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the root of a tree, but the counter is null!");
+
+            _ = counter++;
+            return Root;
+        }
+
+        /// <summary>
+        /// Sets the root of this <see cref="Tree{N}"/> to <paramref name="newRoot"/>.
+        /// </summary>
+        /// <param name="newRoot">The <typeparamref name="N"/> that will be the new root of this <see cref="Tree{N}"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="newRoot"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        protected void SetRoot(N newRoot, Counter counter)
+        {
+            Utils.NullCheck(newRoot, nameof(newRoot), $"Trying to set the root of a tree, but the new root is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to set the root of a tree, but the counter is null!");
+
+            _ = counter++;
+            Root = newRoot;
+        }
+
+        /// <summary>
+        /// Returns the number of nodes in this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that represents the number of nodes in this <see cref="Tree{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int NumberOfNodes(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the number of nodes in a tree, but the counter is null!");
+
+            return InternalNodes.Count(counter);
+        }
+
+        /// <summary>
+        /// Returns the number of edges in this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that represents the number of edges in this <see cref="Tree{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int NumberOfEdges(Counter counter)
+        {
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the number of edges in a tree, but the counter is null!");
+
+            return InternalEdges.Count(counter);
         }
 
         /// <summary>
@@ -112,18 +137,22 @@ namespace MulticutInTrees.Graphs
         /// <returns>A <see cref="string"/> representation of this <see cref="Graph{N}"/>.</returns>
         public override string ToString()
         {
-            return $"Tree with {NumberOfNodes} nodes, {NumberOfEdges} edges and height {Height}.";
+            return $"Tree with {NumberOfNodes(MockCounter)} nodes, {NumberOfEdges(MockCounter)} edges and height {Height(MockCounter)}.";
         }
 
         /// <summary>
         /// Get the root with information from <see cref="Nodes"/>.
         /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
         /// <returns>The first occurance of an <typeparamref name="N"/> in <see cref="Nodes"/> that is a root.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoRootException">Thrown when there is no root in <see cref="Nodes"/>.</exception>
         /// <exception cref="MultipleRootsException">Thrown when there are multiple roots in <see cref="Nodes"/>.</exception>
-        private N FindRoot()
+        protected N FindRoot(Counter counter)
         {
-            int numberOfRoots = Nodes.Count(n => n.Parent is null);
+            Utils.NullCheck(counter, nameof(counter), "Tryinf to find the root of a tree, but the counter is null!");
+
+            int numberOfRoots = InternalNodes.Count(n => n.GetParent(counter) is null, counter);
             if (numberOfRoots == 0)
             {
                 throw new NoRootException($"Trying to find a root in {this}, but there is none!");
@@ -133,71 +162,52 @@ namespace MulticutInTrees.Graphs
                 throw new MultipleRootsException($"Trying to update the root of {this}, but there are multiple roots!");
             }
 
-            return Nodes.First(n => n.Parent is null);
+            return InternalNodes.First(n => n.GetParent(counter) is null, counter);
         }
 
         /// <summary>
-        /// Adds the children of <paramref name="node"/> as children to the parent of <paramref name="node"/>, and removes <paramref name="node"/> from this <see cref="Tree{N}"/>.
-        /// <br/>
-        /// If <paramref name="node"/> is the root of this <see cref="Tree{N}"/>, and it has a single child, its child will become the root. Otherwise, an <see cref="MultipleRootsException"/> is thrown.
+        /// Adds the children of <paramref name="node"/> as children to the parent of <paramref name="node"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> whose children we want to connect to its parent.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
-        /// <exception cref="MultipleRootsException">Thrown when <paramref name="node"/> is the root and has multiple children.</exception>
-        private void AddChildrenToParent(N node)
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        /// <exception cref="MultipleRootsException">Thrown when <paramref name="node"/> is the root of this <see cref="Tree{N}"/>.</exception>
+        protected void AddChildrenToParent(N node, Counter counter)
         {
             Utils.NullCheck(node, nameof(node), "Trying to add the children of a node to its parent, but the node is null!");
-
+            Utils.NullCheck(counter, nameof(counter), "Trying to add the children of a node to its parent, but the counter is null!");
             if (node.Equals(Root))
             {
-                if (node.Children.Count > 1)
-                {
-                    throw new MultipleRootsException($"Trying to add the children of {node} to its parent, but {node} is the root of {this} and has more than 1 child ({node.Children.Count})!");
-                }
-
-                InternalEdges.Remove((Root, node));
-                if (node.Children.Count == 1)
-                {
-                    Root = node.Children[0];
-                }
-                else
-                {
-                    Root = default;
-                }
+                throw new NotSupportedException($"Trying to add the children of {node} to its parent, but {node} is the root of its tree!");
             }
-            else
+
+            if (node.Children.Count() == 0)
             {
-                InternalEdges.Remove((node.Parent, node));
-                //UniqueInternalEdges.Remove((node.Parent, node));
-
-                //InternalEdges.RemoveAll(edge => edge.Item1.Equals(node));
-                foreach (N child in node.Children) 
-                {
-                    InternalEdges.ChangeElement((node, child), (node.Parent, child));
-
-                    /*
-                    UniqueInternalEdges.Remove((node, child));
-                    InternalEdges.Add((node.Parent, child));
-                    UniqueInternalEdges.Add((node.Parent, child));
-                    */
-                }
-
-                node.Parent.AddChildren(node.Children);
-                node.RemoveAllChildren();
+                return;
             }
+
+            N parent = node.GetParent(counter);
+            foreach (N child in node.Children) 
+            {
+                InternalEdges.ChangeElement((node, child), (parent, child), counter);
+            }
+            parent.AddChildren(node.Children, counter);
+            node.RemoveAllChildren(counter);
         }
 
         /// <summary>
         /// Finds whether <paramref name="node"/> is part of this <see cref="Tree{N}"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> for which we want to know if it is part of this <see cref="Tree{N}"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
         /// <returns><see langword="true"/> if <paramref name="node"/> is part of this <see cref="Tree{N}"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
-        public bool HasNode(N node)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool HasNode(N node, Counter counter)
         {
             Utils.NullCheck(node, nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to see if a node is in {this}, but the counter is null!");
 
-            return InternalNodes.Contains(node);
+            return InternalNodes.Contains(node, counter);
         }
 
         /// <summary>
@@ -205,40 +215,41 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         /// <inheritdoc/>
         /// <returns><see langword="true"/> if the edge between <paramref name="parent"/> and <paramref name="child"/> exists in this <see cref="Tree{N}"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="parent"/> or <paramref name="child"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="parent"/>, <paramref name="child"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when either <paramref name="parent"/> or <paramref name="child"/> is not part of this <see cref="Tree{N}"/>.</exception>
-        public bool HasEdge(N parent, N child)
+        public bool HasEdge(N parent, N child, Counter counter)
         {
             Utils.NullCheck(parent, nameof(parent), $"Trying to find out whether an edge exists in {this}, but the parent of the edge is null!");
             Utils.NullCheck(child, nameof(child), $"Trying to find out whether an edge exists in {this}, but the child of the edge is null!");
-            if (!HasNode(parent))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to find out whether an edge exists in {this}, but the counter is null!");
+            if (!HasNode(parent, MockCounter))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the parent of the edge is not part of {this}!");
             }
-            if (!HasNode(child))
+            if (!HasNode(child, MockCounter))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the child of the edge is not part of {this}!");
             }
 
-            return InternalEdges.Contains((parent, child));
+            return InternalEdges.Contains((parent, child), counter);
         }
 
         /// <summary>
         /// Checks whether the edge <paramref name="edge"/> is part of this <see cref="Tree{N}"/>.
         /// </summary>
-        /// <param name="edge">The <see cref="ValueTuple{T1, T2}"/> of <typeparamref name="N"/>s for which we want to know if it is part of this <see cref="Tree{N}"/>.</param>
-        /// <returns><see langword="true"/> if <paramref name="edge"/> exists in this <see cref="ITree{N}"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either <typeparamref name="N"/> of <paramref name="edge"/> is <see langword="null"/>.</exception>
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when either <typeparamref name="N"/> of <paramref name="edge"/>, or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when either <typeparamref name="N"/> of <paramref name="edge"/> is not part of this <see cref="Tree{N}"/>.</exception>
-        public bool HasEdge((N, N) edge)
+        public bool HasEdge((N, N) edge, Counter counter)
         {
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), $"Trying to find out whether an edge exists in {this}, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), $"Trying to find out whether an edge exists in {this}, but the second endpoint of the edge is null!");
-            if (!HasNode(edge.Item1))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to find out whether an edge exists in {this}, but the counter is null!");
+            if (!HasNode(edge.Item1, MockCounter))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the first endpoint of the edge is not part of {this}!");
             }
-            if (!HasNode(edge.Item2))
+            if (!HasNode(edge.Item2, MockCounter))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the second endpoint of the edge is not part of {this}!");
             }
@@ -248,36 +259,35 @@ namespace MulticutInTrees.Graphs
 
             if (!parent.Equals(Root))
             {
-                if (parent.Parent.Equals(child))
+                if (parent.GetParent(MockCounter).Equals(child))
                 {
                     parent = edge.Item2;
                     child = edge.Item1;
                 }
             }
 
-            return InternalEdges.Contains((parent, child));
+            return InternalEdges.Contains((parent, child), counter);
         }
-
 
         /// <summary>
         /// Add <paramref name="newRoot"/> as root to this <see cref="Tree{N}"/>. The old root (if it exists) becomes a child of <paramref name="newRoot"/>.
         /// </summary>
         /// <param name="newRoot">The <typeparamref name="N"/> that will be the new root of this <see cref="Tree{N}"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="newRoot"/> is <see langword="null"/>.</exception>
-        public void AddRoot(N newRoot)
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="newRoot"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void AddRoot(N newRoot, Counter counter)
         {
             Utils.NullCheck(newRoot, nameof(newRoot), $"Trying to add a new root to {this}, but the new root is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add a new root to {this}, but the counter is null!");
 
-            if (!(Root is null))
+            if (!(GetRoot(counter) is null))
             {
-                newRoot.AddChild(Root);
-                InternalEdges.Add((newRoot, Root));
-                //UniqueInternalEdges.Add((newRoot, Root));
+                newRoot.AddChild(Root, counter);
+                InternalEdges.Add((newRoot, Root), counter);
             }
 
-            InternalNodes.Add(newRoot);
-            //UniqueInternalNodes.Add(newRoot);
-            Root = newRoot;
+            InternalNodes.Add(newRoot, counter);
+            SetRoot(newRoot, counter);
         }
 
         /// <summary>
@@ -285,28 +295,28 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         /// <param name="parent">The <typeparamref name="N"/> that will be the parent of <paramref name="child"/>. Must already be part of this <see cref="Tree{N}"/>.</param>
         /// <param name="child">The <typeparamref name="N"/> that will be the new child of <paramref name="parent"/>. Must not be part of this <see cref="Tree{N}"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/> or <paramref name="child"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parent"/>, <paramref name="child"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="parent"/> is not part of this <see cref="Tree{N}"/>.</exception>
         /// <exception cref="AlreadyInGraphException">Thrown when <paramref name="child"/> is already part of this <see cref="Tree{N}"/>.</exception>
-        public void AddChild(N parent, N child)
+        public void AddChild(N parent, N child, Counter counter)
         {
             Utils.NullCheck(parent, nameof(parent), $"Trying to add {child} as a child to a parent, but the parent is null!");
             Utils.NullCheck(child, nameof(child), $"Trying to add a child to {parent}, but the child is null!");
-            if (!HasNode(parent))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add a child to {parent}, but the counter is null!");
+            if (!HasNode(parent, MockCounter))
             {
                 throw new NotInGraphException($"Trying to add {child} as a child to {parent}, but {parent} is not part of {this}!");
             }
-            if (HasNode(child))
+            if (HasNode(child, MockCounter))
             {
                 throw new AlreadyInGraphException($"Trying to add {child} to {parent}, but {child} is already part of {this}!");
             }
 
-            parent.AddChild(child);
-            InternalNodes.Add(child);
-            //UniqueInternalNodes.Add(child);
+            parent.AddChild(child, counter);
+            InternalNodes.Add(child, counter);
             (N, N) edge = (parent, child);
-            InternalEdges.Add(edge);
-            //UniqueInternalEdges.Add(edge);
+            InternalEdges.Add(edge, counter);
         }
 
         /// <summary>
@@ -314,15 +324,17 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         /// <param name="parent">The <typeparamref name="N"/> that will be the parent of each <typeparamref name="N"/> in <paramref name="children"/>. Must already be part of this <see cref="Tree{N}"/>.</param>
         /// <param name="children">The <see cref="IEnumerable{T}"/> of <typeparamref name="N"/>s that will be the new children of <paramref name="parent"/>. Must not be part of this <see cref="Tree{N}"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="parent"/> or <paramref name="children"/> is <see langword="null"/>.</exception>
-        public void AddChildren(N parent, IEnumerable<N> children)
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="parent"/>, <paramref name="children"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void AddChildren(N parent, IEnumerable<N> children, Counter counter)
         {
             Utils.NullCheck(parent, nameof(parent), "Trying to add multiple children to a parent, but the parent is null!");
             Utils.NullCheck(children, nameof(children), $"Trying to add multiple children to {parent}, but the IEnumerable of children is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add multiple children to {parent}, but the counter is null!");
 
             foreach (N child in children)
             {
-                AddChild(parent, child);
+                AddChild(parent, child, counter);
             }
         }
 
@@ -330,41 +342,54 @@ namespace MulticutInTrees.Graphs
         /// Add all children of <paramref name="node"/> to its parent, and then deletes <paramref name="node"/> from this <see cref="Tree{N}"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> to be removed.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Tree{N}"/>.</exception>
-        public void RemoveNode(N node)
+        public void RemoveNode(N node, Counter counter)
         {
             Utils.NullCheck(node, nameof(node), $"Trying to remove a node from {this}, but the node is null!");
-            if (!HasNode(node))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove a node from {this}, but the counter is null!");
+            if (!HasNode(node, MockCounter))
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");
             }
             bool wasRoot = node.Equals(Root);
 
-            AddChildrenToParent(node);
-
-            if (!wasRoot)
+            if (wasRoot)
             {
-                node.Parent.RemoveChild(node);
-                InternalEdges.Remove((node.Parent, node));
-                //UniqueInternalEdges.Remove((node.Parent, node));
+                if (node.Children.Count() > 1)
+                {
+                    throw new MultipleRootsException($"Trying to remove {node} from {this}, but {node} is the root of this tree and has more than 1 child!");
+                }
+                N newRoot = node.Children.First();
+                InternalEdges.Remove((node, newRoot), counter);
+                SetRoot(newRoot, counter);
+                node.RemoveChild(newRoot, counter);
+                InternalNodes.Remove(node, counter);
+                return;
             }
-            InternalNodes.Remove(node);
-            //UniqueInternalNodes.Remove(node);
+
+            AddChildrenToParent(node, counter);
+            N parent = node.GetParent(counter);
+            parent.RemoveChild(node, counter);
+            InternalEdges.Remove((parent, node), counter);
+            InternalNodes.Remove(node, counter);
         }
 
         /// <summary>
         /// Remove muliple nodes from this <see cref="Tree{N}"/>. Children of the nodes to be removed are added to the parent of the node to be removed.
         /// </summary>
         /// <param name="nodes">The <see cref="IEnumerable{T}"/> of <typeparamref name="N"/>s to be removed from this <see cref="Tree{N}"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
-        public void RemoveNodes(IEnumerable<N> nodes)
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void RemoveNodes(IEnumerable<N> nodes, Counter counter)
         {
             Utils.NullCheck(nodes, nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove multiple nodes from {this}, but the counter is null!");
 
             foreach (N node in nodes)
             {
-                RemoveNode(node);
+                RemoveNode(node, counter);
             }
         }
 
@@ -376,7 +401,7 @@ namespace MulticutInTrees.Graphs
         {
             try
             {
-                FindRoot();
+                FindRoot(MockCounter);
             }
             catch (NoRootException)
             {
@@ -387,7 +412,7 @@ namespace MulticutInTrees.Graphs
                 return false;
             }
             
-            return DFS.IsAcyclicTree<Tree<N>, N>(this) && DFS.FindAllConnectedComponents(Nodes).Count == 1;
+            return DFS.IsAcyclicTree<Tree<N>, N>(this, MockCounter) && DFS.FindAllConnectedComponents(Nodes, MockCounter).Count == 1;
         }
 
         /// <summary>
@@ -414,7 +439,7 @@ namespace MulticutInTrees.Graphs
 
             foreach (N node in Nodes)
             {
-                if (node.Neighbours.Count == 1)
+                if (node.Neighbours(MockCounter).Count() == 1)
                 {
                     leaves.Add(node);
                     leafSet.Add(node);
@@ -435,7 +460,7 @@ namespace MulticutInTrees.Graphs
         {
             foreach (N node in internalNodes)
             {
-                int internalNeighbours = node.Neighbours.Count(n => !leaves.Contains(n));
+                int internalNeighbours = node.Neighbours(MockCounter).Count(n => !leaves.Contains(n));
                 if (internalNeighbours <= 1)
                 {
                     node.Type = NodeType.I1;
@@ -459,10 +484,10 @@ namespace MulticutInTrees.Graphs
         {
             foreach (N leaf in leaves)
             {
-                N parent = leaf.Parent;
+                N parent = leaf.GetParent(MockCounter);
                 if (parent is null)
                 {
-                    parent = leaf.Children[0];
+                    parent = leaf.Children.First();
                 }
 
                 if (parent.Type == NodeType.I1)

@@ -32,24 +32,9 @@ namespace MulticutInTrees.ReductionRules
         protected Algorithm Algorithm { get; }
 
         /// <summary>
-        /// <see cref="Counter"/> that counts how many edges this <see cref="ReductionRule"/> contracted.
+        /// The <see cref="PerformanceMeasurements"/> used to measure the performance of this <see cref="ReductionRule"/>.
         /// </summary>
-        protected Counter ContractedEdgesCounter { get; set; }
-
-        /// <summary>
-        /// <see cref="Counter"/> that counts how many <see cref="DemandPair"/>s this <see cref="ReductionRule"/> removed.
-        /// </summary>
-        protected Counter RemovedDemandPairsCounter { get; set; }
-
-        /// <summary>
-        /// <see cref="Counter"/> that counts how many <see cref="DemandPair"/>s this <see cref="ReductionRule"/> changed.
-        /// </summary>
-        protected Counter ChangedDemandPairsCounter { get; set; }
-
-        /// <summary>
-        /// <see cref="Stopwatch"/> that keeps track of the time spent checking whether this <see cref="ReductionRule"/> is applicable.
-        /// </summary>
-        protected Stopwatch TimeSpentCheckingApplicability { get; }
+        protected PerformanceMeasurements Measurements { get; }
 
         /// <summary>
         /// The <see cref="System.Random"/> used for random number generation.
@@ -63,23 +48,21 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
         /// <param name="random">The <see cref="System.Random"/> used for random number generation.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
-        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random)
+        /// <param name="name">The name of this <see cref="ReductionRule"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="name"/> is <see langword="null"/>.</exception>
+        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, string name)
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a reduction rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create a reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create a reduction rule, but the random is null!");
+            Utils.NullCheck(name, nameof(name), "Trying to create a reduction rule, but its name is null!");
 
             Tree = tree;
             DemandPairs = new CountedList<DemandPair>(demandPairs);
             Algorithm = algorithm;
             Random = random;
-
-            ContractedEdgesCounter = new Counter();
-            RemovedDemandPairsCounter = new Counter();
-            ChangedDemandPairsCounter = new Counter();
-            TimeSpentCheckingApplicability = new Stopwatch();
+            Measurements = new PerformanceMeasurements(name);
 
             Preprocess();
         }
@@ -92,13 +75,9 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Print all counters that this <see cref="ReductionRule"/> needed.
         /// </summary>
-        internal virtual void PrintCounters()
+        internal void PrintCounters()
         {
-            Console.WriteLine($"DemandPairs:          {DemandPairs.OperationsCounter}");
-            Console.WriteLine($"Contracted edges:     {ContractedEdgesCounter}");
-            Console.WriteLine($"Removed demand pairs: {RemovedDemandPairsCounter}");
-            Console.WriteLine($"Changed demand pairs: {ChangedDemandPairsCounter}");
-            Console.WriteLine($"Time spent checking whether this rule is applicable: {TimeSpentCheckingApplicability.ElapsedTicks} ticks");
+            Console.WriteLine(Measurements);
         }
 
         /// <summary>

@@ -4,15 +4,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 
 namespace MulticutInTrees.Utilities
 {
+    // todo: add counters
     /// <summary>
     /// Implementation of Dinic's algorithm for maximum flow in a graph.
     /// </summary>
     public static class DinicMaxFlow
     {
+        // todo: replace with correct counters
+        private readonly static Counter counter = new Counter();
+
         /// <summary>
         /// Compute the maximum flow in <paramref name="inputGraph"/> for multiple sources and sinks and unit capacities for each edge.
         /// </summary>
@@ -246,7 +251,7 @@ namespace MulticutInTrees.Utilities
             while (queue.Count > 0)
             {
                 N node = queue.Dequeue();
-                foreach (N child in node.Neighbours)
+                foreach (N child in node.Neighbours(counter))
                 {
                     // Update the level of this child if it does not have a level yet and we can send flow over the edge from the current node to this child.
                     if (levels[child.ID] < 0 && flow[(node.ID, child.ID)] < capacities[(node.ID, child.ID)])
@@ -289,7 +294,7 @@ namespace MulticutInTrees.Utilities
                 return currentFlow;
             }
 
-            foreach (N child in node.Neighbours)
+            foreach (N child in node.Neighbours(counter))
             {
                 if (levels[child.ID] == levels[node.ID] + 1 && flow[(node.ID, child.ID)] < capacities[(node.ID, child.ID)])
                 {

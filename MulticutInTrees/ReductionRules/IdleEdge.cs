@@ -33,7 +33,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public IdleEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random)
+        public IdleEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, "Idle Edge")
         {
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the IdleEdge rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the IdleEdge rule, but the list of demand pairs is null!");
@@ -58,7 +58,7 @@ namespace MulticutInTrees.ReductionRules
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
 
             // If this edge is not in the dictionary with demand paths per edge, or it is, but there are no demand paths going through this edge, we can contract this edge.
-            if (Tree.HasNode(edge.Item1) && Tree.HasNode(edge.Item2) && Tree.HasEdge(edge) && (!DemandPairsPerEdge.ContainsKey(usedEdge) || DemandPairsPerEdge[usedEdge].Count == 0))
+            if (Tree.HasNode(edge.Item1, Measurements.TreeOperationsCounter) && Tree.HasNode(edge.Item2, Measurements.TreeOperationsCounter) && Tree.HasEdge(edge, Measurements.TreeOperationsCounter) && (!DemandPairsPerEdge.ContainsKey(usedEdge) || DemandPairsPerEdge[usedEdge].Count == 0))
             {
                 return true;
             }
@@ -71,6 +71,7 @@ namespace MulticutInTrees.ReductionRules
             return;
         }
 
+        /*
         /// <inheritdoc/>
         internal override void PrintCounters()
         {
@@ -81,6 +82,7 @@ namespace MulticutInTrees.ReductionRules
             base.PrintCounters();
             Console.WriteLine();
         }
+        */
 
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
@@ -90,7 +92,7 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Idle Edge rule for the first time...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             // In the first iteration, check all edges in the input tree.
             List<(TreeNode, TreeNode)> edgesToBeContracted = new List<(TreeNode, TreeNode)>();
@@ -102,7 +104,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryContractEdges(edgesToBeContracted);
         }
@@ -127,7 +129,7 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Idle Edge rule after a demand path was removed...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             // Find all edges that were on the removed demand path, and check if they can be contracted.
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
@@ -142,7 +144,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryContractEdges(edgesToBeContracted.ToList());
         }
@@ -158,7 +160,7 @@ namespace MulticutInTrees.ReductionRules
                 Console.WriteLine("Applying Idle Edge rule after a demand path was changed...");
             }
 
-            TimeSpentCheckingApplicability.Start();
+            Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
             foreach ((List<(TreeNode, TreeNode)>, DemandPair) tuple in changedEdgesPerDemandPairList.GetCountedEnumerable(new Counter()))
@@ -172,7 +174,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentCheckingApplicability.Stop();
 
             return TryContractEdges(edgesToBeContracted.ToList());
         }
@@ -192,8 +194,7 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            ContractedEdgesCounter += edgesToBeContracted.Count;
-            Algorithm.ContractEdges(edgesToBeContracted);
+            Algorithm.ContractEdges(edgesToBeContracted, Measurements);
             return true;
         }
     }

@@ -18,6 +18,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
     [TestClass]
     public class UnitTestIdleEdge
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestConstructor()
         {
@@ -29,9 +31,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
 
             tree.UpdateNodeTypes();
 
@@ -62,9 +64,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
 
             tree.UpdateNodeTypes();
 
@@ -110,9 +112,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
 
             tree.UpdateNodeTypes();
 
@@ -144,9 +146,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
 
             tree.UpdateNodeTypes();
 
@@ -181,9 +183,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node4 = new TreeNode(4);
 
-            tree.AddRoot(node0);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 });
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 });
+            tree.AddRoot(node0, counter);
+            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
 
             tree.UpdateNodeTypes();
 
@@ -212,8 +214,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
             tree.UpdateNodeTypes();
             DemandPair demandPair = new DemandPair(node0, node1);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair };

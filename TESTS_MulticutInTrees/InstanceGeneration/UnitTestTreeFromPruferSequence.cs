@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.Graphs;
@@ -15,6 +16,8 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
     [TestClass]
     public class UnitTestTreeFromPruferSequence
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestTree()
         {
@@ -22,7 +25,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
 
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(525, random);
             Assert.IsNotNull(tree);
-            Assert.AreEqual(525, tree.NumberOfNodes);
+            Assert.AreEqual(525, tree.NumberOfNodes(counter));
             Assert.IsTrue(tree.IsValid());
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => TreeFromPruferSequence.GenerateTree(2, random));

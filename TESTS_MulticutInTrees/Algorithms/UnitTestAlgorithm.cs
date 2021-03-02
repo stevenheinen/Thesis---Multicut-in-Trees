@@ -14,9 +14,12 @@ using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Algorithms
 {
+
     [TestClass]
     public class UnitTestAlgorithm
     {
+        private readonly static Counter counter = new Counter();
+        
         [TestMethod]
         public void TestRun1()
         {
@@ -28,10 +31,10 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node2 = new TreeNode(2);
             TreeNode node3 = new TreeNode(3);
 
-            tree.AddRoot(node0);
-            tree.AddChild(node0, node1);
-            tree.AddChild(node0, node2);
-            tree.AddChild(node1, node3);
+            tree.AddRoot(node0, counter);
+            tree.AddChild(node0, node1, counter);
+            tree.AddChild(node0, node2, counter);
+            tree.AddChild(node1, node3, counter);
 
             tree.UpdateNodeTypes();
 
@@ -40,7 +43,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             GuoNiedermeierFPT g = new GuoNiedermeierFPT(instance);
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) solution = g.Run();
             Assert.IsTrue(solution.Item1);
-            Assert.AreEqual(0, solution.Item2.NumberOfEdges);
+            Assert.AreEqual(0, solution.Item2.NumberOfEdges(counter));
             Assert.AreEqual(1, solution.Item3.Count);
             Assert.AreEqual(0, solution.Item4.Count);
         }
@@ -71,15 +74,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             TreeNode node16 = new TreeNode(16);
             TreeNode node17 = new TreeNode(17);
 
-            tree.AddRoot(node1);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 });
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 });
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 });
-            tree.AddChild(node4, node10);
-            tree.AddChildren(node5, new List<TreeNode>() { node11, node12 });
-            tree.AddChildren(node6, new List<TreeNode>() { node13, node14 });
-            tree.AddChild(node7, node15);
-            tree.AddChildren(node10, new List<TreeNode>() { node16, node17 });
+            tree.AddRoot(node1, counter);
+            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
+            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
+            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
+            tree.AddChild(node4, node10, counter);
+            tree.AddChildren(node5, new List<TreeNode>() { node11, node12 }, counter);
+            tree.AddChildren(node6, new List<TreeNode>() { node13, node14 }, counter);
+            tree.AddChild(node7, node15, counter);
+            tree.AddChildren(node10, new List<TreeNode>() { node16, node17 }, counter);
 
             tree.UpdateNodeTypes();
 
@@ -97,13 +100,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
 
             Assert.IsTrue(result.Item1);
-            Assert.AreEqual(1, result.Item2.NumberOfNodes);
+            Assert.AreEqual(1, result.Item2.NumberOfNodes(counter));
             Assert.AreEqual(3, result.Item3.Count);
             Assert.AreEqual(0, result.Item4.Count);
 
             foreach (DemandPair dp in result.Item4)
             {
-                if (!result.Item2.HasNode(dp.Node1) || !result.Item2.HasNode(dp.Node2))
+                if (!result.Item2.HasNode(dp.Node1, counter) || !result.Item2.HasNode(dp.Node2, counter))
                 {
                     Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item2.Nodes.Print()}.");
                 }

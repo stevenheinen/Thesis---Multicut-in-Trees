@@ -11,7 +11,7 @@ using MulticutInTrees.Utilities;
 namespace TESTS_MulticutInTrees.Utilities
 {
     [TestClass]
-    public class UnitTestFisher_Yates
+    public class UnitTestFisherYates
     {
         [TestMethod]
         public void CheckReadOnly()
