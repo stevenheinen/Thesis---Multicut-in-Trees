@@ -68,8 +68,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
         public CountedList(CountedList<T> list)
         {
+#if !EXPERIMENT
             Utils.NullCheck(list, nameof(list), $"Trying to create a CountedList with a shared List, but the shared list is null!");
-
+#endif
             OperationsCounter = new Counter();
             List = list.List;
         }
@@ -81,8 +82,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
         public CountedList(List<T> list)
         {
+#if !EXPERIMENT
             Utils.NullCheck(list, nameof(list), $"Trying to create a CountedList with a shared List, but the shared list is null!");
-
+#endif
             OperationsCounter = new Counter();
             List = list;
         }
@@ -94,8 +96,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public CountedList(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), $"Trying to create a CountedList with a shared counter, but the shared counter is null!");
-            
+#endif            
             OperationsCounter = counter;
             List = new List<T>();
         }
@@ -108,9 +111,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public CountedList(CountedList<T> list, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(list, nameof(list), $"Trying to create a CountedList with a shared list and a shared counter, but the shared list is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to create a CountedList with a shared list and a shared counter, but the shared counter is null!");
-            
+#endif            
             OperationsCounter = counter;
             List = list.List;
         }
@@ -123,9 +127,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public CountedList(List<T> list, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(list, nameof(list), $"Trying to create a CountedList with a shared list and a shared counter, but the shared list is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to create a CountedList with a shared list and a shared counter, but the shared counter is null!");
-            
+#endif            
             OperationsCounter = counter;
             List = list;
         }
@@ -235,8 +240,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public IEnumerable<T> GetCountedEnumerable(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Grabbing the custom Counter Enumerable for a CountedList, but the counter is null!");
-
+#endif
             foreach (T item in List)
             {
                 counter++;

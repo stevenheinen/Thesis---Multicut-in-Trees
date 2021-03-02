@@ -51,9 +51,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <param name="counter">The <see cref="Counter"/> this <see cref="CountedEnumerator{T}"/> should use.</param>
         public CountedEnumerator(IEnumerator<T> enumerator, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(enumerator, nameof(enumerator), $"Trying to create an instance of a CountedEnumerator, but the IEnumerator is should use is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to create an instance of a CountedEnumerator, but the counter is should use is null!");
-
+#endif
             Enumerator = enumerator;
             OperationsCounter = counter;
         }

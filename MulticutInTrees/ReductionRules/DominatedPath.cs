@@ -34,12 +34,13 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
         public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, "Dominated Edge")
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the dominated path reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the dominated path reduction rule, but the list with demand paths is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the dominated path reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the dominated path reduction rule, but the random is null!");
             Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the dominated path reduction rule, but the dictionary with demand pairs per edge is null!");
-
+#endif
             DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
         }
 
@@ -52,9 +53,10 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="subsetPair"/> or <paramref name="largerPair"/> is <see langword="null"/>.</exception>
         private bool PathIsContainedIn(DemandPair subsetPair, DemandPair largerPair)
         {
+#if !EXPERIMENT
             Utils.NullCheck(subsetPair, nameof(subsetPair), "Trying to see if the path of a demand pair is contained in the path of another demand pair, but the first demand pair is null!");
             Utils.NullCheck(largerPair, nameof(largerPair), "Trying to see if the path of a demand pair is contained in the path of another demand pair, but the second demand pair is null!");
-
+#endif
             return largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter), Measurements.DemandPairsOperationsCounter) && largerPair.EdgeIsPartOfPath(subsetPair.EdgesOnDemandPath.Last(Measurements.DemandPairsOperationsCounter), Measurements.DemandPairsOperationsCounter);
         }
 
@@ -64,29 +66,15 @@ namespace MulticutInTrees.ReductionRules
             return;
         }
 
-        /*
-        /// <inheritdoc/>
-        internal override void PrintCounters()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Dominated Path counters");
-            Console.WriteLine("==============================");
-            Console.WriteLine($"DemandPairsPerEdge: {DemandPairsPerEdge.OperationsCounter}");
-            base.PrintCounters();
-            Console.WriteLine();
-        }
-        */
-
         /// <inheritdoc/>
         internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
+#if !EXPERIMENT
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Dominated Path reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
-
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Dominated Path rule after a demand path changed...");
-            }
-
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Dominated Path rule after a demand path changed...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             List<DemandPair> pairsToBeRemoved = new List<DemandPair>();
@@ -131,21 +119,21 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
+#if !EXPERIMENT
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Dominated Path reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
-
+#endif
             return false;
         }
 
         /// <inheritdoc/>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Dominated Path reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
-
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Dominated Path rule after an edge was contracted...");
-            }
-
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Dominated Path rule after an edge was contracted...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
@@ -193,11 +181,9 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Dominated Path rule for the first time...");
-            }
-
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Dominated Path rule for the first time...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
@@ -239,8 +225,9 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="pairsToBeRemoved"/> is <see langword="null"/>.</exception>
         private bool TryRemoveDemandPairs(List<DemandPair> pairsToBeRemoved)
         {
+#if !EXPERIMENT
             Utils.NullCheck(pairsToBeRemoved, nameof(pairsToBeRemoved), $"Trying to remove demand pairs, but the List with demand pairs is null!");
-
+#endif
             if (pairsToBeRemoved.Count == 0)
             {
                 return false;

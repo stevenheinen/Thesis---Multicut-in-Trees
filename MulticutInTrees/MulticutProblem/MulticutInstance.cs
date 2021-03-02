@@ -44,6 +44,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than or equal to zero.</exception>
         public MulticutInstance(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int k, Random random)
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create a multicut instance, but the tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create a multicut instance, but the random is null!");
@@ -51,7 +52,7 @@ namespace MulticutInTrees.MulticutProblem
             {
                 throw new ArgumentOutOfRangeException(nameof(k), $"Trying to create a multicut instance, but the maximum amount of edges that can be removed is smaller than or equal to zero!");
             }
-
+#endif
             Tree = tree;
             DemandPairs = demandPairs;
             K = k;

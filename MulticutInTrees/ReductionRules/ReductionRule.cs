@@ -2,7 +2,6 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -52,12 +51,13 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="name"/> is <see langword="null"/>.</exception>
         protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, string name)
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a reduction rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create a reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create a reduction rule, but the random is null!");
             Utils.NullCheck(name, nameof(name), "Trying to create a reduction rule, but its name is null!");
-
+#endif
             Tree = tree;
             DemandPairs = new CountedList<DemandPair>(demandPairs);
             Algorithm = algorithm;

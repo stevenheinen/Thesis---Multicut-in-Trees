@@ -70,8 +70,9 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="ownerName"/> is <see langword="null"/>.</exception>
         public PerformanceMeasurements(string ownerName)
         {
+#if !EXPERIMENT
             Utils.NullCheck(ownerName, nameof(ownerName), "Trying to create an instance of PerformanceMeasurements, but the name of the owner is null!");
-
+#endif
             Owner = ownerName;
             TreeOperationsCounter = new Counter();
             DemandPairsOperationsCounter = new Counter();

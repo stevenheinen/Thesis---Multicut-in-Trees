@@ -23,12 +23,6 @@ namespace MulticutInTrees
     /// </summary>
     public class Program
     {
-        // TODO: Better solution
-        /// <summary>
-        /// <see cref="bool"/> that represents whether debug information should be printed to the console during execution of the algorithm.
-        /// </summary>
-        public readonly static bool PRINT_DEBUG_INFORMATION = false;
-
         /// <summary>
         /// The entry method for the program.
         /// </summary>

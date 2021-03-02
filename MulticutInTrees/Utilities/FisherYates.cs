@@ -20,9 +20,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="NotSupportedException">Thrown when <paramref name="list"/> is readonly.</exception>
         public static void Shuffle<T>(this IList<T> list, Random random)
         {
+#if !EXPERIMENT
             Utils.NullCheck(list, nameof(list), "Trying to shuffle an IList, but the IList is null!");
             Utils.NullCheck(random, nameof(random), "Trying to shuffle an IList, but the random is null!");
-
+#endif
             if (list.IsReadOnly && !(list is T[]))
             {
                 throw new NotSupportedException($"Cannot shuffle this {list.GetType()} because it is readonly!");

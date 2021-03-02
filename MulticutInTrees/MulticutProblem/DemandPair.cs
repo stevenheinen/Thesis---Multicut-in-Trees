@@ -47,9 +47,10 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/> or <paramref name="node2"/> is <see langword="null"/>.</exception>
         public DemandPair(TreeNode node1, TreeNode node2)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node1, nameof(node1), "Trying to create a DemandPair, but the first endpoint of this demandpair is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to create a DemandPair, but the second endpoint of this demandpair is null!");
-
+#endif
             MockCounter = new Counter();
             Node1 = node1;
             Node2 = node2;
@@ -74,10 +75,11 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool EdgeIsPartOfPath((TreeNode, TreeNode) edge, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to see if an edge is part of a demandpair, but the counter is null!");
-
+#endif
             return Path.Contains(edge, counter) || Path.Contains((edge.Item2, edge.Item1), counter);
         }
 
@@ -94,6 +96,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ZeroLengthDemandPathException">Thrown when <paramref name="newEndpoint"/> is equal to the endpoint that is not <paramref name="oldEndpoint"/>, meaning the result of this new <see cref="DemandPair"/> would be between the same two <see cref="TreeNode"/>s.</exception>
         internal void ChangeEndpoint(TreeNode oldEndpoint, TreeNode newEndpoint, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(oldEndpoint, nameof(oldEndpoint), $"Trying to change the endpoint of {this}, but the old endpoint is null!");
             Utils.NullCheck(newEndpoint, nameof(newEndpoint), $"Trying to change the endpoint of {this}, but the new endpoint is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to change the endpoint of {this}, but the counter is null!");
@@ -101,7 +104,7 @@ namespace MulticutInTrees.MulticutProblem
             {
                 throw new NotOnDemandPathException($"Trying to change the endpoint of {this}, but the old endpoint given as argument is not on this demand path!");
             }
-
+#endif
             if (oldEndpoint == Node1)
             {
                 if (newEndpoint == Node2)
@@ -134,6 +137,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ZeroLengthDemandPathException">Thrown when the contraction of <paramref name="contractedEdge"/> means this <see cref="DemandPair"/> now consists between the same nodes.</exception>
         internal void OnEdgeContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
@@ -142,7 +146,7 @@ namespace MulticutInTrees.MulticutProblem
             {
                 throw new ZeroLengthDemandPathException($"After contracting edge {contractedEdge}, {this} is now a demand pair of length zero!");
             }
-
+#endif
             UpdateEndpointsAfterEdgeContraction(contractedEdge, newNode);
             UpdateEdgesOnPathAfterEdgeContraction(contractedEdge, newNode, counter);
         }
@@ -156,10 +160,11 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="oldNode"/>, <paramref name="newNode"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         internal void OnEdgeNextToNodeOnDemandPathContracted(TreeNode oldNode, TreeNode newNode, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(oldNode, nameof(oldNode), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the old node is null!");
             Utils.NullCheck(newNode, nameof(newNode), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the new node is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to update a demand pair when one of the endpoints of the contracted edge is part of this demand pair, but the counter is null!");
-
+#endif
             // TODO: Should not be necessary.
             if (oldNode == newNode)
             {
@@ -178,6 +183,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="contractedEdge"/>, <paramref name="newNode"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         internal void OnEdgeNextToDemandPathEndpointsContracted((TreeNode, TreeNode) contractedEdge, TreeNode newNode, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
@@ -186,7 +192,7 @@ namespace MulticutInTrees.MulticutProblem
             {
                 throw new ZeroLengthDemandPathException($"After contracting edge {contractedEdge}, {this} is now a demand pair of length zero!");
             }
-
+#endif
             if (contractedEdge.Item1 == Node1 || contractedEdge.Item2 == Node1)
             {
                 Node1 = newNode;
@@ -215,10 +221,11 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentNullException">Thrown when one of the elements of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
         private void UpdateEndpointsAfterEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the endpoints of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the endpoints of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the endpoints of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
-
+#endif
             if (contractedEdge.Item1 == Node1 || contractedEdge.Item2 == Node1)
             {
                 Node1 = newNode;
@@ -239,11 +246,12 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="NotOnDemandPathException">Thrown when <paramref name="contractedEdge"/> was not part of this <see cref="DemandPair"/>.</exception>
         private void UpdateEdgesOnPathAfterEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the first endpoint of the edge is null!");
             Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the second endpoint of the edge is null!");
             Utils.NullCheck(newNode, nameof(newNode), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the new node is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to update the edges on the path of {this} after the contraction of the edge between {contractedEdge.Item1} and {contractedEdge.Item2}, but the counter is null!");
-
+#endif
             // Update the list of edges on this demand path.
             (TreeNode, TreeNode) usedEdge = contractedEdge;
             if (!Path.Contains(usedEdge, counter))

@@ -35,12 +35,13 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
         public IdleEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, "Idle Edge")
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the IdleEdge rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the IdleEdge rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the IdleEdge rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the IdleEdge rule, but the random is null!");
             Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the IdleEdge rule, but the dictionary with demand paths per edge is null!");
-
+#endif
             DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
         }
 
@@ -52,9 +53,10 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when either <see cref="TreeNode"/> of <paramref name="edge"/> is <see langword="null"/>.</exception>
         private bool CanEdgeBeContracted((TreeNode, TreeNode) edge)
         {
+#if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to see if an edge can be contracted, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to see if an edge can be contracted, but the second endpoint of the edge is null!");
-
+#endif
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
 
             // If this edge is not in the dictionary with demand paths per edge, or it is, but there are no demand paths going through this edge, we can contract this edge.
@@ -71,27 +73,12 @@ namespace MulticutInTrees.ReductionRules
             return;
         }
 
-        /*
-        /// <inheritdoc/>
-        internal override void PrintCounters()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Idle Edge counters");
-            Console.WriteLine("==============================");
-            Console.WriteLine($"DemandPairsPerEdge: {DemandPairsPerEdge.OperationsCounter}");
-            base.PrintCounters();
-            Console.WriteLine();
-        }
-        */
-
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Idle Edge rule for the first time...");
-            }
-
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Idle Edge rule for the first time...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             // In the first iteration, check all edges in the input tree.
@@ -113,8 +100,9 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to execute the IdleEdge rule after edges were contracted, but the IEnumerable with contracted edge information is null!");
-
+#endif
             return false;
         }
 
@@ -122,13 +110,12 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
+#if !EXPERIMENT
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to execute the IdleEdge rule after a demand pair was removed, but the list of removed demand pairs is null!");
-
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Idle Edge rule after a demand path was removed...");
-            }
-
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Idle Edge rule after a demand path was removed...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             // Find all edges that were on the removed demand path, and check if they can be contracted.
@@ -153,13 +140,12 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
+#if !EXPERIMENT
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to execute the IdleEdge rule after a demand pair was changed, but the list of changed demand pairs is null!");
-
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Idle Edge rule after a demand path was changed...");
-            }
-
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Idle Edge rule after a demand path was changed...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
@@ -187,8 +173,9 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeContracted"/> is <see langword="null"/>.</exception>
         private bool TryContractEdges(List<(TreeNode, TreeNode)> edgesToBeContracted)
         {
+#if !EXPERIMENT
             Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), $"Trying to contract edges, but the List with edges is null!");
-            
+#endif            
             if (edgesToBeContracted.Count == 0)
             {
                 return false;

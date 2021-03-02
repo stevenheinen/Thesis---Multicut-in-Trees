@@ -5,6 +5,8 @@
     <RootNamespace>TESTS_MulticutInTrees</RootNamespace>
 
     <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;VerboseDebug;Experiment</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

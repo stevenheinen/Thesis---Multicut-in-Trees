@@ -11,6 +11,7 @@
     <DefaultDocumentationWikiLinks>true</DefaultDocumentationWikiLinks>
     <DefaultDocumentationFileNameMode>Name</DefaultDocumentationFileNameMode>
     <DefaultDocumentationHome>home</DefaultDocumentationHome>
+    <Configurations>Debug;Release;VerboseDebug;Experiment</Configurations>
   </PropertyGroup>
 
   <Choose>

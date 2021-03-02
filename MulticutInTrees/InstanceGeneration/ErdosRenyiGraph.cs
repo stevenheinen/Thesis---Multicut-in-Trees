@@ -22,6 +22,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> or <paramref name="chancePerEdge"/> is negative.</exception>
         public static Graph<Node> CreateErdosRenyiGraph(int numberOfNodes, double chancePerEdge, Random random)
         {
+#if !EXPERIMENT
             Utils.NullCheck(random, nameof(random), "Trying to create an Erdos-Renyi graph, but the random is null!");
             if (numberOfNodes < 0)
             {
@@ -35,7 +36,7 @@ namespace MulticutInTrees.InstanceGeneration
             {
                 throw new ArgumentOutOfRangeException(nameof(chancePerEdge), "Trying to create an Erdos-Renyi graph with a change of larger than 1 per possible edge!");
             }
-
+#endif
             Graph<Node> graph = new Graph<Node>();
 
             for (uint i = 0; i < numberOfNodes; i++)

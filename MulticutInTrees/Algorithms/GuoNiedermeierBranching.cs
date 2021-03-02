@@ -42,6 +42,15 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         private Dictionary<(TreeNode, TreeNode), List<DemandPair>> DemandPairsPerEdge { get; }
 
+        /// <summary>
+        /// <see cref="PerformanceMeasurements"/> this <see cref="Algorithm"/> used.
+        /// </summary>
+        private PerformanceMeasurements Measurements { get; }
+
+        // todo: let this algorithm use Measurements
+        /// <summary>
+        /// <see cref="Counter"/> that can be used for operations that should not impact performance of this <see cref="Algorithm"/>.
+        /// </summary>
         private Counter MockCounter { get; }
 
         /// <summary>
@@ -51,12 +60,14 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
         public GuoNiedermeierBranching(MulticutInstance instance)
         {
+#if !EXPERIMENT
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the GuoNiedermeier branching algorithm, but the instance we want to solve is null!");
-
+#endif
             Tree = instance.Tree;
             DemandPairs = new List<DemandPair>(instance.DemandPairs);
             K = instance.K;
 
+            Measurements = new PerformanceMeasurements("Guo and Niedermeier branching");
             MockCounter = new Counter();
             LeastCommonAncestors = new Dictionary<DemandPair, TreeNode>();
             DemandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>();
@@ -69,34 +80,30 @@ namespace MulticutInTrees.Algorithms
         public (bool, List<(TreeNode, TreeNode)>) Run()
         {
             FillDemandPathsPerEdge();
+
+            Measurements.TimeSpentModifyingInstance.Start();
+
             FindLeastCommonAncestors();
 
             List<DemandPair> sortedDemandPairs = LeastCommonAncestors.OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key).ToList();
             HashSet<DemandPair> solvedDemandPairs = new HashSet<DemandPair>();
             List<(TreeNode, TreeNode)> solution = new List<(TreeNode, TreeNode)>();
             (bool solved, int size) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution);
-            
-            //PrintCounters();
+
+            Measurements.TimeSpentModifyingInstance.Stop();
+
+            PrintCounters();
             
             return (solved, solution);
         }
 
-        /*
         /// <summary>
-        /// Print the <see cref="Counter"/>s this algorithm used to the console.
+        /// Print the <see cref="PerformanceMeasurements"/> this algorithm used to the console.
         /// </summary>
         private void PrintCounters()
         {
-            Console.WriteLine();
-            Console.WriteLine("Guo and Niedermeier branching algorithm");
-            Console.WriteLine("==============================");
-            Console.WriteLine($"DemandPairs:               {DemandPairs.OperationsCounter}");
-            Console.WriteLine($"Least Common Ancestors:    {LeastCommonAncestors.OperationsCounter}");
-            Console.WriteLine($"DemandPairsPerEdge Keys:   {DemandPairsPerEdge.OperationsCounter}");
-            Console.WriteLine($"DemandPairsPerEdge Values: {DemandPairsPerEdgeCounter}");
-            Console.WriteLine();
+            Console.WriteLine(Measurements);
         }
-        */
 
         /// <summary>
         /// Fills <see cref="DemandPairsPerEdge"/>.
@@ -244,8 +251,9 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         private List<TreeNode> FindAllAncestors(TreeNode node)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), "Trying to find all ancestors of a treenode, but the treenode is null!");
-
+#endif
             List<TreeNode> ancestors = new List<TreeNode>() { node };
             TreeNode parent;
             while ((parent = node.GetParent(MockCounter)) != null)

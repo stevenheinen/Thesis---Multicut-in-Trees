@@ -28,8 +28,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
         public static List<(N, N)> FindMaximumMatching<G, N>(G graph) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find a maximum matching in a graph, but the graph is null!");
-
+#endif
             List<(N, N)> matching = FindGreedyMaximalMatching<G, N>(graph);
             return RecursiveFindMaximumMatching(graph, matching);
         }
@@ -45,8 +46,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
         public static bool HasMatchingOfAtLeast<G, N>(G graph, int requiredSize) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), $"Trying to find a matching of size at least {requiredSize} in a graph, but the graph is null!");
-
+#endif
             List<(N, N)> matching = FindGreedyMaximalMatching<G, N>(graph);
             return RecursiveHasMatchingOfAtLeast(graph, requiredSize, matching);
         }
@@ -62,9 +64,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="currentMatching"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> RecursiveFindMaximumMatching<G, N>(G graph, List<(N, N)> currentMatching) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to recursively find a maximum matching in a graph, but the graph is null!");
             Utils.NullCheck(currentMatching, nameof(currentMatching), "Trying to recursively find a maximum matching in a graph, but the current matching is null!");
-
+#endif
             List<(N, N)> augmentingPath = FindAugmentingPath(graph, currentMatching);
             if (augmentingPath.Count > 0)
             {
@@ -87,9 +90,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="currentMatching"/> is <see langword="null"/>.</exception>
         private static bool RecursiveHasMatchingOfAtLeast<G, N>(G graph, int requiredSize, List<(N, N)> currentMatching) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), $"Trying to recursively find a matching of size at least {requiredSize} in a graph, but the graph is null!");
             Utils.NullCheck(currentMatching, nameof(currentMatching), $"Trying to recursively find a matching of size at least {requiredSize} in a graph, but the current matching is null!");
-
+#endif
             if (currentMatching.Count >= requiredSize)
             {
                 return true;
@@ -115,13 +119,14 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="path"/> is not an augmenting path.</exception>
         private static void AugmentMatchingAlongPath<N>(List<(N, N)> matching, List<(N, N)> path) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(matching, nameof(matching), "Trying to augment a matching along a path, but the matching is null!");
             Utils.NullCheck(path, nameof(path), "Trying to augment a matching along a path, but the path is null!");
             if (!IsAugmentingPath(path, matching))
             {
                 throw new InvalidOperationException("Trying to augment along a path, but the path is not an augmenting path!");
             }
-
+#endif
             for (int i = 1; i < path.Count - 1; i += 2)
             {
                 matching.Remove(Utils.OrderEdgeSmallToLarge(path[i]));
@@ -142,8 +147,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> FindGreedyMaximalMatching<G, N>(G graph) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find an initial matching in a graph, but the graph is null!");
-
+#endif
             List<(N, N)> matching = new List<(N, N)>();
 
             // Save we have not matched any of the nodes.
@@ -193,9 +199,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> FindAugmentingPath<G, N>(G graph, List<(N, N)> matching) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find an augmenting path in a graph, but the graph is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find an augmenting path in a graph, but the current matching is null!");
-
+#endif
             if (graph.NumberOfEdges == 0)
             {
                 return new List<(N, N)>();
@@ -264,13 +271,14 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodesInD"/>, <paramref name="unmatchedEdges"/>, <paramref name="originalNodes"/>, <paramref name="unmatchedVertices"/>, <paramref name="adjacentVertices"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> FindPathPPrime<N>(HashSet<Node> nodesInD, List<(N, N)> unmatchedEdges, Dictionary<Node, N> originalNodes, HashSet<N> unmatchedVertices, HashSet<N> adjacentVertices, Dictionary<(N, N), N> nodesInMiddleOfArcs) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(nodesInD, nameof(nodesInD), "Trying to create path P', but the set with nodes in D is null!");
             Utils.NullCheck(unmatchedEdges, nameof(unmatchedEdges), "Trying to create path P', but the list with unmatched edges is null!");
             Utils.NullCheck(originalNodes, nameof(originalNodes), "Trying to create path P', but the dictionary with original nodes is null!");
             Utils.NullCheck(unmatchedVertices, nameof(unmatchedVertices), "Trying to create path P', but the set with unmatched vertices in D is null!");
             Utils.NullCheck(adjacentVertices, nameof(adjacentVertices), "Trying to create path P', but the set with adjacent vertices in D is null!");
             Utils.NullCheck(nodesInMiddleOfArcs, nameof(nodesInMiddleOfArcs), "Trying to create path P', but the dictionary with nodes in the middle of arcs in D is null!");
-
+#endif
             Node start = nodesInD.First(n => unmatchedVertices.Contains(originalNodes[n]));
             HashSet<Node> target = new HashSet<Node>(nodesInD.Where(n => n != start && adjacentVertices.Contains(originalNodes[n])));
 
@@ -318,9 +326,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="unmatchedEdges"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static Graph<Node> BuildDigraphD<N>(List<(N, N)> unmatchedEdges, HashSet<(N, N)> matching, HashSet<Node> nodesInD, Dictionary<Node, N> originalNodes, Dictionary<(N, N), N> nodesInMiddleOfArcs) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(unmatchedEdges, nameof(unmatchedEdges), "Trying to build the digraph D, but the list with the unmatched edges is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to build the digraph D, but the list with the matched edges is null!");
-
+#endif
             if (nodesInD is null)
             {
                 nodesInD = new HashSet<Node>();
@@ -378,6 +387,7 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="unmatchedEdge"/> or <paramref name="matchedEdge"/>, or <paramref name="nodesInD"/>, <paramref name="arcsInD"/>, <paramref name="nodesInMiddleOfArcs"/>, <paramref name="originalNodes"/> or <paramref name="originalToD"/> is <see langword="null"/>.</exception>
         private static void CreateArcForD<N>((N, N) unmatchedEdge, (N, N) matchedEdge, HashSet<Node> nodesInD, List<(Node, Node)> arcsInD, Dictionary<(N, N), N> nodesInMiddleOfArcs, Dictionary<Node, N> originalNodes, Dictionary<N, Node> originalToD) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(unmatchedEdge.Item1, nameof(unmatchedEdge.Item1), "Trying to create an arc for the digraph D, but the first endpoint of the unmatched edge is null!");
             Utils.NullCheck(unmatchedEdge.Item2, nameof(unmatchedEdge.Item2), "Trying to create an arc for the digraph D, but the second endpoint of the unmatched edge is null!");
             Utils.NullCheck(matchedEdge.Item1, nameof(matchedEdge.Item1), "Trying to create an arc for the digraph D, but the first endpoint of the matched edge is null!");
@@ -387,7 +397,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(nodesInMiddleOfArcs, nameof(nodesInMiddleOfArcs), "Trying to create an arc for the digraph D, but the dictionary with nodes in the middle of arcs in D is null!");
             Utils.NullCheck(originalNodes, nameof(originalNodes), "Trying to create an arc for the digraph D, but the dictionary with original nodes is null!");
             Utils.NullCheck(originalToD, nameof(originalToD), "Trying to create an arc for the digraph D, but the dictionary with nodes in D from original nodes is null!");
-
+#endif
             if (!originalToD.TryGetValue(unmatchedEdge.Item1, out Node dNode1))
             {
                 dNode1 = new Node(unmatchedEdge.Item1.ID);
@@ -421,10 +431,11 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/>, <paramref name="nonSimpleWalk"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> FindAndContractBlossom<G, N>(G graph, List<(N, N)> nonSimpleWalk, List<(N, N)> matching) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find and contract a blossom, but the graph this blossom is in is null!");
             Utils.NullCheck(nonSimpleWalk, nameof(nonSimpleWalk), "Trying to find and contract a blossom, but the list with the non-simple walk is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find and contract a blossom, but the list with the current matching is null!");
-
+#endif
             List<N> blossom = new List<N>();
             for (int i = 0; i < nonSimpleWalk.Count - 1; i++)
             {
@@ -482,12 +493,13 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/>, <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> ExpandPath<G, N>(G graph, List<(N, N)> contractedPath, List<N> blossom, N contractedBlossom, List<(N, N)> matching) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to expand a path in a graph with a contracted blossom, but the graph is null!");
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom, but the path is null!");
             Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom, but the original blossom is null!");
             Utils.NullCheck(contractedBlossom, nameof(contractedBlossom), "Trying to expand a path in a graph with a contracted blossom, but the contracted blossom is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom, but the current matching is null!");
-
+#endif
             if (contractedPath.Count == 0)
             {
                 return contractedPath;
@@ -526,10 +538,11 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> ExpandPathBlossomOnEnd<N>(List<(N, N)> contractedPath, List<N> blossom, List<(N, N)> matching) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom on the end of the path, but the path is null!");
             Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom somewhere on the end of the path, but the original blossom is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom somewhere on the end of the path, but the current matching is null!");
-
+#endif
             N enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1));
             contractedPath[^1] = (contractedPath[^1].Item1, enterNode);
             bool matched = true;
@@ -570,12 +583,13 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/>, <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static List<(N, N)> ExpandPathBlossomInMiddle<G, N>(G graph, List<(N, N)> contractedPath, List<N> blossom, N contractedBlossom, List<(N, N)> matching) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the graph is null!");
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the path is null!");
             Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the original blossom is null!");
             Utils.NullCheck(contractedBlossom, nameof(contractedBlossom), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the contracted blossom is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the current matching is null!");
-
+#endif
             N lastNodeBeforeBlossom = contractedPath.SkipWhile(n => !n.Item2.Equals(contractedBlossom)).First().Item1;
             N firstNodeAfterBlossom = contractedPath.SkipWhile(n => !n.Item1.Equals(contractedBlossom)).First().Item2;
 
@@ -612,9 +626,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
         private static bool IsAugmentingPath<N>(List<(N, N)> path, List<(N, N)> matching) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(path, nameof(path), "Trying to see if a path is an augmenting path given a matching, but the path is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to see if a path is an augmenting path given a matching, but the matching is null!");
-
+#endif
             // If the path has even length, it cannot be an augmenting path.
             if (path.Count % 2 == 0)
             {

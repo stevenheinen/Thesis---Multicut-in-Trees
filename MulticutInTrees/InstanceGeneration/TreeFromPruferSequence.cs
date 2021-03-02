@@ -24,12 +24,13 @@ namespace MulticutInTrees.InstanceGeneration
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is less than three.</exception>
         public static Tree<TreeNode> GenerateTree(int numberOfNodes, Random random)
         {
+#if !EXPERIMENT
             Utils.NullCheck(random, nameof(random), "Trying to generate a random tree from a Prüfer sequence, but the random is null!");
             if (numberOfNodes < 3)
             {
                 throw new ArgumentOutOfRangeException("A tree generated with a Prüfer sequence should have at least 3 nodes!");
             }
-
+#endif
             Counter counter = new Counter();
 
             List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes, random);

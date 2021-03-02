@@ -90,8 +90,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public TreeNode GetParent(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the root of a TreeNode, but the counter is null!");
-            
+#endif            
             _ = counter++;
             return Parent;
         }
@@ -104,8 +105,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         private void SetParent(TreeNode newParent, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to set the root of a TreeNode, but the counter is null!");
-
+#endif
             _ = counter++;
             Parent = newParent;
         }
@@ -117,8 +119,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int Degree(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the degree of a TreeNode, but the counter is null!");
-
+#endif
             if (Parent is null)
             {
                 return InternalChildren.Count(counter);
@@ -130,8 +133,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int DepthFromRoot(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the depth of a TreeNode, but the counter is null!");
-
+#endif
             if (Parent is null)
             {
                 _ = counter++;
@@ -144,8 +148,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int HeightOfSubtree(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the height of the subtree of a TreeNode, but the counter is null!");
-
+#endif
             _ = counter++;
             if (InternalChildren.Count(counter) == 0)
             {
@@ -173,6 +178,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyANeighbourException">Thrown when parameter <paramref name="child"/> is already a child of the <see cref="TreeNode"/> this method is called from.</exception>
         public void AddChild(TreeNode child, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(child, nameof(child), $"Trying to add a child to {this}, but child is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to add a child to {this}, but the counter is null!");
             if (child == this)
@@ -187,7 +193,7 @@ namespace MulticutInTrees.Graphs
             {
                 throw new AlreadyANeighbourException($"Trying to add {child} as a child to {this}, but {child} is already a child of {this}!");
             }
-
+#endif
             InternalChildren.Add(child, counter);
             child.SetParent(this, counter);
         }
@@ -203,9 +209,10 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="children"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void AddChildren(IEnumerable<TreeNode> children, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(children, nameof(children), $"Trying to add multiple children to {this}, but the IEnumerable of children is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to add multiple children to {this}, but the counter is null!");
-
+#endif
             foreach (TreeNode child in children)
             {
                 AddChild(child, counter);
@@ -224,13 +231,14 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotANeighbourException">Thrown when <paramref name="child"/> is not a child of this <see cref="TreeNode"/>.</exception>
         public void RemoveChild(TreeNode child, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(child, nameof(child), $"Trying to remove a child from {this}, but the child is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to remove a child from {this}, but the counter is null!");
             if (!InternalChildren.Contains(child, MockCounter))
             {
                 throw new NotANeighbourException($"Trying to remove {child} from the children of {this}, but {child} is no neighbour of {this}!");
             }
-
+#endif
             if (child.GetParent(counter) == this)
             {
                 child.SetParent(null, counter);
@@ -249,9 +257,10 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="children"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void RemoveChildren(IEnumerable<TreeNode> children, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(children, nameof(children), $"Trying to remove multiple children from {this}, but the IEnumerable with children is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to remove multiple children from {this}, but the counter is null!");
-
+#endif
             foreach (TreeNode child in children)
             {
                 RemoveChild(child, counter);
@@ -268,8 +277,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void RemoveAllChildren(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), $"Trying to remove all children from {this}, but the counter is null!");
-
+#endif
             foreach (TreeNode child in InternalChildren.GetCountedEnumerable(counter))
             {
                 if (child.GetParent(counter) == this)
@@ -289,9 +299,10 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool HasChild(TreeNode node, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to see if a node is a child of {this}, but the node is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to see if a node is a child of {this}, but the counter is null!");
-
+#endif
             return InternalChildren.Contains(node, counter);
         }
 
@@ -305,8 +316,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool IsRoot(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), $"Trying to check if {this} is a root, but the counter is null!");
-
+#endif
             _ = counter++;
             return Parent is null;
         }
@@ -360,8 +372,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbour"/> is <see langword="null"/>.</exception>
         void INode<TreeNode>.RemoveNeighbour(TreeNode neighbour, bool directed)
         {
+#if !EXPERIMENT
             Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
-
+#endif
             if (neighbour == Parent)
             {
                 Parent.RemoveChild(this, MockCounter);
@@ -380,8 +393,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> is <see langword="null"/>.</exception>
         void INode<TreeNode>.RemoveNeighbours(IEnumerable<TreeNode> neighbours, bool directed)
         {
+#if !EXPERIMENT
             Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
-
+#endif
             foreach (TreeNode neighbour in neighbours)
             {
                 ((INode<TreeNode>)this).RemoveNeighbour(neighbour);
@@ -396,8 +410,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         bool INode<TreeNode>.HasNeighbour(TreeNode node)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
-
+#endif
             return node == Parent || HasChild(node, MockCounter);
         }
     }

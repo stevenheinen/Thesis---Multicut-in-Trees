@@ -29,9 +29,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="commodities"/> is <see langword="null"/>.</exception>
         public static int ComputeMaximumMultiCommodityFlow<T, N>(T tree, IEnumerable<(N, N)> commodities, Counter counter) where T : ITree<N> where N : ITreeNode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to compute the multi commodity flow on a tree, but the tree is null!");
             Utils.NullCheck(commodities, nameof(commodities), "Trying to compute the multi commodity flow on a tree, but the list with commodities is null!");
-
+#endif
             // Create a list with original commodities, that should not be modified, and a copy with commodities that can be modified.
             ReadOnlyCollection<Commodity<N>> originalCommodities = new ReadOnlyCollection<Commodity<N>>(commodities.Select(n => new Commodity<N>(n.Item1, n.Item2)).ToList());
             List<Commodity<N>> modifiedCommodities = new List<Commodity<N>>();

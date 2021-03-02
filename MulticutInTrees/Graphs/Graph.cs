@@ -74,8 +74,12 @@ namespace MulticutInTrees.Graphs
         /// Constructor for a <see cref="Graph{N}"/> from any type that implements <see cref="IGraph{N}"/>.
         /// </summary>
         /// <param name="interfaceGraph">The <see cref="IGraph{N}"/> to create this new <see cref="Graph{N}"/> from.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="interfaceGraph"/> is <see langword="null"/>.</exception>
         internal Graph(IGraph<N> interfaceGraph)
         {
+#if !EXPERIMENT
+            Utils.NullCheck(interfaceGraph, nameof(interfaceGraph), "Trying to create a Graph from another instance that implements IGraph, but the other instance is null!");
+#endif
             InternalNodes = new List<N>(interfaceGraph.Nodes);
             UniqueInternalNodes = new HashSet<N>(InternalNodes);
             InternalEdges = new List<(N, N)>(interfaceGraph.Edges);
@@ -90,8 +94,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
         public bool HasNode(N node)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
-
+#endif
             return UniqueInternalNodes.Contains(node);
         }
 
@@ -104,6 +109,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is not part of this <see cref="Graph{N}"/>.</exception>
         public bool HasEdge(N origin, N destination, bool directed = false)
         {
+#if !EXPERIMENT
             Utils.NullCheck(origin, nameof(origin), $"Trying to find out whether an edge exists in {this}, but the origin of the edge is null!");
             Utils.NullCheck(destination, nameof(destination), $"Trying to find out whether an edge exists in {this}, but the destination of the edge is null!");
             if (!HasNode(origin))
@@ -114,7 +120,7 @@ namespace MulticutInTrees.Graphs
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the destination of the edge is not part of {this}!");
             }
-
+#endif
             if (directed) 
             {
                 return UniqueInternalEdges.Contains((origin, destination));
@@ -152,12 +158,13 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyInGraphException">Thrown when <paramref name="node"/> is already part of this <see cref="Graph{N}"/>.</exception>
         public void AddNode(N node)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to add a node to {this}, but the node is null!");
             if (HasNode(node))
             {
                 throw new AlreadyInGraphException($"Trying to add {node} to {this}, but {node} is already part of {this}!");
             }
-
+#endif
             UniqueInternalNodes.Add(node);
             InternalNodes.Add(node);
         }
@@ -169,8 +176,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
         public void AddNodes(IEnumerable<N> nodes)
         {
+#if !EXPERIMENT
             Utils.NullCheck(nodes, nameof(nodes), $"Trying to add an IEnumerable of nodes to {this}, but the IEnumerable is null!");
-
+#endif
             foreach (N node in nodes)
             {
                 AddNode(node);
@@ -186,6 +194,7 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="AlreadyInGraphException">Thrown when the edge to be added is already part of this <see cref="Graph{N}"/>.</exception>
         public void AddEdge(N origin, N destination, bool directed = false)
         {
+#if !EXPERIMENT
             Utils.NullCheck(origin, nameof(origin), $"Trying to add an edge to {this}, but the origin of the edge is null!");
             Utils.NullCheck(destination, nameof(destination), $"Trying to add an edge to {this}, but the destination of the edge is null!");
             if (!HasNode(origin))
@@ -196,7 +205,7 @@ namespace MulticutInTrees.Graphs
             {
                 throw new NotInGraphException($"Trying to add an edge between {origin} and {destination} to {this}, but {destination} is not part of {this}!");
             }
-
+#endif
             (N, N) edge1 = (origin, destination);
             if (HasEdge(edge1, true) || (!directed && HasEdge((destination, origin), false)))
             {
@@ -215,8 +224,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
         public void AddEdges(IEnumerable<(N, N)> edges, bool directed = false)
         {
+#if !EXPERIMENT
             Utils.NullCheck(edges, nameof(edges), $"Trying to add an IEnumerable of edges to {this}, but the IEnumerable is null!");
-
+#endif
             foreach ((N origin, N destination) in edges)
             {
                 AddEdge(origin, destination, directed);
@@ -231,12 +241,13 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Graph{N}"/>.</exception>
         public void RemoveNode(N node)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to remove a node from {this}, but the node is null!");
             if (!HasNode(node))
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");
             }
-
+#endif
             RemoveAllEdgesOfNode(node);
             UniqueInternalNodes.Remove(node);
             InternalNodes.Remove(node);
@@ -249,8 +260,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
         public void RemoveNodes(IEnumerable<N> nodes)
         {
+#if !EXPERIMENT
             Utils.NullCheck(nodes, nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
-
+#endif
             foreach (N node in nodes)
             {
                 RemoveNode(node);
@@ -265,12 +277,13 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Graph{N}"/>.</exception>
         public void RemoveAllEdgesOfNode(N node, bool directed = false)
         {
+#if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to remove all edges of a node in {this}, but the node is null!");
             if (!HasNode(node))
             {
                 throw new NotInGraphException($"Trying to remove all edges of {node} from {this}, but {node} is not part of {this}!");
             }
-
+#endif
             // TODO: correct counter
             RemoveEdges(node.Neighbours(new Counter()).Select(neighbour => (node, neighbour)).ToList(), directed);
         }
@@ -282,8 +295,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
         public void RemoveEdges(IList<(N, N)> edges, bool directed = false)
         {
+#if !EXPERIMENT
             Utils.NullCheck(edges, nameof(edges), $"Trying to remove multiple edges from {this}, but the IEnumerable with edges is null!");
-
+#endif
             foreach ((N origin, N destination) in edges)
             {
                 RemoveEdge(origin, destination, directed);
@@ -297,7 +311,8 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="origin"/>, <paramref name="destination"/> or the edge between them is not part of this <see cref="Graph{N}"/>.</exception>
         public void RemoveEdge(N origin, N destination, bool directed = false)
-        { 
+        {
+#if !EXPERIMENT
             Utils.NullCheck(origin, nameof(origin), $"Trying to remove the edge from {this}, but the origin of the edge is null!");
             Utils.NullCheck(destination, nameof(destination), $"Trying to remove the edge from {this}, but the destination of the edge is null!");
             if (!HasNode(origin))
@@ -308,14 +323,15 @@ namespace MulticutInTrees.Graphs
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but {destination} is not part of {this}!");
             }
-
+#endif
             (N, N) edge1 = (origin, destination);
             (N, N) edge2 = (destination, origin);
+#if !EXPERIMENT
             if ((directed && !HasEdge(edge1, true)) || (!HasEdge(edge1, directed)) && (!HasEdge(edge2, directed)))
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but this edge is not part of {this}!");
             }
-
+#endif
             origin.RemoveNeighbour(destination, directed);
             if (HasEdge(edge1, true))
             {
@@ -342,8 +358,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool IsAcyclic(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to find out whether a graph is acyclic, but the counter is null!");
-
+#endif
             return DFS.IsAcyclicGraph<Graph<N>, N>(this, counter);
         }
 
@@ -355,8 +372,9 @@ namespace MulticutInTrees.Graphs
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool IsConnected(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to find out whether a graph is connected, but the counter is null!");
-
+#endif
             return DFS.FindAllConnectedComponents(Nodes, counter).Count == 1;
         }
     }

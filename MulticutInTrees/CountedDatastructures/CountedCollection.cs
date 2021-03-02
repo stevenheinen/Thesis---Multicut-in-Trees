@@ -42,9 +42,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="collection"/> is <see langword="null"/>.</exception>
         public CountedCollection(IEnumerable<T> collection, Counter counter) : this()
         {
+#if !EXPERIMENT
             Utils.NullCheck(collection, nameof(collection), "Trying to create a new CountedCollection containing elements of an IEnumerable, but the IEnumerable is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to create a CountedCollection containing elements of an IEnumerable, but the Counter is null!");
-
+#endif
             foreach (T item in collection)
             {
                 Add(item, counter);
@@ -59,8 +60,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int Count(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements in a CountedCollection, but the Counter is null!");
-
+#endif
             _ = counter++;
             return LinkedList.Count;
         }
@@ -74,9 +76,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int Count(Func<T, bool> predicate, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(predicate, nameof(predicate), "Trying to get the number of elements that fit a function in a CountedCollection, but the function is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements that fit a function in a CountedCollection, but the Counter is null!");
-
+#endif
             int res = LinkedList.Count(predicate);
             _ = counter += res;
             return res;
@@ -90,8 +93,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public T First(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the first element of a CountedCollection, but the Counter is null!");
-
+#endif
             _ = counter++;
             return LinkedList.First.Value;
         }
@@ -105,9 +109,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public T First(Func<T, bool> predicate, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(predicate, nameof(predicate), "Trying to get the first element of a CountedCollection that fits a condition, but the condition-function is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to get the first element of a CountedCollection that fits a condition, but the Counter is null!");
-
+#endif
             return LinkedList.First(elem =>
             {
                 _ = counter++;
@@ -123,8 +128,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public T Last(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the last element of a CountedCollection, but the Counter is null!");
-
+#endif
             _ = counter++;
             return LinkedList.Last.Value;
         }
@@ -138,13 +144,14 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="AlreadyPresentException">Thrown when <paramref name="item"/> is already present in this <see cref="CountedCollection{T}"/>.</exception>
         public void Add(T item, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(item, nameof(item), "Trying to add an item to a CountedCollection, but the item is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to add an element to a CountedCollection, but the Counter is null!");
             if (Dictionary.ContainsKey(item))
             {
                 throw new AlreadyPresentException($"Trying to add {item} to a CountedCollection, but {item} is already present in this CountedCollection!");
             }
-
+#endif
             _ = counter++;
             LinkedListNode<T> node = new LinkedListNode<T>(item);
             Dictionary[item] = node;
@@ -158,8 +165,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void Clear(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to clear a CountedCollection, but the Counter is null!");
-            
+#endif            
             _ = counter += Dictionary.Count;
             Dictionary.Clear();
             LinkedList.Clear();
@@ -174,9 +182,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool Contains(T item, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(item, nameof(item), "Trying to check whether a CountedCollection contains an element, but the item is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to check whether a CountedCollection contains an element, but the Counter is null!");
-            
+#endif            
             _ = counter++;
             return Dictionary.ContainsKey(item);
         }
@@ -190,8 +199,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public IEnumerable<T> GetCountedEnumerable(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Grabbing the custom Counter Enumerable for a CountedCollection, but the counter is null!");
-
+#endif
             foreach (T item in LinkedList)
             {
                 _ = counter++;
@@ -208,9 +218,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool Remove(T item, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(item, nameof(item), "Trying to remove an item from a CountedCollection, but the item is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to remove an element from a CountedCollection, but the Counter is null!");
-
+#endif
             _ = counter++;
             if (!Dictionary.ContainsKey(item))
             {
@@ -230,9 +241,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void RemoveFromStartWhile(Func<T, bool> predicate, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the start of a CountedCollection, but the Counter is null!");
-
+#endif
             while (predicate(LinkedList.First.Value))
             {
                 _ = counter++;
@@ -248,9 +260,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void RemoveFromEndWhile(Func<T, bool> predicate, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the end of a CountedCollection, but the predicate is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from end start of a CountedCollection, but the Counter is null!");
-
+#endif
             while (predicate(LinkedList.Last.Value))
             {
                 _ = counter++;
@@ -268,6 +281,7 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="oldElement"/> is not part of this <see cref="CountedCollection{T}"/>.</exception>
         public void ChangeElement(T oldElement, T newElement, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(oldElement, nameof(oldElement), "Trying to replace an element by another in a CountedCollection, but the old element is null!");
             Utils.NullCheck(newElement, nameof(newElement), "Trying to replace an element by another in a CountedCollection, but the new element is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to replace an element by another in a CountedCollection, but the counter is null!");
@@ -275,7 +289,7 @@ namespace MulticutInTrees.CountedDatastructures
             {
                 throw new InvalidOperationException($"Trying to change {oldElement} to {newElement} in {this}, but {oldElement} is not part of this collection!");
             }
-
+#endif
             _ = counter++;
             if (oldElement.Equals(newElement))
             {
@@ -294,9 +308,10 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public void ChangeOccurrence(Func<T, T> function, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(function, nameof(function), "Trying to change all elements in a CountedCollection according to a function, but the function is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to change all elements in a CountedCollection according to a function, but the counter is null!");
-
+#endif
             foreach (T node in LinkedList)
             {
                 _ = counter++;
@@ -315,13 +330,14 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="element"/> is not part of this <see cref="CountedCollection{T}"/>.</exception>
         public (T, T) ElementBeforeAndAfter(T element, Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(element, nameof(element), "Trying to find the element before and after an element in a CountedCollection, but the element is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to find the element before and after an element in a CountedCollection, but the counter is null!");
             if (!Dictionary.ContainsKey(element))
             {
                 throw new InvalidOperationException($"Trying to find the element before and after {element} in {this}, but {element} is not part of this CountedCollection!");
             }
-
+#endif
             _ = counter += 2;
             LinkedListNode<T> node = Dictionary[element];
             T before = default;

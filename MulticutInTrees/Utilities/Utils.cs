@@ -48,9 +48,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown whein either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
         public static (N, N) OrderEdgeSmallToLarge<N>((N, N) edge) where N : INode<N>
         {
+#if !EXPERIMENT
             NullCheck(edge.Item1, nameof(edge.Item1), "Trying to order an edge from smallest to largest, but the first endpoint of the edge is null!");
             NullCheck(edge.Item2, nameof(edge.Item2), "Trying to order an edge from smallest to largest, but the second endpoint of the edge is null!");
-
+#endif
             if (edge.Item2.ID < edge.Item1.ID)
             {
                 return (edge.Item2, edge.Item1);
@@ -68,9 +69,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when either <paramref name="subset"/> or<paramref name="largerSet"/> is <see langword="null"/>.</exception>
         public static bool IsSubsetOf<T>(this IEnumerable<T> subset, IEnumerable<T> largerSet)
         {
+#if !EXPERIMENT
             NullCheck(subset, nameof(subset), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the first IEnumerable is null!");
             NullCheck(largerSet, nameof(largerSet), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the second IEnumerable is null!");
-
+#endif
             if (subset.Count() > largerSet.Count())
             {
                 return false;
@@ -91,8 +93,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
         public static string Print<T>(this IEnumerable<T> list)
         {
+#if !EXPERIMENT
             NullCheck(list, nameof(list), "Trying to print an IEnumerable, but the IEnumerable is null!");
-
+#endif
             StringBuilder sb = new StringBuilder();
             sb.Append($"{list.GetType()} with {list.Count()} elements: [");
             foreach (T elem in list)
@@ -121,8 +124,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
         public static bool IsSimplePath<N>(IEnumerable<(N, N)> path) where N : INode<N>
         {
+#if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to see whether a path is a simple path, but the path is null!");
-
+#endif
             for (int i = 0; i < path.Count() - 1; i++)
             {
                 for (int j = i + 1; j < path.Count(); j++)
@@ -146,8 +150,9 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
         public static List<(N, N)> NodePathToEdgePath<N>(IEnumerable<N> path) where N : INode<N>
         {
+#if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to transform a node path to an edge path, but the path is null!");
-
+#endif
             List<(N, N)> result = new List<(N, N)>();
             for (int i = 0; i < path.Count() - 1; i++)
             {
@@ -168,10 +173,11 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/>, <paramref name="condition"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
         public static T PickRandomWhere<T>(this IEnumerable<T> list, Func<T, bool> condition, Random random)
         {
+#if !EXPERIMENT
             NullCheck(list, nameof(list), "Trying to pick a random element form an IEnumerable that fits a condition, but the IEnumerable is null!");
             NullCheck(condition, nameof(condition), "Trying to pick a random element form an IEnumerable that fits a condition, but the function with the condition is null!");
             NullCheck(random, nameof(random), "Trying to pick a random element form an IEnumerable that fits a condition, but the random number generator is null!");
-
+#endif
             return list.Where(n => condition(n)).PickRandom(random);
         }
 
@@ -185,9 +191,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
         public static T PickRandom<T>(this IEnumerable<T> list, Random random)
         {
+#if !EXPERIMENT
             NullCheck(list, nameof(list), "Trying to pick a random element from an IEnumerable, but the IEnumerable is null!");
             NullCheck(random, nameof(random), "Trying to pick a random element from an IEnumerable, but the random number generator is null!");
-
+#endif
             return list.ElementAt(random.Next(list.Count()));
         }
     }

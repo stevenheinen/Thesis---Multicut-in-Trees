@@ -25,9 +25,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static List<N> FindConnectedComponent<N>(N startNode, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find a connected component of an INode, but the start node is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find a connected component of an INode, but the counter is null!");
-
+#endif
             return FindConnectedComponent(startNode, default, graphCounter, seen);
         }
 
@@ -42,9 +43,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static bool IsAcyclicGraph<G, N>(G inputGraph, Counter graphCounter) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to see if a graph is acyclic, but the graph is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to see if a graph is acyclic, but the counter is null!");
-
+#endif
             if (inputGraph.NumberOfNodes < 2)
             {
                 return true;
@@ -64,13 +66,14 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="NoRootException">Thrown when <see cref="ITree{N}.GetRoot(Counter)"/> of <paramref name="inputTree"/> returns <see langword="null"/>.</exception>
         public static bool IsAcyclicTree<T, N>(T inputTree, Counter treeCounter) where T : ITree<N> where N : ITreeNode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(inputTree, nameof(inputTree), "Trying to see if a tree is acyclic, but the tree is null!");
             Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to see if a tree is acyclic, but the counter is null!");
-
             if (inputTree.GetRoot(new Counter()) is null)
             {
                 throw new NoRootException($"Trying to see if {inputTree} is acyclic, but it has no root!");
             }
+#endif
 
             if (inputTree.Nodes.Count() < 2)
             {
@@ -173,9 +176,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="allNodes"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static List<List<N>> FindAllConnectedComponents<N>(IEnumerable<N> allNodes, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(allNodes, nameof(allNodes), "Trying to find all connected components of an IEnumerable with nodes, but the IEnumberable is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all connected components of an IEnumerable with nodes, but the counter is null!");
-
+#endif
             List<List<N>> result = new List<List<N>>();
             if (seen is null)
             {
@@ -211,10 +215,11 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/>, <paramref name="node2"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static bool AreConnected<N>(N node1, N node2, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(node1, nameof(node1), "Trying to find whether two nodes are connected, but the first of these nodes is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to find whether two nodes are connected, but the second of these nodes is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find whether two nodes are connected, but the counter is null!");
-
+#endif
             List<N> connectedComponent = FindConnectedComponent(node1, node2, graphCounter, seen);
             return connectedComponent.Count == 1;
         }
@@ -231,10 +236,11 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/>, <paramref name="node2"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static List<N> FindPathBetween<N>(N node1, N node2, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(node1, nameof(node1), "Trying to find whether two nodes are connected, but the first of these nodes is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to find whether two nodes are connected, but the second of these nodes is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find whether two nodes are connected, but counter is null!");
-
+#endif
             List<N> result = FindConnectedComponent(node1, node2, graphCounter, seen, false, true);
             result.Reverse();
             return result;
@@ -251,9 +257,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static List<(N, N)> FindAllEdgesGraph<G, N>(G graph, Counter graphCounter) where G : IGraph<N> where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find all edges in a graph, but the graph is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all edges in a graph, but the counter is null!");
-
+#endif
             Counter mockCounter = new Counter();
 
             List<(N, N)> result = new List<(N, N)>();
@@ -294,9 +301,10 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
         public static List<(N, N)> FindAllEdgesTree<T, N>(T tree, Counter treeCounter) where T : ITree<N> where N : ITreeNode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to find all edges in a tree, but the tree is null!");
             Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to find all edges in a tree, but the counter is null!");
-
+#endif
             List<(N, N)> result = new List<(N, N)>();
             N root = tree.GetRoot(new Counter());
             if (root is null)
@@ -329,10 +337,11 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="unmatchedNodes"/>, <paramref name="matching"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
         public static List<N> FreeNodes<N>(List<N> unmatchedNodes, HashSet<(N, N)> matching, Counter graphCounter) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(unmatchedNodes, nameof(unmatchedNodes), "Trying to find all free nodes, but the list with unmatched nodes is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find all free nodes, but the list with the current matching is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all free nodes, but the counter is null!");
-
+#endif
             Counter mockCounter = new Counter();
 
             HashSet<N> seen = new HashSet<N>();

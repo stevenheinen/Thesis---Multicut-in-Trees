@@ -28,10 +28,12 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, or <paramref name="random"/> is <see langword="null"/>.</exception>
         public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random) : base(tree, demandPairs, algorithm, random, "Unit Path")
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Unit Path rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Unit Path rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Unit Path rule, but the algorithm it is part of is null!");
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the Unit Path rule, but the random is null!");
+#endif
         }
 
         /// <summary>
@@ -42,34 +44,22 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/> is <see langword="null"/>.</exception>
         private bool DemandPathHasLengthOne(DemandPair demandPair)
         {
+#if !EXPERIMENT
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to check whether a demand pair has a path of length 1, but the demand pair is null!");
-
+#endif
             return demandPair.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) == 1;
         }
-
-        /*
-        /// <inheritdoc/>
-        internal override void PrintCounters()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Unit Path counters");
-            Console.WriteLine("==============================");
-            base.PrintCounters();
-            Console.WriteLine();
-        }
-        */
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
+#if !EXPERIMENT
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Unit Path rule after a demand path was changed, but the list of changed demand pairs is null!");
-
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Unit Path rule after a demand path was changed...");
-            }
-
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Unit Path rule after a demand path was changed...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
@@ -90,8 +80,9 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
+#if !EXPERIMENT
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Unit Path rule after a demand path was removed, but the list of removed demand pairs is null!");
-
+#endif
             return false;
         }
 
@@ -99,13 +90,12 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
         {
+#if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Unit Path rule after an edge was contracted, but the list of contracted edges is null!");
-
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Unit Path rule after an edge was contracted...");
-            }
-
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Unit Path rule after an edge was contracted...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
@@ -128,11 +118,9 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
-            if (Program.PRINT_DEBUG_INFORMATION)
-            {
-                Console.WriteLine("Applying Unit Path rule for the first time...");
-            }
-
+#if VERBOSEDEBUG
+            Console.WriteLine("Applying Unit Path rule for the first time...");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
@@ -163,7 +151,9 @@ namespace MulticutInTrees.ReductionRules
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeCut"/> is <see langword="null"/>.</exception>
         private bool TryCutEdges(HashSet<(TreeNode, TreeNode)> edgesToBeCut)
         {
+#if !EXPERIMENT
             Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), $"Trying to cut edges, but the Hashset with edges is null!");
+#endif
 
             if (edgesToBeCut.Count == 0)
             {

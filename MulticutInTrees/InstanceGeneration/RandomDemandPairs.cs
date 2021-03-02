@@ -26,13 +26,14 @@ namespace MulticutInTrees.InstanceGeneration
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfDemandPairs"/> is negative.</exception>
         public static List<DemandPair> GenerateRandomDemandPairs(int numberOfDemandPairs, Tree<TreeNode> tree, Random random)
         {
+#if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to generate random demand pairs in a tree, but the tree is null!");
             Utils.NullCheck(random, nameof(random), "Trying to generate random demand pairs in a tree, but the random is null!");
             if (numberOfDemandPairs < 0)
             {
                 throw new ArgumentOutOfRangeException("Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
             }
-
+#endif
             Counter counter = new Counter();
 
             List<DemandPair> demandPairs = new List<DemandPair>();

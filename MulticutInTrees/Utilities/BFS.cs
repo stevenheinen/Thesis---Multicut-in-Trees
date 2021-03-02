@@ -25,6 +25,7 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/>, <paramref name="targetSet"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
         public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, Counter treeCounter, HashSet <N> seen = null) where N : INode<N>
         {
+#if !EXPERIMENT
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find the shortest path to a set, but the start node is null!");
             Utils.NullCheck(targetSet, nameof(targetSet), "Trying to find the shortest path to a set, but the set is null!");
             Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to find the shortest path to a set, but the counter is null!");
@@ -36,7 +37,7 @@ namespace MulticutInTrees.Utilities
             {
                 throw new InvalidOperationException("Trying to find the shortest path to a set, but the startnode is already part of the set!");
             }
-
+#endif
             Counter mockCounter = new Counter();
 
             if (seen is null)

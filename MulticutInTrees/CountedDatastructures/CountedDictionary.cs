@@ -89,8 +89,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="dictionary"/> is <see langword="null"/>.</exception>
         public CountedDictionary(CountedDictionary<TKey, TValue> dictionary) : this()
         {
+#if !EXPERIMENT
             Utils.NullCheck(dictionary, nameof(dictionary), $"Trying to create an instance of a CountedDictionary with a reference to another CountedDictionary, but the reference is null!");
-
+#endif
             Dictionary = dictionary.Dictionary;
         }
         
@@ -162,8 +163,9 @@ namespace MulticutInTrees.CountedDatastructures
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public IEnumerable<KeyValuePair<TKey, TValue>> GetCountedEnumerable(Counter counter)
         {
+#if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Grabbing the custom Counter Enumerable for a CountedDictionary, but the counter is null!");
-
+#endif
             foreach (KeyValuePair<TKey, TValue> item in Dictionary)
             {
                 counter++;
