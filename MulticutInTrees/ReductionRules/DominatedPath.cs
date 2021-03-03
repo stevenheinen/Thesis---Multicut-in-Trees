@@ -32,7 +32,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, "Dominated Edge")
+        public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, nameof(DominatedPath))
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the dominated path reduction rule, but the input tree is null!");
@@ -41,7 +41,8 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the dominated path reduction rule, but the random is null!");
             Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the dominated path reduction rule, but the dictionary with demand pairs per edge is null!");
 #endif
-            DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
+            //DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
+            DemandPairsPerEdge = demandPairsPerEdge;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
 #if !EXPERIMENT
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Dominated Path reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
@@ -79,13 +80,13 @@ namespace MulticutInTrees.ReductionRules
 
             List<DemandPair> pairsToBeRemoved = new List<DemandPair>();
 
-            foreach ((List<(TreeNode, TreeNode)>, DemandPair) changedPath in changedEdgesPerDemandPairList.GetCountedEnumerable(new Counter()))
+            foreach ((CountedList<(TreeNode, TreeNode)>, DemandPair) changedPath in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 if (pairsToBeRemoved.Contains(changedPath.Item2))
                 {
                     continue;
                 }
-                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter))].GetCountedEnumerable(new Counter()))
+                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter)), Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                 {
                     if (changedPath.Item2 == otherDemandPair || pairsToBeRemoved.Contains(otherDemandPair))
                     {
@@ -97,7 +98,7 @@ namespace MulticutInTrees.ReductionRules
                         break;
                     }
                 }
-                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.Last(Measurements.DemandPairsOperationsCounter))].GetCountedEnumerable(new Counter()))
+                foreach (DemandPair otherDemandPair in DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(changedPath.Item2.EdgesOnDemandPath.Last(Measurements.DemandPairsOperationsCounter)), Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                 {
                     if (changedPath.Item2 == otherDemandPair || pairsToBeRemoved.Contains(otherDemandPair))
                     {
@@ -113,7 +114,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryRemoveDemandPairs(pairsToBeRemoved);
+            return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -138,22 +139,22 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
 
-            foreach (((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>) contraction in contractedEdgeNodeTupleList.GetCountedEnumerable(new Counter())) 
+            foreach (((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>) contraction in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter)) 
             {
                 HashSet<DemandPair> otherDemandPairs = new HashSet<DemandPair>();
                 foreach (TreeNode neighbour in contraction.Item2.Neighbours(Measurements.TreeOperationsCounter))
                 {
-                    if (!DemandPairsPerEdge.TryGetValue(Utils.OrderEdgeSmallToLarge((contraction.Item2, neighbour)), out CountedList<DemandPair> pairsOnEdge))
+                    if (!DemandPairsPerEdge.TryGetValue(Utils.OrderEdgeSmallToLarge((contraction.Item2, neighbour)), out CountedList<DemandPair> pairsOnEdge, Measurements.DemandPairsPerEdgeKeysCounter))
                     {
                         continue;
                     }
 
-                    foreach (DemandPair pair in pairsOnEdge.GetCountedEnumerable(new Counter()))
+                    foreach (DemandPair pair in pairsOnEdge.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                     {
                         otherDemandPairs.Add(pair);
                     }
                 }
-                foreach (DemandPair demandPair in contraction.Item3.GetCountedEnumerable(new Counter()))
+                foreach (DemandPair demandPair in contraction.Item3.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
                     if (pairsToBeRemoved.Contains(demandPair))
                     {
@@ -175,7 +176,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryRemoveDemandPairs(pairsToBeRemoved.ToList());
+            return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -187,48 +188,49 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
-            for (int i = 0; i < DemandPairs.Count - 1; i++)
+            int nrPairs = DemandPairs.Count(Measurements.DemandPairsOperationsCounter);
+            for (int i = 0; i < nrPairs - 1; i++)
             {
-                if (pairsToBeRemoved.Contains(DemandPairs[i]))
+                if (pairsToBeRemoved.Contains(DemandPairs[i, Measurements.DemandPairsOperationsCounter]))
                 {
                     continue;
                 }
-                for (int j = i + 1; j < DemandPairs.Count; j++)
+                for (int j = i + 1; j < nrPairs; j++)
                 {
-                    if (pairsToBeRemoved.Contains(DemandPairs[j]))
+                    if (pairsToBeRemoved.Contains(DemandPairs[j, Measurements.DemandPairsOperationsCounter]))
                     {
                         continue;
                     }
 
-                    if (PathIsContainedIn(DemandPairs[j], DemandPairs[i]))
+                    if (PathIsContainedIn(DemandPairs[j, Measurements.DemandPairsOperationsCounter], DemandPairs[i, Measurements.DemandPairsOperationsCounter]))
                     {
-                        pairsToBeRemoved.Add(DemandPairs[i]);
+                        pairsToBeRemoved.Add(DemandPairs[i, Measurements.DemandPairsOperationsCounter]);
                         break;
                     }
-                    else if (PathIsContainedIn(DemandPairs[i], DemandPairs[j]))
+                    else if (PathIsContainedIn(DemandPairs[i, Measurements.DemandPairsOperationsCounter], DemandPairs[j, Measurements.DemandPairsOperationsCounter]))
                     {
-                        pairsToBeRemoved.Add(DemandPairs[j]);
+                        pairsToBeRemoved.Add(DemandPairs[j, Measurements.DemandPairsOperationsCounter]);
                     }
                 }
             }
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryRemoveDemandPairs(pairsToBeRemoved.ToList());
+            return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
 
         /// <summary>
         /// Remove all <see cref="DemandPair"/>s in <paramref name="pairsToBeRemoved"/>.
         /// </summary>
-        /// <param name="pairsToBeRemoved">The <see cref="List{T}"/> with all <see cref="DemandPair"/>s to be removed.</param>
+        /// <param name="pairsToBeRemoved">The <see cref="CountedList{T}"/> with all <see cref="DemandPair"/>s to be removed.</param>
         /// <returns><see langword="true"/> if <paramref name="pairsToBeRemoved"/> has any elements, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="pairsToBeRemoved"/> is <see langword="null"/>.</exception>
-        private bool TryRemoveDemandPairs(List<DemandPair> pairsToBeRemoved)
+        private bool TryRemoveDemandPairs(CountedList<DemandPair> pairsToBeRemoved)
         {
 #if !EXPERIMENT
             Utils.NullCheck(pairsToBeRemoved, nameof(pairsToBeRemoved), $"Trying to remove demand pairs, but the List with demand pairs is null!");
 #endif
-            if (pairsToBeRemoved.Count == 0)
+            if (pairsToBeRemoved.Count(Measurements.DemandPairsOperationsCounter) == 0)
             {
                 return false;
             }

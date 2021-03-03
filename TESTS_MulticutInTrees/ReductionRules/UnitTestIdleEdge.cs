@@ -38,14 +38,14 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.UpdateNodeTypes();
 
             DemandPair demandPair = new DemandPair(node2, node4);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                {(node0, node2), new CountedList<DemandPair>(){ demandPair } },
-                {(node0, node1), new CountedList<DemandPair>(){ demandPair } },
-                {(node1, node4), new CountedList<DemandPair>(){ demandPair } }
-            };
+                {(node0, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+                {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+                {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
+            }, counter);
 
             Random random = new Random(5644687);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
@@ -71,14 +71,14 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.UpdateNodeTypes();
 
             DemandPair demandPair = new DemandPair(node2, node4);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                {(node0, node2), new CountedList<DemandPair>(){ demandPair } },
-                {(node0, node1), new CountedList<DemandPair>(){ demandPair } },
-                {(node1, node4), new CountedList<DemandPair>(){ demandPair } }
-            };
+                {(node0, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+                {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+                {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
+            }, counter);
 
             Random random = new Random(674648);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
@@ -119,20 +119,20 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.UpdateNodeTypes();
 
             DemandPair demandPair = new DemandPair(node2, node4);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                {(node0, node2), new CountedList<DemandPair>(){ demandPair } },
-                {(node0, node1), new CountedList<DemandPair>(){ demandPair } },
-                {(node1, node4), new CountedList<DemandPair>(){ demandPair } }
-            };
+                {(node0, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+                {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+                {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
+            }, counter);
 
             Random random = new Random(6453422);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
             IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
 
-            Assert.IsFalse(idleEdge.AfterEdgeContraction(new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>() { ((node1, node3), node1, demandPairs) }));
+            Assert.IsFalse(idleEdge.AfterEdgeContraction(new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>() { ((node1, node3), node1, demandPairs) }, counter)));
         }
 
         [TestMethod]
@@ -155,21 +155,21 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair1 = new DemandPair(node2, node4);
             DemandPair demandPair2 = new DemandPair(node0, node1);
             DemandPair demandPair3 = new DemandPair(node1, node3);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair1 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1 }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                {(node0, node2), new CountedList<DemandPair>(){ demandPair1 } },
-                {(node0, node1), new CountedList<DemandPair>(){ demandPair1 } },
-                {(node1, node4), new CountedList<DemandPair>(){ demandPair1 } }
-            };
+                {(node0, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair1 }, counter) },
+                {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair1 }, counter) },
+                {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair1 }, counter) }
+            }, counter);
 
             Random random = new Random(5468763);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
             IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
 
-            Assert.IsFalse(idleEdge.AfterDemandPathRemove(new CountedList<DemandPair>() { demandPair2 }));
-            Assert.IsTrue(idleEdge.AfterDemandPathRemove(new CountedList<DemandPair>() { demandPair3 }));
+            Assert.IsFalse(idleEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair2 }, counter)));
+            Assert.IsTrue(idleEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair3 }, counter)));
         }
 
         [TestMethod]
@@ -191,21 +191,21 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DemandPair demandPair1 = new DemandPair(node2, node0);
             DemandPair demandPair2 = new DemandPair(node2, node1);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair1 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1 }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                {(node0, node2), new CountedList<DemandPair>(){ demandPair1 } },
-                {(node0, node1), new CountedList<DemandPair>(){ demandPair2 } },
-                {(node1, node2), new CountedList<DemandPair>(){ demandPair2 } }
-            };
+                {(node0, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair1 }, counter) },
+                {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2 }, counter) },
+                {(node1, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2 }, counter) }
+            }, counter);
 
             Random random = new Random(35468468);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
             IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
 
-            Assert.IsTrue(idleEdge.AfterDemandPathChanged(new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>() { (new List<(TreeNode, TreeNode)> { (node1, node4) }, demandPair2) }));
-            Assert.IsFalse(idleEdge.AfterDemandPathChanged(new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>() { (new List<(TreeNode, TreeNode)> { (node1, node2) }, demandPair1) }));
+            Assert.IsTrue(idleEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)> { (node1, node4) }, counter), demandPair2) }, counter)));
+            Assert.IsFalse(idleEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)> { (node1, node2) }, counter), demandPair1) }, counter)));
         }
 
         [TestMethod]
@@ -218,12 +218,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddChild(node0, node1, counter);
             tree.UpdateNodeTypes();
             DemandPair demandPair = new DemandPair(node0, node1);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { demandPair };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
             {
-                {(node0, node1), new CountedList<DemandPair>(){ demandPair } },
-            };
+                {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
+            }, counter);
 
             Random random = new Random(74);
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);

@@ -28,35 +28,18 @@ namespace MulticutInTrees
         /// </summary>
         public static void Main()
         {
+            // todo: use counted list/dict everywhere where possible throughout the entire program.
+
             Console.WriteLine("Hello World!");
-
-            PerformanceMeasurements op = new PerformanceMeasurements("testName");
-            Console.WriteLine(op);
-
-            Counter counter = new Counter();
-            CountedCollection<int> c = new CountedCollection<int>();
-            c.Add(1, counter);
-            c.Add(2, counter);
-            c.Add(3, counter);
-            c.Add(4, counter);
-            c.Add(5, counter);
-
-            Assert.AreEqual(5, counter.Value);
-
-            int first = c.First(n => n == 3, counter);
-            Assert.AreEqual(8, counter.Value);
-
-
-
 
             Random random = new Random(0);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree, random));
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree, random), new Counter());
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 21, random);
             
             Random random2 = new Random(0);
             Tree<TreeNode> tree2 = TreeFromPruferSequence.GenerateTree(500, random2);
-            CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree2, random2));
+            CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree2, random2), new Counter());
             MulticutInstance instance2 = new MulticutInstance(tree2, demandPairs2, 21, random2);
 
             GuoNiedermeierBranching gnBranching = new GuoNiedermeierBranching(instance);

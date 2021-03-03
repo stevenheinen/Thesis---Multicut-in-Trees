@@ -64,7 +64,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp2 = new DemandPair(node7, node8);
             DemandPair dp3 = new DemandPair(node4, node10);
             DemandPair dp4 = new DemandPair(node6, node3);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2, dp3, dp4 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, counter);
 
             int k = 3;
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
@@ -100,7 +100,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node1, node6);
             DemandPair dp2 = new DemandPair(node4, node5);
             DemandPair dp3 = new DemandPair(node8, node10);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 2;
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
@@ -136,7 +136,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node2, node11);
             DemandPair dp2 = new DemandPair(node4, node9);
             DemandPair dp3 = new DemandPair(node2, node8);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2, dp3 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 1;
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
@@ -185,7 +185,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node7, node15);
             DemandPair dp4 = new DemandPair(node8, node10);
             DemandPair dp5 = new DemandPair(node11, node17);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2, dp3, dp4, dp5 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 3;
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
@@ -216,7 +216,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node1, node4);
             DemandPair dp4 = new DemandPair(node1, node5);
             DemandPair dp5 = new DemandPair(node1, node6);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>() { dp1, dp2, dp3, dp4, dp5 };
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 4;
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));

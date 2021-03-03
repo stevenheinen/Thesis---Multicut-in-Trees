@@ -18,9 +18,9 @@ namespace MulticutInTrees.Algorithms
     public class GuoNiedermeierBranching
     {
         /// <summary>
-        /// The <see cref="List{T}"/> of <see cref="DemandPair"/>s in the input.
+        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the input.
         /// </summary>
-        private List<DemandPair> DemandPairs { get; }
+        private CountedList<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The input <see cref="Tree{N}"/>.
@@ -33,21 +33,20 @@ namespace MulticutInTrees.Algorithms
         private int K { get; }
 
         /// <summary>
-        /// <see cref="Dictionary{TKey, TValue}"/> containing the <see cref="TreeNode"/> that is the least common ancestor per <see cref="DemandPair"/>.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing the <see cref="TreeNode"/> that is the least common ancestor per <see cref="DemandPair"/>.
         /// </summary>
-        private Dictionary<DemandPair, TreeNode> LeastCommonAncestors { get; }
+        private CountedDictionary<DemandPair, TreeNode> LeastCommonAncestors { get; }
 
         /// <summary>
-        /// <see cref="Dictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
         /// </summary>
-        private Dictionary<(TreeNode, TreeNode), List<DemandPair>> DemandPairsPerEdge { get; }
+        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
         /// <see cref="PerformanceMeasurements"/> this <see cref="Algorithm"/> used.
         /// </summary>
         private PerformanceMeasurements Measurements { get; }
 
-        // todo: let this algorithm use Measurements
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not impact performance of this <see cref="Algorithm"/>.
         /// </summary>
@@ -64,13 +63,13 @@ namespace MulticutInTrees.Algorithms
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the GuoNiedermeier branching algorithm, but the instance we want to solve is null!");
 #endif
             Tree = instance.Tree;
-            DemandPairs = new List<DemandPair>(instance.DemandPairs);
+            DemandPairs = instance.DemandPairs;
             K = instance.K;
 
             Measurements = new PerformanceMeasurements("Guo and Niedermeier branching");
             MockCounter = new Counter();
-            LeastCommonAncestors = new Dictionary<DemandPair, TreeNode>();
-            DemandPairsPerEdge = new Dictionary<(TreeNode, TreeNode), List<DemandPair>>();
+            LeastCommonAncestors = new CountedDictionary<DemandPair, TreeNode>();
+            DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
         }
 
         /// <summary>
@@ -85,7 +84,7 @@ namespace MulticutInTrees.Algorithms
 
             FindLeastCommonAncestors();
 
-            List<DemandPair> sortedDemandPairs = LeastCommonAncestors.OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key).ToList();
+            CountedList<DemandPair> sortedDemandPairs = new CountedList<DemandPair>(LeastCommonAncestors.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key), Measurements.DemandPairsOperationsCounter);
             HashSet<DemandPair> solvedDemandPairs = new HashSet<DemandPair>();
             List<(TreeNode, TreeNode)> solution = new List<(TreeNode, TreeNode)>();
             (bool solved, int size) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution);
@@ -111,18 +110,18 @@ namespace MulticutInTrees.Algorithms
         private void FillDemandPathsPerEdge()
         {
             // For each demand pair in the instance...
-            foreach (DemandPair demandPair in DemandPairs)
+            foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 // For each edge on this demand pair...
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(new Counter()))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
                     // Add this edge to the DemandPairsPerEdge dictionary.
                     (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
-                    if (!DemandPairsPerEdge.ContainsKey(usedEdge))
+                    if (!DemandPairsPerEdge.ContainsKey(usedEdge, Measurements.DemandPairsPerEdgeKeysCounter))
                     {
-                        DemandPairsPerEdge[usedEdge] = new List<DemandPair>();
+                        DemandPairsPerEdge[usedEdge, Measurements.DemandPairsPerEdgeKeysCounter] = new CountedList<DemandPair>();
                     }
-                    DemandPairsPerEdge[usedEdge].Add(demandPair);
+                    DemandPairsPerEdge[usedEdge, Measurements.DemandPairsPerEdgeKeysCounter].Add(demandPair, Measurements.DemandPairsPerEdgeValuesCounter);
                 }
             }
         }
@@ -135,23 +134,24 @@ namespace MulticutInTrees.Algorithms
         /// <param name="solvedDemandPairs"><see cref="HashSet{T}"/> with <see cref="DemandPair"/>s that are already separated.</param>
         /// <param name="solution"><see cref="List{T}"/> with the solution thus far. Is added to in this method.</param>
         /// <returns><see langword="true"/> if a solution can be found with these parameters, <see langword="false"/> otherwise.</returns>
-        private (bool, int) RecSolve(List<DemandPair> sortedDemandPairs, int currentIndex, HashSet<DemandPair> solvedDemandPairs, List<(TreeNode, TreeNode)> solution)
+        private (bool, int) RecSolve(CountedList<DemandPair> sortedDemandPairs, int currentIndex, HashSet<DemandPair> solvedDemandPairs, List<(TreeNode, TreeNode)> solution)
         {
-            for (int i = currentIndex; i < sortedDemandPairs.Count; i++)
+            int nrPairs = sortedDemandPairs.Count(Measurements.DemandPairsOperationsCounter);
+            for (int i = currentIndex; i < nrPairs; i++)
             {
                 if (solution.Count > K)
                 {
                     return (false, K + 1);
                 }
 
-                DemandPair demandPair = sortedDemandPairs[i];
+                DemandPair demandPair = sortedDemandPairs[i, Measurements.DemandPairsOperationsCounter];
 
                 if (solvedDemandPairs.Contains(demandPair))
                 {
                     continue;
                 }
 
-                TreeNode leastCommonAncestor = LeastCommonAncestors[demandPair];
+                TreeNode leastCommonAncestor = LeastCommonAncestors[demandPair, Measurements.DemandPairsOperationsCounter];
                 (TreeNode, TreeNode) edgeInSolution;
 
                 if (leastCommonAncestor == demandPair.Node1)
@@ -164,13 +164,13 @@ namespace MulticutInTrees.Algorithms
                 }
                 else
                 {
-                    (TreeNode, TreeNode) before = demandPair.EdgesOnDemandPath.GetCountedEnumerable(new Counter()).First(edge => edge.Item2 == leastCommonAncestor);
+                    (TreeNode, TreeNode) before = demandPair.EdgesOnDemandPath.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).First(edge => edge.Item2 == leastCommonAncestor);
                     ((TreeNode, TreeNode) _, (TreeNode, TreeNode) after) = demandPair.EdgesOnDemandPath.ElementBeforeAndAfter(before, MockCounter);
 
                     (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(before);
                     List<(TreeNode, TreeNode)> tempSolution1 = new List<(TreeNode, TreeNode)>(solution) { edge1 };
                     HashSet<DemandPair> tempSolvedDemandPairs1 = new HashSet<DemandPair>(solvedDemandPairs);
-                    foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edge1])
+                    foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edge1, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                     {
                         tempSolvedDemandPairs1.Add(solvedDemandPair);
                     }
@@ -178,7 +178,7 @@ namespace MulticutInTrees.Algorithms
                     (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(after);
                     List<(TreeNode, TreeNode)> tempSolution2 = new List<(TreeNode, TreeNode)>(solution) { edge2 };
                     HashSet<DemandPair> tempSolvedDemandPairs2 = new HashSet<DemandPair>(solvedDemandPairs);
-                    foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edge2])
+                    foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edge2, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                     {
                         tempSolvedDemandPairs2.Add(solvedDemandPair);
                     }
@@ -205,7 +205,7 @@ namespace MulticutInTrees.Algorithms
                 }
 
                 solution.Add(edgeInSolution);
-                foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edgeInSolution])
+                foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edgeInSolution, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                 {
                     solvedDemandPairs.Add(solvedDemandPair);
                 }
@@ -223,11 +223,11 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         private void FindLeastCommonAncestors()
         {
-            foreach (DemandPair demandPair in DemandPairs)
+            foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 // Find the ancestors for each endpoint of the demand pair.
-                List<TreeNode> ancestors1 = FindAllAncestors(demandPair.Node1);
-                List<TreeNode> ancestors2 = FindAllAncestors(demandPair.Node2);
+                List<TreeNode> ancestors1 = demandPair.Node1.FindAllAncestors();
+                List<TreeNode> ancestors2 = demandPair.Node2.FindAllAncestors();
                 int minSize = Math.Min(ancestors1.Count, ancestors2.Count) + 1;
 
                 // Start from the root, while the path at index i (looked from back to front) is still the same, go to the next node.
@@ -238,30 +238,8 @@ namespace MulticutInTrees.Algorithms
                 }
 
                 // At index i (from the back), we have two nodes that are different, so the least common ancestor is the one before these.
-                LeastCommonAncestors[demandPair] = ancestors1[^(i - 1)];
+                LeastCommonAncestors[demandPair, Measurements.DemandPairsOperationsCounter] = ancestors1[^(i - 1)];
             }
-        }
-
-        // todo: move to treenode
-        /// <summary>
-        /// Finds all ancestors for <paramref name="node"/>. Includes <paramref name="node"/> itself.
-        /// </summary>
-        /// <param name="node">The <see cref="TreeNode"/> for which we want to know its ancestors.</param>
-        /// <returns>A <see cref="List{T}"/> with <see cref="TreeNode"/>s that are ancestors of <paramref name="node"/>. Ordered from <paramref name="node"/> to root.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
-        private List<TreeNode> FindAllAncestors(TreeNode node)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(node, nameof(node), "Trying to find all ancestors of a treenode, but the treenode is null!");
-#endif
-            List<TreeNode> ancestors = new List<TreeNode>() { node };
-            TreeNode parent;
-            while ((parent = node.GetParent(MockCounter)) != null)
-            {
-                ancestors.Add(parent);
-                node = parent;
-            }
-            return ancestors;
         }
     }
 }

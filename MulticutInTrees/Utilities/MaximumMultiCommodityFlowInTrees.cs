@@ -6,10 +6,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 
 namespace MulticutInTrees.Utilities
 {
-    // todo: use correct counters everywhere in class
     /// <summary>
     /// Class that can compute the maximum multi-commodity flow in an <see cref="ITree{N}"/>. Based on a method in a paper by Garg et al.
     /// <br/>
@@ -17,7 +17,11 @@ namespace MulticutInTrees.Utilities
     /// </summary>
     public static class MaximumMultiCommodityFlowInTrees
     {
-        // todo: comment, nullcheck
+        /// <summary>
+        /// The <see cref="Counter"/> that can be used for operations that should not impact the performance of this algorithm.
+        /// </summary>
+        private readonly static Counter MockCounter = new Counter();
+
         /// <summary>
         /// Compute the size of the maximum multi-commodity flow in <paramref name="tree"/> with <paramref name="commodities"/> as commodities.
         /// </summary>
@@ -25,57 +29,63 @@ namespace MulticutInTrees.Utilities
         /// <typeparam name="N">The type of nodes in <typeparamref name="T"/>. Implements <see cref="ITreeNode{N}"/>.</typeparam>
         /// <param name="tree">The <typeparamref name="T"/> in which we are solving the problem.</param>
         /// <param name="commodities">An <see cref="IEnumerable{T}"/> of tuples of two <typeparamref name="N"/>s that represent the commodities in the problem instance.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that measures the performance of this algorithm.</param>
         /// <returns>An <see cref="int"/> that represents the size of the maximum multi-commodity flow in the problem instance.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="commodities"/> is <see langword="null"/>.</exception>
-        public static int ComputeMaximumMultiCommodityFlow<T, N>(T tree, IEnumerable<(N, N)> commodities, Counter counter) where T : ITree<N> where N : ITreeNode<N>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="commodities"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        public static int ComputeMaximumMultiCommodityFlow<T, N>(T tree, IEnumerable<(N, N)> commodities, PerformanceMeasurements measurements) where T : ITree<N> where N : ITreeNode<N>
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to compute the multi commodity flow on a tree, but the tree is null!");
             Utils.NullCheck(commodities, nameof(commodities), "Trying to compute the multi commodity flow on a tree, but the list with commodities is null!");
+            Utils.NullCheck(measurements, nameof(measurements), "Trying to compute the multi commodity flow on a tree, but the performance measures are null!");
 #endif
             // Create a list with original commodities, that should not be modified, and a copy with commodities that can be modified.
             ReadOnlyCollection<Commodity<N>> originalCommodities = new ReadOnlyCollection<Commodity<N>>(commodities.Select(n => new Commodity<N>(n.Item1, n.Item2)).ToList());
-            List<Commodity<N>> modifiedCommodities = new List<Commodity<N>>();
+            CountedList<Commodity<N>> modifiedCommodities = new CountedList<Commodity<N>>();
             foreach (Commodity<N> commodity in originalCommodities)
             {
-                modifiedCommodities.Add(new Commodity<N>(commodity.EndPoint1, commodity.EndPoint2, commodity));
+                modifiedCommodities.Add(new Commodity<N>(commodity.EndPoint1, commodity.EndPoint2, commodity), MockCounter);
             }
 
             // Find the internal nodes and sort them on non-increasing depth.
-            List<N> internalNodesSortedOnDepth = tree.Nodes.Where(n => { counter++; return n.Children.Count() > 0; }).OrderByDescending(n => { counter++; return n.DepthFromRoot(counter); }).ToList();
+            CountedList<N> internalNodesSortedOnDepth = new CountedList<N>(tree.Nodes.Where(n => { measurements.TreeOperationsCounter++; return n.Children.Count() > 0; }).OrderByDescending(n => { measurements.TreeOperationsCounter++; return n.DepthFromRoot(measurements.TreeOperationsCounter); }).ToList(), MockCounter);
 
             // Execute the upward pass that checks for strictly advantageous commodities.
-            UpwardPass(internalNodesSortedOnDepth, modifiedCommodities, counter);
+            UpwardPass(internalNodesSortedOnDepth, modifiedCommodities, measurements);
 
             // Reverse the internal nodes so they are now sorted on non-decreasing depth.
-            internalNodesSortedOnDepth.Reverse();
+            CountedList<N> reversedInternalNodesSortedOnDepth = new CountedList<N>();
+            foreach (N node in internalNodesSortedOnDepth.GetCountedEnumerable(MockCounter))
+            {
+                reversedInternalNodesSortedOnDepth.Insert(0, node, MockCounter);
+            }
 
             // Pick the commodities that are part of the multicommodity flow in the downward pass.
-            List<Commodity<N>> pickedCommodities = DownwardPass(internalNodesSortedOnDepth, modifiedCommodities, counter);
+            List<Commodity<N>> pickedCommodities = DownwardPass(reversedInternalNodesSortedOnDepth, modifiedCommodities, measurements);
 
             // Return the size of the picked commodities.
             return pickedCommodities.Count;
         }
 
-        // todo: comment, nullcheck
         /// <summary>
         /// Upward pass of the algorithm. Determines all strictly advantageous commodities.
         /// </summary>
         /// <typeparam name="N">The type of nodes in the problem instance. Implements <see cref="ITreeNode{N}"/>.</typeparam>
         /// <param name="internalNodesSortedOnDepth">The <see cref="List{T}"/> of <typeparamref name="N"/>s that are internal nodes in the tree and sorted on non-increasing depth.</param>
         /// <param name="commodities">The <see cref="List{T}"/> of <see cref="Commodity{N}"/>s in the problem instance.</param>
-        private static void UpwardPass<N>(List<N> internalNodesSortedOnDepth, List<Commodity<N>> commodities, Counter counter) where N : ITreeNode<N>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that measures the performance of this algorithm.</param>
+        private static void UpwardPass<N>(CountedList<N> internalNodesSortedOnDepth, CountedList<Commodity<N>> commodities, PerformanceMeasurements measurements) where N : ITreeNode<N>
         {
-            foreach (N node in internalNodesSortedOnDepth)
+            foreach (N node in internalNodesSortedOnDepth.GetCountedEnumerable(measurements.TreeOperationsCounter))
             {
                 HashSet<N> children = new HashSet<N>(node.Children);
 
                 // Determine all commodities of length 1 and add their leaf-endpoint as already used node.
-                HashSet<Commodity<N>> resolvedCommodities = new HashSet<Commodity<N>>(commodities.Where(n => n.IsBetween(node, children)));
+                HashSet<Commodity<N>> resolvedCommodities = new HashSet<Commodity<N>>(commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(node, children)));
                 HashSet<N> takenNodes = DetermineTakenNodes(children, resolvedCommodities);
 
                 // Find all commodities in the subtree
-                List<Commodity<N>> commoditiesInSubtree = commodities.Where(n => n.IsBetween(children)).ToList();
+                List<Commodity<N>> commoditiesInSubtree = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(children)).ToList();
                 
                 Dictionary<N, Node> nToNode = new Dictionary<N, Node>();
                 Dictionary<Node, N> nodeToN = new Dictionary<Node, N>();
@@ -88,7 +98,7 @@ namespace MulticutInTrees.Utilities
                 HashSet<Node> unmatchedNodes = FindUnmatchedNodes(graph.Nodes, matching);
 
                 // Determine the strictly advantagous communities and change their endpoint to be the current node.
-                DetermineStrictlyAdvantageousCommodities(node, commodities, takenNodes, unmatchedNodes, nToNode, matching, counter);
+                DetermineStrictlyAdvantageousCommodities(node, commodities, takenNodes, unmatchedNodes, nToNode, matching, measurements);
             }
         }
 
@@ -129,7 +139,6 @@ namespace MulticutInTrees.Utilities
             }
         }
 
-        // todo: comment, nullcheck
         /// <summary>
         /// Determines and modifies the strictly advantageous commodities during the downward pass.
         /// </summary>
@@ -140,15 +149,16 @@ namespace MulticutInTrees.Utilities
         /// <param name="unmatchedNodes"><see cref="HashSet{T}"/> of <see cref="Node"/>s that are unmatched.</param>
         /// <param name="nToNode"><see cref="Dictionary{TKey, TValue}"/> from an <typeparamref name="N"/> to its corresponding <see cref="Node"/>.</param>
         /// <param name="matching"><see cref="List{T}"/> of tuples of two <typeparamref name="N"/>s that represents edges in the current matching.</param>
-        private static void DetermineStrictlyAdvantageousCommodities<N>(N node, List<Commodity<N>> commodities, HashSet<N> takenNodes, HashSet<Node> unmatchedNodes, Dictionary<N, Node> nToNode, List<(Node, Node)> matching, Counter counter) where N : ITreeNode<N>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that measures the performance of this algorithm.</param>
+        private static void DetermineStrictlyAdvantageousCommodities<N>(N node, CountedList<Commodity<N>> commodities, HashSet<N> takenNodes, HashSet<Node> unmatchedNodes, Dictionary<N, Node> nToNode, List<(Node, Node)> matching, PerformanceMeasurements measurements) where N : ITreeNode<N>
         {
             // Find all remaining free nodes in the current subtree.
             HashSet<N> subtree = new HashSet<N>(node.Children) { node };
             subtree.RemoveWhere(n => takenNodes.Contains(n));
-            List<Commodity<N>> partlyInSubtreeCommodities = commodities.Where(n => n.IsPartlyInSubtree(subtree, node, counter)).ToList();
+            List<Commodity<N>> partlyInSubtreeCommodities = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsPartlyInSubtree(subtree, node, measurements.TreeOperationsCounter)).ToList();
 
             // Determine all free nodes.
-            HashSet<Node> freeNodes = new HashSet<Node>(DFS.FreeNodes(new List<Node>(unmatchedNodes), new HashSet<(Node, Node)>(matching), counter));
+            HashSet<Node> freeNodes = new HashSet<Node>(DFS.FreeNodes(new List<Node>(unmatchedNodes), new HashSet<(Node, Node)>(matching), measurements.TreeOperationsCounter));
 
             foreach (Commodity<N> commodity in partlyInSubtreeCommodities)
             {
@@ -287,15 +297,15 @@ namespace MulticutInTrees.Utilities
             }
         }
 
-        // todo: comment, nullcheck
         /// <summary>
         /// Downward pass of the algorithm. Picks all <see cref="Commodity{N}"/>s per edge.
         /// </summary>
         /// <typeparam name="N">The type of nodes in the problem instance. Implements <see cref="ITreeNode{N}"/>.</typeparam>
         /// <param name="internalNodesSortedOnDepth"><see cref="List{T}"/> of all internal <typeparamref name="N"/>s sorted on non-decreasing depth.</param>
         /// <param name="commodities">The <see cref="List{T}"/> of <see cref="Commodity{N}"/>s in the current problem instance.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that measures the performance of this algorithm.</param>
         /// <returns>A <see cref="List{T}"/> with the final <see cref="Commodity{N}"/>s that are picked.</returns>
-        private static List<Commodity<N>> DownwardPass<N>(List<N> internalNodesSortedOnDepth, List<Commodity<N>> commodities, Counter counter) where N : ITreeNode<N>
+        private static List<Commodity<N>> DownwardPass<N>(CountedList<N> internalNodesSortedOnDepth, CountedList<Commodity<N>> commodities, PerformanceMeasurements measurements) where N : ITreeNode<N>
         {
             // Final list of picked commodities
             List<Commodity<N>> pickedCommodities = new List<Commodity<N>>();
@@ -303,11 +313,11 @@ namespace MulticutInTrees.Utilities
             // Dictionary with per edge in the problem instance the commodity that is picked along it.
             Dictionary<(N, N), Commodity<N>> edgeToPickedCommodity = new Dictionary<(N, N), Commodity<N>>();
 
-            foreach (N node in internalNodesSortedOnDepth)
+            foreach (N node in internalNodesSortedOnDepth.GetCountedEnumerable(measurements.TreeOperationsCounter))
             {
                 // Check if a commodity was picked on the edge between the root and its parent.
                 Commodity<N> pickedCommodity = null;
-                N parent = node.GetParent(counter);
+                N parent = node.GetParent(measurements.TreeOperationsCounter);
                 if (!(parent is null))
                 {
                     // not the root, so there is probably a commodity on the edge between this node and its parent. We cannot use the edge it continues on
@@ -315,9 +325,9 @@ namespace MulticutInTrees.Utilities
                 }
 
                 HashSet<N> children = new HashSet<N>(node.Children);
-                HashSet<Commodity<N>> resolvedCommodities = new HashSet<Commodity<N>>(commodities.Where(n => n.IsBetween(node, children)));
+                HashSet<Commodity<N>> resolvedCommodities = new HashSet<Commodity<N>>(commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(node, children)));
                 HashSet<N> takenNodes = DetermineTakenNodes(children, resolvedCommodities);
-                List<Commodity<N>> commoditiesInSubtree = commodities.Where(n => n.IsBetween(children)).ToList();
+                List<Commodity<N>> commoditiesInSubtree = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(children)).ToList();
 
                 Dictionary<N, Node> nToNode = new Dictionary<N, Node>();
                 Dictionary<Node, N> nodeToN = new Dictionary<Node, N>();
@@ -408,12 +418,12 @@ namespace MulticutInTrees.Utilities
                 return nodes.Contains(EndPoint1) && nodes.Contains(EndPoint2);
             }
 
-            // todo: comment, nullcheck
             /// <summary>
             /// Returns whether this <see cref="Commodity{N}"/> has one endpoint in <paramref name="nodesInSubtree"/> and leaves the subtree via <paramref name="root"/>.
             /// </summary>
             /// <param name="nodesInSubtree">The <see cref="HashSet{T}"/> of <typeparamref name="N"/>s in the subtree.</param>
             /// <param name="root">The <typeparamref name="N"/> that is the root of this subtree.</param>
+            /// <param name="counter">The graph <see cref="Counter"/> used for performance measurement.</param>
             /// <returns><see langword="true"/> if exactly one of <see cref="EndPoint1"/> or <see cref="EndPoint2"/> is present in <paramref name="nodesInSubtree"/>, and <see cref="Path"/> contains <paramref name="root"/>, <see langword="false"/> otherwise.</returns>
             public bool IsPartlyInSubtree(HashSet<N> nodesInSubtree, N root, Counter counter)
             {

@@ -3,7 +3,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.CountedDatastructures
@@ -12,7 +11,7 @@ namespace MulticutInTrees.CountedDatastructures
     /// Custom <see cref="IEnumerator{T}"/> that counts the number of operations it performed.
     /// </summary>
     /// <typeparam name="T">The type of elements this <see cref="IEnumerator{T}"/> enumerates.</typeparam>
-    public class CountedEnumerator<T> : IEnumerator<T>
+    public class CountedEnumerator<T> : IEnumerator<T> where T : notnull
     {
         /// <summary>
         /// The <see cref="Counter"/> that counts the number of operations this <see cref="CountedEnumerator{T}"/> used.

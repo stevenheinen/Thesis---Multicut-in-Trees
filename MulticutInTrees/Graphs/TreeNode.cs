@@ -324,6 +324,21 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
+        /// Finds all ancestors for this <see cref="TreeNode"/>. Includes this <see cref="TreeNode"/> itself.
+        /// </summary>
+        /// <returns>A <see cref="List{T}"/> with <see cref="TreeNode"/>s that are ancestors of this <see cref="TreeNode"/>. Ordered from this <see cref="TreeNode"/> to the root.</returns>
+        public List<TreeNode> FindAllAncestors()
+        {
+            List<TreeNode> ancestors = new List<TreeNode>() { this };
+            TreeNode parent = this;
+            while ((parent = parent.GetParent(MockCounter)) != null)
+            {
+                ancestors.Add(parent);
+            }
+            return ancestors;
+        }
+
+        /// <summary>
         /// Returns a <see cref="string"/> representation of this <see cref="TreeNode"/>.
         /// <br/>
         /// Looks like: "TreeNode [ID]", where "[ID]" is the <see cref="ID"/> of this <see cref="TreeNode"/>.

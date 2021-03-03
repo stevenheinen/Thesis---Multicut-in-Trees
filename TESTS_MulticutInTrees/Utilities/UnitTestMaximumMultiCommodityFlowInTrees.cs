@@ -18,6 +18,7 @@ namespace TESTS_MulticutInTrees.Utilities
     public class UnitTestMaximumMultiCommodityFlowInTrees
     {
         private readonly static Counter counter = new Counter();
+        private readonly static PerformanceMeasurements measurements = new PerformanceMeasurements(nameof(UnitTestMaximumMultiCommodityFlowInTrees));
 
         [TestMethod]
         public void TestCase1()
@@ -42,7 +43,7 @@ namespace TESTS_MulticutInTrees.Utilities
             tree.AddChildren(node3, new List<TreeNode>() { node9, node10, node11 }, counter);
             List<(TreeNode, TreeNode)> commodities = new List<(TreeNode, TreeNode)>() { (node5, node4), (node5, node6), (node6, node0), (node0, node7), (node9, node8), (node10, node11), (node3, node11) };
 
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, counter);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
             Assert.AreEqual(4, flow);
         }
 
@@ -53,7 +54,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(50, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(10, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, counter);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
             Assert.AreEqual(4, flow);
         }
 
@@ -64,7 +65,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(100, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(90, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, counter);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
             Assert.AreEqual(13, flow);
         }
 
@@ -75,7 +76,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(250, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, counter);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
             Assert.AreEqual(16, flow);
         }
 
@@ -86,7 +87,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(2000, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(1000, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, counter);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
             Assert.AreEqual(33, flow);
         }
 
@@ -97,7 +98,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(5000, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(4000, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, counter);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
             Assert.AreEqual(73, flow);
         }
     }

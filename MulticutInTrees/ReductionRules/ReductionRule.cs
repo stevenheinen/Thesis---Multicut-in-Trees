@@ -59,7 +59,7 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(name, nameof(name), "Trying to create a reduction rule, but its name is null!");
 #endif
             Tree = tree;
-            DemandPairs = new CountedList<DemandPair>(demandPairs);
+            DemandPairs = demandPairs;
             Algorithm = algorithm;
             Random = random;
             Measurements = new PerformanceMeasurements(name);
@@ -105,6 +105,6 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         /// <param name="changedEdgesPerDemandPairList">The <see cref="CountedList{T}"/> with tuples with a <see cref="List{T}"/> with tuples of <see cref="TreeNode"/>s that represent the edges that were removed from the demand path, and a <see cref="DemandPair"/>.</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
+        internal abstract bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
     }
 }

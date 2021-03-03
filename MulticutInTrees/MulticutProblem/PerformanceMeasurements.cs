@@ -93,23 +93,24 @@ namespace MulticutInTrees.MulticutProblem
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("\n");
-            sb.Append($"{Owner} input modifications\n");
-            sb.Append("===================================================\n");
+            sb.Append("========================================================\n");
+            sb.Append($"{Owner} instance modifications\n");
+            sb.Append("========================================================\n");
             sb.Append($"Number of contracted edges:    {NumberOfContractedEdgesCounter}\n");
             sb.Append($"Number of changed demandpairs: {NumberOfChangedDemandPairsCounter}\n");
             sb.Append($"Number of removed demandpairs: {NumberOfRemovedDemandPairsCounter}\n");
+            sb.Append("========================================================\n");
             sb.Append($"{Owner} operations\n");
-            sb.Append("===================================================\n");
+            sb.Append("========================================================\n");
             sb.Append($"Operations on the input tree:              {TreeOperationsCounter}\n");
             sb.Append($"Operations on demandpairs:                 {DemandPairsOperationsCounter}\n");
             sb.Append($"Operations on demandpairs per edge keys:   {DemandPairsPerEdgeKeysCounter}\n");
             sb.Append($"Operations on demandpairs per edge values: {DemandPairsPerEdgeValuesCounter}\n");
+            sb.Append("========================================================\n");
             sb.Append($"{Owner} time\n");
-            sb.Append("===================================================\n");
+            sb.Append("========================================================\n");
             sb.Append($"Time spent checking applicability (in ticks): {TimeSpentCheckingApplicability.ElapsedTicks}\n");
             sb.Append($"Time spent modifying the instance (in ticks): {TimeSpentModifyingInstance.ElapsedTicks}\n");
-            sb.Append($"Time spent checking applicability (in ms):    {TimeSpentCheckingApplicability.ElapsedMilliseconds}\n");
-            sb.Append($"Time spent modifying the instance (in ms):    {TimeSpentModifyingInstance.ElapsedMilliseconds}\n");
             sb.Append("\n");
 
             return sb.ToString();

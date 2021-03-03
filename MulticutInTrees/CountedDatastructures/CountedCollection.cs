@@ -13,7 +13,7 @@ namespace MulticutInTrees.CountedDatastructures
     /// Custom data structure that uses a <see cref="LinkedList{T}"/> and a <see cref="Dictionary{TKey, TValue}"/> for fast operations, and counts the number of operations it performs.
     /// </summary>
     /// <typeparam name="T">The type of elements in this <see cref="CountedCollection{T}"/>.</typeparam>
-    public class CountedCollection<T>
+    public class CountedCollection<T> where T : notnull
     {
         /// <summary>
         /// The internal <see cref="Dictionary{TKey, TValue}"/> from <typeparamref name="T"/> to <see cref="LinkedListNode{T}"/>.
@@ -190,7 +190,6 @@ namespace MulticutInTrees.CountedDatastructures
             return Dictionary.ContainsKey(item);
         }
 
-        // todo: bij elke reference de juiste counter meegeven
         /// <summary>
         /// Returns an <see cref="IEnumerable{T}"/> that can be used to iterate over this <see cref="CountedCollection{T}"/>.
         /// </summary>

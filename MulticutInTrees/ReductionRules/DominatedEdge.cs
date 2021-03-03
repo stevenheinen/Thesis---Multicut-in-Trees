@@ -34,7 +34,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="List{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="random"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, "Dominated Edge")
+        public DominatedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, random, nameof(DominatedEdge))
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
@@ -43,7 +43,8 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(random, nameof(random), "Trying to create an instance of the DominatedEdge reduction rule, but the random is null!");
             Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the DominatedEdge reduction rule, but the dictionary with demand paths per edge is null!");
 #endif
-            DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
+            //DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
+            DemandPairsPerEdge = demandPairsPerEdge;
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(otherEdge.Item1, nameof(otherEdge.Item1), "Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the second edge is null!");
             Utils.NullCheck(otherEdge.Item2, nameof(otherEdge.Item2), "Trying to see whether all demand paths that pass through an edge also pass through another, but the second endpoint of the second edge is null!");
 #endif
-            return DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(contractEdge)].GetCountedEnumerable(new Counter()).IsSubsetOf(DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(otherEdge)].GetCountedEnumerable(new Counter()));
+            return DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(contractEdge), Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).IsSubsetOf(DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(otherEdge), Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter));
         }
 
         /// <summary>
@@ -75,19 +76,18 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to find all edges on the shortest demand path through this edge, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to find all edges on the shortest demand path through this edge, but the second endpoint of the edge is null!");
 #endif
-            if (!DemandPairsPerEdge.TryGetValue(edge, out CountedList<DemandPair> demandPathsOnEdge)) 
+            if (!DemandPairsPerEdge.TryGetValue(edge, out CountedList<DemandPair> demandPathsOnEdge, Measurements.DemandPairsPerEdgeKeysCounter)) 
             {
                 return new List<(TreeNode, TreeNode)>().AsReadOnly();
             }
 
-            DemandPair shortestPathThroughThisEdge = demandPathsOnEdge.GetCountedEnumerable(new Counter()).Aggregate((n, m) => n.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) < m.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) ? n : m);
-            return shortestPathThroughThisEdge.EdgesOnDemandPath.GetCountedEnumerable(new Counter()).Select(n => Utils.OrderEdgeSmallToLarge(n)).ToList().AsReadOnly();
+            DemandPair shortestPathThroughThisEdge = demandPathsOnEdge.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).Aggregate((n, m) => n.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) < m.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) ? n : m);
+            return shortestPathThroughThisEdge.EdgesOnDemandPath.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(n => Utils.OrderEdgeSmallToLarge(n)).ToList().AsReadOnly();
         }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        // TODO: Van parameter list maken zodat counted niet doorgegeven kan worden, en dan hier een countedlist ervan maken met een counter die alleen hier bestaat. Ook bij andere methoden en de andere reduction rules.
-        internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
 #if !EXPERIMENT
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Dominated Edge rule after a demand path was changed, but the IEnumerable of changed demand paths is null!");
@@ -98,9 +98,9 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
-            foreach ((List<(TreeNode, TreeNode)> edges, DemandPair _) in changedEdgesPerDemandPairList.GetCountedEnumerable(new Counter()))
+            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
-                foreach ((TreeNode, TreeNode) edge in edges)
+                foreach ((TreeNode, TreeNode) edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                 {
                     edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
                 }
@@ -126,7 +126,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryContractEdges(edgesToBeContracted);
+            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -142,14 +142,14 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
-            foreach (DemandPair demandPair in removedDemandPairs.GetCountedEnumerable(new Counter()))
+            foreach (DemandPair demandPair in removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 if (demandPair.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) == 0)
                 {
                     continue;
                 }
 
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(new Counter()))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
                     edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
                 }
@@ -179,7 +179,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryContractEdges(edgesToBeContracted.ToList());
+            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -227,7 +227,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryContractEdges(edgesToBeContracted.ToList());
+            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -239,15 +239,15 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Contract all edges in <paramref name="edgesToBeContracted"/>.
         /// </summary>
-        /// <param name="edgesToBeContracted">The <see cref="List{T}"/> with all edges to be contracted.</param>
+        /// <param name="edgesToBeContracted">The <see cref="CountedList{T}"/> with all edges to be contracted.</param>
         /// <returns><see langword="true"/> if <paramref name="edgesToBeContracted"/> has any elements, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeContracted"/> is <see langword="null"/>.</exception>
-        private bool TryContractEdges(List<(TreeNode, TreeNode)> edgesToBeContracted)
+        private bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), $"Trying to contract edges, but the List with edges is null!");
 #endif
-            if (edgesToBeContracted.Count == 0)
+            if (edgesToBeContracted.Count(Measurements.TreeOperationsCounter) == 0)
             {
                 return false;
             }

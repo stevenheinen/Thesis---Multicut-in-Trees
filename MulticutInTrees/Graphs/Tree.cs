@@ -14,6 +14,7 @@ namespace MulticutInTrees.Graphs
     /// </summary>
     public class Tree<N> : ITree<N> where N : ITreeNode<N>
     {
+        // Todo: should use counter
         /// <summary>
         /// The publically visible collection of edges in this <see cref="Tree{N}"/>. Edges cannot be edited directly.
         /// <br/>
@@ -21,6 +22,7 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         public IEnumerable<(N, N)> Edges => InternalEdges.GetLinkedList();
 
+        // todo: should use counter
         /// <summary>
         /// The publically visible collection of nodes in this <see cref="Tree{N}"/>. Nodes cannot be edited directly.
         /// <br/>

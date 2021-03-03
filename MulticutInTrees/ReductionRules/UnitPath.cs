@@ -26,7 +26,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, or <paramref name="random"/> is <see langword="null"/>.</exception>
-        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random) : base(tree, demandPairs, algorithm, random, "Unit Path")
+        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random) : base(tree, demandPairs, algorithm, random, nameof(UnitPath))
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Unit Path rule, but the input tree is null!");
@@ -52,7 +52,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
+        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
 #if !EXPERIMENT
             Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Unit Path rule after a demand path was changed, but the list of changed demand pairs is null!");
@@ -63,7 +63,7 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach ((List<(TreeNode, TreeNode)> _, DemandPair path) in changedEdgesPerDemandPairList.GetCountedEnumerable(new Counter()))
+            foreach ((CountedList<(TreeNode, TreeNode)> _, DemandPair path) in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 if (DemandPathHasLengthOne(path))
                 {
@@ -73,7 +73,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryCutEdges(edgesToBeCut);
+            return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -99,9 +99,9 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedList<DemandPair> pairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(new Counter()))
+            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedList<DemandPair> pairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
-                foreach (DemandPair path in pairs.GetCountedEnumerable(new Counter()))
+                foreach (DemandPair path in pairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
                     if (DemandPathHasLengthOne(path))
                     {
@@ -112,7 +112,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryCutEdges(edgesToBeCut);
+            return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -124,7 +124,7 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (DemandPair dp in DemandPairs.GetCountedEnumerable(new Counter()))
+            foreach (DemandPair dp in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 if (DemandPathHasLengthOne(dp))
                 {
@@ -134,7 +134,7 @@ namespace MulticutInTrees.ReductionRules
 
             Measurements.TimeSpentCheckingApplicability.Stop();
 
-            return TryCutEdges(edgesToBeCut);
+            return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -146,21 +146,20 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Cut all edges in <paramref name="edgesToBeCut"/>.
         /// </summary>
-        /// <param name="edgesToBeCut">The <see cref="HashSet{T}"/> with all edges to be cut.</param>
+        /// <param name="edgesToBeCut">The <see cref="CountedList{T}"/> with all edges to be cut.</param>
         /// <returns><see langword="true"/> if <paramref name="edgesToBeCut"/> has any elements, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeCut"/> is <see langword="null"/>.</exception>
-        private bool TryCutEdges(HashSet<(TreeNode, TreeNode)> edgesToBeCut)
+        private bool TryCutEdges(CountedList<(TreeNode, TreeNode)> edgesToBeCut)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), $"Trying to cut edges, but the Hashset with edges is null!");
 #endif
-
-            if (edgesToBeCut.Count == 0)
+            if (edgesToBeCut.Count(Measurements.TreeOperationsCounter) == 0)
             {
                 return false;
             }
 
-            Algorithm.CutEdges(edgesToBeCut.ToList(), Measurements);
+            Algorithm.CutEdges(edgesToBeCut, Measurements);
             return true;
         }
     }

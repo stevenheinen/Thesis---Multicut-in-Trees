@@ -1,117 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>68355</CodebaseCost>
-    <TotalDuplicatesCost>1435</TotalDuplicatesCost>
-    <TotalFragmentsCost>2870</TotalFragmentsCost>
+    <CodebaseCost>68875</CodebaseCost>
+    <TotalDuplicatesCost>1554</TotalDuplicatesCost>
+    <TotalFragmentsCost>3108</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
+    <Duplicate Cost="297">
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
+        <OffsetRange Start="6015" End="6878"></OffsetRange>
+        <LineRange Start="81" End="91"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
+        <OffsetRange Start="23057" End="23736"></OffsetRange>
+        <LineRange Start="327" End="333"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="277">
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\DemandPair.cs</FileName>
-        <OffsetRange Start="8736" End="9950"></OffsetRange>
-        <LineRange Start="137" End="144"></LineRange>
+        <OffsetRange Start="8822" End="10036"></OffsetRange>
+        <LineRange Start="141" End="148"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\DemandPair.cs</FileName>
-        <OffsetRange Start="12836" End="14050"></OffsetRange>
-        <LineRange Start="181" End="188"></LineRange>
+        <OffsetRange Start="12968" End="14182"></OffsetRange>
+        <LineRange Start="187" End="194"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="271">
-      <Fragment>
-        <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
-        <OffsetRange Start="4839" End="5574"></OffsetRange>
-        <LineRange Start="70" End="80"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
-        <OffsetRange Start="21279" End="21830"></OffsetRange>
-        <LineRange Start="316" End="322"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="232">
+    <Duplicate Cost="273">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="11560" End="12049"></OffsetRange>
-        <LineRange Start="213" End="223"></LineRange>
+        <OffsetRange Start="12643" End="13282"></OffsetRange>
+        <LineRange Start="203" End="213"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="25803" End="26292"></OffsetRange>
-        <LineRange Start="417" End="427"></LineRange>
+        <OffsetRange Start="28344" End="28983"></OffsetRange>
+        <LineRange Start="410" End="420"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="194">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\DinicMaxFlow.cs</FileName>
-        <OffsetRange Start="2903" End="3258"></OffsetRange>
-        <LineRange Start="38" End="44"></LineRange>
+        <OffsetRange Start="2926" End="3281"></OffsetRange>
+        <LineRange Start="39" End="45"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Utilities\DinicMaxFlow.cs</FileName>
-        <OffsetRange Start="10724" End="11079"></OffsetRange>
-        <LineRange Start="148" End="154"></LineRange>
+        <OffsetRange Start="10793" End="11148"></OffsetRange>
+        <LineRange Start="151" End="157"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="107">
+    <Duplicate Cost="135">
+      <Fragment>
+        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
+        <OffsetRange Start="18897" End="19458"></OffsetRange>
+        <LineRange Start="293" End="298"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
+        <OffsetRange Start="19661" End="20222"></OffsetRange>
+        <LineRange Start="303" End="308"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="117">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
-        <OffsetRange Start="14522" End="15506"></OffsetRange>
-        <LineRange Start="252" End="269"></LineRange>
+        <OffsetRange Start="14488" End="15545"></OffsetRange>
+        <LineRange Start="239" End="257"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\IdleEdge.cs</FileName>
-        <OffsetRange Start="10324" End="11320"></OffsetRange>
-        <LineRange Start="182" End="199"></LineRange>
+        <OffsetRange Start="10374" End="11443"></OffsetRange>
+        <LineRange Start="169" End="187"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="99">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="8490" End="8877"></OffsetRange>
-        <LineRange Start="162" End="164"></LineRange>
+        <OffsetRange Start="9237" End="9624"></OffsetRange>
+        <LineRange Start="149" End="151"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="10355" End="10742"></OffsetRange>
-        <LineRange Start="196" End="198"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="93">
-      <Fragment>
-        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="17460" End="17795"></OffsetRange>
-        <LineRange Start="302" End="307"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierFPT.cs</FileName>
-        <OffsetRange Start="17998" End="18333"></OffsetRange>
-        <LineRange Start="312" End="317"></LineRange>
+        <OffsetRange Start="11297" End="11684"></OffsetRange>
+        <LineRange Start="184" End="186"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\DinicMaxFlow.cs</FileName>
-        <OffsetRange Start="6609" End="6725"></OffsetRange>
-        <LineRange Start="79" End="80"></LineRange>
+        <OffsetRange Start="6655" End="6771"></OffsetRange>
+        <LineRange Start="81" End="82"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Utilities\DinicMaxFlow.cs</FileName>
-        <OffsetRange Start="13833" End="13949"></OffsetRange>
-        <LineRange Start="189" End="190"></LineRange>
+        <OffsetRange Start="13925" End="14041"></OffsetRange>
+        <LineRange Start="193" End="194"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="76">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
-        <OffsetRange Start="7000" End="7432"></OffsetRange>
-        <LineRange Start="101" End="111"></LineRange>
+        <OffsetRange Start="6740" End="7172"></OffsetRange>
+        <LineRange Start="90" End="100"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
-        <OffsetRange Start="7676" End="8108"></OffsetRange>
-        <LineRange Start="113" End="123"></LineRange>
+        <OffsetRange Start="7491" End="7923"></OffsetRange>
+        <LineRange Start="102" End="112"></LineRange>
       </Fragment>
     </Duplicate>
   </Duplicates>

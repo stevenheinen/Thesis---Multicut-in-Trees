@@ -3,7 +3,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -71,7 +70,7 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// A <see cref="List{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
         /// </summary>
-        protected CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
+        protected CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
 
         /// <summary>
         /// The <see cref="System.Random"/> used for random number generation.
@@ -83,20 +82,22 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         protected Counter MockCounter { get; }
 
-        // TODO: temp
-        private readonly Counter lastContractedEdgesCounter;
-        private readonly Counter LastRemovedDemandPairsCounter;
-        private readonly Counter LastChangedEdgesPerDemandPairCounter;
+        /// <summary>
+        /// <see cref="PerformanceMeasurements"/> that are used by the central parts an <see cref="Algorithm"/> does that has nothing to do with <see cref="ReductionRule"/>s, like preprocessing.
+        /// </summary>
+        protected PerformanceMeasurements AlgorithmPerformanceMeasurements { get; }
 
         /// <summary>
         /// Constructor for an <see cref="Algorithm"/>.
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
-        protected Algorithm(MulticutInstance instance)
+        /// <param name="algorithmName">The name of the current <see cref="Algorithm"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> or <paramref name="algorithmName"/> is <see langword="null"/>.</exception>
+        protected Algorithm(MulticutInstance instance, string algorithmName)
         {
 #if !EXPERIMENT
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
+            Utils.NullCheck(algorithmName, nameof(algorithmName), "Trying to create an instance of a Multicut algorithm, but the name of the algorithm is null!");
 #endif
             Tree = instance.Tree;
             DemandPairs = instance.DemandPairs;
@@ -104,14 +105,11 @@ namespace MulticutInTrees.Algorithms
             Random = instance.Random;
             PartialSolution = new List<(TreeNode, TreeNode)>();
             MockCounter = new Counter();
+            AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmName);
 
-            lastContractedEdgesCounter = new Counter();
-            LastRemovedDemandPairsCounter = new Counter();
-            LastChangedEdgesPerDemandPairCounter = new Counter();
-
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(lastContractedEdgesCounter);
-            LastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairsCounter);
-            LastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPairCounter);
+            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>();
+            LastRemovedDemandPairs = new CountedList<DemandPair>();
+            LastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
         }
 
         /// <summary>
@@ -124,7 +122,7 @@ namespace MulticutInTrees.Algorithms
 
             for (int i = 0; i < ReductionRules.Count; i++)
             {
-                if (DemandPairs.Count == 0)
+                if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
                 {
                     PrintCounters();
                     return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
@@ -195,8 +193,8 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying rule {i + 1} after an edge was contracted.");
 #endif
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(LastContractedEdges, lastContractedEdgesCounter);
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(lastContractedEdgesCounter);
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(LastContractedEdges.GetCountedEnumerable(MockCounter), MockCounter);
+            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>();
             LastIterationEdgeContraction = false;
             bool successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges);
             if (!successful)
@@ -220,8 +218,8 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying rule {i + 1} after a demand pair was removed.");
 #endif
-            CountedList<DemandPair> oldLastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairs, LastRemovedDemandPairsCounter);
-            LastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairsCounter);
+            CountedList<DemandPair> oldLastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairs.GetCountedEnumerable(MockCounter), MockCounter);
+            LastRemovedDemandPairs = new CountedList<DemandPair>();
             LastIterationDemandPairRemoval = false;
             bool successful = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs);
             if (!successful)
@@ -245,8 +243,8 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying rule {i + 1} after a demand pair changed.");
 #endif
-            CountedList<(List<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair, LastChangedEdgesPerDemandPairCounter);
-            LastChangedEdgesPerDemandPair = new CountedList<(List<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPairCounter);
+            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair.GetCountedEnumerable(MockCounter), MockCounter);
+            LastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
             LastIterationDemandPairChange = false;
             bool successful = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair);
             if (!successful)
@@ -266,8 +264,7 @@ namespace MulticutInTrees.Algorithms
         protected virtual void PrintCounters()
         {
             Console.WriteLine();
-            Console.WriteLine(GetType());
-            Console.WriteLine("==================================================");
+            Console.WriteLine(AlgorithmPerformanceMeasurements);
             foreach (ReductionRule reductionRule in ReductionRules)
             {
                 reductionRule.PrintCounters();
@@ -425,7 +422,7 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="edges">The <see cref="IList{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges to be cut.</param>
         /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
-        internal abstract void CutEdges(IList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements);
+        internal abstract void CutEdges(CountedList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Contract an edge.
@@ -439,7 +436,7 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="edges">The <see cref="IList{T}"/> of tuples of <see cref="TreeNode"/>s representing the edges to be contracted.</param>
         /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
-        internal abstract void ContractEdges(IList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements);
+        internal abstract void ContractEdges(CountedList<(TreeNode, TreeNode)> edges, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Remove a <see cref="DemandPair"/> from the problem instance.
@@ -453,7 +450,7 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="demandPairs">The <see cref="IList{T}"/> of <see cref="DemandPair"/>s to be removed.</param>
         /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
-        internal abstract void RemoveDemandPairs(IList<DemandPair> demandPairs, PerformanceMeasurements measurements);
+        internal abstract void RemoveDemandPairs(CountedList<DemandPair> demandPairs, PerformanceMeasurements measurements);
 
         /// <summary>
         /// Change an endpoint of a <see cref="DemandPair"/>.
@@ -469,6 +466,6 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="demandPairEndpointTuples">The <see cref="IList{T}"/> of tuples containing the <see cref="DemandPair"/> that is changed, the <see cref="TreeNode"/> old endpoint and <see cref="TreeNode"/> new endpoint.</param>
         /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
-        internal abstract void ChangeEndpointOfDemandPairs(IList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples, PerformanceMeasurements measurements);
+        internal abstract void ChangeEndpointOfDemandPairs(CountedList<(DemandPair, TreeNode, TreeNode)> demandPairEndpointTuples, PerformanceMeasurements measurements);
     }
 }
