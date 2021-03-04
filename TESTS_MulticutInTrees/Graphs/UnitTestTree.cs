@@ -22,8 +22,8 @@ namespace TESTS_MulticutInTrees.Graphs
             Tree<TreeNode> tree = new Tree<TreeNode>();
             Assert.IsNotNull(tree);
 
-            Assert.IsNotNull(tree.Edges);
-            Assert.IsNotNull(tree.Nodes);
+            Assert.IsNotNull(tree.Edges(counter));
+            Assert.IsNotNull(tree.Nodes(counter));
         }
 
         [TestMethod]
@@ -77,8 +77,8 @@ namespace TESTS_MulticutInTrees.Graphs
             MethodInfo method = typeof(Tree<TreeNode>).GetMethod("AddChildrenToParent", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(tree, new object[] { node3, counter });
 
-            Assert.AreEqual(7, node0.Children.Count());
-            Assert.AreEqual(0, node3.Children.Count());
+            Assert.AreEqual(7, node0.NumberOfChildren(counter));
+            Assert.AreEqual(0, node3.NumberOfChildren(counter));
             Assert.AreEqual(node0, node9.GetParent(counter));
             Assert.IsTrue(node0.HasChild(node7, counter));
 
@@ -363,7 +363,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.AreEqual(8, tree.NumberOfEdges(counter));
 
             Assert.IsFalse(node0.HasChild(node3, counter));
-            Assert.AreEqual(6, node0.Children.Count());
+            Assert.AreEqual(6, node0.NumberOfChildren(counter));
 
             tree.AddRoot(node3, counter);
             tree.RemoveNode(node3, counter);

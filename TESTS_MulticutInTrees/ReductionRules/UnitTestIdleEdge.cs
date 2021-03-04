@@ -47,9 +47,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            Random random = new Random(5644687);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsNotNull(idleEdge);
         }
 
@@ -81,14 +80,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
             }, counter);
 
             Random random = new Random(674648);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(null, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, null, new GuoNiedermeierFPT(instance), random, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, null, random, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), null, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(null, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, null, new GuoNiedermeierFPT(instance), demandPairPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, null, demandPairPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), null); });
 
             Assert.ThrowsException<ArgumentNullException>(() => idleEdge.AfterDemandPathChanged(null));
             Assert.ThrowsException<ArgumentNullException>(() => idleEdge.AfterDemandPathRemove(null));
@@ -128,9 +126,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            Random random = new Random(6453422);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
 
             Assert.IsFalse(idleEdge.AfterEdgeContraction(new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>() { ((node1, node3), node1, demandPairs) }, counter)));
         }
@@ -164,9 +161,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair1 }, counter) }
             }, counter);
 
-            Random random = new Random(5468763);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
 
             Assert.IsFalse(idleEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair2 }, counter)));
             Assert.IsTrue(idleEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair3 }, counter)));
@@ -200,9 +196,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node2), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2 }, counter) }
             }, counter);
 
-            Random random = new Random(35468468);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
 
             Assert.IsTrue(idleEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)> { (node1, node4) }, counter), demandPair2) }, counter)));
             Assert.IsFalse(idleEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)> { (node1, node2) }, counter), demandPair1) }, counter)));
@@ -225,9 +220,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) },
             }, counter);
 
-            Random random = new Random(74);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, random);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsFalse(idleEdge.RunFirstIteration());
         }
     }

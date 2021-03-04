@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -12,6 +13,8 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestDinicMaxFlow
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestArgumentNull()
         {
@@ -118,15 +121,15 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 });
-            graph.AddEdge(node0, node1, true);
-            graph.AddEdge(node0, node2, true);
-            graph.AddEdge(node2, node1, true);
-            graph.AddEdge(node1, node3, true);
-            graph.AddEdge(node2, node4, true);
-            graph.AddEdge(node4, node3, true);
-            graph.AddEdge(node4, node5, true);
-            graph.AddEdge(node3, node5, true);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, counter);
+            graph.AddEdge(node0, node1, counter, true);
+            graph.AddEdge(node0, node2, counter, true);
+            graph.AddEdge(node2, node1, counter, true);
+            graph.AddEdge(node1, node3, counter, true);
+            graph.AddEdge(node2, node4, counter, true);
+            graph.AddEdge(node4, node3, counter, true);
+            graph.AddEdge(node4, node5, counter, true);
+            graph.AddEdge(node3, node5, counter, true);
 
             Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>()
             {
@@ -169,23 +172,23 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node9 = new Node(9);
             Node node10 = new Node(10);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 });
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, counter);
 
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node1, node6);
-            graph.AddEdge(node1, node5);
-            graph.AddEdge(node2, node5);
-            graph.AddEdge(node3, node4);
-            graph.AddEdge(node4, node8);
-            graph.AddEdge(node5, node6);
-            graph.AddEdge(node6, node7);
-            graph.AddEdge(node6, node8);
-            graph.AddEdge(node6, node9);
-            graph.AddEdge(node9, node10);
-            graph.AddEdge(node8, node10);
-            graph.AddEdge(node7, node10);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node1, node6, counter);
+            graph.AddEdge(node1, node5, counter);
+            graph.AddEdge(node2, node5, counter);
+            graph.AddEdge(node3, node4, counter);
+            graph.AddEdge(node4, node8, counter);
+            graph.AddEdge(node5, node6, counter);
+            graph.AddEdge(node6, node7, counter);
+            graph.AddEdge(node6, node8, counter);
+            graph.AddEdge(node6, node9, counter);
+            graph.AddEdge(node9, node10, counter);
+            graph.AddEdge(node8, node10, counter);
+            graph.AddEdge(node7, node10, counter);
 
             int flow = DinicMaxFlow.MaxFlowUnitCapacities(graph, node0, node10);
             Assert.AreEqual(3, flow);
@@ -208,21 +211,21 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node9 = new Node(9);
             Node node10 = new Node(10);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 });
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, counter);
 
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node1, node6);
-            graph.AddEdge(node1, node5);
-            graph.AddEdge(node2, node5);
-            graph.AddEdge(node3, node4);
-            graph.AddEdge(node4, node8);
-            graph.AddEdge(node5, node6);
-            graph.AddEdge(node6, node9);
-            graph.AddEdge(node9, node10);
-            graph.AddEdge(node8, node10);
-            graph.AddEdge(node7, node10);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node1, node6, counter);
+            graph.AddEdge(node1, node5, counter);
+            graph.AddEdge(node2, node5, counter);
+            graph.AddEdge(node3, node4, counter);
+            graph.AddEdge(node4, node8, counter);
+            graph.AddEdge(node5, node6, counter);
+            graph.AddEdge(node6, node9, counter);
+            graph.AddEdge(node9, node10, counter);
+            graph.AddEdge(node8, node10, counter);
+            graph.AddEdge(node7, node10, counter);
 
             int flow = DinicMaxFlow.MaxFlowUnitCapacities(graph, node0, node10);
             Assert.AreEqual(2, flow);
@@ -238,11 +241,11 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node1, node2);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node1, node2, counter);
 
             List<Node> sources = new List<Node>() { node0, node1 };
             List<Node> sinks = new List<Node>() { node2, node3 };
@@ -262,11 +265,11 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node1, node3);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node1, node3, counter);
 
             Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>()
             {
@@ -300,11 +303,11 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node1, node3);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node1, node3, counter);
 
             List<Node> sources = new List<Node>() { node0, node0, node0, node0, node1, node1, node1 };
             sources.Shuffle(random);
@@ -398,11 +401,11 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node1, node3);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node1, node3, counter);
 
             int flow = DinicMaxFlow.MaxFlowUnitCapacities(graph, node1, node1);
             Assert.AreEqual(0, flow);
@@ -418,11 +421,11 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
-            graph.AddEdge(node0, node2);
-            graph.AddEdge(node0, node3);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node1, node3);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
+            graph.AddEdge(node0, node2, counter);
+            graph.AddEdge(node0, node3, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node1, node3, counter);
 
             List<Node> sources = new List<Node>() { node0 };
             List<Node> sinks = new List<Node>() { node2 };

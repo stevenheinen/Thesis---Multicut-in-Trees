@@ -16,7 +16,7 @@ namespace MulticutInTrees.CountedDatastructures
         /// <summary>
         /// The internal <see cref="List{T}"/> that contains the collection of elements in this <see cref="CountedList{T}"/>.
         /// </summary>
-        private List<T> List { get; set; }
+        private List<T> List { get; }
 
         /// <summary>
         /// Gets or sets the element at the specified index in this <see cref="CountedList{T}"/>.

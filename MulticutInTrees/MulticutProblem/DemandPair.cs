@@ -30,11 +30,6 @@ namespace MulticutInTrees.MulticutProblem
         public TreeNode Node2 { get; private set; }
 
         /// <summary>
-        /// The publically visible <see cref="IEnumerable{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
-        /// </summary>
-        public CountedCollection<(TreeNode, TreeNode)> EdgesOnDemandPath => Path;
-
-        /// <summary>
         /// <see cref="Counter"/> that can be used for modifications that should not impact the performance of an <see cref="Algorithms.Algorithm"/> or <see cref="ReductionRules.ReductionRule"/>.
         /// </summary>
         private Counter MockCounter { get; }
@@ -81,6 +76,51 @@ namespace MulticutInTrees.MulticutProblem
             Utils.NullCheck(counter, nameof(counter), "Trying to see if an edge is part of a demandpair, but the counter is null!");
 #endif
             return Path.Contains(edge, counter) || Path.Contains((edge.Item2, edge.Item1), counter);
+        }
+
+        /// <summary>
+        /// Returns the number of edges on the path between the endpoints of this <see cref="DemandPair"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <returns>An <see cref="int"/> that is equal to the number of edges on the (unique) path between the endpoints of this <see cref="DemandPair"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int LengthOfPath(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the legnth of a demand path, but the counter is null!");
+#endif
+            return Path.Count(counter);
+        }
+
+        /// <summary>
+        /// Returns the edge before and after <paramref name="edge"/> on the path of this <see cref="DemandPair"/>.
+        /// </summary>
+        /// <param name="edge">The edge for which we want to know the edge before and after it.</param>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <returns>A tuple with the edge before and after <paramref name="edge"/>, or <see langword="null"/> if any of these does not exist.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public ((TreeNode, TreeNode), (TreeNode, TreeNode)) EdgeBeforeAndAfter((TreeNode, TreeNode) edge, Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to get the edge before and after a given edge on a demand path, but the first endpoint of the edge is null!");
+            Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to get the edge before and after a given edge on a demand path, but the second endpoint of the edge is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the edge before and after a given edge on a demand path, but the counter is null!");
+#endif
+            return Path.ElementBeforeAndAfter(edge, counter);
+        }
+
+        /// <summary>
+        /// The publically visible <see cref="CountedEnumerable{T}"/> of tuples of <see cref="TreeNode"/>s that represent the edges on the path between the endpoints of this <see cref="DemandPair"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all edges on the unique path between the endpoints of this <see cref="DemandPair"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<(TreeNode, TreeNode)> EdgesOnDemandPath(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the edges on the path of a demand pair, but the counter is null!");
+#endif
+            return new CountedEnumerable<(TreeNode, TreeNode)>(Path.GetLinkedList(), counter);
         }
 
         /// <summary>

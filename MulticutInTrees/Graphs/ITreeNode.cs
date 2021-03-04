@@ -12,32 +12,36 @@ namespace MulticutInTrees.Graphs
     public interface ITreeNode<N> : INode<N> where N : INode<N>
     {
         /// <summary>
-        /// The <see cref="IEnumerable{T}"/> of children this <see cref="ITreeNode{N}"/> is connected to. Cannot be edited directly.
+        /// The <see cref="CountedEnumerable{T}"/> of children this <see cref="ITreeNode{N}"/> is connected to. Cannot be edited directly.
         /// <para>
         /// When using this <see cref="ITreeNode{N}"/> in combination with an <see cref="ITree{N}"/>, refer to <seealso cref="ITree{N}.AddChild(N, N, Counter)"/>, <seealso cref="ITree{N}.AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="ITree{N}.RemoveNode(N, Counter)"/> and <seealso cref="ITree{N}.RemoveNodes(IEnumerable{N}, Counter)"/>.
         /// <br/>
         /// When using this <see cref="ITreeNode{N}"/> without and <see cref="ITree{N}"/>, refer to <seealso cref="AddChild(N, Counter)"/>, <seealso cref="AddChildren(IEnumerable{N}, Counter)"/>, <seealso cref="RemoveChild(N, Counter)"/>, <seealso cref="RemoveChildren(IEnumerable{N}, Counter)"/> and <seealso cref="RemoveAllChildren"/>.
         /// </para>
         /// </summary>
-        public IEnumerable<N> Children { get; }
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with <typeparamref name="N"/>s that are children of this <see cref="ITreeNode{N}"/>.</returns>
+        public CountedEnumerable<N> Children(Counter counter);
 
         /// <summary>
         /// The depth of this <see cref="ITreeNode{N}"/> in the tree measured from the root.
         /// </summary>
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the depth of this <see cref="ITreeNode{N}"/> in the tree measured from the root.</returns>
         public int DepthFromRoot(Counter counter);
 
         /// <summary>
         /// The height of the subtree rooted at this <see cref="ITreeNode{N}"/>.
         /// </summary>
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the height of the subtree that is rooted at this <see cref="ITreeNode{N}"/>.</returns>
         public int HeightOfSubtree(Counter counter);
 
         /// <summary>
         /// Checks whether this <see cref="ITreeNode{N}"/> is the root of the tree it is in.
         /// </summary>
-        /// <returns><see langword="true"/> if this <see cref="ITreeNode{N}"/> is the root of its tree, <see langword="false"/> otherwise.</returns>
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns><see langword="true"/> if this <see cref="ITreeNode{N}"/> is the root of its tree, <see langword="false"/> otherwise.</returns>
         public bool IsRoot(Counter counter);
 
         /// <summary>
@@ -93,8 +97,8 @@ namespace MulticutInTrees.Graphs
         /// Checks whether <paramref name="node"/> is a child of this <see cref="ITreeNode{N}"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> for which we want to know if it is a child of this <see cref="ITreeNode{N}"/>.</param>
-        /// <returns><see langword="true"/> if <paramref name="node"/> is a child of this <see cref="ITreeNode{N}"/>, <see langword="false"/> otherwise.</returns>
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns><see langword="true"/> if <paramref name="node"/> is a child of this <see cref="ITreeNode{N}"/>, <see langword="false"/> otherwise.</returns>
         public bool HasChild(N node, Counter counter);
 
         /// <summary>
@@ -103,5 +107,12 @@ namespace MulticutInTrees.Graphs
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
         /// <returns>The <typeparamref name="N"/> that is the parent of this <see cref="ITreeNode{N}"/>.</returns>
         public N GetParent(Counter counter);
+
+        /// <summary>
+        /// Returns the number of children this <see cref="ITreeNode{N}"/> has.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the number of children this <see cref="ITreeNode{N}"/> has.</returns>
+        public int NumberOfChildren(Counter counter);
     }
 }

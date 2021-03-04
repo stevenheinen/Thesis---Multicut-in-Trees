@@ -27,10 +27,10 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Node node0 = new Node(0);
             Node node1;
-            node1 = new Node(1, new List<Node>() { node0 });
+            node1 = new Node(1, new List<Node>() { node0 }, counter);
             Assert.IsNotNull(node1);
-            Assert.IsTrue(node1.HasNeighbour(node0));
-            Assert.IsTrue(node0.HasNeighbour(node1));
+            Assert.IsTrue(node1.HasNeighbour(node0, counter));
+            Assert.IsTrue(node0.HasNeighbour(node1, counter));
             Assert.AreEqual(1, node1.Degree(counter));
             Assert.AreEqual(1, node0.Degree(counter));
         }
@@ -40,10 +40,10 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Node node0 = new Node(0);
             Node node1;
-            node1 = new Node(1, new List<Node>() { node0 }, true);
+            node1 = new Node(1, new List<Node>() { node0 }, counter, true);
             Assert.IsNotNull(node1);
-            Assert.IsTrue(node1.HasNeighbour(node0));
-            Assert.IsFalse(node0.HasNeighbour(node1));
+            Assert.IsTrue(node1.HasNeighbour(node0, counter));
+            Assert.IsFalse(node0.HasNeighbour(node1, counter));
             Assert.AreEqual(1, node1.Degree(counter));
             Assert.AreEqual(0, node0.Degree(counter));
         }
@@ -53,7 +53,11 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                Node node0 = new Node(0, null);
+                Node node0 = new Node(0, null, counter);
+            });
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                Node node0 = new Node(0, new List<Node>(), null);
             });
         }
 
@@ -77,7 +81,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<AddNeighbourToSelfException>(() =>
             {
                 Node node0 = new Node(0);
-                node0.AddNeighbour(node0);
+                node0.AddNeighbour(node0, counter);
             });
         }
 
@@ -87,9 +91,9 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node0 = new Node(0);
             Node node1 = new Node(1);
 
-            Assert.IsFalse(node0.HasNeighbour(node1));
-            node0.AddNeighbour(node1);
-            Assert.IsTrue(node0.HasNeighbour(node1));
+            Assert.IsFalse(node0.HasNeighbour(node1, counter));
+            node0.AddNeighbour(node1, counter);
+            Assert.IsTrue(node0.HasNeighbour(node1, counter));
         }
 
         [TestMethod]
@@ -98,7 +102,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 Node node0 = new Node(0);
-                node0.AddNeighbour(null);
+                node0.AddNeighbour(null, counter);
             });
         }
 
@@ -109,9 +113,9 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node1 = new Node(1);
             Node node2 = new Node(2);
 
-            node0.AddNeighbours(new List<Node>() { node1, node2 });
-            Assert.IsTrue(node0.HasNeighbour(node1));
-            Assert.IsTrue(node0.HasNeighbour(node2));
+            node0.AddNeighbours(new List<Node>() { node1, node2 }, counter);
+            Assert.IsTrue(node0.HasNeighbour(node1, counter));
+            Assert.IsTrue(node0.HasNeighbour(node2, counter));
         }
 
         [TestMethod]
@@ -120,7 +124,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 Node node0 = new Node(0);
-                node0.AddNeighbours(null);
+                node0.AddNeighbours(null, counter);
             });
         }
 
@@ -131,11 +135,11 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node1 = new Node(1);
             Node node2 = new Node(2);
 
-            node0.AddNeighbours(new List<Node>() { node1, node2 });
-            node0.RemoveAllNeighbours();
-            Assert.IsFalse(node0.HasNeighbour(node1));
-            Assert.IsFalse(node0.HasNeighbour(node2));
-            Assert.IsFalse(node2.HasNeighbour(node0));
+            node0.AddNeighbours(new List<Node>() { node1, node2 }, counter);
+            node0.RemoveAllNeighbours(counter);
+            Assert.IsFalse(node0.HasNeighbour(node1, counter));
+            Assert.IsFalse(node0.HasNeighbour(node2, counter));
+            Assert.IsFalse(node2.HasNeighbour(node0, counter));
         }
 
         [TestMethod]
@@ -144,10 +148,10 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node0 = new Node(0);
             Node node1 = new Node(1);
 
-            node0.AddNeighbour(node1);
-            node0.RemoveNeighbour(node1);
-            Assert.IsFalse(node0.HasNeighbour(node1));
-            Assert.IsFalse(node1.HasNeighbour(node0));
+            node0.AddNeighbour(node1, counter);
+            node0.RemoveNeighbour(node1, counter);
+            Assert.IsFalse(node0.HasNeighbour(node1, counter));
+            Assert.IsFalse(node1.HasNeighbour(node0, counter));
         }
 
         [TestMethod]
@@ -157,7 +161,7 @@ namespace TESTS_MulticutInTrees.Graphs
             {
                 Node node0 = new Node(0);
                 Node node1 = new Node(1);
-                node0.RemoveNeighbour(node1);
+                node0.RemoveNeighbour(node1, counter);
             });
         }
 
@@ -167,7 +171,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 Node node0 = new Node(0);
-                node0.RemoveNeighbour(null);
+                node0.RemoveNeighbour(null, counter);
             });
         }
 
@@ -179,11 +183,11 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            node0.AddNeighbours(new List<Node>() { node1, node3, node2 });
-            node0.RemoveNeighbours(new List<Node>() { node2, node1 });
-            Assert.IsFalse(node0.HasNeighbour(node1));
-            Assert.IsFalse(node0.HasNeighbour(node2));
-            Assert.IsTrue(node0.HasNeighbour(node3));
+            node0.AddNeighbours(new List<Node>() { node1, node3, node2 }, counter);
+            node0.RemoveNeighbours(new List<Node>() { node2, node1 }, counter);
+            Assert.IsFalse(node0.HasNeighbour(node1, counter));
+            Assert.IsFalse(node0.HasNeighbour(node2, counter));
+            Assert.IsTrue(node0.HasNeighbour(node3, counter));
         }
 
         [TestMethod]
@@ -194,8 +198,8 @@ namespace TESTS_MulticutInTrees.Graphs
                 Node node0 = new Node(0);
                 Node node1 = new Node(1);
                 Node node2 = new Node(2);
-                node0.AddNeighbours(new List<Node>() { node1, node2 });
-                node0.RemoveNeighbours(null);
+                node0.AddNeighbours(new List<Node>() { node1, node2 }, counter);
+                node0.RemoveNeighbours(null, counter);
             });
         }
 
@@ -211,14 +215,14 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Node node0 = new Node(0);
             Node node1 = new Node(1);
-            Node node2 = new Node(2, new List<Node>() { node1 });
-            node1.AddNeighbour(node0);
-            Assert.IsTrue(node2.HasNeighbour(node1));
-            Assert.IsFalse(node2.HasNeighbour(node0));
-            Assert.IsTrue(node1.HasNeighbour(node0));
-            Assert.IsTrue(node1.HasNeighbour(node2));
-            Assert.IsTrue(node0.HasNeighbour(node1));
-            Assert.IsFalse(node0.HasNeighbour(node2));
+            Node node2 = new Node(2, new List<Node>() { node1 }, counter);
+            node1.AddNeighbour(node0, counter);
+            Assert.IsTrue(node2.HasNeighbour(node1, counter));
+            Assert.IsFalse(node2.HasNeighbour(node0, counter));
+            Assert.IsTrue(node1.HasNeighbour(node0, counter));
+            Assert.IsTrue(node1.HasNeighbour(node2, counter));
+            Assert.IsTrue(node0.HasNeighbour(node1, counter));
+            Assert.IsFalse(node0.HasNeighbour(node2, counter));
         }
 
         [TestMethod]
@@ -227,7 +231,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 Node node = new Node(0);
-                node.HasNeighbour(null);
+                node.HasNeighbour(null, counter);
             });
         }
 
@@ -238,7 +242,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node1 = new Node(1);
 
             Assert.IsNotNull(node0.Neighbours(counter));
-            node0.AddNeighbour(node1);
+            node0.AddNeighbour(node1, counter);
             Assert.IsNotNull(node0.Neighbours(counter));
             Assert.IsTrue(new List<Node>(node0.Neighbours(counter)).Contains(node1));
         }
@@ -257,33 +261,33 @@ namespace TESTS_MulticutInTrees.Graphs
 
             Assert.AreEqual(nodes[0].Degree(counter), 0);
 
-            nodes[0].AddNeighbour(nodes[1]);
+            nodes[0].AddNeighbour(nodes[1], counter);
             Assert.AreEqual(nodes[0].Degree(counter), 1);
 
-            nodes[0].AddNeighbour(nodes[2]);
+            nodes[0].AddNeighbour(nodes[2], counter);
             Assert.AreEqual(nodes[0].Degree(counter), 2);
 
-            nodes[0].AddNeighbours(new List<Node>() { nodes[3], nodes[4] });
+            nodes[0].AddNeighbours(new List<Node>() { nodes[3], nodes[4] }, counter);
             Assert.AreEqual(nodes[0].Degree(counter), 4);
 
-            nodes[0].RemoveNeighbour(nodes[1]);
+            nodes[0].RemoveNeighbour(nodes[1], counter);
             Assert.AreEqual(nodes[0].Degree(counter), 3);
 
-            nodes[0].RemoveNeighbours(new List<Node>() { nodes[3], nodes[4] });
+            nodes[0].RemoveNeighbours(new List<Node>() { nodes[3], nodes[4] }, counter);
             Assert.AreEqual(nodes[0].Degree(counter), 1);
 
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
-                nodes[0].RemoveNeighbour(nodes[1]);
+                nodes[0].RemoveNeighbour(nodes[1], counter);
             });
 
             Assert.ThrowsException<AlreadyANeighbourException>(() =>
             {
-                nodes[0].AddNeighbour(nodes[2]);
+                nodes[0].AddNeighbour(nodes[2], counter);
             });
 
-            nodes[0].AddNeighbours(new List<Node>() { nodes[3], nodes[4] });
-            nodes[0].RemoveAllNeighbours();
+            nodes[0].AddNeighbours(new List<Node>() { nodes[3], nodes[4] }, counter);
+            nodes[0].RemoveAllNeighbours(counter);
             Assert.AreEqual(nodes[0].Degree(counter), 0);
         }
 
@@ -291,12 +295,19 @@ namespace TESTS_MulticutInTrees.Graphs
         public void TestNullArgument()
         {
             Node n = new Node(0);
+            List<Node> list = new List<Node>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbour(null));
-            Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbours(null));
-            Assert.ThrowsException<ArgumentNullException>(() => n.HasNeighbour(null));
-            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveNeighbour(null));
-            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveNeighbours(null));
+            Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbour(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbour(n, null));
+            Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbours(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbours(list, null));
+            Assert.ThrowsException<ArgumentNullException>(() => n.HasNeighbour(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => n.HasNeighbour(n, null));
+            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveNeighbour(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveNeighbour(n, null));
+            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveNeighbours(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveNeighbours(list, null));
+            Assert.ThrowsException<ArgumentNullException>(() => n.RemoveAllNeighbours(null));
         }
     }
 }

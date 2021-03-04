@@ -23,7 +23,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             Assert.IsNotNull(gnb);
@@ -34,7 +34,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
 
             Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(null); });
         }
@@ -67,7 +67,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, counter);
 
             int k = 3;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
@@ -103,7 +103,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 2;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
@@ -139,7 +139,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 1;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
@@ -188,7 +188,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 3;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
@@ -219,7 +219,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 4;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k, new Random(0));
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();

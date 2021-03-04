@@ -13,20 +13,24 @@ namespace MulticutInTrees.Graphs
     public interface ITree<N> where N : ITreeNode<N>
     {
         /// <summary>
-        /// The <see cref="IEnumerable{T}"/> of all edges in the graph. Cannot be edited directly.
+        /// The <see cref="CountedEnumerable{T}"/> of all edges in the graph. Cannot be edited directly.
         /// <para>
         /// See also: <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
         /// </para>
         /// </summary>
-        public IEnumerable<(N, N)> Edges { get; }
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all edges in this <see cref="ITree{N}"/>.</returns>
+        public CountedEnumerable<(N, N)> Edges(Counter counter);
 
         /// <summary>
-        /// The <see cref="IEnumerable{T}"/> of all nodes in the graph. Cannot be edited directly.
+        /// The <see cref="CountedEnumerable{T}"/> of all nodes in the graph. Cannot be edited directly.
         /// <para>
         /// See also: <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
         /// </para>
         /// </summary>
-        public IEnumerable<N> Nodes { get; }
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all nodes in this <see cref="ITree{N}"/>.</returns>
+        public CountedEnumerable<N> Nodes(Counter counter);
 
         /// <summary>
         /// Get the root of this <see cref="ITree{N}"/>.
@@ -103,5 +107,19 @@ namespace MulticutInTrees.Graphs
         /// <param name="nodes">The <see cref="IEnumerable{T}"/> of <typeparamref name="N"/>s to be removed.</param>
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
         public void RemoveNodes(IEnumerable<N> nodes, Counter counter);
+
+        /// <summary>
+        /// Returns the number of <typeparamref name="N"/>s in this <see cref="ITree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the number of <typeparamref name="N"/>s in this <see cref="ITree{N}"/>.</returns>
+        public int NumberOfNodes(Counter counter);
+
+        /// <summary>
+        /// Returns the number of edges in this <see cref="ITree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the number of edges in this <see cref="ITree{N}"/>.</returns>
+        public int NumberOfEdges(Counter counter);
     }
 }

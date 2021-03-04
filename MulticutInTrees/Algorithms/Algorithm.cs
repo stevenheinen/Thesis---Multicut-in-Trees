@@ -58,24 +58,19 @@ namespace MulticutInTrees.Algorithms
         protected bool LastIterationDemandPairChange { get; set; }
 
         /// <summary>
-        /// A <see cref="List{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
+        /// A <see cref="CountedList{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
         /// </summary>
         protected CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> LastContractedEdges { get; set; }
 
         /// <summary>
-        /// A <see cref="List{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
+        /// A <see cref="CountedList{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
         /// </summary>
         protected CountedList<DemandPair> LastRemovedDemandPairs { get; set; }
 
         /// <summary>
-        /// A <see cref="List{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
+        /// A <see cref="CountedList{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
         /// </summary>
         protected CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
-
-        /// <summary>
-        /// The <see cref="System.Random"/> used for random number generation.
-        /// </summary>
-        protected Random Random { get; }
 
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should <b>NOT</b> be counted for the performance of this <see cref="Algorithm"/>.
@@ -102,7 +97,6 @@ namespace MulticutInTrees.Algorithms
             Tree = instance.Tree;
             DemandPairs = instance.DemandPairs;
             K = instance.K;
-            Random = instance.Random;
             PartialSolution = new List<(TreeNode, TreeNode)>();
             MockCounter = new Counter();
             AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmName);

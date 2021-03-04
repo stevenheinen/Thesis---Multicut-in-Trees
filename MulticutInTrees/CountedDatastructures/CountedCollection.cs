@@ -191,21 +191,17 @@ namespace MulticutInTrees.CountedDatastructures
         }
 
         /// <summary>
-        /// Returns an <see cref="IEnumerable{T}"/> that can be used to iterate over this <see cref="CountedCollection{T}"/>.
+        /// Returns an <see cref="CountedEnumerable{T}"/> that can be used to iterate over this <see cref="CountedCollection{T}"/>.
         /// </summary>
         /// <param name="counter"><see cref="Counter"/> that counts how many operations this <see cref="IEnumerable{T}"/> executed.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> that can be used to iterate over this <see cref="CountedCollection{T}"/>.</returns>
+        /// <returns>An <see cref="CountedEnumerable{T}"/> that can be used to iterate over this <see cref="CountedCollection{T}"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
-        public IEnumerable<T> GetCountedEnumerable(Counter counter)
+        public CountedEnumerable<T> GetCountedEnumerable(Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Grabbing the custom Counter Enumerable for a CountedCollection, but the counter is null!");
 #endif
-            foreach (T item in LinkedList)
-            {
-                _ = counter++;
-                yield return item;
-            }
+            return new CountedEnumerable<T>(LinkedList, counter);
         }
 
         /// <summary>

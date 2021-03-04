@@ -24,15 +24,13 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
-        /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, or <paramref name="random"/> is <see langword="null"/>.</exception>
-        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, Random random) : base(tree, demandPairs, algorithm, random, nameof(UnitPath))
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
+        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm) : base(tree, demandPairs, algorithm, nameof(UnitPath))
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Unit Path rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Unit Path rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Unit Path rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(random, nameof(random), "Trying to create an instance of the Unit Path rule, but the random is null!");
 #endif
         }
 
@@ -47,7 +45,7 @@ namespace MulticutInTrees.ReductionRules
 #if !EXPERIMENT
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to check whether a demand pair has a path of length 1, but the demand pair is null!");
 #endif
-            return demandPair.EdgesOnDemandPath.Count(Measurements.DemandPairsOperationsCounter) == 1;
+            return demandPair.LengthOfPath(Measurements.DemandPairsOperationsCounter) == 1;
         }
 
         /// <inheritdoc/>
@@ -67,7 +65,7 @@ namespace MulticutInTrees.ReductionRules
             {
                 if (DemandPathHasLengthOne(path))
                 {
-                    edgesToBeCut.Add(path.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter));
+                    edgesToBeCut.Add(path.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
                 }
             }
 
@@ -105,7 +103,7 @@ namespace MulticutInTrees.ReductionRules
                 {
                     if (DemandPathHasLengthOne(path))
                     {
-                        edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter)));
+                        edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First()));
                     }
                 }
             }
@@ -128,7 +126,7 @@ namespace MulticutInTrees.ReductionRules
             {
                 if (DemandPathHasLengthOne(dp))
                 {
-                    edgesToBeCut.Add(dp.EdgesOnDemandPath.First(Measurements.DemandPairsOperationsCounter));
+                    edgesToBeCut.Add(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
                 }
             }
 

@@ -16,12 +16,12 @@ namespace MulticutInTrees.CountedDatastructures
         /// <summary>
         /// The <see cref="Counter"/> that counts the number of operations this <see cref="CountedEnumerator{T}"/> used.
         /// </summary>
-        public Counter OperationsCounter { get; private set; }
+        public Counter OperationsCounter { get; set; }
 
         /// <summary>
         /// The internal <see cref="IEnumerator{T}"/> this <see cref="CountedEnumerator{T}"/> uses.
         /// </summary>
-        private protected IEnumerator<T> Enumerator { get; set; }
+        private protected IEnumerator<T> Enumerator { get; }
 
         /// <inheritdoc/>
         public T Current

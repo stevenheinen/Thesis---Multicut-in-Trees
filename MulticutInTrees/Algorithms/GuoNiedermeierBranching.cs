@@ -23,11 +23,6 @@ namespace MulticutInTrees.Algorithms
         private CountedList<DemandPair> DemandPairs { get; }
 
         /// <summary>
-        /// The input <see cref="Tree{N}"/>.
-        /// </summary>
-        private Tree<TreeNode> Tree { get; }
-
-        /// <summary>
         /// The size the cutset is allowed to be.
         /// </summary>
         private int K { get; }
@@ -62,7 +57,6 @@ namespace MulticutInTrees.Algorithms
 #if !EXPERIMENT
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the GuoNiedermeier branching algorithm, but the instance we want to solve is null!");
 #endif
-            Tree = instance.Tree;
             DemandPairs = instance.DemandPairs;
             K = instance.K;
 
@@ -113,7 +107,7 @@ namespace MulticutInTrees.Algorithms
             foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 // For each edge on this demand pair...
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter))
                 {
                     // Add this edge to the DemandPairsPerEdge dictionary.
                     (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
@@ -156,16 +150,16 @@ namespace MulticutInTrees.Algorithms
 
                 if (leastCommonAncestor == demandPair.Node1)
                 {
-                    edgeInSolution = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath.First(MockCounter));
+                    edgeInSolution = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
                 }
                 else if (leastCommonAncestor == demandPair.Node2)
                 {
-                    edgeInSolution = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath.Last(MockCounter));
+                    edgeInSolution = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).Last());
                 }
                 else
                 {
-                    (TreeNode, TreeNode) before = demandPair.EdgesOnDemandPath.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).First(edge => edge.Item2 == leastCommonAncestor);
-                    ((TreeNode, TreeNode) _, (TreeNode, TreeNode) after) = demandPair.EdgesOnDemandPath.ElementBeforeAndAfter(before, MockCounter);
+                    (TreeNode, TreeNode) before = demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First(edge => edge.Item2 == leastCommonAncestor);
+                    ((TreeNode, TreeNode) _, (TreeNode, TreeNode) after) = demandPair.EdgeBeforeAndAfter(before, Measurements.TreeOperationsCounter);
 
                     (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(before);
                     List<(TreeNode, TreeNode)> tempSolution1 = new List<(TreeNode, TreeNode)>(solution) { edge1 };
@@ -226,19 +220,21 @@ namespace MulticutInTrees.Algorithms
             foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 // Find the ancestors for each endpoint of the demand pair.
-                List<TreeNode> ancestors1 = demandPair.Node1.FindAllAncestors();
-                List<TreeNode> ancestors2 = demandPair.Node2.FindAllAncestors();
-                int minSize = Math.Min(ancestors1.Count, ancestors2.Count) + 1;
+                CountedList<TreeNode> ancestors1 = new CountedList<TreeNode>(demandPair.Node1.FindAllAncestors(), Measurements.TreeOperationsCounter);
+                CountedList<TreeNode> ancestors2 = new CountedList<TreeNode>(demandPair.Node2.FindAllAncestors(), Measurements.TreeOperationsCounter);
+                int length1 = ancestors1.Count(Measurements.TreeOperationsCounter);
+                int length2 = ancestors2.Count(Measurements.TreeOperationsCounter);
+                int minSize = Math.Min(length1, length2) + 1;
 
                 // Start from the root, while the path at index i (looked from back to front) is still the same, go to the next node.
                 int i = 1;
-                while (i < minSize && ancestors1[^i] == ancestors2[^i])
+                while (i < minSize && ancestors1[length1 - i, Measurements.TreeOperationsCounter] == ancestors2[length2 - i, Measurements.TreeOperationsCounter])
                 {
                     i++;
                 }
 
                 // At index i (from the back), we have two nodes that are different, so the least common ancestor is the one before these.
-                LeastCommonAncestors[demandPair, Measurements.DemandPairsOperationsCounter] = ancestors1[^(i - 1)];
+                LeastCommonAncestors[demandPair, Measurements.DemandPairsOperationsCounter] = ancestors1[length1 - (i - 1), Measurements.TreeOperationsCounter];
             }
         }
     }

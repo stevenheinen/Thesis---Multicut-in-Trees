@@ -47,9 +47,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            Random random = new Random(5744654);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsNotNull(dominatedEdge);
         }
 
@@ -80,15 +79,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            Random random = new Random(13895712);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(null, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, null, new GuoNiedermeierFPT(instance), random, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, demandPairs, null, random, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), null, demandPairPerEdge); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, null); });
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(null, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, null, new GuoNiedermeierFPT(instance), demandPairPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, demandPairs, null, demandPairPerEdge); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), null); });
 
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
 
             Assert.ThrowsException<ArgumentNullException>(() => dominatedEdge.AfterDemandPathChanged(null));
             Assert.ThrowsException<ArgumentNullException>(() => dominatedEdge.AfterDemandPathRemove(null));
@@ -124,9 +121,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2 }, counter) }
             }, counter);
 
-            Random random = new Random(48764);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.RunFirstIteration());
 
             DemandPair demandPair3 = new DemandPair(node1, node4);
@@ -143,7 +139,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair4 }, counter) }
             }, counter);
 
-            dominatedEdge = new DominatedEdge(tree, demandPairs2, new GuoNiedermeierFPT(instance), random, demandPairPerEdge2);
+            dominatedEdge = new DominatedEdge(tree, demandPairs2, new GuoNiedermeierFPT(instance), demandPairPerEdge2);
             Assert.IsFalse(dominatedEdge.RunFirstIteration());
         }
 
@@ -180,14 +176,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2, demandPair5 }, counter) }
             }, counter);
 
-            Random random = new Random(74945);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair3 }, counter)));
 
             demandPairPerEdge[(node0, node2), counter].Remove(demandPair4, counter);
             demandPairs.Remove(demandPair4, counter);
-            dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
 
             Assert.IsTrue(dominatedEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair4 }, counter)));
         }
@@ -224,9 +219,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair5 }, counter) }
             }, counter);
 
-            Random random = new Random(684332);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node1, node0) }, counter), demandPair3) }, counter)));
         }
 
@@ -261,9 +255,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node2, node3), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2, demandPair4, demandPair5 }, counter) }
             }, counter);
 
-            Random random = new Random(65416845);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node1, node0) }, counter), demandPair3) }, counter)));
         }
 
@@ -301,9 +294,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node3, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair4, demandPair5 }, counter) }
             }, counter);
 
-            Random random = new Random(654978);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node3, node2) }, counter), demandPair4) }, counter)));
         }
 
@@ -342,9 +334,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node3, node4), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair4, demandPair5, demandPair6 }, counter) }
             }, counter);
 
-            Random random = new Random(68941);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node3, node2) }, counter), demandPair4) }, counter)));
         }
 
@@ -380,9 +371,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node2, node3), new CountedList<DemandPair>(new List<DemandPair>(){ demandPair2, demandPair4, demandPair5 }, counter) }
             }, counter);
 
-            Random random = new Random(6984980);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100, random);
-            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), random, demandPairPerEdge);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierFPT(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterEdgeContraction(new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>() { ((node3, node4), node3, new CountedList<DemandPair>()) }, counter)));
         }
     }

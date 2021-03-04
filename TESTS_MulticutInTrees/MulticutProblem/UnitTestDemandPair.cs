@@ -34,7 +34,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             Assert.AreEqual(node0, dp.Node1);
             Assert.AreEqual(node1, dp.Node2);
-            Assert.AreEqual(1, dp.EdgesOnDemandPath.Count(counter));
+            Assert.AreEqual(1, dp.LengthOfPath(counter));
         }
 
         [TestMethod]
@@ -106,10 +106,10 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<NotOnDemandPathException>(() => dp.ChangeEndpoint(node2, node1, counter));
 
             dp.ChangeEndpoint(node3, node2, counter);
-            Assert.AreEqual(2, dp.EdgesOnDemandPath.Count(counter));
+            Assert.AreEqual(2, dp.LengthOfPath(counter));
 
             dp.ChangeEndpoint(node0, node1, counter);
-            Assert.AreEqual(1, dp.EdgesOnDemandPath.Count(counter));
+            Assert.AreEqual(1, dp.LengthOfPath(counter));
 
             Assert.ThrowsException<ZeroLengthDemandPathException>(() => dp.ChangeEndpoint(node1, node2, counter));
             Assert.ThrowsException<ZeroLengthDemandPathException>(() => dp.ChangeEndpoint(node2, node1, counter));
@@ -137,7 +137,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             dp = new DemandPair(node0, node3);
             dp.OnEdgeContracted((node2, node1), node1, counter);
-            Assert.AreEqual(2, dp.EdgesOnDemandPath.Count(counter));
+            Assert.AreEqual(2, dp.LengthOfPath(counter));
 
             dp.OnEdgeContracted((node0, node1), node1, counter);
             Assert.AreEqual(node1, dp.Node1);

@@ -23,8 +23,6 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRun1()
         {
-            Random random = new Random(574);
-
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -39,7 +37,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.UpdateNodeTypes();
 
             DemandPair dp = new DemandPair(node0, node3);
-            MulticutInstance instance = new MulticutInstance(tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3, random);
+            MulticutInstance instance = new MulticutInstance(tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3);
             GuoNiedermeierFPT g = new GuoNiedermeierFPT(instance);
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) solution = g.Run();
             Assert.IsTrue(solution.Item1);
@@ -52,8 +50,6 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRun2()
         {
-            Random random = new Random(83);
-
             Tree<TreeNode> tree = new Tree<TreeNode>();
 
             TreeNode node1 = new TreeNode(1);
@@ -94,7 +90,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 3, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 3);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
 
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
@@ -108,7 +104,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             {
                 if (!result.Item2.HasNode(dp.Node1, counter) || !result.Item2.HasNode(dp.Node2, counter))
                 {
-                    Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item2.Nodes.Print()}.");
+                    Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item2.Nodes(counter).Print()}.");
                 }
             }
         }
@@ -119,7 +115,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(273);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(500, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 500, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 500);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
 
@@ -134,7 +130,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(789456);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(2000, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2000, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2000);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
 
@@ -149,7 +145,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(8765);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(400, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 400, random);
+            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 400);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
 

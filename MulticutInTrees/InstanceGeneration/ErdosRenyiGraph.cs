@@ -1,6 +1,7 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
 ﻿using System;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -11,6 +12,8 @@ namespace MulticutInTrees.InstanceGeneration
     /// </summary>
     public static class ErdosRenyiGraph
     {
+        private readonly static Counter MockCounter = new Counter();
+
         /// <summary>
         /// Creates a random Erdos-Renyi graph.
         /// </summary>
@@ -41,16 +44,20 @@ namespace MulticutInTrees.InstanceGeneration
 
             for (uint i = 0; i < numberOfNodes; i++)
             {
-                graph.AddNode(new Node(i));
+                graph.AddNode(new Node(i), MockCounter);
             }
 
-            for (int i = 0; i < numberOfNodes - 1; i++)
+            foreach (Node node1 in graph.Nodes(MockCounter))
             {
-                for (int j = i + 1; j < numberOfNodes; j++)
+                foreach (Node node2 in graph.Nodes(MockCounter))
                 {
+                    if (node2.ID <= node1.ID)
+                    {
+                        continue;
+                    }
                     if (random.NextDouble() < chancePerEdge)
                     {
-                        graph.AddEdge(graph.Nodes[i], graph.Nodes[j]);
+                        graph.AddEdge(node1, node2, MockCounter);
                     }
                 }
             }

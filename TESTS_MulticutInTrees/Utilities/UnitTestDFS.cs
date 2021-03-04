@@ -264,8 +264,8 @@ namespace TESTS_MulticutInTrees.Utilities
                 (node3, node4)
             };
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 });
-            graph.AddEdges(edges);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, counter);
+            graph.AddEdges(edges, counter);
 
             List<(Node, Node)> foundEdges = DFS.FindAllEdgesGraph<Graph<Node>, Node>(graph, counter);
 
@@ -384,24 +384,24 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 });
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
             graph.AddEdges(new List<(Node, Node)>()
             {
                 (node0, node1),
                 (node1, node2),
                 (node2, node3),
                 (node3, node0)
-            });
+            }, counter);
 
             Assert.IsFalse(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, counter));
 
-            graph.RemoveEdge(node0, node3);
+            graph.RemoveEdge(node0, node3, counter);
 
             Assert.IsTrue(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, counter));
 
-            graph.RemoveNode(node1);
-            graph.RemoveNode(node2);
-            graph.RemoveNode(node3);
+            graph.RemoveNode(node1, counter);
+            graph.RemoveNode(node2, counter);
+            graph.RemoveNode(node3, counter);
 
             Assert.IsTrue(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, counter));
         }
@@ -443,7 +443,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node5 = new Node(5);
             Node node6 = new Node(6);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6 });
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6 }, counter);
 
             graph.AddEdges(new List<(Node, Node)>()
             {
@@ -457,7 +457,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 (node3, node5),
                 (node4, node5),
                 (node5, node6)
-            });
+            }, counter);
 
             HashSet<(Node, Node)> matching = new HashSet<(Node, Node)>()
             {

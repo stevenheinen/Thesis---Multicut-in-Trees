@@ -16,88 +16,122 @@ namespace MulticutInTrees.Graphs
     public class Graph<N> : IGraph<N> where N : INode<N>
     {
         /// <summary>
-        /// The internal <see cref="List{T}"/> of edges in this <see cref="Graph{N}"/>.
+        /// The internal <see cref="CountedCollection{T}"/> of edges in this <see cref="Graph{N}"/>.
         /// </summary>
-        protected List<(N, N)> InternalEdges { get; set; }
+        protected CountedCollection<(N, N)> InternalEdges { get; set; }
 
         /// <summary>
-        /// The internal <see cref="HashSet{T}"/> of edges in this <see cref="Graph{N}"/>.
+        /// The internal <see cref="CountedCollection{T}"/> of nodes in this <see cref="Graph{N}"/>.
         /// </summary>
-        protected HashSet<(N, N)> UniqueInternalEdges { get; set; }
+        protected CountedCollection<N> InternalNodes { get; set; }
 
         /// <summary>
-        /// The internal <see cref="HashSet{T}"/> of nodes in this <see cref="Graph{N}"/>
+        /// <see cref="Counter"/> that can be used for operations that should not affect the performance of an <see cref="Algorithms.Algorithm"/> or <see cref="ReductionRules.ReductionRule"/>.
         /// </summary>
-        protected HashSet<N> UniqueInternalNodes { get; set; }
-       
-        /// <summary>
-        /// The internal <see cref="List{T}"/> of nodes in this <see cref="Graph{N}"/>.
-        /// </summary>
-        protected List<N> InternalNodes { get; set; }
-
-        /// <summary>
-        /// The number of nodes in this <see cref="Graph{N}"/>.
-        /// </summary>
-        public int NumberOfNodes => InternalNodes.Count;
-
-        /// <summary>
-        /// The number of edges in this <see cref="Graph{N}"/>.
-        /// </summary>
-        public int NumberOfEdges => InternalEdges.Count;
-
-        /// <summary>
-        /// The publically visible collection of edges in this <see cref="Graph{N}"/>. Edges cannot be edited directly.
-        /// <br/>
-        /// See also: <seealso cref="AddEdge(N, N, bool)"/>, <seealso cref="AddEdges(IEnumerable{ValueTuple{N, N}}, bool)"/>, <seealso cref="RemoveEdge(N, N, bool)"/>, <seealso cref="RemoveEdges(IList{ValueTuple{N, N}}, bool)"/> and <seealso cref="RemoveAllEdgesOfNode(N, bool)"/>.
-        /// </summary>
-        public ReadOnlyCollection<(N, N)> Edges => InternalEdges.AsReadOnly();
-
-        /// <summary>
-        /// The publically visible collection of nodes in this <see cref="Graph{N}"/>. Nodes cannot be edited directly.
-        /// <br/>
-        /// See also: <seealso cref="AddNode(N)"/>, <seealso cref="AddNodes(IEnumerable{N})"/>, <seealso cref="RemoveNode(N)"/> and <seealso cref="RemoveNodes(IEnumerable{N})"/>.
-        /// </summary>
-        public ReadOnlyCollection<N> Nodes => InternalNodes.AsReadOnly();
+        protected Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for a <see cref="Graph{N}"/>.
         /// </summary>
         public Graph()
         {
-            InternalNodes = new List<N>();
-            UniqueInternalNodes = new HashSet<N>();
-            InternalEdges = new List<(N, N)>();
-            UniqueInternalEdges = new HashSet<(N, N)>();
+            MockCounter = new Counter();
+            InternalNodes = new CountedCollection<N>();
+            InternalEdges = new CountedCollection<(N, N)>();
         }
 
         /// <summary>
         /// Constructor for a <see cref="Graph{N}"/> from any type that implements <see cref="IGraph{N}"/>.
         /// </summary>
         /// <param name="interfaceGraph">The <see cref="IGraph{N}"/> to create this new <see cref="Graph{N}"/> from.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="interfaceGraph"/> is <see langword="null"/>.</exception>
-        internal Graph(IGraph<N> interfaceGraph)
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="interfaceGraph"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        internal Graph(IGraph<N> interfaceGraph, Counter counter) : this()
         {
 #if !EXPERIMENT
             Utils.NullCheck(interfaceGraph, nameof(interfaceGraph), "Trying to create a Graph from another instance that implements IGraph, but the other instance is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to create a Graph from another instance that implements IGraph, but the counter is null!");
 #endif
-            InternalNodes = new List<N>(interfaceGraph.Nodes);
-            UniqueInternalNodes = new HashSet<N>(InternalNodes);
-            InternalEdges = new List<(N, N)>(interfaceGraph.Edges);
-            UniqueInternalEdges = new HashSet<(N, N)>(InternalEdges);
+            InternalNodes = new CountedCollection<N>(interfaceGraph.Nodes(counter), counter);
+            InternalEdges = new CountedCollection<(N, N)>(interfaceGraph.Edges(counter), counter);
+        }
+
+        /// <summary>
+        /// The publically visible collection of edges in this <see cref="Graph{N}"/>. Edges cannot be edited directly.
+        /// <br/>
+        /// See also: <seealso cref="AddEdge(N, N, Counter, bool)"/>, <seealso cref="AddEdges(IEnumerable{ValueTuple{N, N}}, Counter, bool)"/>, <seealso cref="RemoveEdge(N, N, Counter, bool)"/>, <seealso cref="RemoveEdges(IList{ValueTuple{N, N}}, Counter, bool)"/> and <seealso cref="RemoveAllEdgesOfNode(N, Counter, bool)"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all edges in this <see cref="Graph{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<(N, N)> Edges(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the edges in a graph, but the counter is null!");
+#endif
+            _ = counter++;
+            return new CountedEnumerable<(N, N)>(InternalEdges.GetLinkedList(), counter);
+        }
+
+        /// <summary>
+        /// The publically visible collection of nodes in this <see cref="Graph{N}"/>. Nodes cannot be edited directly.
+        /// <br/>
+        /// See also: <seealso cref="AddNode(N, Counter)"/>, <seealso cref="AddNodes(IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all nodes in this <see cref="Graph{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<N> Nodes(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the nodes in a graph, but the counter is null!");
+#endif
+            _ = counter++;
+            return new CountedEnumerable<N>(InternalNodes.GetLinkedList(), counter);
+        }
+
+        /// <summary>
+        /// The number of nodes in this <see cref="Graph{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
+        /// <returns>An <see cref="int"/> that represents the number of nodes in this <see cref="Graph{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int NumberOfNodes(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of nodes in a graph, but the counter is null!");
+#endif
+            return InternalNodes.Count(counter);
+        }
+
+        /// <summary>
+        /// The number of edges in this <see cref="Graph{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
+        /// <returns>An <see cref="int"/> that represents the number of edges in this <see cref="Graph{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int NumberOfEdges(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of edges in a graph, but the counter is null!");
+#endif
+            return InternalEdges.Count(counter);
         }
 
         /// <summary>
         /// Finds whether <paramref name="node"/> is part of this <see cref="Graph{N}"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> for which we want to know if it is part of this <see cref="Graph{N}"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
         /// <returns><see langword="true"/> if <paramref name="node"/> is part of this <see cref="Graph{N}"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
-        public bool HasNode(N node)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool HasNode(N node, Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to see if a node is in {this}, but the node is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to see if a node is in {this}, but the counter is null!");
 #endif
-            return UniqueInternalNodes.Contains(node);
+            return InternalNodes.Contains(node, counter);
         }
 
         /// <summary>
@@ -105,39 +139,42 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         /// <inheritdoc/>
         /// <returns><see langword="true"/> if the edge between <paramref name="origin"/> and <paramref name="destination"/> exists in this <see cref="Graph{N}"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/>, <paramref name="destination"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is not part of this <see cref="Graph{N}"/>.</exception>
-        public bool HasEdge(N origin, N destination, bool directed = false)
+        public bool HasEdge(N origin, N destination, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
             Utils.NullCheck(origin, nameof(origin), $"Trying to find out whether an edge exists in {this}, but the origin of the edge is null!");
             Utils.NullCheck(destination, nameof(destination), $"Trying to find out whether an edge exists in {this}, but the destination of the edge is null!");
-            if (!HasNode(origin))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to find out whether an edge exists in {this}, but the counter is null!");
+            if (!HasNode(origin, MockCounter))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the origin of the edge is not part of {this}!");
             }
-            if (!HasNode(destination))
+            if (!HasNode(destination, MockCounter))
             {
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the destination of the edge is not part of {this}!");
             }
 #endif
             if (directed) 
             {
-                return UniqueInternalEdges.Contains((origin, destination));
+                return InternalEdges.Contains((origin, destination), counter);
             }
 
-            return UniqueInternalEdges.Contains((origin, destination)) || UniqueInternalEdges.Contains((destination, origin));
+            // One of these uses the MockCounter to ensure this contains only counts as a single operation.
+            return InternalEdges.Contains((origin, destination), counter) || InternalEdges.Contains((destination, origin), MockCounter);
         }
 
         /// <summary>
         /// Finds whether the edge <paramref name="edge"/> exists in this <see cref="Graph{N}"/>.
         /// </summary>
         /// <param name="edge">The tuple of two <typeparamref name="N"/>s for which we want to know if it is part of this <see cref="Graph{N}"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
         /// <param name="directed">Optional. If <see langword="true"/>, only the edge from the first to the second endpoint of <paramref name="edge"/> is checked. If <see langword="false"/>, also the inverse edge is checked.</param>
         /// <returns><see langword="true"/> if <paramref name="edge"/> exists in this <see cref="Graph{N}"/>, <see langword="false"/> otherwise.</returns>
-        public bool HasEdge((N, N) edge, bool directed = false)
+        public bool HasEdge((N, N) edge, Counter counter, bool directed = false)
         {
-            return HasEdge(edge.Item1, edge.Item2, directed);
+            return HasEdge(edge.Item1, edge.Item2, counter, directed);
         }
 
         /// <summary>
@@ -147,26 +184,27 @@ namespace MulticutInTrees.Graphs
         /// <returns>A <see cref="string"/> representation of this <see cref="Graph{N}"/>.</returns>
         public override string ToString()
         {
-            return $"Graph with {NumberOfNodes} nodes and {NumberOfEdges} edges.";
+            return $"Graph with {NumberOfNodes(MockCounter)} nodes and {NumberOfEdges(MockCounter)} edges.";
         }
 
         /// <summary>
         /// Add a new <typeparamref name="N"/> <paramref name="node"/> to this <see cref="Graph{N}"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="N"/> to be added.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
+        /// <param name="counter">The <see cref="Counter"/> used for performance measurement.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="AlreadyInGraphException">Thrown when <paramref name="node"/> is already part of this <see cref="Graph{N}"/>.</exception>
-        public void AddNode(N node)
+        public void AddNode(N node, Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to add a node to {this}, but the node is null!");
-            if (HasNode(node))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add a node to {this}, but the counter is null!");
+            if (HasNode(node, MockCounter))
             {
                 throw new AlreadyInGraphException($"Trying to add {node} to {this}, but {node} is already part of {this}!");
             }
 #endif
-            UniqueInternalNodes.Add(node);
-            InternalNodes.Add(node);
+            InternalNodes.Add(node, counter);
         }
 
         /// <summary>
@@ -174,14 +212,15 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
-        public void AddNodes(IEnumerable<N> nodes)
+        public void AddNodes(IEnumerable<N> nodes, Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(nodes, nameof(nodes), $"Trying to add an IEnumerable of nodes to {this}, but the IEnumerable is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add an IEnumerable of nodes to {this}, but the counter is null!");
 #endif
             foreach (N node in nodes)
             {
-                AddNode(node);
+                AddNode(node, counter);
             }
         }
 
@@ -189,47 +228,49 @@ namespace MulticutInTrees.Graphs
         /// Add an edge between <paramref name="origin"/> and <paramref name="destination"/> to this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/>, <paramref name="destination"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is not part of this <see cref="Graph{N}"/>.</exception>
         /// <exception cref="AlreadyInGraphException">Thrown when the edge to be added is already part of this <see cref="Graph{N}"/>.</exception>
-        public void AddEdge(N origin, N destination, bool directed = false)
+        public void AddEdge(N origin, N destination, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
             Utils.NullCheck(origin, nameof(origin), $"Trying to add an edge to {this}, but the origin of the edge is null!");
             Utils.NullCheck(destination, nameof(destination), $"Trying to add an edge to {this}, but the destination of the edge is null!");
-            if (!HasNode(origin))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add an edge to {this}, but the counter is null!");
+            if (!HasNode(origin, MockCounter))
             {
                 throw new NotInGraphException($"Trying to add an edge between {origin} and {destination} to {this}, but {origin} is not part of {this}!");
             }
-            if (!HasNode(destination))
+            if (!HasNode(destination, MockCounter))
             {
                 throw new NotInGraphException($"Trying to add an edge between {origin} and {destination} to {this}, but {destination} is not part of {this}!");
             }
 #endif
             (N, N) edge1 = (origin, destination);
-            if (HasEdge(edge1, true) || (!directed && HasEdge((destination, origin), false)))
+#if !EXPERIMENT
+            if (HasEdge(edge1, MockCounter, true) || (!directed && HasEdge((destination, origin), MockCounter, false)))
             {
                 throw new AlreadyInGraphException($"Trying to add an edge between {origin} and {destination} to {this}, but this edge is already part of {this}!");
             }
-
-            origin.AddNeighbour(destination, directed);
-            InternalEdges.Add(edge1);
-            UniqueInternalEdges.Add(edge1);
+#endif
+            origin.AddNeighbour(destination, counter, directed);
+            InternalEdges.Add(edge1, counter);
         }
 
         /// <summary>
         /// Add multiple edges to this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
-        public void AddEdges(IEnumerable<(N, N)> edges, bool directed = false)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void AddEdges(IEnumerable<(N, N)> edges, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edges, nameof(edges), $"Trying to add an IEnumerable of edges to {this}, but the IEnumerable is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to add an IEnumerable of edges to {this}, but the counter is null!");
 #endif
             foreach ((N origin, N destination) in edges)
             {
-                AddEdge(origin, destination, directed);
+                AddEdge(origin, destination, counter, directed);
             }
         }
 
@@ -237,35 +278,36 @@ namespace MulticutInTrees.Graphs
         /// Remove an <typeparamref name="N"/> from this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Graph{N}"/>.</exception>
-        public void RemoveNode(N node)
+        public void RemoveNode(N node, Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to remove a node from {this}, but the node is null!");
-            if (!HasNode(node))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove a node from {this}, but the counter is null!");
+            if (!HasNode(node, MockCounter))
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");
             }
 #endif
-            RemoveAllEdgesOfNode(node);
-            UniqueInternalNodes.Remove(node);
-            InternalNodes.Remove(node);
+            RemoveAllEdgesOfNode(node, counter);
+            InternalNodes.Remove(node, counter);
         }
 
         /// <summary>
         /// Remove multiple <typeparamref name="N"/>s from this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> is <see langword="null"/>.</exception>
-        public void RemoveNodes(IEnumerable<N> nodes)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void RemoveNodes(IEnumerable<N> nodes, Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(nodes, nameof(nodes), $"Trying to remove multiple nodes from {this}, but the IEnumerable with nodes is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove multiple nodes from {this}, but the counter is null!");
 #endif
             foreach (N node in nodes)
             {
-                RemoveNode(node);
+                RemoveNode(node, counter);
             }
         }
 
@@ -273,34 +315,35 @@ namespace MulticutInTrees.Graphs
         /// Removes all edges connected to a given <typeparamref name="N"/> from this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="node"/> is not part of this <see cref="Graph{N}"/>.</exception>
-        public void RemoveAllEdgesOfNode(N node, bool directed = false)
+        public void RemoveAllEdgesOfNode(N node, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to remove all edges of a node in {this}, but the node is null!");
-            if (!HasNode(node))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove all edges of a node in {this}, but the counter is null!");
+            if (!HasNode(node, MockCounter))
             {
                 throw new NotInGraphException($"Trying to remove all edges of {node} from {this}, but {node} is not part of {this}!");
             }
 #endif
-            // TODO: correct counter
-            RemoveEdges(node.Neighbours(new Counter()).Select(neighbour => (node, neighbour)).ToList(), directed);
+            RemoveEdges(node.Neighbours(counter).Select(neighbour => (node, neighbour)).ToList(), counter, directed);
         }
 
         /// <summary>
         /// Remove multiple edges from this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
-        public void RemoveEdges(IList<(N, N)> edges, bool directed = false)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void RemoveEdges(IList<(N, N)> edges, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edges, nameof(edges), $"Trying to remove multiple edges from {this}, but the IEnumerable with edges is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove multiple edges from {this}, but the counter is null!");
 #endif
             foreach ((N origin, N destination) in edges)
             {
-                RemoveEdge(origin, destination, directed);
+                RemoveEdge(origin, destination, counter, directed);
             }
         }
 
@@ -308,18 +351,19 @@ namespace MulticutInTrees.Graphs
         /// Remove an edge from this <see cref="Graph{N}"/>.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/> or <paramref name="destination"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when either <paramref name="origin"/>, <paramref name="destination"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="origin"/>, <paramref name="destination"/> or the edge between them is not part of this <see cref="Graph{N}"/>.</exception>
-        public void RemoveEdge(N origin, N destination, bool directed = false)
+        public void RemoveEdge(N origin, N destination, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
             Utils.NullCheck(origin, nameof(origin), $"Trying to remove the edge from {this}, but the origin of the edge is null!");
             Utils.NullCheck(destination, nameof(destination), $"Trying to remove the edge from {this}, but the destination of the edge is null!");
-            if (!HasNode(origin))
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove the edge from {this}, but the counter is null!");
+            if (!HasNode(origin, MockCounter))
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but {origin} is not part of {this}!");
             }
-            if (!HasNode(destination))
+            if (!HasNode(destination, MockCounter))
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but {destination} is not part of {this}!");
             }
@@ -327,25 +371,23 @@ namespace MulticutInTrees.Graphs
             (N, N) edge1 = (origin, destination);
             (N, N) edge2 = (destination, origin);
 #if !EXPERIMENT
-            if ((directed && !HasEdge(edge1, true)) || (!HasEdge(edge1, directed)) && (!HasEdge(edge2, directed)))
+            if ((directed && !HasEdge(edge1, MockCounter, true)) || (!HasEdge(edge1, MockCounter, directed)) && (!HasEdge(edge2, MockCounter, directed)))
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but this edge is not part of {this}!");
             }
 #endif
-            origin.RemoveNeighbour(destination, directed);
-            if (HasEdge(edge1, true))
+            origin.RemoveNeighbour(destination, counter, directed);
+            if (HasEdge(edge1, MockCounter, true))
             {
-                InternalEdges.Remove(edge1);
-                UniqueInternalEdges.Remove(edge1);
+                InternalEdges.Remove(edge1, counter);
                 return;
             }
 
             if (!directed)
             {
-                if (HasEdge(edge2, true))
+                if (HasEdge(edge2, MockCounter, true))
                 {
-                    InternalEdges.Remove(edge2);
-                    UniqueInternalEdges.Remove(edge2);
+                    InternalEdges.Remove(edge2, counter);
                 }
             }
         }
@@ -375,7 +417,7 @@ namespace MulticutInTrees.Graphs
 #if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to find out whether a graph is connected, but the counter is null!");
 #endif
-            return DFS.FindAllConnectedComponents(Nodes, counter).Count == 1;
+            return DFS.FindAllConnectedComponents(Nodes(counter), counter).Count == 1;
         }
     }
 }

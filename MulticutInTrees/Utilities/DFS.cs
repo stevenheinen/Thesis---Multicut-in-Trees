@@ -47,11 +47,11 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to see if a graph is acyclic, but the graph is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to see if a graph is acyclic, but the counter is null!");
 #endif
-            if (inputGraph.NumberOfNodes < 2)
+            if (inputGraph.NumberOfNodes(graphCounter) < 2)
             {
                 return true;
             }
-            return FindConnectedComponent(inputGraph.Nodes[0], default, graphCounter, null, true).Count != 0;
+            return FindConnectedComponent(inputGraph.Nodes(graphCounter).First(), default, graphCounter, null, true).Count != 0;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace MulticutInTrees.Utilities
             }
 #endif
 
-            if (inputTree.Nodes.Count() < 2)
+            if (inputTree.NumberOfNodes(treeCounter) < 2)
             {
                 _ = treeCounter++;
                 return true;
@@ -264,12 +264,12 @@ namespace MulticutInTrees.Utilities
             Counter mockCounter = new Counter();
 
             List<(N, N)> result = new List<(N, N)>();
-            if (graph.Nodes.Count == 0)
+            if (graph.NumberOfNodes(graphCounter) == 0)
             {
                 return result;
             }
             Stack<N> stack = new Stack<N>();
-            stack.Push(graph.Nodes[0]);
+            stack.Push(graph.Nodes(graphCounter).First());
             HashSet<(N, N)> seen = new HashSet<(N, N)>();
             while (stack.Count > 0)
             {
@@ -316,7 +316,7 @@ namespace MulticutInTrees.Utilities
             while (stack.Count > 0)
             {
                 N node = stack.Pop();
-                foreach (N child in node.Children)
+                foreach (N child in node.Children(treeCounter))
                 {
                     _ = treeCounter++;
                     result.Add((node, child));

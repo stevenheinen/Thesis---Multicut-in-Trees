@@ -21,9 +21,8 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
-            Random random = new Random(4854);
 
-            MulticutInstance instance = new MulticutInstance(tree, dps, 2, random);
+            MulticutInstance instance = new MulticutInstance(tree, dps, 2);
 
             Assert.IsNotNull(instance);
         }
@@ -33,14 +32,12 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
-            Random random = new Random(4854);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(null, dps, 2, random); });
-            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(tree, null, 2, random); });
-            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, 2, null); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, 0, random); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -1, random); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -8459472, random); });
+            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(null, dps, 2); });
+            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(tree, null, 2); });
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, 0); });
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -1); });
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -8459472); });
         }
     }
 }

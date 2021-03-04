@@ -2,7 +2,6 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Utilities;
@@ -19,12 +18,6 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         private CountedCollection<TreeNode> InternalChildren { get; }
 
-        // todo: should have counter... Also, when enumerating over these a counter should be used
-        /// <summary>
-        /// The <see cref="IEnumerable{T}"/> with children of this <see cref="TreeNode"/>.
-        /// </summary>
-        public IEnumerable<TreeNode> Children => InternalChildren.GetLinkedList();
-        
         /// <summary>
         /// The <see cref="NodeType"/> of this <see cref="TreeNode"/>.
         /// </summary>
@@ -39,32 +32,6 @@ namespace MulticutInTrees.Graphs
         /// The internal representation for the parent of this <see cref="TreeNode"/>.
         /// </summary>
         private TreeNode Parent { get; set;}
-
-        // todo: when enumerating over these a counter should be used
-        // todo: comment, nullcheck, move
-        /// <summary>
-        /// The <see cref="ReadOnlyCollection{T}"/> of all neighbours of this <see cref="TreeNode"/>. Includes <see cref="Parent"/> and <see cref="Children"/>. Cannot be edited directly.
-        /// <br/>
-        /// When using this <see cref="TreeNode"/> in combination with an <see cref="ITree{N}"/>, refer to <seealso cref="ITree{TreeNode}.AddChild(TreeNode, TreeNode, Counter)"/>, <seealso cref="ITree{TreeNode}.AddChildren(TreeNode, IEnumerable{TreeNode}, Counter)"/>, <seealso cref="ITree{TreeNode}.RemoveNode(TreeNode, Counter)"/> and <seealso cref="ITree{TreeNode}.RemoveNodes(IEnumerable{TreeNode}, Counter)"/>.
-        /// <br/>
-        /// When using this <see cref="TreeNode"/> without and <see cref="ITree{N}"/>, refer to <seealso cref="AddChild(TreeNode, Counter)"/>, <seealso cref="AddChildren(IEnumerable{TreeNode}, Counter)"/>, <seealso cref="RemoveChild(TreeNode, Counter)"/>, <seealso cref="RemoveChildren(IEnumerable{TreeNode}, Counter)"/> and <seealso cref="RemoveAllChildren"/>.
-        /// </summary>
-        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
-        public IEnumerable<TreeNode> Neighbours(Counter counter)
-        {
-            _ = counter++;
-
-            if (Parent is null)
-            {
-                return InternalChildren.GetLinkedList();
-            }
-
-            List<TreeNode> neighbours = new List<TreeNode>(InternalChildren.GetLinkedList())
-            {
-                Parent
-            };
-            return neighbours.AsReadOnly();
-        }
 
         /// <summary>
         /// The unique identifier of this <see cref="TreeNode"/>.
@@ -98,6 +65,50 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
+        /// The <see cref="CountedEnumerable{T}"/> with children of this <see cref="TreeNode"/>.
+        /// </summary>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all children of this <see cref="TreeNode"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<TreeNode> Children(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the children of a TreeNode, but the counter is null!");
+#endif
+            _ = counter++;
+            return new CountedEnumerable<TreeNode>(InternalChildren.GetLinkedList(), counter);
+        }
+
+        /// <summary>
+        /// The <see cref="CountedEnumerable{T}"/> of all neighbours of this <see cref="TreeNode"/>. Includes <see cref="Parent"/> and <see cref="Children"/>. Cannot be edited directly.
+        /// <br/>
+        /// When using this <see cref="TreeNode"/> in combination with an <see cref="ITree{N}"/>, refer to <seealso cref="ITree{TreeNode}.AddChild(TreeNode, TreeNode, Counter)"/>, <seealso cref="ITree{TreeNode}.AddChildren(TreeNode, IEnumerable{TreeNode}, Counter)"/>, <seealso cref="ITree{TreeNode}.RemoveNode(TreeNode, Counter)"/> and <seealso cref="ITree{TreeNode}.RemoveNodes(IEnumerable{TreeNode}, Counter)"/>.
+        /// <br/>
+        /// When using this <see cref="TreeNode"/> without and <see cref="ITree{N}"/>, refer to <seealso cref="AddChild(TreeNode, Counter)"/>, <seealso cref="AddChildren(IEnumerable{TreeNode}, Counter)"/>, <seealso cref="RemoveChild(TreeNode, Counter)"/>, <seealso cref="RemoveChildren(IEnumerable{TreeNode}, Counter)"/> and <seealso cref="RemoveAllChildren"/>.
+        /// </summary>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all neighbours of this <see cref="TreeNode"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<TreeNode> Neighbours(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the neighbours of a TreeNode, but the counter is null!");
+#endif            
+            _ = counter++;
+
+            if (Parent is null)
+            {
+                return new CountedEnumerable<TreeNode>(InternalChildren.GetLinkedList(), counter);
+            }
+
+            List<TreeNode> neighbours = new List<TreeNode>(InternalChildren.GetLinkedList())
+            {
+                Parent
+            };
+            return new CountedEnumerable<TreeNode>(neighbours.AsReadOnly(), counter);
+        }
+
+        /// <summary>
         /// Set the parent of this <see cref="TreeNode"/> to <paramref name="newParent"/>.
         /// </summary>
         /// <param name="newParent">The <see cref="TreeNode"/> that will become the new parent of this <see cref="TreeNode"/>.</param>
@@ -116,6 +127,7 @@ namespace MulticutInTrees.Graphs
         /// The number of neighbours (children + parent) this <see cref="TreeNode"/> has.
         /// </summary>
         /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the degree of this <see cref="TreeNode"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int Degree(Counter counter)
         {
@@ -127,6 +139,20 @@ namespace MulticutInTrees.Graphs
                 return InternalChildren.Count(counter);
             }
             return InternalChildren.Count(counter) + 1;
+        }
+
+        /// <summary>
+        /// The number of children this <see cref="TreeNode"/> has.
+        /// </summary>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is equal to the number of children of this <see cref="TreeNode"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public int NumberOfChildren(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of children of a TreeNode, but the counter is null!");
+#endif
+            return InternalChildren.Count(counter);
         }
 
         /// <inheritdoc/>
@@ -353,50 +379,59 @@ namespace MulticutInTrees.Graphs
         /// Calls <see cref="AddChild(TreeNode, Counter)"/>.
         /// </summary>
         /// <param name="neighbour"><inheritdoc cref="AddChild(TreeNode, Counter)"/></param>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
         /// <param name="directed">Unused.</param>
-        void INode<TreeNode>.AddNeighbour(TreeNode neighbour, bool directed)
+        void INode<TreeNode>.AddNeighbour(TreeNode neighbour, Counter counter, bool directed)
         {
-            AddChild(neighbour, MockCounter);
+            AddChild(neighbour, counter);
         }
 
         /// <summary>
         /// Calls <see cref="AddChildren(IEnumerable{TreeNode}, Counter)"/>.
         /// </summary>
         /// <param name="neighbours"><inheritdoc cref="AddChildren(IEnumerable{TreeNode}, Counter)"/></param>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
         /// <param name="directed">Unused.</param>
-        void INode<TreeNode>.AddNeighbours(IEnumerable<TreeNode> neighbours, bool directed)
+        void INode<TreeNode>.AddNeighbours(IEnumerable<TreeNode> neighbours, Counter counter, bool directed)
         {
-            AddChildren(neighbours, MockCounter);
+            AddChildren(neighbours, counter);
         }
 
         /// <summary>
         /// Removes all children and parent from this <see cref="TreeNode"/>.
         /// </summary>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
         /// <param name="directed">Unused.</param>
-        void INode<TreeNode>.RemoveAllNeighbours(bool directed)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        void INode<TreeNode>.RemoveAllNeighbours(Counter counter, bool directed)
         {
-            RemoveAllChildren(MockCounter);
-            Parent.RemoveChild(this, MockCounter);
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove all neighbours from {this}, but the counter is null!");
+#endif
+            RemoveAllChildren(counter);
+            Parent.RemoveChild(this, counter);
         }
 
         /// <summary>
         /// Remove a <see cref="TreeNode"/> from the neighbours of this <see cref="TreeNode"/>.
         /// </summary>
         /// <param name="neighbour">The neighbour to be removed.</param>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
         /// <param name="directed">Unused.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbour"/> is <see langword="null"/>.</exception>
-        void INode<TreeNode>.RemoveNeighbour(TreeNode neighbour, bool directed)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbour"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        void INode<TreeNode>.RemoveNeighbour(TreeNode neighbour, Counter counter, bool directed)
         {
 #if !EXPERIMENT
             Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove a neighbour from {this}, but the counter is null!");
 #endif
             if (neighbour == Parent)
             {
-                Parent.RemoveChild(this, MockCounter);
+                Parent.RemoveChild(this, counter);
             }
             else
             {
-                RemoveChild(neighbour, MockCounter);
+                RemoveChild(neighbour, counter);
             }
         }
 
@@ -404,16 +439,18 @@ namespace MulticutInTrees.Graphs
         /// Remove multiple <see cref="TreeNode"/>s from the neighbours of this <see cref="TreeNode"/>.
         /// </summary>
         /// <param name="neighbours"></param>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
         /// <param name="directed"></param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> is <see langword="null"/>.</exception>
-        void INode<TreeNode>.RemoveNeighbours(IEnumerable<TreeNode> neighbours, bool directed)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="neighbours"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        void INode<TreeNode>.RemoveNeighbours(IEnumerable<TreeNode> neighbours, Counter counter, bool directed)
         {
 #if !EXPERIMENT
             Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to remove multiple neighbours from {this}, but the IEnumerable with neighbours is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to remove multiple neighbours from {this}, but the counter is null!");
 #endif
             foreach (TreeNode neighbour in neighbours)
             {
-                ((INode<TreeNode>)this).RemoveNeighbour(neighbour);
+                ((INode<TreeNode>)this).RemoveNeighbour(neighbour, counter);
             }
         }
 
@@ -421,14 +458,16 @@ namespace MulticutInTrees.Graphs
         /// Checks whether <paramref name="node"/> is either the <see cref="Parent"/> or a child of this <see cref="TreeNode"/>.
         /// </summary>
         /// <param name="node">The <see cref="TreeNode"/> for which we want to know if it is a neighbour of this <see cref="TreeNode"/>.</param>
+        /// <param name="counter"><see cref="Counter"/> to be used for this operation.</param>
         /// <returns><see langword="true"/> if <paramref name="node"/> is the parent or a child of this <see cref="TreeNode"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is <see langword="null"/>.</exception>
-        bool INode<TreeNode>.HasNeighbour(TreeNode node)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        bool INode<TreeNode>.HasNeighbour(TreeNode node, Counter counter)
         {
 #if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to find out whether a node is a neighbour of {this}, but the node is null!");
+            Utils.NullCheck(counter, nameof(counter), $"Trying to find out whether a node is a neighbour of {this}, but the counter is null!");
 #endif
-            return node == Parent || HasChild(node, MockCounter);
+            return node == Parent || HasChild(node, counter);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.Graphs;
@@ -15,6 +16,8 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
     [TestClass]
     public class UnitTestErdosRenyiGraph
     {
+        private readonly static Counter counter = new Counter();
+
         [TestMethod]
         public void TestWrongParameters()
         {
@@ -34,7 +37,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
             double chance = 0.5;
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(numberOfNodes, chance, random);
             Assert.IsNotNull(graph);
-            Assert.AreEqual(numberOfNodes, graph.NumberOfNodes);
+            Assert.AreEqual(numberOfNodes, graph.NumberOfNodes(counter));
         }
     }
 }

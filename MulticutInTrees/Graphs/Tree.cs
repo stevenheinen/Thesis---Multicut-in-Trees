@@ -14,22 +14,6 @@ namespace MulticutInTrees.Graphs
     /// </summary>
     public class Tree<N> : ITree<N> where N : ITreeNode<N>
     {
-        // Todo: should use counter
-        /// <summary>
-        /// The publically visible collection of edges in this <see cref="Tree{N}"/>. Edges cannot be edited directly.
-        /// <br/>
-        /// See also: <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
-        /// </summary>
-        public IEnumerable<(N, N)> Edges => InternalEdges.GetLinkedList();
-
-        // todo: should use counter
-        /// <summary>
-        /// The publically visible collection of nodes in this <see cref="Tree{N}"/>. Nodes cannot be edited directly.
-        /// <br/>
-        /// See also: <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
-        /// </summary>
-        public IEnumerable<N> Nodes => InternalNodes.GetLinkedList();
-
         /// <summary>
         /// The <see cref="CountedCollection{T}"/> of edges in this <see cref="Tree{N}"/>.
         /// </summary>
@@ -61,9 +45,44 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
-        /// The depth of this <see cref="Tree{N}"/>. Equal to the depth of the subtree of the <see cref="Root"/> of this <see cref="Tree{N}"/>.
+        /// The publically visible collection of edges in this <see cref="Tree{N}"/>. Edges cannot be edited directly.
+        /// <br/>
+        /// See also: <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>+
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all edges in this <see cref="Tree{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<(N, N)> Edges(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the edges of a tree, but the counter is null!");
+#endif
+            _ = counter++;
+            return new CountedEnumerable<(N, N)>(InternalEdges.GetLinkedList(), counter);
+        }
+
+        /// <summary>
+        /// The publically visible collection of nodes in this <see cref="Tree{N}"/>. Nodes cannot be edited directly.
+        /// <br/>
+        /// See also: <seealso cref="AddRoot(N, Counter)"/>, <seealso cref="AddChild(N, N, Counter)"/>, <seealso cref="AddChildren(N, IEnumerable{N}, Counter)"/>, <seealso cref="RemoveNode(N, Counter)"/> and <seealso cref="RemoveNodes(IEnumerable{N}, Counter)"/>.
         /// </summary>
         /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>A <see cref="CountedEnumerable{T}"/> with all nodes in this <see cref="Tree{N}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public CountedEnumerable<N> Nodes(Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(counter, nameof(counter), $"Trying to get the nodes of a tree, but the counter is null!");
+#endif
+            _ = counter++;
+            return new CountedEnumerable<N>(InternalNodes.GetLinkedList(), counter);
+        }
+
+        /// <summary>
+        /// The height of this <see cref="Tree{N}"/>. Equal to the height of the subtree of the <see cref="Root"/> of this <see cref="Tree{N}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this operation.</param>
+        /// <returns>An <see cref="int"/> that is the height of this <see cref="Tree{N}"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
         public int Height(Counter counter)
         {
@@ -190,17 +209,17 @@ namespace MulticutInTrees.Graphs
             }
 #endif
 
-            if (node.Children.Count() == 0)
+            if (node.Children(counter).Count() == 0)
             {
                 return;
             }
 
             N parent = node.GetParent(counter);
-            foreach (N child in node.Children) 
+            foreach (N child in node.Children(counter)) 
             {
                 InternalEdges.ChangeElement((node, child), (parent, child), counter);
             }
-            parent.AddChildren(node.Children, counter);
+            parent.AddChildren(node.Children(counter), counter);
             node.RemoveAllChildren(counter);
         }
 
@@ -372,11 +391,11 @@ namespace MulticutInTrees.Graphs
 #endif
             if (node.Equals(Root))
             {
-                if (node.Children.Count() > 1)
+                if (node.Degree(counter) > 1)
                 {
                     throw new MultipleRootsException($"Trying to remove {node} from {this}, but {node} is the root of this tree and has more than 1 child!");
                 }
-                N newRoot = node.Children.First();
+                N newRoot = node.Children(counter).First();
                 InternalEdges.Remove((node, newRoot), counter);
                 SetRoot(newRoot, counter);
                 node.RemoveChild(newRoot, counter);
@@ -428,7 +447,7 @@ namespace MulticutInTrees.Graphs
                 return false;
             }
             
-            return DFS.IsAcyclicTree<Tree<N>, N>(this, MockCounter) && DFS.FindAllConnectedComponents(Nodes, MockCounter).Count == 1;
+            return DFS.IsAcyclicTree<Tree<N>, N>(this, MockCounter) && DFS.FindAllConnectedComponents(Nodes(MockCounter), MockCounter).Count == 1;
         }
 
         /// <summary>
@@ -453,7 +472,7 @@ namespace MulticutInTrees.Graphs
             leafSet = new HashSet<N>();
             internalNodes = new List<N>();
 
-            foreach (N node in Nodes)
+            foreach (N node in Nodes(MockCounter))
             {
                 if (node.Neighbours(MockCounter).Count() == 1)
                 {
@@ -503,7 +522,7 @@ namespace MulticutInTrees.Graphs
                 N parent = leaf.GetParent(MockCounter);
                 if (parent is null)
                 {
-                    parent = leaf.Children.First();
+                    parent = leaf.Children(MockCounter).First();
                 }
 
                 if (parent.Type == NodeType.I1)

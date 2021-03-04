@@ -154,13 +154,13 @@ namespace MulticutInTrees.Utilities
 
             // Save we have not matched any of the nodes.
             Dictionary<N, bool> matched = new Dictionary<N, bool>();
-            foreach (N node in graph.Nodes)
+            foreach (N node in graph.Nodes(counter))
             {
                 matched[node] = false;
             }
 
             // Try to find an edge incident to each node to add to the mathcing.
-            foreach (N node in graph.Nodes)
+            foreach (N node in graph.Nodes(counter))
             {
                 // If we already matched this node, we cannot include any edges incident to it to the matching.
                 if (matched[node])
@@ -203,17 +203,17 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(graph, nameof(graph), "Trying to find an augmenting path in a graph, but the graph is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find an augmenting path in a graph, but the current matching is null!");
 #endif
-            if (graph.NumberOfEdges == 0)
+            if (graph.NumberOfEdges(counter) == 0)
             {
                 return new List<(N, N)>();
             }
 
             if (matching.Count == 0)
             {
-                return new List<(N, N)>() { graph.Edges[0] };
+                return new List<(N, N)>() { graph.Edges(counter).First() };
             }
 
-            HashSet<N> unmatchedVertices = new HashSet<N>(graph.Nodes);
+            HashSet<N> unmatchedVertices = new HashSet<N>(graph.Nodes(counter));
             foreach ((N, N) edge in matching)
             {
                 unmatchedVertices.Remove(edge.Item1);
@@ -235,7 +235,7 @@ namespace MulticutInTrees.Utilities
             }
 
             HashSet<(N, N)> hashedMatching = new HashSet<(N, N)>(matching);
-            List<(N, N)> unmatchedEdges = graph.Edges.Where(n => !hashedMatching.Contains(n) && !hashedMatching.Contains((n.Item2, n.Item1))).Select(n => Utils.OrderEdgeSmallToLarge(n)).ToList();
+            List<(N, N)> unmatchedEdges = graph.Edges(counter).Where(n => !hashedMatching.Contains(n) && !hashedMatching.Contains((n.Item2, n.Item1))).Select(n => Utils.OrderEdgeSmallToLarge(n)).ToList();
 
             if (unmatchedEdges.Count == 0)
             {
@@ -368,8 +368,8 @@ namespace MulticutInTrees.Utilities
             }
 
             Graph<Node> D = new Graph<Node>();
-            D.AddNodes(nodesInD);
-            D.AddEdges(arcsInD, true);
+            D.AddNodes(nodesInD, counter);
+            D.AddEdges(arcsInD, counter, true);
             return D;
         }
 
@@ -464,15 +464,15 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
-            graph.RemoveNodes(blossom);
-            graph.AddNode(blossom[0]);
-            graph.AddEdges(neighbours.Select(n => (blossom[0], n)));
+            graph.RemoveNodes(blossom, counter);
+            graph.AddNode(blossom[0], counter);
+            graph.AddEdges(neighbours.Select(n => (blossom[0], n)), counter);
 
             List<(N, N)> contractedPath = FindAugmentingPath(graph, matching.Where(n => !(blossom.Contains(n.Item1) && blossom.Contains(n.Item2))).Select(n => blossom.Contains(n.Item1) ? (blossom[0], n.Item2) : n).Select(n => blossom.Contains(n.Item2) ? (n.Item1, blossom[0]) : n).ToList());
 
-            graph.RemoveNode(blossom[0]);
-            graph.AddNodes(blossom);
-            graph.AddEdges(originalEdges);
+            graph.RemoveNode(blossom[0], counter);
+            graph.AddNodes(blossom, counter);
+            graph.AddEdges(originalEdges, counter);
 
             List<(N, N)> result = ExpandPath(graph, contractedPath, blossom, blossom[0], matching);
 
@@ -543,7 +543,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom somewhere on the end of the path, but the original blossom is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom somewhere on the end of the path, but the current matching is null!");
 #endif
-            N enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1));
+            N enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1, counter));
             contractedPath[^1] = (contractedPath[^1].Item1, enterNode);
             bool matched = true;
             while (true)
@@ -593,7 +593,7 @@ namespace MulticutInTrees.Utilities
             N lastNodeBeforeBlossom = contractedPath.SkipWhile(n => !n.Item2.Equals(contractedBlossom)).First().Item1;
             N firstNodeAfterBlossom = contractedPath.SkipWhile(n => !n.Item1.Equals(contractedBlossom)).First().Item2;
 
-            HashSet<N> seen = new HashSet<N>(graph.Nodes);
+            HashSet<N> seen = new HashSet<N>(graph.Nodes(counter));
             seen.RemoveWhere(n => blossom.Contains(n) || matching.Select(n => n.Item1).Contains(n) || matching.Select(n => n.Item2).Contains(n));
 
             IEnumerable<(N, N)> beforeBlossom = contractedPath.TakeWhile(n => !n.Item2.Equals(contractedBlossom));

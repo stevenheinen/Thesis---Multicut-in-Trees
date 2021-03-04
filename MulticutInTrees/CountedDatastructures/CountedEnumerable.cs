@@ -48,7 +48,7 @@ namespace MulticutInTrees.CountedDatastructures
         /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new CountedEnumerator<T>(Enumerable.GetEnumerator(), Counter);
         }
     }
 }

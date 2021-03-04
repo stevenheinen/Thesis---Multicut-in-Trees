@@ -214,8 +214,8 @@ namespace TESTS_MulticutInTrees.Utilities
                 (node7, node8)
             };
 
-            graph.AddNodes(nodes);
-            graph.AddEdges(edges);
+            graph.AddNodes(nodes, counter);
+            graph.AddEdges(edges, counter);
 
             List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
 
@@ -287,8 +287,8 @@ namespace TESTS_MulticutInTrees.Utilities
                 (node11, node12)
             };
 
-            graph.AddNodes(nodes);
-            graph.AddEdges(edges);
+            graph.AddNodes(nodes, counter);
+            graph.AddEdges(edges, counter);
 
             List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
 
@@ -375,8 +375,8 @@ namespace TESTS_MulticutInTrees.Utilities
                 (node16, node17)
             };
 
-            graph.AddNodes(nodes);
-            graph.AddEdges(edges);
+            graph.AddNodes(nodes, counter);
+            graph.AddEdges(edges, counter);
 
             List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
 
@@ -389,18 +389,18 @@ namespace TESTS_MulticutInTrees.Utilities
             Random random = new Random(685450);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.3, random);
 
-            int startEdges = graph.NumberOfEdges;
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            int startEdges = graph.NumberOfEdges(counter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0]);
+                    graph.AddEdge(components[i][0], components[j][0], counter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             if (components.Count != 1)
             {
@@ -417,14 +417,14 @@ namespace TESTS_MulticutInTrees.Utilities
 
             foreach ((Node, Node) edge in matching)
             {
-                Assert.IsTrue(graph.HasEdge(edge));
+                Assert.IsTrue(graph.HasEdge(edge, counter));
 
                 matchedNodes.Add(edge.Item1);
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges);
-            Assert.AreEqual(graph.Nodes.Count, matchedNodes.Count);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
+            Assert.AreEqual(graph.NumberOfNodes(counter), matchedNodes.Count);
         }
 
         [TestMethod]
@@ -433,19 +433,19 @@ namespace TESTS_MulticutInTrees.Utilities
             Random random = new Random(9874);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.8, random);
 
-            int startEdges = graph.NumberOfEdges;
+            int startEdges = graph.NumberOfEdges(counter);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0]);
+                    graph.AddEdge(components[i][0], components[j][0], counter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             if (components.Count != 1)
             {
@@ -461,14 +461,14 @@ namespace TESTS_MulticutInTrees.Utilities
             HashSet<Node> matchedNodes = new HashSet<Node>();
             foreach ((Node, Node) edge in matching)
             {
-                Assert.IsTrue(graph.HasEdge(edge));
+                Assert.IsTrue(graph.HasEdge(edge, counter));
 
                 matchedNodes.Add(edge.Item1);
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges);
-            Assert.AreEqual(graph.Nodes.Count, matchedNodes.Count);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
+            Assert.AreEqual(graph.NumberOfNodes(counter), matchedNodes.Count);
         }
 
         [TestMethod]
@@ -477,19 +477,19 @@ namespace TESTS_MulticutInTrees.Utilities
             Random random = new Random(3);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(501, 0.05, random);
 
-            int startEdges = graph.NumberOfEdges;
+            int startEdges = graph.NumberOfEdges(counter);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0]);
+                    graph.AddEdge(components[i][0], components[j][0], counter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             if (components.Count != 1)
             {
@@ -505,14 +505,14 @@ namespace TESTS_MulticutInTrees.Utilities
             HashSet<Node> matchedNodes = new HashSet<Node>();
             foreach ((Node, Node) edge in matching)
             {
-                Assert.IsTrue(graph.HasEdge(edge));
+                Assert.IsTrue(graph.HasEdge(edge, counter));
 
                 matchedNodes.Add(edge.Item1);
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges);
-            Assert.AreEqual(graph.Nodes.Count - 1, matchedNodes.Count);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
+            Assert.AreEqual(graph.NumberOfNodes(counter) - 1, matchedNodes.Count);
         }
 
         [TestMethod]
@@ -523,15 +523,21 @@ namespace TESTS_MulticutInTrees.Utilities
 
             for (uint i = 0; i < nrNodes; i++)
             {
-                graph.AddNode(new Node(i));
+                graph.AddNode(new Node(i), counter);
             }
 
-            for (int i = 1; i < nrNodes; i++)
+            bool first = true;
+            foreach (Node node in graph.Nodes(counter))
             {
-                graph.AddEdge(graph.Nodes[0], graph.Nodes[i]);
+                if (first)
+                {
+                    first = false;
+                    continue;
+                }
+                graph.AddEdge(graph.Nodes(counter).First(), node, counter);
             }
 
-            int startEdges = graph.NumberOfEdges;
+            int startEdges = graph.NumberOfEdges(counter);
 
             List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
             Assert.AreEqual(1, matching.Count);
@@ -546,7 +552,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
             Assert.AreEqual(2, matchedNodes.Count);
         }
 
@@ -555,17 +561,17 @@ namespace TESTS_MulticutInTrees.Utilities
         {
             Random random = new Random(243);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.2, random);
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0]);
+                    graph.AddEdge(components[i][0], components[j][0], counter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             if (components.Count != 1)
             {
@@ -581,17 +587,17 @@ namespace TESTS_MulticutInTrees.Utilities
             Random random = new Random(9846);
             Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.1, random);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0]);
+                    graph.AddEdge(components[i][0], components[j][0], counter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes, counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
 
             if (components.Count != 1)
             {
@@ -623,23 +629,23 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node14 = new Node(14);
             Node node15 = new Node(15);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 });
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node2, node3);
-            graph.AddEdge(node3, node4);
-            graph.AddEdge(node4, node5);
-            graph.AddEdge(node4, node9);
-            graph.AddEdge(node5, node6);
-            graph.AddEdge(node6, node7);
-            graph.AddEdge(node7, node8);
-            graph.AddEdge(node8, node12);
-            graph.AddEdge(node8, node13);
-            graph.AddEdge(node9, node10);
-            graph.AddEdge(node10, node11);
-            graph.AddEdge(node11, node12);
-            graph.AddEdge(node13, node14);
-            graph.AddEdge(node15, node14);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 }, counter);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node2, node3, counter);
+            graph.AddEdge(node3, node4, counter);
+            graph.AddEdge(node4, node5, counter);
+            graph.AddEdge(node4, node9, counter);
+            graph.AddEdge(node5, node6, counter);
+            graph.AddEdge(node6, node7, counter);
+            graph.AddEdge(node7, node8, counter);
+            graph.AddEdge(node8, node12, counter);
+            graph.AddEdge(node8, node13, counter);
+            graph.AddEdge(node9, node10, counter);
+            graph.AddEdge(node10, node11, counter);
+            graph.AddEdge(node11, node12, counter);
+            graph.AddEdge(node13, node14, counter);
+            graph.AddEdge(node15, node14, counter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node13), (node13, node14), (node14, node15) };
             List<Node> blossom = new List<Node>() { node4, node5, node6, node7, node8, node9, node10, node11, node12 };
@@ -676,23 +682,23 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node14 = new Node(14);
             Node node15 = new Node(15);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 });
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node2, node3);
-            graph.AddEdge(node3, node4);
-            graph.AddEdge(node4, node5);
-            graph.AddEdge(node4, node8);
-            graph.AddEdge(node5, node6);
-            graph.AddEdge(node6, node7);
-            graph.AddEdge(node7, node12);
-            graph.AddEdge(node7, node13);
-            graph.AddEdge(node8, node9);
-            graph.AddEdge(node9, node10);
-            graph.AddEdge(node10, node11);
-            graph.AddEdge(node11, node12);
-            graph.AddEdge(node13, node14);
-            graph.AddEdge(node14, node15);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 }, counter);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node2, node3, counter);
+            graph.AddEdge(node3, node4, counter);
+            graph.AddEdge(node4, node5, counter);
+            graph.AddEdge(node4, node8, counter);
+            graph.AddEdge(node5, node6, counter);
+            graph.AddEdge(node6, node7, counter);
+            graph.AddEdge(node7, node12, counter);
+            graph.AddEdge(node7, node13, counter);
+            graph.AddEdge(node8, node9, counter);
+            graph.AddEdge(node9, node10, counter);
+            graph.AddEdge(node10, node11, counter);
+            graph.AddEdge(node11, node12, counter);
+            graph.AddEdge(node13, node14, counter);
+            graph.AddEdge(node14, node15, counter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node13), (node13, node14), (node14, node15) };
             List<Node> blossom = new List<Node>() { node4, node5, node6, node7, node8, node9, node10, node11, node12 };
@@ -727,21 +733,21 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node12 = new Node(12);
             Node node13 = new Node(13);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 });
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node2, node3);
-            graph.AddEdge(node3, node4);
-            graph.AddEdge(node4, node5);
-            graph.AddEdge(node5, node6);
-            graph.AddEdge(node5, node13);
-            graph.AddEdge(node6, node7);
-            graph.AddEdge(node7, node8);
-            graph.AddEdge(node8, node9);
-            graph.AddEdge(node9, node10);
-            graph.AddEdge(node10, node11);
-            graph.AddEdge(node11, node12);
-            graph.AddEdge(node12, node13);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 }, counter);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node2, node3, counter);
+            graph.AddEdge(node3, node4, counter);
+            graph.AddEdge(node4, node5, counter);
+            graph.AddEdge(node5, node6, counter);
+            graph.AddEdge(node5, node13, counter);
+            graph.AddEdge(node6, node7, counter);
+            graph.AddEdge(node7, node8, counter);
+            graph.AddEdge(node8, node9, counter);
+            graph.AddEdge(node9, node10, counter);
+            graph.AddEdge(node10, node11, counter);
+            graph.AddEdge(node11, node12, counter);
+            graph.AddEdge(node12, node13, counter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5) };
             List<Node> blossom = new List<Node>() { node5, node6, node7, node8, node9, node10, node11, node12, node13 };
@@ -776,21 +782,21 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node12 = new Node(12);
             Node node13 = new Node(13);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 });
-            graph.AddEdge(node0, node1);
-            graph.AddEdge(node1, node2);
-            graph.AddEdge(node2, node3);
-            graph.AddEdge(node3, node4);
-            graph.AddEdge(node4, node5);
-            graph.AddEdge(node5, node6);
-            graph.AddEdge(node5, node13);
-            graph.AddEdge(node6, node7);
-            graph.AddEdge(node7, node8);
-            graph.AddEdge(node8, node9);
-            graph.AddEdge(node9, node10);
-            graph.AddEdge(node10, node11);
-            graph.AddEdge(node11, node12);
-            graph.AddEdge(node12, node13);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 }, counter);
+            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(node1, node2, counter);
+            graph.AddEdge(node2, node3, counter);
+            graph.AddEdge(node3, node4, counter);
+            graph.AddEdge(node4, node5, counter);
+            graph.AddEdge(node5, node6, counter);
+            graph.AddEdge(node5, node13, counter);
+            graph.AddEdge(node6, node7, counter);
+            graph.AddEdge(node7, node8, counter);
+            graph.AddEdge(node8, node9, counter);
+            graph.AddEdge(node9, node10, counter);
+            graph.AddEdge(node10, node11, counter);
+            graph.AddEdge(node11, node12, counter);
+            graph.AddEdge(node12, node13, counter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5) };
             List<Node> blossom = new List<Node>() { node5, node6, node7, node8, node9, node10, node11, node12, node13 };

@@ -21,12 +21,12 @@ namespace MulticutInTrees.Algorithms
     public class GuoNiedermeierFPT : Algorithm
     {
         /// <summary>
-        /// <see cref="Dictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
         /// </summary>
         private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; set; }
 
         /// <summary>
-        /// <see cref="Dictionary{TKey, TValue}"/> containing a <see cref="List{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedList{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
         /// </summary>
         private CountedDictionary<TreeNode, CountedList<DemandPair>> DemandPairsPerNode { get; set; }
 
@@ -50,16 +50,16 @@ namespace MulticutInTrees.Algorithms
         {
             List<ReductionRule> reductionRules = new List<ReductionRule>();
 
-            IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
+            IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(idleEdge);
 
-            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this, Random);
+            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
 
-            DominatedEdge dominatedEdge = new DominatedEdge(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
+            DominatedEdge dominatedEdge = new DominatedEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedEdge);
 
-            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, Random, DemandPairsPerEdge);
+            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
 
             // TODO: add other reduction rules.
@@ -91,7 +91,7 @@ namespace MulticutInTrees.Algorithms
                 DemandPairsPerNode[demandPair.Node2, AlgorithmPerformanceMeasurements.DemandPairsPerEdgeKeysCounter].Add(demandPair, AlgorithmPerformanceMeasurements.DemandPairsPerEdgeValuesCounter);
 
                 // For each edge on this demand pair...
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter))
                 {
                     // Add this edge to the DemandPairsPerEdge dictionary.
                     (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
@@ -166,7 +166,7 @@ namespace MulticutInTrees.Algorithms
 
             foreach (DemandPair demandPair in separatedDemandPairs.GetCountedEnumerable(measurements.DemandPairsPerEdgeValuesCounter))
             {
-                if (demandPair.EdgesOnDemandPath.Count(measurements.DemandPairsOperationsCounter) == 1)
+                if (demandPair.LengthOfPath(measurements.DemandPairsOperationsCounter) == 1)
                 {
                     continue;
                 }
@@ -279,8 +279,8 @@ namespace MulticutInTrees.Algorithms
             Utils.NullCheck(measurements, nameof(measurements), "Trying to update the demand pairs going through the child of an edge that will be contracted, but the performance measures to be used are null!");
 #endif
             List<(TreeNode, TreeNode)> keysToBeRemoved = new List<(TreeNode, TreeNode)>();
-            List<(TreeNode, TreeNode)> oldKeys = DemandPairsPerEdge.GetKeys(measurements.DemandPairsPerEdgeKeysCounter).Where(n => n.Item1 == child || n.Item2 == child).ToList();
-            foreach ((TreeNode, TreeNode) key in oldKeys)
+            CountedList<(TreeNode, TreeNode)> oldKeys = new CountedList<(TreeNode, TreeNode)>(DemandPairsPerEdge.GetKeys(measurements.DemandPairsPerEdgeKeysCounter).Where(n => n.Item1 == child || n.Item2 == child), MockCounter);
+            foreach ((TreeNode, TreeNode) key in oldKeys.GetCountedEnumerable(measurements.DemandPairsPerEdgeKeysCounter))
             {
                 foreach (DemandPair demandPair in DemandPairsPerEdge[key, measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(measurements.DemandPairsPerEdgeValuesCounter))
                 {
@@ -320,7 +320,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
         /// <param name="child">The <see cref="TreeNode"/> that will be removed by the contraction.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
-        /// <param name="pairsOnEdge">The <see cref="List{T}"/> of <see cref="DemandPair"/>s that go over <paramref name="edge"/>.</param>
+        /// <param name="pairsOnEdge">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s that go over <paramref name="edge"/>.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/>, <paramref name="pairsOnEdge"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
         private void UpdateDemandPairsStartingAtContractedEdge((TreeNode, TreeNode) edge, TreeNode child, TreeNode newNode, CountedList<DemandPair> pairsOnEdge, PerformanceMeasurements measurements)
@@ -354,7 +354,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="edge">The tuple of <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
-        /// <returns>A <see cref="List{T}"/> with all the <see cref="DemandPair"/>s that pass through <paramref name="edge"/>.</returns>
+        /// <returns>A <see cref="CountedList{T}"/> with all the <see cref="DemandPair"/>s that pass through <paramref name="edge"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="newNode"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
         private CountedList<DemandPair> RemoveDemandPairsFromContractedEdge((TreeNode, TreeNode) edge, TreeNode newNode, PerformanceMeasurements measurements)
         {
@@ -449,7 +449,7 @@ namespace MulticutInTrees.Algorithms
             }
 
             // Remove this demand pair from each edge it is on.
-            foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath.GetCountedEnumerable(measurements.DemandPairsOperationsCounter))
+            foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(measurements.DemandPairsOperationsCounter))
             {
                 RemoveDemandPairFromEdge(edge, demandPair, measurements);
             }
@@ -491,12 +491,12 @@ namespace MulticutInTrees.Algorithms
             if (oldEndpoint == demandPair.Node1)
             {
                 // If the old endpoint is the first endpoint, we are removing edges from the start until the edge starts with the new endpoint.
-                oldEdges.AddRange(demandPair.EdgesOnDemandPath.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).TakeWhile(n => n.Item1 != newEndpoint), measurements.TreeOperationsCounter);
+                oldEdges.AddRange(demandPair.EdgesOnDemandPath(measurements.DemandPairsOperationsCounter).TakeWhile(n => n.Item1 != newEndpoint), measurements.TreeOperationsCounter);
             }
             else if (oldEndpoint == demandPair.Node2)
             {
                 // If the old endpoint is the second endpoint, we are removing all edges from the new endpoint to the old endpoint. The extra Skip(1) is to exclude the last edge on the new demand path.
-                oldEdges.AddRange(demandPair.EdgesOnDemandPath.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).SkipWhile(n => n.Item2 != newEndpoint).Skip(1), measurements.TreeOperationsCounter);
+                oldEdges.AddRange(demandPair.EdgesOnDemandPath(measurements.DemandPairsOperationsCounter).SkipWhile(n => n.Item2 != newEndpoint).Skip(1), measurements.TreeOperationsCounter);
             }
 
             if (!DemandPairsPerNode.ContainsKey(newEndpoint, measurements.DemandPairsPerEdgeKeysCounter))
