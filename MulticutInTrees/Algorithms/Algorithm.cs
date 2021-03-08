@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -110,7 +110,7 @@ namespace MulticutInTrees.Algorithms
         /// Try to solve the instance.
         /// </summary>
         /// <returns>A tuple with a <see cref="bool"/> that states whether the instance is solvable, the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
-        public virtual (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
+        public (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
         {
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
 
@@ -169,7 +169,6 @@ namespace MulticutInTrees.Algorithms
                 if (successfulAfterDemandPairChanged || successfulAfterDemandPairRemoved || successfulAfterEdgeContracted)
                 {
                     i = -1;
-                    continue;
                 }
             }
 
@@ -255,7 +254,7 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Print all counters that are used by this <see cref="Algorithm"/>.
         /// </summary>
-        protected virtual void PrintCounters()
+        private void PrintCounters()
         {
             Console.WriteLine();
             Console.WriteLine(AlgorithmPerformanceMeasurements);
@@ -288,7 +287,7 @@ namespace MulticutInTrees.Algorithms
                 throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Item2} is not known. Please make sure every node has a nodetype to start with!");
             }
 #endif
-            switch ((contractedEdge.Item1.Type, contractedEdge.Item2.Type))
+            switch (contractedEdge.Item1.Type, contractedEdge.Item2.Type)
             {
                 // In case of a contraction of an edge between two I1-nodes, two I2-nodes, or two I3-nodes, no changes have to be made.
                 // We also do not need to change anything when contracting an edge between an L2-leaf and an I2-node, or between an L3-leaf and an I3-node.

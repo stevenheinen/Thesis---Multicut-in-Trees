@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
@@ -23,7 +23,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the BFS.</param>
         /// <returns>A <see cref="List{T}"/> with the shortest path from <paramref name="startNode"/> to any <typeparamref name="N"/> in <paramref name="targetSet"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/>, <paramref name="targetSet"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
-        public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, Counter treeCounter, HashSet <N> seen = null) where N : INode<N>
+        public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, Counter treeCounter, HashSet<N> seen = null) where N : INode<N>
         {
 #if !EXPERIMENT
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find the shortest path to a set, but the start node is null!");
@@ -39,11 +39,7 @@ namespace MulticutInTrees.Utilities
             }
 #endif
             Counter mockCounter = new Counter();
-
-            if (seen is null)
-            {
-                seen = new HashSet<N>();
-            }
+            seen ??= new HashSet<N>();
             Queue<N> queue = new Queue<N>();
             queue.Enqueue(startNode);
             seen.Add(startNode);

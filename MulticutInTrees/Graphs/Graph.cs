@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
@@ -18,17 +17,17 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// The internal <see cref="CountedCollection{T}"/> of edges in this <see cref="Graph{N}"/>.
         /// </summary>
-        protected CountedCollection<(N, N)> InternalEdges { get; set; }
+        private CountedCollection<(N, N)> InternalEdges { get; }
 
         /// <summary>
         /// The internal <see cref="CountedCollection{T}"/> of nodes in this <see cref="Graph{N}"/>.
         /// </summary>
-        protected CountedCollection<N> InternalNodes { get; set; }
+        private CountedCollection<N> InternalNodes { get; }
 
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not affect the performance of an <see cref="Algorithms.Algorithm"/> or <see cref="ReductionRules.ReductionRule"/>.
         /// </summary>
-        protected Counter MockCounter { get; }
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for a <see cref="Graph{N}"/>.
@@ -156,7 +155,7 @@ namespace MulticutInTrees.Graphs
                 throw new NotInGraphException($"Trying to find out whether an edge exists in {this}, but the destination of the edge is not part of {this}!");
             }
 #endif
-            if (directed) 
+            if (directed)
             {
                 return InternalEdges.Contains((origin, destination), counter);
             }
@@ -248,7 +247,7 @@ namespace MulticutInTrees.Graphs
 #endif
             (N, N) edge1 = (origin, destination);
 #if !EXPERIMENT
-            if (HasEdge(edge1, MockCounter, true) || (!directed && HasEdge((destination, origin), MockCounter, false)))
+            if (HasEdge(edge1, MockCounter, true) || (!directed && HasEdge((destination, origin), MockCounter)))
             {
                 throw new AlreadyInGraphException($"Trying to add an edge between {origin} and {destination} to {this}, but this edge is already part of {this}!");
             }
@@ -371,7 +370,7 @@ namespace MulticutInTrees.Graphs
             (N, N) edge1 = (origin, destination);
             (N, N) edge2 = (destination, origin);
 #if !EXPERIMENT
-            if ((directed && !HasEdge(edge1, MockCounter, true)) || (!HasEdge(edge1, MockCounter, directed)) && (!HasEdge(edge2, MockCounter, directed)))
+            if ((directed && !HasEdge(edge1, MockCounter, true)) || ((!HasEdge(edge1, MockCounter, directed)) && (!HasEdge(edge2, MockCounter, directed))))
             {
                 throw new NotInGraphException($"Trying to remove the edge between {origin} and {destination} from {this}, but this edge is not part of {this}!");
             }

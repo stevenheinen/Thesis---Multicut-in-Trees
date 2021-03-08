@@ -1,23 +1,16 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
-using MulticutInTrees.Graphs;
-using MulticutInTrees.InstanceGeneration;
-using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.CountedDatastructures
 {
     [TestClass]
     public class UnitTestCountedDictionary
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -26,7 +19,7 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
             Assert.IsNotNull(countedDictionary);
             Assert.AreEqual(0, countedDictionary.Count(counter));
 
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 },  { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
             countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
             Assert.IsNotNull(countedDictionary);
             Assert.AreEqual(dictionary.Count, countedDictionary.Count(counter));

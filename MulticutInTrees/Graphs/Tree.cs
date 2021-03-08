@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
@@ -17,22 +17,22 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// The <see cref="CountedCollection{T}"/> of edges in this <see cref="Tree{N}"/>.
         /// </summary>
-        protected CountedCollection<(N, N)> InternalEdges { get; set; }
+        private CountedCollection<(N, N)> InternalEdges { get; }
 
         /// <summary>
         /// The <see cref="CountedCollection{T}"/> of nodes in this <see cref="Tree{N}"/>.
         /// </summary>
-        protected CountedCollection<N> InternalNodes { get; set; }
+        private CountedCollection<N> InternalNodes { get; }
 
         /// <summary>
         /// <see cref="Counter"/> that can be used for modifications that should not impact the performance of an <see cref="Algorithms.Algorithm"/> or <see cref="ReductionRules.ReductionRule"/>.
         /// </summary>
-        protected Counter MockCounter { get; }
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// The root of this <see cref="Tree{N}"/>.
         /// </summary>
-        protected N Root { get; set; }
+        private N Root { get; set; }
 
         /// <summary>
         /// Constructor for a <see cref="Tree{N}"/>.
@@ -55,7 +55,7 @@ namespace MulticutInTrees.Graphs
         public CountedEnumerable<(N, N)> Edges(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the edges of a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the edges of a tree, but the counter is null!");
 #endif
             _ = counter++;
             return new CountedEnumerable<(N, N)>(InternalEdges.GetLinkedList(), counter);
@@ -72,7 +72,7 @@ namespace MulticutInTrees.Graphs
         public CountedEnumerable<N> Nodes(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the nodes of a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the nodes of a tree, but the counter is null!");
 #endif
             _ = counter++;
             return new CountedEnumerable<N>(InternalNodes.GetLinkedList(), counter);
@@ -87,7 +87,7 @@ namespace MulticutInTrees.Graphs
         public int Height(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the height of a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the height of a tree, but the counter is null!");
 #endif
             if (Root is null)
             {
@@ -106,7 +106,7 @@ namespace MulticutInTrees.Graphs
         public N GetRoot(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the root of a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the root of a tree, but the counter is null!");
 #endif
             _ = counter++;
             return Root;
@@ -121,8 +121,8 @@ namespace MulticutInTrees.Graphs
         protected void SetRoot(N newRoot, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(newRoot, nameof(newRoot), $"Trying to set the root of a tree, but the new root is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to set the root of a tree, but the counter is null!");
+            Utils.NullCheck(newRoot, nameof(newRoot), "Trying to set the root of a tree, but the new root is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to set the root of a tree, but the counter is null!");
 #endif
             _ = counter++;
             Root = newRoot;
@@ -137,7 +137,7 @@ namespace MulticutInTrees.Graphs
         public int NumberOfNodes(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the number of nodes in a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of nodes in a tree, but the counter is null!");
 #endif
             return InternalNodes.Count(counter);
         }
@@ -151,7 +151,7 @@ namespace MulticutInTrees.Graphs
         public int NumberOfEdges(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the number of edges in a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of edges in a tree, but the counter is null!");
 #endif
             return InternalEdges.Count(counter);
         }
@@ -177,7 +177,7 @@ namespace MulticutInTrees.Graphs
         protected N FindRoot(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Tryinf to find the root of a tree, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to find the root of a tree, but the counter is null!");
             int numberOfRoots = InternalNodes.Count(n => n.GetParent(counter) is null, counter);
             if (numberOfRoots == 0)
             {
@@ -209,13 +209,13 @@ namespace MulticutInTrees.Graphs
             }
 #endif
 
-            if (node.Children(counter).Count() == 0)
+            if (!node.Children(counter).Any())
             {
                 return;
             }
 
             N parent = node.GetParent(counter);
-            foreach (N child in node.Children(counter)) 
+            foreach (N child in node.Children(counter))
             {
                 InternalEdges.ChangeElement((node, child), (parent, child), counter);
             }
@@ -446,7 +446,7 @@ namespace MulticutInTrees.Graphs
             {
                 return false;
             }
-            
+
             return DFS.IsAcyclicTree<Tree<N>, N>(this, MockCounter) && DFS.FindAllConnectedComponents(Nodes(MockCounter), MockCounter).Count == 1;
         }
 

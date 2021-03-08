@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
@@ -31,7 +31,7 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// The internal representation for the parent of this <see cref="TreeNode"/>.
         /// </summary>
-        private TreeNode Parent { get; set;}
+        private TreeNode Parent { get; set; }
 
         /// <summary>
         /// The unique identifier of this <see cref="TreeNode"/>.
@@ -269,7 +269,7 @@ namespace MulticutInTrees.Graphs
             {
                 child.SetParent(null, counter);
             }
-            InternalChildren.Remove(child, counter); 
+            InternalChildren.Remove(child, counter);
         }
 
         /// <summary>

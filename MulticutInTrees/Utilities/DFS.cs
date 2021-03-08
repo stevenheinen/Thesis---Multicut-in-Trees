@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
@@ -74,10 +74,9 @@ namespace MulticutInTrees.Utilities
                 throw new NoRootException($"Trying to see if {inputTree} is acyclic, but it has no root!");
             }
 #endif
-
             if (inputTree.NumberOfNodes(treeCounter) < 2)
             {
-                _ = treeCounter++;
+                treeCounter++;
                 return true;
             }
             return FindConnectedComponent(inputTree.GetRoot(treeCounter), default, treeCounter, null, true).Count != 0;
@@ -99,10 +98,7 @@ namespace MulticutInTrees.Utilities
             Counter mockCounter = new Counter();
 
             List<N> result = new List<N>();
-            if (seen is null)
-            {
-                seen = new HashSet<N>();
-            }
+            seen ??= new HashSet<N>();
             Stack<N> stack = new Stack<N>();
             stack.Push(startNode);
             seen.Add(startNode);
@@ -181,10 +177,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all connected components of an IEnumerable with nodes, but the counter is null!");
 #endif
             List<List<N>> result = new List<List<N>>();
-            if (seen is null)
-            {
-                seen = new HashSet<N>();
-            }
+            seen ??= new HashSet<N>();
             foreach (N node in allNodes)
             {
                 if (!seen.Contains(node))

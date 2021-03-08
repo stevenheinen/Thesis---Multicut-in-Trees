@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.CountedDatastructures;
@@ -12,7 +12,7 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestNode
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructorNoNeighbours()
@@ -250,13 +250,13 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestDegree()
         {
-            List<Node> nodes = new List<Node>() 
-            { 
-                new Node(0), 
-                new Node(1), 
-                new Node(2), 
-                new Node(3), 
-                new Node(4) 
+            List<Node> nodes = new List<Node>()
+            {
+                new Node(0),
+                new Node(1),
+                new Node(2),
+                new Node(3),
+                new Node(4)
             };
 
             Assert.AreEqual(nodes[0].Degree(counter), 0);

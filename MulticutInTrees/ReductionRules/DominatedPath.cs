@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.Algorithms;
@@ -21,7 +21,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
         /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; set; }
+        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
         /// Constructor for the <see cref="DominatedPath"/> reduction rule.
@@ -39,7 +39,6 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the dominated path reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the dominated path reduction rule, but the dictionary with demand pairs per edge is null!");
 #endif
-            //DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
             DemandPairsPerEdge = demandPairsPerEdge;
         }
 
@@ -62,7 +61,7 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         protected override void Preprocess()
         {
-            return;
+
         }
 
         /// <inheritdoc/>
@@ -137,7 +136,7 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
 
-            foreach (((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>) contraction in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter)) 
+            foreach (((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>) contraction in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 HashSet<DemandPair> otherDemandPairs = new HashSet<DemandPair>();
                 foreach (TreeNode neighbour in contraction.Item2.Neighbours(Measurements.TreeOperationsCounter))
@@ -212,8 +211,6 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-
             return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
 
@@ -226,14 +223,18 @@ namespace MulticutInTrees.ReductionRules
         private bool TryRemoveDemandPairs(CountedList<DemandPair> pairsToBeRemoved)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(pairsToBeRemoved, nameof(pairsToBeRemoved), $"Trying to remove demand pairs, but the List with demand pairs is null!");
+            Utils.NullCheck(pairsToBeRemoved, nameof(pairsToBeRemoved), "Trying to remove demand pairs, but the List with demand pairs is null!");
 #endif
             if (pairsToBeRemoved.Count(Measurements.DemandPairsOperationsCounter) == 0)
             {
+                Measurements.TimeSpentCheckingApplicability.Stop();
                 return false;
             }
 
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentModifyingInstance.Start();
             Algorithm.RemoveDemandPairs(pairsToBeRemoved, Measurements);
+            Measurements.TimeSpentModifyingInstance.Stop();
             return true;
         }
     }

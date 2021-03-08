@@ -1,7 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
-using System.Collections.Generic;
+using System;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
@@ -17,7 +16,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// The <see cref="CountedCollection{T}"/> containing the edges on the demand path of this <see cref="DemandPair"/>.
         /// </summary>
-        private CountedCollection<(TreeNode, TreeNode)> Path { get; set; }
+        private CountedCollection<(TreeNode, TreeNode)> Path { get; }
 
         /// <summary>
         /// The first endpoint of this <see cref="DemandPair"/>.

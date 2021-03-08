@@ -1,8 +1,7 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -16,7 +15,7 @@ namespace MulticutInTrees.Utilities
     public static class DinicMaxFlow
     {
         // todo: replace with correct counters
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         /// <summary>
         /// Compute the maximum flow in <paramref name="inputGraph"/> for multiple sources and sinks and unit capacities for each edge.
@@ -36,7 +35,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(sinks, nameof(sinks), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sinks is null!");
 #endif            
             // Create a capacity dictionary with capacity 1 for each edge.
-            IEnumerable<(N, N)> edges = inputGraph.Edges(counter);
+            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
             Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>();
             foreach ((N, N) edge in edges)
             {
@@ -75,7 +74,7 @@ namespace MulticutInTrees.Utilities
             }
 
             // Check if each edge has a capacity
-            IEnumerable<(N, N)> edges = inputGraph.Edges(counter);
+            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
             foreach ((N, N) edge in edges)
             {
                 (uint, uint) e1 = (edge.Item1.ID, edge.Item2.ID);
@@ -86,9 +85,9 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
-            Graph<Node> internalGraph = new Graph<Node>((IGraph<Node>)inputGraph, counter);
+            Graph<Node> internalGraph = new Graph<Node>((IGraph<Node>)inputGraph, MockCounter);
             HashSet<N> startPoints = new HashSet<N>(sources);
-            HashSet<N> endPoints = new HashSet<N>(sinks);             
+            HashSet<N> endPoints = new HashSet<N>(sinks);
             Dictionary<uint, int> startOccurrences = new Dictionary<uint, int>(startPoints.Select(i => new KeyValuePair<uint, int>(i.ID, 0)));
             Dictionary<uint, int> endOccurrences = new Dictionary<uint, int>(endPoints.Select(i => new KeyValuePair<uint, int>(i.ID, 0)));
             foreach (N s in sources)
@@ -102,20 +101,20 @@ namespace MulticutInTrees.Utilities
 
             // Create a dummy source node connected to all sources.
             Node source = new Node(uint.MaxValue);
-            internalGraph.AddNode(source, counter);
+            internalGraph.AddNode(source, MockCounter);
             foreach (Node node in (IEnumerable<Node>)startPoints)
             {
-                internalGraph.AddEdge(source, node, counter, false);
+                internalGraph.AddEdge(source, node, MockCounter);
                 capacities.Add((source.ID, node.ID), startOccurrences[node.ID]);
                 capacities.Add((node.ID, source.ID), startOccurrences[node.ID]);
             }
 
             // Create a dummy sink node connected to all sinks.
             Node sink = new Node(uint.MaxValue - 1);
-            internalGraph.AddNode(sink, counter);
+            internalGraph.AddNode(sink, MockCounter);
             foreach (Node node in (IEnumerable<Node>)endPoints)
             {
-                internalGraph.AddEdge(sink, node, counter, false);
+                internalGraph.AddEdge(sink, node, MockCounter);
                 capacities.Add((sink.ID, node.ID), endOccurrences[node.ID]);
                 capacities.Add((node.ID, sink.ID), endOccurrences[node.ID]);
             }
@@ -124,8 +123,8 @@ namespace MulticutInTrees.Utilities
             int flow = MaxFlow(internalGraph, source, sink, capacities);
 
             // Remove the dummy source and sink
-            internalGraph.RemoveNode(source, counter);
-            internalGraph.RemoveNode(sink, counter);
+            internalGraph.RemoveNode(source, MockCounter);
+            internalGraph.RemoveNode(sink, MockCounter);
 
             return flow;
         }
@@ -148,7 +147,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(sink, nameof(sink), "Trying to compute single source, single sink flow with unit capacities, but the sink node is null!");
 #endif
             // Create a capacity dictionary with capacity 1 for each edge.
-            IEnumerable<(N, N)> edges = inputGraph.Edges(counter);
+            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
             Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>();
             foreach ((N, N) edge in edges)
             {
@@ -187,7 +186,7 @@ namespace MulticutInTrees.Utilities
             }
 
             // Check if each edge has a capacity
-            IEnumerable<(N, N)> edges = inputGraph.Edges(counter);
+            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
             foreach ((N, N) edge in edges)
             {
                 (uint, uint) e1 = (edge.Item1.ID, edge.Item2.ID);
@@ -217,7 +216,7 @@ namespace MulticutInTrees.Utilities
                 while ((extraFlow = SendFlow(inputGraph, source, sink, int.MaxValue, flow, capacities, levels)) != 0)
                 {
                     maximumFlow += extraFlow;
-                }                
+                }
             }
 
             return maximumFlow;
@@ -244,7 +243,7 @@ namespace MulticutInTrees.Utilities
 #endif
             // Initialise each level to -1.
             Dictionary<uint, int> levels = new Dictionary<uint, int>();
-            foreach (N node in inputGraph.Nodes(counter))
+            foreach (N node in inputGraph.Nodes(MockCounter))
             {
                 levels.Add(node.ID, -1);
             }
@@ -256,7 +255,7 @@ namespace MulticutInTrees.Utilities
             while (queue.Count > 0)
             {
                 N node = queue.Dequeue();
-                foreach (N child in node.Neighbours(counter))
+                foreach (N child in node.Neighbours(MockCounter))
                 {
                     // Update the level of this child if it does not have a level yet and we can send flow over the edge from the current node to this child.
                     if (levels[child.ID] < 0 && flow[(node.ID, child.ID)] < capacities[(node.ID, child.ID)])
@@ -300,7 +299,7 @@ namespace MulticutInTrees.Utilities
                 return currentFlow;
             }
 
-            foreach (N child in node.Neighbours(counter))
+            foreach (N child in node.Neighbours(MockCounter))
             {
                 if (levels[child.ID] == levels[node.ID] + 1 && flow[(node.ID, child.ID)] < capacities[(node.ID, child.ID)])
                 {

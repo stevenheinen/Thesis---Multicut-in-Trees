@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.Utilities;
@@ -25,22 +25,22 @@ namespace MulticutInTrees.CountedDatastructures
         /// <param name="counter">The counter used for performance measurement.</param>
         /// <returns>The element at the specified index.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
-        public T this[int index, Counter counter] 
+        public T this[int index, Counter counter]
         {
             get
             {
 #if !EXPERIMENT
-                Utils.NullCheck(counter, nameof(counter), $"Trying to get an element at an index in a CountedList, but the counter is null!");
+                Utils.NullCheck(counter, nameof(counter), "Trying to get an element at an index in a CountedList, but the counter is null!");
 #endif
-                _ = counter++;
+                counter++;
                 return List[index];
             }
             set
             {
 #if !EXPERIMENT
-                Utils.NullCheck(counter, nameof(counter), $"Trying to set an element at an index in a CountedList, but the counter is null!");
+                Utils.NullCheck(counter, nameof(counter), "Trying to set an element at an index in a CountedList, but the counter is null!");
 #endif
-                _ = counter++;
+                counter++;
                 List[index] = value;
             }
         }
@@ -62,8 +62,8 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedList(IEnumerable<T> list, Counter counter) : this()
         {
 #if !EXPERIMENT
-            Utils.NullCheck(list, nameof(list), $"Trying to create a CountedList with elements, but the IEnumerable of elements is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to create a CountedList with elements, but the counter is null!");
+            Utils.NullCheck(list, nameof(list), "Trying to create a CountedList with elements, but the IEnumerable of elements is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to create a CountedList with elements, but the counter is null!");
 #endif
             AddRange(list, counter);
         }
@@ -86,9 +86,9 @@ namespace MulticutInTrees.CountedDatastructures
         public int Count(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the number of elements in a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements in a CountedList, but the counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             return List.Count;
         }
 
@@ -102,9 +102,9 @@ namespace MulticutInTrees.CountedDatastructures
         public void RemoveAt(int index, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to remove an element at a given index from a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to remove an element at a given index from a CountedList, but the counter is null!");
 #endif
-            _ = counter += List.Count - index;
+            counter += List.Count - index;
             List.RemoveAt(index);
         }
 
@@ -117,9 +117,9 @@ namespace MulticutInTrees.CountedDatastructures
         public void Add(T item, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to add an element to a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to add an element to a CountedList, but the counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             List.Add(item);
         }
 
@@ -133,9 +133,9 @@ namespace MulticutInTrees.CountedDatastructures
         public void Insert(int index, T item, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to insert an element in a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to insert an element in a CountedList, but the counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             List.Insert(index, item);
         }
 
@@ -148,9 +148,9 @@ namespace MulticutInTrees.CountedDatastructures
         public void AddRange(IEnumerable<T> collection, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to add a range of elements to a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to add a range of elements to a CountedList, but the counter is null!");
 #endif
-            _ = counter += collection.Count();
+            counter += collection.Count();
             List.AddRange(collection);
         }
 
@@ -162,9 +162,9 @@ namespace MulticutInTrees.CountedDatastructures
         public void Clear(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to clear a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to clear a CountedList, but the counter is null!");
 #endif
-            _ = counter += List.Count;
+            counter += List.Count;
             List.Clear();
         }
 
@@ -178,15 +178,15 @@ namespace MulticutInTrees.CountedDatastructures
         public bool Contains(T item, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to check whether an element is present in a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to check whether an element is present in a CountedList, but the counter is null!");
 #endif
             if (List.Contains(item))
             {
-                _ = counter += List.IndexOf(item);
+                counter += List.IndexOf(item);
                 return true;
             }
 
-            _ = counter += List.Count;
+            counter += List.Count;
             return false;
         }
 
@@ -200,9 +200,9 @@ namespace MulticutInTrees.CountedDatastructures
         public bool Remove(T item, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to remove an element from a CountedList, but the counter is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to remove an element from a CountedList, but the counter is null!");
 #endif
-            _ = counter += List.Count;
+            counter += List.Count;
             return List.Remove(item);
         }
 

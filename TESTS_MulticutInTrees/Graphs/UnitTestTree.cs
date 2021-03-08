@@ -1,8 +1,7 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.CountedDatastructures;
@@ -14,7 +13,7 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestTree
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -111,7 +110,7 @@ namespace TESTS_MulticutInTrees.Graphs
             });
             Assert.IsInstanceOfType(a.InnerException, typeof(ArgumentNullException));
             Assert.AreEqual("node", ((ArgumentNullException)a.InnerException).ParamName);
-            
+
             a = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 Tree<TreeNode> tree = new Tree<TreeNode>();
@@ -443,13 +442,12 @@ namespace TESTS_MulticutInTrees.Graphs
             PropertyInfo nodesProperty = typeof(Tree<TreeNode>).GetProperty("InternalNodes", BindingFlags.NonPublic | BindingFlags.Instance);
             TargetInvocationException u = Assert.ThrowsException<TargetInvocationException>(() =>
             {
-                MethodInfo m = nodesProperty.GetSetMethod(true);
                 TreeNode node2 = new TreeNode(2);
                 TreeNode node3 = new TreeNode(3);
-                CountedCollection<TreeNode> collection = new CountedCollection<TreeNode>();
+                CountedCollection<TreeNode> collection = (CountedCollection<TreeNode>)nodesProperty.GetGetMethod(true).Invoke(tree, new object[] { });
+                collection.Clear(counter);
                 collection.Add(node2, counter);
                 collection.Add(node3, counter);
-                m.Invoke(tree, new object[] { collection });
                 method.Invoke(tree, new object[] { counter });
             });
             Assert.IsInstanceOfType(u.InnerException, typeof(MultipleRootsException));
@@ -523,12 +521,12 @@ namespace TESTS_MulticutInTrees.Graphs
             setParentMethod.Invoke(node3, new object[] { node2, counter });
 
             PropertyInfo nodeproperty = typeof(Tree<TreeNode>).GetProperty("InternalNodes", BindingFlags.NonPublic | BindingFlags.Instance);
-            CountedCollection<TreeNode> collection = new CountedCollection<TreeNode>();
+            CountedCollection<TreeNode> collection = (CountedCollection<TreeNode>)nodeproperty.GetGetMethod(true).Invoke(tree, new object[] { });
+            collection.Clear(counter);
             collection.Add(node0, counter);
             collection.Add(node1, counter);
             collection.Add(node2, counter);
             collection.Add(node3, counter);
-            nodeproperty.GetSetMethod(true).Invoke(tree, new object[] { collection });
 
             Assert.IsFalse(tree.IsValid());
 

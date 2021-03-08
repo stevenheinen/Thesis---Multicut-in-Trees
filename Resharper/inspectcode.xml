@@ -8,498 +8,365 @@
     </InspectionScope>
   </Information>
   <IssueTypes>
-    <IssueType Id="ArrangeModifiersOrder" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Adjust modifiers declaration order" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeModifiersOrder" />
+    <IssueType Id="ArrangeMissingParentheses" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Add parentheses to avoid non-obvious precedence" Severity="DO_NOT_SHOW" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeMissingParentheses" />
+    <IssueType Id="ArrangeRedundantParentheses" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Remove redundant parentheses" Severity="HINT" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeRedundantParentheses" />
     <IssueType Id="AssignNullToNotNullAttribute" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Possible 'null' assignment to non-nullable entity" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AssignNullToNotNullAttribute" />
-    <IssueType Id="AutoPropertyCanBeMadeGetOnly.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Global" />
-    <IssueType Id="AutoPropertyCanBeMadeGetOnly.Local" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Private accessibility" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Local" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
-    <IssueType Id="ConditionIsAlwaysTrueOrFalse" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Expression is always 'true' or always 'false'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConditionIsAlwaysTrueOrFalse" />
     <IssueType Id="ConvertClosureToMethodGroup" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert lambda expression to method group" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertClosureToMethodGroup" />
     <IssueType Id="ConvertIfStatementToConditionalTernaryExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '?:' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToConditionalTernaryExpression" />
-    <IssueType Id="ConvertIfStatementToNullCoalescingAssignment" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '??=' assignment" Severity="SUGGESTION" />
     <IssueType Id="ConvertIfStatementToNullCoalescingExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '??' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToNullCoalescingExpression" />
     <IssueType Id="InconsistentNaming" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Inconsistent Naming" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=InconsistentNaming" />
     <IssueType Id="MemberCanBePrivate.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Member can be made private" Description="Member can be made private: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=MemberCanBePrivate.Global" />
-    <IssueType Id="MemberCanBePrivate.Local" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Member can be made private" Description="Member can be made private: Private accessibility" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=MemberCanBePrivate.Local" />
     <IssueType Id="MemberCanBeProtected.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Member can be made protected" Description="Member can be made protected: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=MemberCanBeProtected.Global" />
     <IssueType Id="MultipleOrderBy" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Multiple sequential 'OrderBy' invocation" Severity="WARNING" />
-    <IssueType Id="NotResolvedInText" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Cannot resolve symbol in text argument" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=NotResolvedInText" />
     <IssueType Id="ParameterOnlyUsedForPreconditionCheck.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Parameter is only used for precondition check" Description="Parameter is only used for precondition check: Non-private accessibility" Severity="SUGGESTION" Global="True" />
     <IssueType Id="PossibleMultipleEnumeration" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible multiple enumeration" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleMultipleEnumeration" />
     <IssueType Id="PossibleNullReferenceException" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Possible 'System.NullReferenceException'" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PossibleNullReferenceException" />
     <IssueType Id="PossibleStructMemberModificationOfNonVariableStruct" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Value assigned to a property of non-variable qualifier expression can be lost" Severity="WARNING" />
-    <IssueType Id="RedundantArgumentDefaultValue" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant argument with default value" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantArgumentDefaultValue" />
     <IssueType Id="RedundantAssignment" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Assignment is not used" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantAssignment" />
-    <IssueType Id="RedundantJumpStatement" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant control flow jump statement" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantJumpStatement" />
-    <IssueType Id="RedundantStringInterpolation" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant string interpolation" Severity="SUGGESTION" />
-    <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
-    <IssueType Id="UnusedAutoPropertyAccessor.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Auto-property accessor is never used" Description="Auto-property accessor is never used: Non-private accessibility" Severity="WARNING" Global="True" />
-    <IssueType Id="UnusedAutoPropertyAccessor.Local" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Auto-property accessor is never used" Description="Auto-property accessor is never used: Private accessibility" Severity="WARNING" />
     <IssueType Id="UnusedMember.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never used" Description="Type member is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedMember.Global" />
     <IssueType Id="UnusedMemberInSuper.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never accessed via base type" Description="Type member is never accessed via base type: Non-private accessibility" Severity="SUGGESTION" Global="True" />
     <IssueType Id="UnusedMethodReturnValue.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Method return value is never used" Description="Method return value is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" />
     <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type is never used" Description="Type is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global" />
     <IssueType Id="UnusedVariable" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Unused local variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedVariable" />
-    <IssueType Id="UseMethodAny.0" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Use method Any()" Description="Use method Any(): Use method Any()" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UseMethodAny.0" />
-    <IssueType Id="UseMethodAny.2" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Use method Any()" Description="Use method Any(): Use method Any()" Severity="SUGGESTION" />
-    <IssueType Id="UseNameofExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Use 'nameof' expression to reference name" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UseNameofExpression" />
-    <IssueType Id="VariableHidesOuterVariable" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Variable in local function hides variable from outer scope" Severity="WARNING" />
     <IssueType Id="VirtualMemberCallInConstructor" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Virtual member call in constructor" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=VirtualMemberCallInConstructor" />
-    <IssueType Id="VirtualMemberNeverOverridden.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Virtual (overridable) member is never overridden" Description="Virtual (overridable) member is never overridden: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=VirtualMemberNeverOverridden.Global" />
   </IssueTypes>
   <Issues>
     <Project Name="MulticutInTrees">
-      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="981-987" Line="23" Message="Property 'ReductionRules' can be made protected" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="1765-1774" Line="43" Message="Property 'K' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="2846-2849" Line="63" Message="Accessor 'LastContractedEdges.set' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3086-3089" Line="68" Message="Accessor 'LastRemovedDemandPairs.set' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3395-3398" Line="73" Message="Accessor 'LastChangedEdgesPerDemandPair.set' can be made private" />
-      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="6192-6199" Line="119" Message="Virtual method 'Run' is never overridden" />
-      <Issue TypeId="RedundantJumpStatement" File="Algorithms\Algorithm.cs" Offset="9044-9053" Line="178" Message="Redundant control flow jump statement" />
-      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="13696-13703" Line="264" Message="Virtual method 'PrintCounters' is never overridden" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="15803-15823" Line="288" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16182-16202" Line="292" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="23232-23242" Line="411" Message="Only overrides of method 'Preprocess' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="23733-23740" Line="418" Message="Method 'CutEdge' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="24826-24838" Line="432" Message="Method 'ContractEdge' is never used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="25857-25873" Line="446" Message="Only overrides of method 'RemoveDemandPair' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="27098-27124" Line="462" Message="Only overrides of method 'ChangeEndpointOfDemandPair' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="27792-27819" Line="469" Message="Method 'ChangeEndpointOfDemandPairs' is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Local" File="Algorithms\GuoNiedermeierBranching.cs" Offset="1137-1141" Line="28" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\GuoNiedermeierBranching.cs" Offset="3773-3776" Line="79" Message="Method 'Run' is never used" />
-      <Issue TypeId="UnusedVariable" File="Algorithms\GuoNiedermeierBranching.cs" Offset="4427-4431" Line="90" Message="Local variable 'size' is never used" />
-      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="Algorithms\GuoNiedermeierBranching.cs" Offset="10805-10812" Line="203" Message="Expression is always true" />
-      <Issue TypeId="ConditionIsAlwaysTrueOrFalse" File="Algorithms\GuoNiedermeierBranching.cs" Offset="10857-10864" Line="203" Message="Expression is always false" />
-      <Issue TypeId="InconsistentNaming" File="Algorithms\GuoNiedermeierFPT.cs" Offset="854-871" Line="21" Message="Name 'GuoNiedermeierFPT' does not match rule 'Types and namespaces'. Suggested name is 'GuoNiedermeierFpt'." />
-      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\GuoNiedermeierFPT.cs" Offset="2187-2197" Line="43" Message="Virtual member call in constructor" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierFPT.cs" Offset="15552-15558" Line="246" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedType.Global" File="Algorithms\_NamespaceDocAlgorithms.cs" Offset="469-481" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedCollection.cs" Offset="2401-2411" Line="46" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedCollection.cs" Offset="2746-2756" Line="49" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="3590-3597" Line="66" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="4929-4936" Line="84" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="5718-5725" Line="99" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="5749-5765" Line="100" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="7834-7841" Line="134" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="7865-7880" Line="135" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="9125-9132" Line="155" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="9888-9895" Line="171" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="11141-11148" Line="189" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedCollection.cs" Offset="12854-12858" Line="218" Message="Method 'Remove' return value is never used" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="13208-13215" Line="224" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedCollection.cs" Offset="14225-14226" Line="244" Message="Redundant string interpolation" />
-      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="14509-14525" Line="247" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedCollection.cs" Offset="15431-15432" Line="263" Message="Redundant string interpolation" />
-      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="15713-15728" Line="266" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="17549-17556" Line="292" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="20812-20819" Line="340" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="1164-1181" Line="20" Message="Property 'Dictionary' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="1225-1229" Line="20" Message="Auto-property can be made get-only" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="2321-2328" Line="36" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="2625-2632" Line="44" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="3700-3717" Line="63" Message="Constructor 'CountedDictionary' is never used" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedDictionary.cs" Offset="3870-3871" Line="66" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedDictionary.cs" Offset="4039-4040" Line="67" Message="Redundant string interpolation" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="5741-5750" Line="96" Message="Method 'GetValues' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="6611-6616" Line="111" Message="Method 'Count' is never used" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="6832-6839" Line="116" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="7475-7481" Line="127" Message="Method 'Add' can be made private" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="7718-7725" Line="132" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="8804-8811" Line="148" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="9559-9563" Line="159" Message="Method 'Remove' return value is never used" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="9790-9797" Line="164" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="10944-10951" Line="181" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="11427-11432" Line="190" Message="Method 'Clear' is never used" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="11624-11631" Line="195" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedEnumerable.cs" Offset="1727-1737" Line="35" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedEnumerable.cs" Offset="2033-2043" Line="39" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantUsingDirective" File="CountedDatastructures\CountedEnumerator.cs" Offset="272-285" Line="3" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\CountedEnumerator.cs" Offset="938-944" Line="19" Message="Property 'OperationsCounter' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\CountedEnumerator.cs" Offset="1152-1169" Line="24" Message="Property 'Enumerator' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="CountedDatastructures\CountedEnumerator.cs" Offset="1203-1207" Line="24" Message="Auto-property can be made get-only" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedEnumerator.cs" Offset="2178-2179" Line="54" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedEnumerator.cs" Offset="2334-2335" Line="55" Message="Redundant string interpolation" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="CountedDatastructures\CountedList.cs" Offset="958-962" Line="19" Message="Auto-property can be made get-only" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="1653-1654" Line="33" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="1767-1774" Line="35" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="1938-1939" Line="41" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="2052-2059" Line="43" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="2951-2955" Line="65" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="2971-2972" Line="65" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="3118-3119" Line="66" Message="Redundant string interpolation" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="3224-3228" Line="68" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="4144-4145" Line="89" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="4254-4261" Line="91" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedList.cs" Offset="4773-4781" Line="102" Message="Method 'RemoveAt' is never used" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="4893-4894" Line="105" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="5013-5020" Line="107" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="5641-5642" Line="120" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="5739-5746" Line="122" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="6457-6458" Line="136" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="6558-6565" Line="138" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="7225-7226" Line="151" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="7332-7339" Line="153" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="7343-7353" Line="153" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="7390-7400" Line="154" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedList.cs" Offset="7778-7783" Line="162" Message="Method 'Clear' is never used" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="7884-7885" Line="165" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="7970-7977" Line="167" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedList.cs" Offset="8725-8733" Line="178" Message="Method 'Contains' is never used" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="8842-8843" Line="181" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="9018-9025" Line="185" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="9113-9120" Line="189" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedList.cs" Offset="9794-9798" Line="200" Message="Method 'Remove' return value is never used" />
-      <Issue TypeId="RedundantStringInterpolation" File="CountedDatastructures\CountedList.cs" Offset="9914-9915" Line="203" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="10017-10024" Line="205" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantUsingDirective" File="CountedDatastructures\Counter.cs" Offset="272-285" Line="3" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="CountedDatastructures\Counter.cs" Offset="287-320" Line="4" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="CountedDatastructures\Counter.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\Counter.cs" Offset="749-755" Line="17" Message="Property 'Value' can be made private" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddNeighbourToSelfException.cs" Offset="684-711" Line="15" Message="Constructor 'AddNeighbourToSelfException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddNeighbourToSelfException.cs" Offset="1484-1511" Line="34" Message="Constructor 'AddNeighbourToSelfException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddParentAsChildException.cs" Offset="682-707" Line="15" Message="Constructor 'AddParentAsChildException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddParentAsChildException.cs" Offset="1474-1499" Line="34" Message="Constructor 'AddParentAsChildException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyANeighbourException.cs" Offset="707-733" Line="15" Message="Constructor 'AlreadyANeighbourException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyANeighbourException.cs" Offset="1503-1529" Line="34" Message="Constructor 'AlreadyANeighbourException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyInGraphException.cs" Offset="703-726" Line="15" Message="Constructor 'AlreadyInGraphException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyInGraphException.cs" Offset="1487-1510" Line="34" Message="Constructor 'AlreadyInGraphException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyPresentException.cs" Offset="699-722" Line="15" Message="Constructor 'AlreadyPresentException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyPresentException.cs" Offset="1483-1506" Line="34" Message="Constructor 'AlreadyPresentException' is never used" />
-      <Issue TypeId="UnusedType.Global" File="Exceptions\IncompatibleTypesException.cs" Offset="506-532" Line="10" Message="Class 'IncompatibleTypesException' is never used" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="980-986" Line="23" Message="Property 'ReductionRules' can be made protected" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="1764-1773" Line="43" Message="Property 'K' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="2852-2855" Line="63" Message="Accessor 'LastContractedEdges.set' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3099-3102" Line="68" Message="Accessor 'LastRemovedDemandPairs.set' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3415-3418" Line="73" Message="Accessor 'LastChangedEdgesPerDemandPair.set' can be made private" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="15564-15584" Line="281" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="15943-15963" Line="285" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="22991-23001" Line="404" Message="Only overrides of method 'Preprocess' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="23492-23499" Line="411" Message="Method 'CutEdge' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="24585-24597" Line="425" Message="Method 'ContractEdge' is never used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="25616-25632" Line="439" Message="Only overrides of method 'RemoveDemandPair' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="26857-26883" Line="455" Message="Only overrides of method 'ChangeEndpointOfDemandPair' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="27551-27578" Line="462" Message="Method 'ChangeEndpointOfDemandPairs' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\GuoNiedermeierBranching.cs" Offset="3596-3599" Line="73" Message="Method 'Run' is never used" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\GuoNiedermeierFPT.cs" Offset="2214-2224" Line="43" Message="Virtual member call in constructor" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierFPT.cs" Offset="15484-15490" Line="246" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedType.Global" File="Algorithms\_NamespaceDocAlgorithms.cs" Offset="468-480" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedCollection.cs" Offset="2400-2410" Line="46" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedCollection.cs" Offset="2745-2755" Line="49" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="3585-3592" Line="66" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="4920-4930" Line="84" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="5705-5712" Line="99" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="5736-5752" Line="100" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="7813-7820" Line="134" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="7844-7859" Line="135" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="9100-9107" Line="155" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="9859-9869" Line="171" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="11108-11115" Line="189" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedCollection.cs" Offset="12764-12768" Line="214" Message="Method 'Remove' return value is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="13114-13121" Line="220" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="14414-14430" Line="243" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="CountedDatastructures\CountedCollection.cs" Offset="15613-15628" Line="262" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="17441-17448" Line="288" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedCollection.cs" Offset="20696-20706" Line="336" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="2300-2307" Line="36" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="2600-2607" Line="44" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="3674-3691" Line="63" Message="Constructor 'CountedDictionary' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="5709-5718" Line="96" Message="Method 'GetValues' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="6575-6580" Line="111" Message="Method 'Count' is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="6792-6799" Line="116" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="7435-7441" Line="127" Message="Method 'Add' can be made private" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="7674-7681" Line="132" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="8756-8763" Line="148" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="9511-9515" Line="159" Message="Method 'Remove' return value is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="9737-9744" Line="164" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="10887-10894" Line="181" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="11370-11375" Line="190" Message="Method 'Clear' is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="11563-11573" Line="195" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedEnumerable.cs" Offset="1726-1736" Line="35" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedEnumerable.cs" Offset="2032-2042" Line="39" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="1755-1762" Line="35" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="2035-2042" Line="43" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="2934-2938" Line="65" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="3205-3209" Line="68" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="4230-4237" Line="91" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedList.cs" Offset="4749-4757" Line="102" Message="Method 'RemoveAt' is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="4984-4994" Line="107" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="5705-5712" Line="122" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="6519-6526" Line="138" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="7288-7298" Line="153" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="7299-7309" Line="153" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedList.cs" Offset="7346-7356" Line="154" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedList.cs" Offset="7734-7739" Line="162" Message="Method 'Clear' is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="7921-7931" Line="167" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedList.cs" Offset="8676-8684" Line="178" Message="Method 'Contains' is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="8964-8974" Line="185" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="9055-9065" Line="189" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedList.cs" Offset="9736-9740" Line="200" Message="Method 'Remove' return value is never used" />
+      <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedList.cs" Offset="9954-9964" Line="205" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\Counter.cs" Offset="676-682" Line="13" Message="Property 'Value' can be made private" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddNeighbourToSelfException.cs" Offset="683-710" Line="15" Message="Constructor 'AddNeighbourToSelfException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddNeighbourToSelfException.cs" Offset="1483-1510" Line="34" Message="Constructor 'AddNeighbourToSelfException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddParentAsChildException.cs" Offset="681-706" Line="15" Message="Constructor 'AddParentAsChildException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AddParentAsChildException.cs" Offset="1473-1498" Line="34" Message="Constructor 'AddParentAsChildException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyANeighbourException.cs" Offset="706-732" Line="15" Message="Constructor 'AlreadyANeighbourException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyANeighbourException.cs" Offset="1502-1528" Line="34" Message="Constructor 'AlreadyANeighbourException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyInGraphException.cs" Offset="702-725" Line="15" Message="Constructor 'AlreadyInGraphException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyInGraphException.cs" Offset="1486-1509" Line="34" Message="Constructor 'AlreadyInGraphException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyPresentException.cs" Offset="698-721" Line="15" Message="Constructor 'AlreadyPresentException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\AlreadyPresentException.cs" Offset="1482-1505" Line="34" Message="Constructor 'AlreadyPresentException' is never used" />
+      <Issue TypeId="UnusedType.Global" File="Exceptions\IncompatibleTypesException.cs" Offset="505-531" Line="10" Message="Class 'IncompatibleTypesException' is never used" />
       <Issue TypeId="UnusedMember.Global" File="Exceptions\InvalidEdgeException.cs" Offset="657-677" Line="15" Message="Constructor 'InvalidEdgeException' is never used" />
       <Issue TypeId="UnusedMember.Global" File="Exceptions\InvalidEdgeException.cs" Offset="1429-1449" Line="34" Message="Constructor 'InvalidEdgeException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\MultipleRootsException.cs" Offset="680-702" Line="15" Message="Constructor 'MultipleRootsException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\MultipleRootsException.cs" Offset="1460-1482" Line="34" Message="Constructor 'MultipleRootsException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NoRootException.cs" Offset="660-675" Line="15" Message="Constructor 'NoRootException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NoRootException.cs" Offset="1436-1451" Line="34" Message="Constructor 'NoRootException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotANeighbourException.cs" Offset="690-712" Line="15" Message="Constructor 'NotANeighbourException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotANeighbourException.cs" Offset="1470-1492" Line="34" Message="Constructor 'NotANeighbourException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotInGraphException.cs" Offset="710-729" Line="15" Message="Constructor 'NotInGraphException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotInGraphException.cs" Offset="1478-1497" Line="34" Message="Constructor 'NotInGraphException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotOnDemandPathException.cs" Offset="747-771" Line="16" Message="Constructor 'NotOnDemandPathException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotOnDemandPathException.cs" Offset="1535-1559" Line="35" Message="Constructor 'NotOnDemandPathException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\ZeroLengthDemandPathException.cs" Offset="689-718" Line="16" Message="Constructor 'ZeroLengthDemandPathException' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Exceptions\ZeroLengthDemandPathException.cs" Offset="1497-1526" Line="35" Message="Constructor 'ZeroLengthDemandPathException' is never used" />
-      <Issue TypeId="UnusedType.Global" File="Exceptions\_NamespaceDocExceptions.cs" Offset="458-470" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Graphs\Graph.cs" Offset="717-718" Line="16" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Graph.cs" Offset="903-912" Line="21" Message="Property 'InternalEdges' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Graphs\Graph.cs" Offset="947-951" Line="21" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Graph.cs" Offset="1104-1113" Line="26" Message="Property 'UniqueInternalEdges' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Graphs\Graph.cs" Offset="1157-1161" Line="26" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Graph.cs" Offset="1313-1322" Line="31" Message="Property 'UniqueInternalNodes' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Graphs\Graph.cs" Offset="1361-1365" Line="31" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Graph.cs" Offset="1522-1531" Line="36" Message="Property 'InternalNodes' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Graphs\Graph.cs" Offset="1561-1565" Line="36" Message="Auto-property can be made get-only" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="9692-9697" Line="180" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="9837-9842" Line="182" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="Graphs\Graph.cs" Offset="11595-11600" Line="210" Message="The parameter directed has the same default value" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="12359-12364" Line="228" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="12523-12528" Line="230" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="13978-13983" Line="264" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="14130-14135" Line="266" Message="Possible multiple enumeration" />
-      <Issue TypeId="InconsistentNaming" File="Graphs\IGraph.cs" Offset="631-632" Line="14" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="2405-2412" Line="47" Message="Only implementations of method 'HasNode' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="3290-3297" Line="56" Message="Only implementations of method 'HasEdge' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="4207-4214" Line="64" Message="Only implementations of method 'HasEdge' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="5363-5370" Line="84" Message="Only implementations of method 'AddEdge' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="7131-7141" Line="111" Message="Only implementations of method 'RemoveEdge' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="7708-7719" Line="118" Message="Only implementations of method 'RemoveEdges' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="8257-8277" Line="125" Message="Only implementations of method 'RemoveAllEdgesOfNode' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\IGraph.cs" Offset="8692-8701" Line="132" Message="Method 'IsAcyclic' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\IGraph.cs" Offset="9100-9111" Line="139" Message="Method 'IsConnected' is never used" />
-      <Issue TypeId="RedundantUsingDirective" File="Graphs\INode.cs" Offset="321-358" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="InconsistentNaming" File="Graphs\INode.cs" Offset="640-641" Line="14" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Graphs\INode.cs" Offset="804-806" Line="19" Message="Name 'ID' does not match rule 'Properties'. Suggested name is 'Id'." />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="2103-2109" Line="36" Message="Method 'Degree' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="4267-4280" Line="61" Message="Method 'AddNeighbours' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="4954-4973" Line="70" Message="Method 'RemoveAllNeighbours' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="7083-7099" Line="90" Message="Method 'RemoveNeighbours' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Graphs\ITree.cs" Offset="605-606" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="1127-1132" Line="21" Message="Only implementations of property 'Edges' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="1135-1138" Line="21" Message="Only implementations of accessor 'Edges.get' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="2413-2419" Line="43" Message="Only implementations of method 'Height' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="2998-3005" Line="51" Message="Only implementations of method 'HasNode' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\ITree.cs" Offset="3875-3882" Line="60" Message="Method 'HasEdge' is never used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="4525-4532" Line="68" Message="Only implementations of method 'HasEdge' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="4924-4931" Line="75" Message="Only implementations of method 'AddRoot' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="5562-5570" Line="83" Message="Only implementations of method 'AddChild' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="6256-6267" Line="91" Message="Only implementations of method 'AddChildren' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="6658-6668" Line="98" Message="Only implementations of method 'RemoveNode' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\ITree.cs" Offset="7073-7084" Line="105" Message="Method 'RemoveNodes' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Graphs\ITreeNode.cs" Offset="615-616" Line="12" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\ITreeNode.cs" Offset="2629-2635" Line="41" Message="Method 'IsRoot' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\ITreeNode.cs" Offset="5503-5517" Line="81" Message="Method 'RemoveChildren' is never used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITreeNode.cs" Offset="6709-6717" Line="98" Message="Only implementations of method 'HasChild' are used" />
-      <Issue TypeId="RedundantUsingDirective" File="Graphs\Node.cs" Offset="321-358" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\Node.cs" Offset="2944-2948" Line="61" Message="Constructor 'Node' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3068-3078" Line="64" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3287-3297" Line="67" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3358-3368" Line="68" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3460-3470" Line="72" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="6475-6485" Line="124" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="6628-6638" Line="126" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="10162-10172" Line="193" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="10320-10330" Line="195" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\Node.cs" Offset="13209-13216" Line="252" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="InconsistentNaming" File="Graphs\Tree.cs" Offset="680-681" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="1999-2008" Line="36" Message="Property 'InternalEdges' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Graphs\Tree.cs" Offset="2056-2060" Line="36" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="2213-2222" Line="41" Message="Property 'InternalNodes' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Graphs\Tree.cs" Offset="2265-2269" Line="41" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="2527-2536" Line="46" Message="Property 'MockCounter' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="2677-2686" Line="51" Message="Property 'Root' can be made private" />
-      <Issue TypeId="RedundantStringInterpolation" File="Graphs\Tree.cs" Offset="3569-3570" Line="71" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\Tree.cs" Offset="3710-3717" Line="75" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="Graphs\Tree.cs" Offset="4401-4402" Line="90" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\Tree.cs" Offset="4490-4497" Line="92" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="5074-5083" Line="102" Message="Method 'SetRoot' can be made private" />
-      <Issue TypeId="RedundantStringInterpolation" File="Graphs\Tree.cs" Offset="5208-5209" Line="105" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantStringInterpolation" File="Graphs\Tree.cs" Offset="5328-5329" Line="106" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\Tree.cs" Offset="5417-5424" Line="108" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantStringInterpolation" File="Graphs\Tree.cs" Offset="6074-6075" Line="121" Message="Redundant string interpolation" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="6699-6705" Line="132" Message="Method 'NumberOfEdges' can be made private" />
-      <Issue TypeId="RedundantStringInterpolation" File="Graphs\Tree.cs" Offset="6824-6825" Line="135" Message="Redundant string interpolation" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="8236-8245" Line="158" Message="Method 'FindRoot' can be made private" />
-      <Issue TypeId="UnusedMethodReturnValue.Global" File="Graphs\Tree.cs" Offset="8246-8247" Line="158" Message="Method 'FindRoot' return value is never used" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="9669-9678" Line="182" Message="Method 'AddChildrenToParent' can be made private" />
-      <Issue TypeId="UseMethodAny.2" File="Graphs\Tree.cs" Offset="10255-10281" Line="193" Message="Use method Any()" />
-      <Issue TypeId="PossibleNullReferenceException" File="Graphs\Tree.cs" Offset="15323-15329" Line="272" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="20150-20158" Line="347" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="20440-20448" Line="350" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="23362-23367" Line="403" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="23644-23649" Line="406" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="Graphs\Tree.cs" Offset="24049-24056" Line="416" Message="Method 'IsValid' is never used" />
-      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="26622-26626" Line="482" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'node' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
-      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="26757-26761" Line="486" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'node' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
-      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="26863-26867" Line="490" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'node' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingExpression" File="Graphs\Tree.cs" Offset="27334-27336" Line="504" Message="Convert to '??' expression" />
-      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="27536-27540" Line="511" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'leaf' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
-      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="27674-27678" Line="515" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'leaf' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
-      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="27780-27784" Line="519" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'leaf' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="3236-3243" Line="55" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="4719-4726" Line="96" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="5517-5524" Line="111" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="6770-6777" Line="141" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="11013-11021" Line="213" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="11306-11314" Line="216" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="14030-14038" Line="261" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="14335-14343" Line="264" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="17573-17580" Line="322" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="21458-21468" Line="412" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="21642-21652" Line="414" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedType.Global" File="Graphs\_NamespaceDocGraphs.cs" Offset="444-456" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="UnusedType.Global" File="InstanceGeneration\ErdosRenyiGraph.cs" Offset="517-532" Line="12" Message="Class 'ErdosRenyiGraph' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\ErdosRenyiGraph.cs" Offset="1628-1649" Line="23" Message="Method 'CreateErdosRenyiGraph' is never used" />
-      <Issue TypeId="NotResolvedInText" File="InstanceGeneration\RandomDemandPairs.cs" Offset="2195-2297" Line="34" Message="Cannot resolve symbol 'Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!'" />
-      <Issue TypeId="NotResolvedInText" File="InstanceGeneration\TreeFromPruferSequence.cs" Offset="1856-1925" Line="31" Message="Cannot resolve symbol 'A tree generated with a Prüfer sequence should have at least 3 nodes!'" />
-      <Issue TypeId="MultipleOrderBy" File="InstanceGeneration\TreeFromPruferSequence.cs" Offset="2300-2307" Line="40" Message="Multiple sequential 'OrderBy' invocations are meaningless. Possibly you mean 'ThenBy' instead" />
-      <Issue TypeId="UnusedType.Global" File="InstanceGeneration\_NamespaceDocInstanceGeneration.cs" Offset="750-762" Line="10" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="MulticutProblem\DemandPair.cs" Offset="891-895" Line="20" Message="Auto-property can be made get-only" />
-      <Issue TypeId="RedundantStringInterpolation" File="MulticutProblem\MulticutInstance.cs" Offset="2753-2754" Line="53" Message="Redundant string interpolation" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutProblem\PerformanceMeasurements.cs" Offset="1335-1338" Line="29" Message="Accessor 'DemandPairsOperationsCounter.set' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutProblem\PerformanceMeasurements.cs" Offset="1335-1339" Line="29" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutProblem\PerformanceMeasurements.cs" Offset="1644-1647" Line="34" Message="Accessor 'DemandPairsPerEdgeKeysCounter.set' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutProblem\PerformanceMeasurements.cs" Offset="1644-1648" Line="34" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="MulticutProblem\PerformanceMeasurements.cs" Offset="1957-1960" Line="39" Message="Accessor 'DemandPairsPerEdgeValuesCounter.set' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="MulticutProblem\PerformanceMeasurements.cs" Offset="1957-1961" Line="39" Message="Auto-property can be made get-only" />
-      <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="747-759" Line="10" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="321-356" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="358-395" Line="6" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="424-442" Line="8" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="444-481" Line="9" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="483-534" Line="10" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="731-768" Line="16" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="934-941" Line="24" Message="Class 'Program' is never instantiated" />
-      <Issue TypeId="UnusedVariable" File="Program.cs" Offset="2069-2080" Line="45" Message="Local variable 'gnBranching' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Program.cs" Offset="2153-2158" Line="46" Message="Name 'gnFPT' does not match rule 'Local variables'. Suggested name is 'gnFpt'." />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\DominatedEdge.cs" Offset="7595-7616" Line="85" Message="Convert to method group" />
-      <Issue TypeId="RedundantJumpStatement" File="ReductionRules\DominatedEdge.cs" Offset="14458-14465" Line="236" Message="Redundant control flow jump statement" />
-      <Issue TypeId="RedundantStringInterpolation" File="ReductionRules\DominatedEdge.cs" Offset="15216-15217" Line="248" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\DominatedPath.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\DominatedPath.cs" Offset="1279-1283" Line="24" Message="Auto-property can be made get-only" />
-      <Issue TypeId="RedundantJumpStatement" File="ReductionRules\DominatedPath.cs" Offset="5354-5361" Line="67" Message="Redundant control flow jump statement" />
-      <Issue TypeId="RedundantStringInterpolation" File="ReductionRules\DominatedPath.cs" Offset="13911-13912" Line="231" Message="Redundant string interpolation" />
-      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\IdleEdge.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantJumpStatement" File="ReductionRules\IdleEdge.cs" Offset="5520-5527" Line="74" Message="Redundant control flow jump statement" />
-      <Issue TypeId="RedundantStringInterpolation" File="ReductionRules\IdleEdge.cs" Offset="11102-11103" Line="178" Message="Redundant string interpolation" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\ReductionRule.cs" Offset="1627-1636" Line="41" Message="Property 'Random' can be made private" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="ReductionRules\ReductionRule.cs" Offset="1653-1657" Line="41" Message="Auto-property accessor is never used" />
-      <Issue TypeId="VirtualMemberCallInConstructor" File="ReductionRules\ReductionRule.cs" Offset="3586-3596" Line="67" Message="Virtual member call in constructor" />
-      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\UnitPath.cs" Offset="322-340" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantJumpStatement" File="ReductionRules\UnitPath.cs" Offset="8075-8082" Line="143" Message="Redundant control flow jump statement" />
-      <Issue TypeId="RedundantStringInterpolation" File="ReductionRules\UnitPath.cs" Offset="8767-8768" Line="155" Message="Redundant string interpolation" />
-      <Issue TypeId="UnusedType.Global" File="ReductionRules\_NamespaceDocReductionRules.cs" Offset="480-492" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\BFS.cs" Offset="588-591" Line="14" Message="Name 'BFS' does not match rule 'Types and namespaces'. Suggested name is 'Bfs'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\BFS.cs" Offset="1748-1749" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="Utilities\BFS.cs" Offset="2770-2772" Line="43" Message="Convert to '??='" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="597-600" Line="15" Message="Name 'DFS' does not match rule 'Types and namespaces'. Suggested name is 'Dfs'." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DFS.cs" Offset="1456-1462" Line="26" Message="Method 'FindConnectedComponent' can be made private" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="1501-1502" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="2875-2876" Line="44" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="2878-2879" Line="44" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="4523-4524" Line="67" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="RedundantAssignment" File="Utilities\DFS.cs" Offset="5169-5180" Line="80" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="6675-6676" Line="97" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="Utilities\DFS.cs" Offset="6939-6941" Line="102" Message="Convert to '??='" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="10684-10685" Line="177" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="10834-10842" Line="180" Message="Possible multiple enumeration" />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="Utilities\DFS.cs" Offset="11208-11210" Line="184" Message="Convert to '??='" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="11330-11338" Line="188" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="12846-12858" Line="216" Message="Method 'AreConnected' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="12859-12860" Line="216" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="14679-14680" Line="237" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="16280-16297" Line="258" Message="Method 'FindAllEdgesGraph' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="16298-16299" Line="258" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="16301-16302" Line="258" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="18534-18550" Line="302" Message="Method 'FindAllEdgesTree' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="18554-18555" Line="302" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DFS.cs" Offset="20769-20770" Line="338" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedType.Global" File="Utilities\DinicMaxFlow.cs" Offset="664-676" Line="16" Message="Class 'DinicMaxFlow' is never used" />
-      <Issue TypeId="ArrangeModifiersOrder" File="Utilities\DinicMaxFlow.cs" Offset="741-764" Line="19" Message="Inconsistent modifiers declaration order" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="773-780" Line="19" Message="Name 'counter' does not match rule 'Static readonly fields (private)'. Suggested name is 'Counter'." />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DinicMaxFlow.cs" Offset="2124-2165" Line="31" Message="Method 'MaxFlowMultipleSourcesSinksUnitCapacities' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="2166-2167" Line="31" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="2169-2170" Line="31" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="2498-2505" Line="35" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="2675-2680" Line="36" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="3420-3427" Line="48" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="3429-3434" Line="48" Message="Possible multiple enumeration" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DinicMaxFlow.cs" Offset="5212-5218" Line="63" Message="Method 'MaxFlowMultipleSourcesSinks' can be made private" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="5258-5259" Line="63" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="5261-5262" Line="63" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="5627-5634" Line="67" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="5799-5804" Line="68" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6141-6148" Line="71" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6165-6170" Line="71" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6391-6398" Line="74" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6413-6418" Line="74" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7250-7257" Line="90" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7311-7316" Line="91" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7645-7652" Line="94" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7756-7761" Line="98" Message="Possible multiple enumeration" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="Utilities\DinicMaxFlow.cs" Offset="8136-8141" Line="108" Message="The parameter directed has the same default value" />
-      <Issue TypeId="RedundantArgumentDefaultValue" File="Utilities\DinicMaxFlow.cs" Offset="8617-8622" Line="118" Message="The parameter directed has the same default value" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DinicMaxFlow.cs" Offset="10093-10114" Line="143" Message="Method 'MaxFlowUnitCapacities' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="10115-10116" Line="143" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="10118-10119" Line="143" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DinicMaxFlow.cs" Offset="12737-12743" Line="175" Message="Method 'MaxFlow' can be made private" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="12763-12764" Line="175" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="12766-12767" Line="175" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="16551-16552" Line="237" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="16554-16555" Line="237" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="19694-19695" Line="287" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\DinicMaxFlow.cs" Offset="19697-19698" Line="287" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ArrangeModifiersOrder" File="Utilities\EdmondsMatching.cs" Offset="757-780" Line="19" Message="Inconsistent modifiers declaration order" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="789-796" Line="19" Message="Name 'counter' does not match rule 'Static readonly fields (private)'. Suggested name is 'Counter'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="1624-1625" Line="29" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="1627-1628" Line="29" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\EdmondsMatching.cs" Offset="2945-2965" Line="47" Message="Method 'HasMatchingOfAtLeast' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="2966-2967" Line="47" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="2969-2970" Line="47" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="4448-4449" Line="65" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="4451-4452" Line="65" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="6470-6471" Line="91" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="6473-6474" Line="91" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="8162-8163" Line="120" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="9881-9882" Line="148" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="9884-9885" Line="148" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="12692-12693" Line="200" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="12695-12696" Line="200" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\EdmondsMatching.cs" Offset="14252-14273" Line="238" Message="Convert to method group" />
-      <Issue TypeId="UnusedVariable" File="Utilities\EdmondsMatching.cs" Offset="14656-14657" Line="248" Message="Local variable 'D' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="14656-14657" Line="248" Message="Name 'D' does not match rule 'Local variables'. Suggested name is 'd'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="16931-16932" Line="272" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\EdmondsMatching.cs" Offset="19130-19138" Line="306" Message="Convert to method group" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="20994-20995" Line="327" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="Utilities\EdmondsMatching.cs" Offset="21510-21512" Line="333" Message="Convert to '??='" />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="Utilities\EdmondsMatching.cs" Offset="21624-21626" Line="337" Message="Convert to '??='" />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingAssignment" File="Utilities\EdmondsMatching.cs" Offset="21754-21756" Line="341" Message="Convert to '??='" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="22282-22289" Line="352" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="22558-22565" Line="356" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="22895-22902" Line="360" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="23203-23210" Line="364" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="23482-23483" Line="370" Message="Name 'D' does not match rule 'Local variables'. Suggested name is 'd'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="25208-25209" Line="388" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\EdmondsMatching.cs" Offset="27031-27050" Line="401" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\EdmondsMatching.cs" Offset="27202-27219" Line="405" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="28770-28771" Line="432" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="28773-28774" Line="432" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="32464-32465" Line="494" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="32467-32468" Line="494" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="35663-35664" Line="539" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Utilities\EdmondsMatching.cs" Offset="36602-36604" Line="551" Message="Convert to '?:' expression" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="38711-38712" Line="584" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="38714-38715" Line="584" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="39927-39934" Line="593" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="40047-40054" Line="594" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="VariableHidesOuterVariable" File="Utilities\EdmondsMatching.cs" Offset="40233-40234" Line="597" Message="Parameter 'n' hides outer parameter with the same name" />
-      <Issue TypeId="VariableHidesOuterVariable" File="Utilities\EdmondsMatching.cs" Offset="40278-40279" Line="597" Message="Parameter 'n' hides outer parameter with the same name" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="40388-40395" Line="599" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="40627-40640" Line="602" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="40893-40905" Line="605" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="41118-41131" Line="613" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="41321-41333" Line="615" Message="Possible multiple enumeration" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\EdmondsMatching.cs" Offset="42234-42235" Line="627" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedType.Global" File="Utilities\FisherYates.cs" Offset="499-510" Line="11" Message="Class 'FisherYates' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\FisherYates.cs" Offset="1271-1278" Line="21" Message="Method 'Shuffle' is never used" />
-      <Issue TypeId="UnusedType.Global" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="841-873" Line="18" Message="Class 'MaximumMultiCommodityFlowInTrees' is never used" />
-      <Issue TypeId="ArrangeModifiersOrder" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="1066-1089" Line="23" Message="Inconsistent modifiers declaration order" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2339-2371" Line="35" Message="Method 'ComputeMaximumMultiCommodityFlow' is never used" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2375-2376" Line="35" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2685-2696" Line="39" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3227-3238" Line="43" Message="Possible multiple enumeration" />
-      <Issue TypeId="UseMethodAny.0" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3843-3865" Line="51" Message="Use method Any()" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5709-5710" Line="77" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8364-8365" Line="112" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9310-9311" Line="130" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="10972-10973" Line="153" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="11398-11406" Line="157" Message="Convert to method group" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14887-14888" Line="202" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17899-17900" Line="253" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="19772-19773" Line="281" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="21817-21818" Line="308" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24745-24746" Line="351" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="MemberCanBePrivate.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24994-24997" Line="356" Message="Accessor 'OriginalCommodity.set' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24994-24998" Line="356" Message="Auto-property can be made get-only" />
-      <Issue TypeId="MemberCanBePrivate.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25545-25548" Line="371" Message="Accessor 'Path.set' can be made private" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25545-25549" Line="371" Message="Auto-property can be made get-only" />
-      <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Global" File="Utilities\Utils.cs" Offset="1454-1463" Line="24" Message="Parameter 'parameter' is only used for precondition check(s)" />
-      <Issue TypeId="UseNameofExpression" File="Utilities\Utils.cs" Offset="1617-1628" Line="28" Message="Use 'nameof' expression to reference parameter 'paramName' name" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\Utils.cs" Offset="3009-3010" Line="49" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Utils.cs" Offset="3404-3414" Line="55" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Utils.cs" Offset="3420-3430" Line="55" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4484-4490" Line="73" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4638-4647" Line="74" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4801-4807" Line="76" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4818-4827" Line="76" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4948-4957" Line="81" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4980-4986" Line="82" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="5891-5895" Line="97" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="6085-6089" Line="100" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="6146-6150" Line="101" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="6282-6286" Line="106" Message="Possible multiple enumeration" />
-      <Issue TypeId="UseMethodAny.2" File="Utilities\Utils.cs" Offset="6282-6299" Line="106" Message="Use method Any()" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\Utils.cs" Offset="7234-7235" Line="125" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7333-7337" Line="128" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7467-7471" Line="130" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7546-7550" Line="132" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7609-7613" Line="134" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7640-7644" Line="134" Message="Possible multiple enumeration" />
-      <Issue TypeId="InconsistentNaming" File="Utilities\Utils.cs" Offset="8715-8716" Line="151" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8809-8813" Line="154" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="9000-9004" Line="157" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="9067-9071" Line="159" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="9086-9090" Line="159" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="10248-10263" Line="174" Message="Method 'PickRandomWhere' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10384-10388" Line="177" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10884-10888" Line="181" Message="Possible multiple enumeration" />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Utils.cs" Offset="10900-10909" Line="181" Message="Convert to method group" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\Utils.cs" Offset="11667-11673" Line="192" Message="Method 'PickRandom' can be made private" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="11789-11793" Line="195" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12068-12072" Line="198" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12095-12099" Line="198" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedType.Global" File="Utilities\_NamespaceDocUtilities.cs" Offset="466-478" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="UnusedType.Global" File="_NamespaceDocMain.cs" Offset="506-518" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\MultipleRootsException.cs" Offset="679-701" Line="15" Message="Constructor 'MultipleRootsException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\MultipleRootsException.cs" Offset="1459-1481" Line="34" Message="Constructor 'MultipleRootsException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NoRootException.cs" Offset="659-674" Line="15" Message="Constructor 'NoRootException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NoRootException.cs" Offset="1435-1450" Line="34" Message="Constructor 'NoRootException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotANeighbourException.cs" Offset="689-711" Line="15" Message="Constructor 'NotANeighbourException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotANeighbourException.cs" Offset="1469-1491" Line="34" Message="Constructor 'NotANeighbourException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotInGraphException.cs" Offset="709-728" Line="15" Message="Constructor 'NotInGraphException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotInGraphException.cs" Offset="1477-1496" Line="34" Message="Constructor 'NotInGraphException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotOnDemandPathException.cs" Offset="746-770" Line="16" Message="Constructor 'NotOnDemandPathException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\NotOnDemandPathException.cs" Offset="1534-1558" Line="35" Message="Constructor 'NotOnDemandPathException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\ZeroLengthDemandPathException.cs" Offset="688-717" Line="16" Message="Constructor 'ZeroLengthDemandPathException' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Exceptions\ZeroLengthDemandPathException.cs" Offset="1496-1525" Line="35" Message="Constructor 'ZeroLengthDemandPathException' is never used" />
+      <Issue TypeId="UnusedType.Global" File="Exceptions\_NamespaceDocExceptions.cs" Offset="457-469" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Graphs\Graph.cs" Offset="678-679" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="13246-13251" Line="217" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="13525-13530" Line="220" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="16307-16312" Line="267" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="16605-16610" Line="270" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="18269-18274" Line="304" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Graph.cs" Offset="18551-18556" Line="307" Message="Possible multiple enumeration" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Graphs\Graph.cs" Offset="22485-22486" Line="373" Message="Redundant parentheses" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Graphs\Graph.cs" Offset="22529-22530" Line="373" Message="Redundant parentheses" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Graphs\IGraph.cs" Offset="591-592" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="3473-3480" Line="55" Message="Only implementations of method 'HasNode' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="4478-4485" Line="65" Message="Only implementations of method 'HasEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="5515-5522" Line="74" Message="Only implementations of method 'HasEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="7031-7038" Line="97" Message="Only implementations of method 'AddEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="9279-9289" Line="128" Message="Only implementations of method 'RemoveEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="9976-9987" Line="136" Message="Only implementations of method 'RemoveEdges' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\IGraph.cs" Offset="10645-10665" Line="144" Message="Only implementations of method 'RemoveAllEdgesOfNode' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\IGraph.cs" Offset="11097-11106" Line="151" Message="Method 'IsAcyclic' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\IGraph.cs" Offset="11505-11516" Line="158" Message="Method 'IsConnected' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Graphs\INode.cs" Offset="601-602" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="4957-4970" Line="64" Message="Method 'AddNeighbours' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="5764-5783" Line="74" Message="Method 'RemoveAllNeighbours' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\INode.cs" Offset="8133-8149" Line="96" Message="Method 'RemoveNeighbours' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Graphs\ITree.cs" Offset="605-606" Line="13" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="1355-1360" Line="23" Message="Only implementations of method 'Edges' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="2887-2893" Line="47" Message="Only implementations of method 'Height' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="3472-3479" Line="55" Message="Only implementations of method 'HasNode' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\ITree.cs" Offset="4349-4356" Line="64" Message="Method 'HasEdge' is never used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="4999-5006" Line="72" Message="Only implementations of method 'HasEdge' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="5398-5405" Line="79" Message="Only implementations of method 'AddRoot' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="6036-6044" Line="87" Message="Only implementations of method 'AddChild' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="6730-6741" Line="95" Message="Only implementations of method 'AddChildren' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="7132-7142" Line="102" Message="Only implementations of method 'RemoveNode' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\ITree.cs" Offset="7547-7558" Line="109" Message="Method 'RemoveNodes' is never used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITree.cs" Offset="8399-8412" Line="123" Message="Only implementations of method 'NumberOfEdges' are used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Graphs\ITreeNode.cs" Offset="615-616" Line="12" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\ITreeNode.cs" Offset="3202-3208" Line="45" Message="Method 'IsRoot' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\ITreeNode.cs" Offset="6076-6090" Line="85" Message="Method 'RemoveChildren' is never used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Graphs\ITreeNode.cs" Offset="7282-7290" Line="102" Message="Only implementations of method 'HasChild' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\Node.cs" Offset="2946-2950" Line="61" Message="Constructor 'Node' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3098-3108" Line="64" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3453-3463" Line="67" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="3564-3574" Line="71" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="6973-6983" Line="125" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="7257-7267" Line="128" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="11578-11588" Line="201" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Node.cs" Offset="11872-11882" Line="204" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Graphs\Tree.cs" Offset="679-680" Line="15" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantAssignment" File="Graphs\Tree.cs" Offset="4957-4964" Line="94" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="Graphs\Tree.cs" Offset="5736-5743" Line="111" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="6320-6329" Line="121" Message="Method 'SetRoot' can be made private" />
+      <Issue TypeId="RedundantAssignment" File="Graphs\Tree.cs" Offset="6661-6668" Line="127" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="9478-9487" Line="177" Message="Method 'FindRoot' can be made private" />
+      <Issue TypeId="UnusedMethodReturnValue.Global" File="Graphs\Tree.cs" Offset="9488-9489" Line="177" Message="Method 'FindRoot' return value is never used" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\Tree.cs" Offset="10911-10920" Line="201" Message="Method 'AddChildrenToParent' can be made private" />
+      <Issue TypeId="PossibleNullReferenceException" File="Graphs\Tree.cs" Offset="16585-16591" Line="291" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="21412-21420" Line="366" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="21702-21710" Line="369" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="24632-24637" Line="422" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\Tree.cs" Offset="24914-24919" Line="425" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\Tree.cs" Offset="25319-25326" Line="435" Message="Method 'IsValid' is never used" />
+      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="27906-27910" Line="501" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'node' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
+      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="28041-28045" Line="505" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'node' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
+      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="28147-28151" Line="509" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'node' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingExpression" File="Graphs\Tree.cs" Offset="28618-28620" Line="523" Message="Convert to '??' expression" />
+      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="28833-28837" Line="530" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'leaf' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
+      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="28971-28975" Line="534" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'leaf' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
+      <Issue TypeId="PossibleStructMemberModificationOfNonVariableStruct" File="Graphs\Tree.cs" Offset="29077-29081" Line="538" Message="Assigned value can be lost if generic type parameter will be substituted with struct type. Foreach iteration variable 'leaf' is immutable. Struct member modifications require accessed struct to be classified as a variable" />
+      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="2647-2654" Line="63" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="6397-6404" Line="122" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="8523-8530" Line="167" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="12766-12774" Line="239" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="13059-13067" Line="242" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="15782-15790" Line="287" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="16087-16095" Line="290" Message="Possible multiple enumeration" />
+      <Issue TypeId="RedundantAssignment" File="Graphs\TreeNode.cs" Offset="19325-19332" Line="348" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="24224-24234" Line="448" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="24543-24553" Line="451" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedType.Global" File="Graphs\_NamespaceDocGraphs.cs" Offset="443-455" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="UnusedType.Global" File="InstanceGeneration\ErdosRenyiGraph.cs" Offset="562-577" Line="13" Message="Class 'ErdosRenyiGraph' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\ErdosRenyiGraph.cs" Offset="1745-1766" Line="26" Message="Method 'CreateErdosRenyiGraph' is never used" />
+      <Issue TypeId="MultipleOrderBy" File="InstanceGeneration\TreeFromPruferSequence.cs" Offset="2322-2329" Line="40" Message="Multiple sequential 'OrderBy' invocations are meaningless. Possibly you mean 'ThenBy' instead" />
+      <Issue TypeId="UnusedType.Global" File="InstanceGeneration\_NamespaceDocInstanceGeneration.cs" Offset="749-761" Line="10" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="746-758" Line="10" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="707-714" Line="18" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="UnusedVariable" File="Program.cs" Offset="1774-1785" Line="39" Message="Local variable 'gnBranching' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Program.cs" Offset="1858-1863" Line="40" Message="Name 'gnFPT' does not match rule 'Local variables'. Suggested name is 'gnFpt'." />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\DominatedEdge.cs" Offset="7132-7153" Line="82" Message="Convert to method group" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="ReductionRules\ReductionRule.cs" Offset="3074-3084" Line="58" Message="Virtual member call in constructor" />
+      <Issue TypeId="UnusedType.Global" File="ReductionRules\_NamespaceDocReductionRules.cs" Offset="479-491" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\BFS.cs" Offset="1747-1748" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DFS.cs" Offset="1455-1461" Line="26" Message="Method 'FindConnectedComponent' can be made private" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="1500-1501" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="2874-2875" Line="44" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="2877-2878" Line="44" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="4555-4556" Line="67" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="RedundantAssignment" File="Utilities\DFS.cs" Offset="5208-5219" Line="79" Message="Value assigned is not used in any execution path" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="6714-6715" Line="96" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="10660-10661" Line="173" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="10810-10818" Line="176" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="11243-11251" Line="181" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="12759-12771" Line="209" Message="Method 'AreConnected' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="12772-12773" Line="209" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="14592-14593" Line="230" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="16193-16210" Line="251" Message="Method 'FindAllEdgesGraph' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="16211-16212" Line="251" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="16214-16215" Line="251" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="18482-18498" Line="295" Message="Method 'FindAllEdgesTree' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="18502-18503" Line="295" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="20730-20731" Line="331" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedType.Global" File="Utilities\DinicMaxFlow.cs" Offset="624-636" Line="15" Message="Class 'DinicMaxFlow' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DinicMaxFlow.cs" Offset="2088-2129" Line="30" Message="Method 'MaxFlowMultipleSourcesSinksUnitCapacities' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="2130-2131" Line="30" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="2133-2134" Line="30" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="2462-2469" Line="34" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="2639-2644" Line="35" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="3390-3397" Line="47" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="3399-3404" Line="47" Message="Possible multiple enumeration" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DinicMaxFlow.cs" Offset="5182-5188" Line="62" Message="Method 'MaxFlowMultipleSourcesSinks' can be made private" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="5228-5229" Line="62" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="5231-5232" Line="62" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="5597-5604" Line="66" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="5769-5774" Line="67" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6111-6118" Line="70" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6135-6140" Line="70" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6361-6368" Line="73" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="6383-6388" Line="73" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7239-7246" Line="89" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7300-7305" Line="90" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7621-7628" Line="93" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DinicMaxFlow.cs" Offset="7732-7737" Line="97" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DinicMaxFlow.cs" Offset="10133-10154" Line="142" Message="Method 'MaxFlowUnitCapacities' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="10155-10156" Line="142" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="10158-10159" Line="142" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DinicMaxFlow.cs" Offset="12783-12789" Line="174" Message="Method 'MaxFlow' can be made private" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="12809-12810" Line="174" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="12812-12813" Line="174" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="16587-16588" Line="236" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="16590-16591" Line="236" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="19747-19748" Line="286" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="19750-19751" Line="286" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="1627-1628" Line="29" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="1630-1631" Line="29" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\EdmondsMatching.cs" Offset="2948-2968" Line="47" Message="Method 'HasMatchingOfAtLeast' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="2969-2970" Line="47" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="2972-2973" Line="47" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="4451-4452" Line="65" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="4454-4455" Line="65" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="6473-6474" Line="91" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="6476-6477" Line="91" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="8165-8166" Line="120" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="9884-9885" Line="148" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="9887-9888" Line="148" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="12725-12726" Line="200" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="12728-12729" Line="200" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\EdmondsMatching.cs" Offset="14346-14367" Line="238" Message="Convert to method group" />
+      <Issue TypeId="UnusedVariable" File="Utilities\EdmondsMatching.cs" Offset="14750-14751" Line="248" Message="Local variable 'D' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="14750-14751" Line="248" Message="Name 'D' does not match rule 'Local variables'. Suggested name is 'd'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="17025-17026" Line="272" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\EdmondsMatching.cs" Offset="19232-19240" Line="306" Message="Convert to method group" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="21096-21097" Line="327" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="22167-22174" Line="343" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="22443-22450" Line="347" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="22780-22787" Line="351" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="23088-23095" Line="355" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="23367-23368" Line="361" Message="Name 'D' does not match rule 'Local variables'. Suggested name is 'd'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="25119-25120" Line="379" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\EdmondsMatching.cs" Offset="26942-26961" Line="392" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\EdmondsMatching.cs" Offset="27113-27130" Line="396" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="28681-28682" Line="423" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="28684-28685" Line="423" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="29639-29642" Line="437" Message="Non-obvious precedence" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="32457-32458" Line="485" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="32460-32461" Line="485" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="35656-35657" Line="530" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Utilities\EdmondsMatching.cs" Offset="36608-36610" Line="542" Message="Convert to '?:' expression" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="38725-38726" Line="575" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="38728-38729" Line="575" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="39941-39948" Line="584" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="40061-40068" Line="585" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="40415-40422" Line="590" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="40654-40667" Line="593" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="40924-40936" Line="596" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="41149-41162" Line="604" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\EdmondsMatching.cs" Offset="41356-41368" Line="606" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="42269-42270" Line="618" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedType.Global" File="Utilities\FisherYates.cs" Offset="498-509" Line="11" Message="Class 'FisherYates' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\FisherYates.cs" Offset="1270-1277" Line="21" Message="Method 'Shuffle' is never used" />
+      <Issue TypeId="UnusedType.Global" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="840-872" Line="18" Message="Class 'MaximumMultiCommodityFlowInTrees' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2338-2370" Line="35" Message="Method 'ComputeMaximumMultiCommodityFlow' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2374-2375" Line="35" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2684-2695" Line="39" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3226-3237" Line="43" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5734-5735" Line="77" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8445-8446" Line="112" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9391-9392" Line="130" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="11053-11054" Line="153" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="11515-11523" Line="157" Message="Convert to method group" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="15004-15005" Line="202" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="18042-18043" Line="253" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="19915-19916" Line="281" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="21960-21961" Line="308" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24924-24925" Line="351" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Global" File="Utilities\Utils.cs" Offset="1453-1462" Line="24" Message="Parameter 'parameter' is only used for precondition check(s)" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\Utils.cs" Offset="3014-3015" Line="49" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Utils.cs" Offset="3409-3419" Line="55" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Utils.cs" Offset="3425-3435" Line="55" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4489-4495" Line="73" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4643-4652" Line="74" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4806-4812" Line="76" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4823-4832" Line="76" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4953-4962" Line="81" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="4985-4991" Line="82" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="5896-5900" Line="97" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="6090-6094" Line="100" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="6151-6155" Line="101" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="6288-6292" Line="106" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\Utils.cs" Offset="7233-7234" Line="125" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7332-7336" Line="128" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7466-7470" Line="130" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7545-7549" Line="132" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7608-7612" Line="134" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7639-7643" Line="134" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\Utils.cs" Offset="8714-8715" Line="151" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8808-8812" Line="154" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8999-9003" Line="157" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="9066-9070" Line="159" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="9085-9089" Line="159" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="10247-10262" Line="174" Message="Method 'PickRandomWhere' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10383-10387" Line="177" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10883-10887" Line="181" Message="Possible multiple enumeration" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Utils.cs" Offset="10899-10908" Line="181" Message="Convert to method group" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\Utils.cs" Offset="11666-11672" Line="192" Message="Method 'PickRandom' can be made private" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="11788-11792" Line="195" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12067-12071" Line="198" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12094-12098" Line="198" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedType.Global" File="Utilities\_NamespaceDocUtilities.cs" Offset="465-477" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="UnusedType.Global" File="_NamespaceDocMain.cs" Offset="505-517" Line="8" Message="Class 'NamespaceDoc' is never used" />
     </Project>
   </Issues>
 </Report>

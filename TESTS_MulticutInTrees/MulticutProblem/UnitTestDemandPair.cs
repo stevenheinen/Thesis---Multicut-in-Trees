@@ -1,22 +1,19 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Reflection;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Utilities
 {
     [TestClass]
     public class UnitTestDemandPair
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -71,7 +68,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             t = Assert.ThrowsException<TargetInvocationException>(() => { updateEndpointsAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node1, node0), null }); });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             MethodInfo updateEdgesOnPathAfterEdgeContraction = typeof(DemandPair).GetMethod("UpdateEdgesOnPathAfterEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
             t = Assert.ThrowsException<TargetInvocationException>(() => { updateEdgesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(null, node0), node1, counter }); });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
@@ -81,7 +78,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             t = Assert.ThrowsException<TargetInvocationException>(() => { updateEdgesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node1, node0), null, counter }); });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() => { updateEdgesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node1, node0), node1, null }); });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
         }

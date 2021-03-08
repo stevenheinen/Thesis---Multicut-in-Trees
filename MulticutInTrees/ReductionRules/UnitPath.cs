@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.Algorithms;
@@ -130,15 +130,13 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-
             return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
         protected override void Preprocess()
         {
-            return;
+            
         }
 
         /// <summary>
@@ -150,14 +148,18 @@ namespace MulticutInTrees.ReductionRules
         private bool TryCutEdges(CountedList<(TreeNode, TreeNode)> edgesToBeCut)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), $"Trying to cut edges, but the Hashset with edges is null!");
+            Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), "Trying to cut edges, but the Hashset with edges is null!");
 #endif
             if (edgesToBeCut.Count(Measurements.TreeOperationsCounter) == 0)
             {
+                Measurements.TimeSpentCheckingApplicability.Stop();
                 return false;
             }
 
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentModifyingInstance.Start();
             Algorithm.CutEdges(edgesToBeCut, Measurements);
+            Measurements.TimeSpentModifyingInstance.Stop();
             return true;
         }
     }

@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
@@ -31,7 +31,7 @@ namespace MulticutInTrees.InstanceGeneration
             Utils.NullCheck(random, nameof(random), "Trying to generate random demand pairs in a tree, but the random is null!");
             if (numberOfDemandPairs < 0)
             {
-                throw new ArgumentOutOfRangeException("Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
+                throw new ArgumentOutOfRangeException(nameof(numberOfDemandPairs), "Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
             }
 #endif
             Counter counter = new Counter();

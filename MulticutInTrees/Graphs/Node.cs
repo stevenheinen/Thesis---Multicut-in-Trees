@@ -30,7 +30,7 @@ namespace MulticutInTrees.Graphs
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not impact performance.
         /// </summary>
-        private Counter MockCounter { get; set; }
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for a <see cref="Node"/>.

@@ -1,23 +1,21 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
-using MulticutInTrees.Exceptions;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Algorithms
 {
     [TestClass]
     public class UnitTestGuoNiedermeierFPT
     {
-        private readonly static PerformanceMeasurements measurements = new PerformanceMeasurements(nameof(UnitTestGuoNiedermeierFPT));
-        private readonly static Counter counter = new Counter();
+        private static readonly PerformanceMeasurements measurements = new PerformanceMeasurements(nameof(UnitTestGuoNiedermeierFPT));
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -121,7 +119,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(node3, node4);
             DemandPair dp2 = new DemandPair(node5, node2);
             DemandPair dp3 = new DemandPair(node5, node4);
-            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>(){ dp1, dp2, dp3 }, counter);
+            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
@@ -228,7 +226,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
             gnfpt.CutEdges(new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node0, node1), (node5, node2) }, counter), measurements);
-            
+
             PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.AreEqual(0, ((CountedList<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count(counter));
         }
@@ -350,7 +348,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
             GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            gnfpt.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, TreeNode, TreeNode)>(new List<(DemandPair, TreeNode, TreeNode)>(){ (dp3, node5, node2), (dp1, node4, node0) }, counter), measurements);
+            gnfpt.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, TreeNode, TreeNode)>(new List<(DemandPair, TreeNode, TreeNode)>() { (dp3, node5, node2), (dp1, node4, node0) }, counter), measurements);
             Assert.AreEqual(3, dp3.LengthOfPath(counter));
             Assert.AreEqual(1, dp1.LengthOfPath(counter));
         }

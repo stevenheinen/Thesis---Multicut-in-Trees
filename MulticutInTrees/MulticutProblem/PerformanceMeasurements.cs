@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text;
 using MulticutInTrees.CountedDatastructures;
@@ -26,17 +26,17 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// <see cref="Counter"/> for the number of operations on the <see cref="DemandPair"/>s in the instance.
         /// </summary>
-        public Counter DemandPairsOperationsCounter { get; set; }
+        public Counter DemandPairsOperationsCounter { get; }
 
         /// <summary>
         /// <see cref="Counter"/> for the number of operations on the keys of the <see cref="CountedDictionary{TKey, TValue}"/> with information about the <see cref="DemandPair"/>s per edge.
         /// </summary>
-        public Counter DemandPairsPerEdgeKeysCounter { get; set; }
+        public Counter DemandPairsPerEdgeKeysCounter { get; }
 
         /// <summary>
         /// <see cref="Counter"/> for the number of operations on the values of the <see cref="CountedDictionary{TKey, TValue}"/> with information about the <see cref="DemandPair"/>s per edge.
         /// </summary>
-        public Counter DemandPairsPerEdgeValuesCounter { get; set; }
+        public Counter DemandPairsPerEdgeValuesCounter { get; }
 
         /// <summary>
         /// <see cref="Counter"/> for the total number of edges contracted by the owner of this <see cref="PerformanceMeasurements"/>.

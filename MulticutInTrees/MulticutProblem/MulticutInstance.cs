@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
@@ -42,7 +42,7 @@ namespace MulticutInTrees.MulticutProblem
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");
             if (k <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(k), $"Trying to create a multicut instance, but the maximum amount of edges that can be removed is smaller than or equal to zero!");
+                throw new ArgumentOutOfRangeException(nameof(k), "Trying to create a multicut instance, but the maximum amount of edges that can be removed is smaller than or equal to zero!");
             }
 #endif
             Tree = tree;

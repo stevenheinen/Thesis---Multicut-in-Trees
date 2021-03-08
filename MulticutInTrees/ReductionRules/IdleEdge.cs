@@ -1,13 +1,12 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
-using MulticutInTrees.Utilities;
 using MulticutInTrees.MulticutProblem;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.ReductionRules
 {
@@ -40,7 +39,6 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the IdleEdge rule, but the algorithm it is part of is null!");
             Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the IdleEdge rule, but the dictionary with demand paths per edge is null!");
 #endif
-            //DemandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(demandPairsPerEdge);
             DemandPairsPerEdge = demandPairsPerEdge;
         }
 
@@ -63,13 +61,13 @@ namespace MulticutInTrees.ReductionRules
             {
                 return true;
             }
-            return false; 
+            return false;
         }
 
         /// <inheritdoc/>
         protected override void Preprocess()
         {
-            return;
+
         }
 
         /// <inheritdoc/>
@@ -121,7 +119,7 @@ namespace MulticutInTrees.ReductionRules
             HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair demandPair in removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
                 {
                     if (CanEdgeBeContracted(edge))
                     {
@@ -159,8 +157,6 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-
             return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
@@ -173,14 +169,18 @@ namespace MulticutInTrees.ReductionRules
         private bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), $"Trying to contract edges, but the List with edges is null!");
+            Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), "Trying to contract edges, but the List with edges is null!");
 #endif            
             if (edgesToBeContracted.Count(Measurements.TreeOperationsCounter) == 0)
             {
+                Measurements.TimeSpentCheckingApplicability.Stop();
                 return false;
             }
 
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentModifyingInstance.Start();
             Algorithm.ContractEdges(edgesToBeContracted, Measurements);
+            Measurements.TimeSpentModifyingInstance.Stop();
             return true;
         }
     }

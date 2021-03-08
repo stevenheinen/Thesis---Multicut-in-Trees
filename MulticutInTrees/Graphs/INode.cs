@@ -16,7 +16,7 @@ namespace MulticutInTrees.Graphs
         /// The unique identifier of this <see cref="INode{N}"/>.
         /// </summary>
         public uint ID { get; }
-       
+
         /// <summary>
         /// The <see cref="NodeType"/> of this <see cref="INode{N}"/>.
         /// </summary>

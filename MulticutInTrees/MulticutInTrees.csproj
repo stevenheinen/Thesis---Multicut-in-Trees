@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>MulticutInTrees</RootNamespace>
     <StartupObject>MulticutInTrees.Program</StartupObject>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DefaultDocumentationFolder>Documentation</DefaultDocumentationFolder>
     <DefaultDocumentationInvalidCharReplacement>_</DefaultDocumentationInvalidCharReplacement>

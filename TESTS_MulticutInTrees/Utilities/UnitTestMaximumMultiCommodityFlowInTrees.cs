@@ -1,9 +1,7 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.CountedDatastructures;
@@ -17,8 +15,8 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestMaximumMultiCommodityFlowInTrees
     {
-        private readonly static Counter counter = new Counter();
-        private readonly static PerformanceMeasurements measurements = new PerformanceMeasurements(nameof(UnitTestMaximumMultiCommodityFlowInTrees));
+        private static readonly Counter counter = new Counter();
+        private static readonly PerformanceMeasurements measurements = new PerformanceMeasurements(nameof(UnitTestMaximumMultiCommodityFlowInTrees));
 
         [TestMethod]
         public void TestCase1()

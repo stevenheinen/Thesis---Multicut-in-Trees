@@ -1,14 +1,11 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MulticutInTrees;
 using MulticutInTrees.CountedDatastructures;
-using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.Utilities;
@@ -18,7 +15,7 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestEdmondsMatching
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestArgumentNull()
@@ -829,7 +826,7 @@ namespace TESTS_MulticutInTrees.Utilities
             MethodInfo method = typeof(EdmondsMatching).GetMethod("AugmentMatchingAlongPath", BindingFlags.NonPublic | BindingFlags.Static);
             method = method.MakeGenericMethod(new Type[1] { typeof(Node) });
 
-            TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { emptyMatching, notAugmentingPath}));
+            TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { emptyMatching, notAugmentingPath }));
             Assert.IsInstanceOfType(t.InnerException, typeof(InvalidOperationException));
 
             List<(Node, Node)> augmentingPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5), (node5, node6), (node6, node7) };

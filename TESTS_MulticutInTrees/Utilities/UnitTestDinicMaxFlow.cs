@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,7 +13,7 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestDinicMaxFlow
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestArgumentNull()
@@ -49,19 +49,19 @@ namespace TESTS_MulticutInTrees.Utilities
                 methodFindLevels.Invoke(null, new object[4] { g, n, c, null });
             });
             Assert.IsInstanceOfType(t1.InnerException, typeof(ArgumentNullException));
-            
+
             TargetInvocationException t2 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodFindLevels.Invoke(null, new object[4] { g, n, null, c });
             });
             Assert.IsInstanceOfType(t2.InnerException, typeof(ArgumentNullException));
-            
+
             TargetInvocationException t3 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodFindLevels.Invoke(null, new object[4] { g, null, c, c });
             });
             Assert.IsInstanceOfType(t3.InnerException, typeof(ArgumentNullException));
-            
+
             TargetInvocationException t4 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodFindLevels.Invoke(null, new object[4] { null, n, c, c });
@@ -77,31 +77,31 @@ namespace TESTS_MulticutInTrees.Utilities
                 methodSendFlow.Invoke(null, new object[7] { g, n, n, 0, c, c, null });
             });
             Assert.IsInstanceOfType(t5.InnerException, typeof(ArgumentNullException));
-           
+
             TargetInvocationException t6 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodSendFlow.Invoke(null, new object[7] { g, n, n, 0, c, null, l });
             });
             Assert.IsInstanceOfType(t6.InnerException, typeof(ArgumentNullException));
-            
+
             TargetInvocationException t7 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodSendFlow.Invoke(null, new object[7] { g, n, n, 0, null, c, l });
             });
             Assert.IsInstanceOfType(t7.InnerException, typeof(ArgumentNullException));
-       
+
             TargetInvocationException t8 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodSendFlow.Invoke(null, new object[7] { g, n, null, 0, c, c, l });
             });
             Assert.IsInstanceOfType(t8.InnerException, typeof(ArgumentNullException));
-      
+
             TargetInvocationException t9 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodSendFlow.Invoke(null, new object[7] { g, null, n, 0, c, c, l });
             });
             Assert.IsInstanceOfType(t9.InnerException, typeof(ArgumentNullException));
-      
+
             TargetInvocationException t10 = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 methodSendFlow.Invoke(null, new object[7] { null, n, n, 0, c, c, l });

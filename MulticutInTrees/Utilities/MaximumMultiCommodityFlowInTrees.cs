@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// The <see cref="Counter"/> that can be used for operations that should not impact the performance of this algorithm.
         /// </summary>
-        private readonly static Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         /// <summary>
         /// Compute the size of the maximum multi-commodity flow in <paramref name="tree"/> with <paramref name="commodities"/> as commodities.
@@ -86,7 +86,7 @@ namespace MulticutInTrees.Utilities
 
                 // Find all commodities in the subtree
                 List<Commodity<N>> commoditiesInSubtree = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(children)).ToList();
-                
+
                 Dictionary<N, Node> nToNode = new Dictionary<N, Node>();
                 Dictionary<Node, N> nodeToN = new Dictionary<Node, N>();
 
@@ -353,7 +353,7 @@ namespace MulticutInTrees.Utilities
             /// <summary>
             /// The original <see cref="Commodity{N}"/> this <see cref="Commodity{N}"/> once was.
             /// </summary>
-            public Commodity<N> OriginalCommodity { get; set; }
+            public Commodity<N> OriginalCommodity { get; }
 
             /// <summary>
             /// The first endpoint of this commodity.
@@ -368,7 +368,7 @@ namespace MulticutInTrees.Utilities
             /// <summary>
             /// The <typeparamref name="N"/>s on the unique path between <see cref="EndPoint1"/> and <see cref="EndPoint2"/>.
             /// </summary>
-            public HashSet<N> Path { get; set; }
+            public HashSet<N> Path { get; }
 
             /// <summary>
             /// Constructor for a <see cref="Commodity{N}"/>.

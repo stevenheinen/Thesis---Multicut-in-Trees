@@ -2,23 +2,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
-using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
-using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.ReductionRules
 {
     [TestClass]
     public class UnitTestDominatedPath
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -260,7 +256,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             {
                 (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>(){ (node3, node6) }, counter), dp3)
             }, counter);
-            
+
             Assert.IsTrue(dominatedPath.AfterDemandPathChanged(information));
         }
     }

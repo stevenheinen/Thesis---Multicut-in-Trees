@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +25,7 @@ namespace MulticutInTrees.Utilities
         {
             if (paramName is null)
             {
-                throw new ArgumentNullException("paramName", "Trying to perform a null check on the parameters of a method, but the name of the parameter given to the null check method is null!");
+                throw new ArgumentNullException(nameof(paramName), "Trying to perform a null check on the parameters of a method, but the name of the parameter given to the null check method is null!");
             }
 
             if (parameter is null)
@@ -103,7 +103,7 @@ namespace MulticutInTrees.Utilities
                 sb.Append($"{elem}, ");
             }
             sb.Remove(sb.Length - 2, 2);
-            if (list.Count() == 0)
+            if (!list.Any())
             {
                 sb.Remove(sb.Length - 1, 1);
                 sb.Append('.');

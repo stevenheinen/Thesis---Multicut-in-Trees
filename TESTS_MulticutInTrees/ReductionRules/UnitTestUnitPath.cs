@@ -1,24 +1,21 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
-using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
-using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.ReductionRules
 {
     [TestClass]
     public class UnitTestUnitPath
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -94,7 +91,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             list.Add(((node2, node1), node1, dpList), counter);
             Assert.IsTrue(unitPath.AfterEdgeContraction(list));
 
-            list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> { ((node4, node5), node5, new CountedList<DemandPair>(new List<DemandPair>(){ dp1 }, counter)) }, counter);
+            list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> { ((node4, node5), node5, new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter)) }, counter);
             Assert.IsFalse(unitPath.AfterEdgeContraction(list));
         }
 

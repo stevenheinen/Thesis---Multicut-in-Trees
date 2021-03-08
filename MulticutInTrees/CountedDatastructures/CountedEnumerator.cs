@@ -1,6 +1,5 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using MulticutInTrees.Utilities;
@@ -16,12 +15,14 @@ namespace MulticutInTrees.CountedDatastructures
         /// <summary>
         /// The <see cref="Counter"/> that counts the number of operations this <see cref="CountedEnumerator{T}"/> used.
         /// </summary>
-        public Counter OperationsCounter { get; set; }
+#pragma warning disable IDE0052 // Remove unread private members. The counter is just a reference, so it is actually read.
+        private Counter OperationsCounter { get; set; }
+#pragma warning restore IDE0052 // Remove unread private members
 
         /// <summary>
         /// The internal <see cref="IEnumerator{T}"/> this <see cref="CountedEnumerator{T}"/> uses.
         /// </summary>
-        private protected IEnumerator<T> Enumerator { get; }
+        private IEnumerator<T> Enumerator { get; }
 
         /// <inheritdoc/>
         public T Current
@@ -51,8 +52,8 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedEnumerator(IEnumerator<T> enumerator, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(enumerator, nameof(enumerator), $"Trying to create an instance of a CountedEnumerator, but the IEnumerator is should use is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to create an instance of a CountedEnumerator, but the counter is should use is null!");
+            Utils.NullCheck(enumerator, nameof(enumerator), "Trying to create an instance of a CountedEnumerator, but the IEnumerator is should use is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to create an instance of a CountedEnumerator, but the counter is should use is null!");
 #endif
             Enumerator = enumerator;
             OperationsCounter = counter;

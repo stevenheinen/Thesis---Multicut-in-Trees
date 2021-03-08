@@ -1,12 +1,12 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
-using MulticutInTrees.Graphs;
 using MulticutInTrees.Exceptions;
+using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
@@ -91,7 +91,7 @@ namespace MulticutInTrees.Algorithms
                 DemandPairsPerNode[demandPair.Node2, AlgorithmPerformanceMeasurements.DemandPairsPerEdgeKeysCounter].Add(demandPair, AlgorithmPerformanceMeasurements.DemandPairsPerEdgeValuesCounter);
 
                 // For each edge on this demand pair...
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(AlgorithmPerformanceMeasurements.TreeOperationsCounter))
                 {
                     // Add this edge to the DemandPairsPerEdge dictionary.
                     (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
@@ -121,7 +121,7 @@ namespace MulticutInTrees.Algorithms
 #endif
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
             DemandPairsPerEdge[usedEdge, measurements.DemandPairsPerEdgeKeysCounter].Remove(demandPair, measurements.DemandPairsPerEdgeValuesCounter);
-            
+
             // If, after removing this demand pair, there are no more demand pairs going over this edge, remove it from the dictionary.
             if (DemandPairsPerEdge[usedEdge, measurements.DemandPairsPerEdgeKeysCounter].Count(measurements.DemandPairsPerEdgeValuesCounter) == 0)
             {
@@ -160,7 +160,7 @@ namespace MulticutInTrees.Algorithms
 #endif
             PartialSolution.Add(edge);
             CountedList<DemandPair> separatedDemandPairs = new CountedList<DemandPair>(DemandPairsPerEdge[Utils.OrderEdgeSmallToLarge(edge), measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(MockCounter), MockCounter);
-            
+
             RemoveDemandPairs(separatedDemandPairs, measurements);
             TreeNode res = InternalContractEdge(edge, measurements);
 
@@ -449,7 +449,7 @@ namespace MulticutInTrees.Algorithms
             }
 
             // Remove this demand pair from each edge it is on.
-            foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(measurements.DemandPairsOperationsCounter))
+            foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(measurements.TreeOperationsCounter))
             {
                 RemoveDemandPairFromEdge(edge, demandPair, measurements);
             }
@@ -491,12 +491,12 @@ namespace MulticutInTrees.Algorithms
             if (oldEndpoint == demandPair.Node1)
             {
                 // If the old endpoint is the first endpoint, we are removing edges from the start until the edge starts with the new endpoint.
-                oldEdges.AddRange(demandPair.EdgesOnDemandPath(measurements.DemandPairsOperationsCounter).TakeWhile(n => n.Item1 != newEndpoint), measurements.TreeOperationsCounter);
+                oldEdges.AddRange(demandPair.EdgesOnDemandPath(measurements.TreeOperationsCounter).TakeWhile(n => n.Item1 != newEndpoint), measurements.TreeOperationsCounter);
             }
             else if (oldEndpoint == demandPair.Node2)
             {
                 // If the old endpoint is the second endpoint, we are removing all edges from the new endpoint to the old endpoint. The extra Skip(1) is to exclude the last edge on the new demand path.
-                oldEdges.AddRange(demandPair.EdgesOnDemandPath(measurements.DemandPairsOperationsCounter).SkipWhile(n => n.Item2 != newEndpoint).Skip(1), measurements.TreeOperationsCounter);
+                oldEdges.AddRange(demandPair.EdgesOnDemandPath(measurements.TreeOperationsCounter).SkipWhile(n => n.Item2 != newEndpoint).Skip(1), measurements.TreeOperationsCounter);
             }
 
             if (!DemandPairsPerNode.ContainsKey(newEndpoint, measurements.DemandPairsPerEdgeKeysCounter))

@@ -13,7 +13,7 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestBFS
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestNullParameter()

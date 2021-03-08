@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
@@ -81,12 +81,12 @@ namespace MulticutInTrees.Algorithms
             CountedList<DemandPair> sortedDemandPairs = new CountedList<DemandPair>(LeastCommonAncestors.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key), Measurements.DemandPairsOperationsCounter);
             HashSet<DemandPair> solvedDemandPairs = new HashSet<DemandPair>();
             List<(TreeNode, TreeNode)> solution = new List<(TreeNode, TreeNode)>();
-            (bool solved, int size) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution);
+            (bool solved, int _) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution);
 
             Measurements.TimeSpentModifyingInstance.Stop();
 
             PrintCounters();
-            
+
             return (solved, solution);
         }
 
@@ -107,7 +107,7 @@ namespace MulticutInTrees.Algorithms
             foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 // For each edge on this demand pair...
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter))
+                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
                 {
                     // Add this edge to the DemandPairsPerEdge dictionary.
                     (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
@@ -180,7 +180,7 @@ namespace MulticutInTrees.Algorithms
                     (bool solved1, int size1) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs1, tempSolution1);
                     (bool solved2, int size2) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs2, tempSolution2);
 
-                    if (!solved1 && !solved2) 
+                    if (!solved1 && !solved2)
                     {
                         return (false, K + 1);
                     }
@@ -188,13 +188,9 @@ namespace MulticutInTrees.Algorithms
                     {
                         edgeInSolution = edge1;
                     }
-                    else if (solved2)
+                    else // solved2 is true
                     {
                         edgeInSolution = edge2;
-                    }
-                    else
-                    {
-                        throw new Exception($"Apparently there is an unhandled case... branch 1 solved? {solved1}, branch 1 size? {size1}, branch 2 solved? {solved2}, branch 2 size {size2}");
                     }
                 }
 

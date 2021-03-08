@@ -3,15 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.ReductionRules;
 using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees
@@ -34,7 +30,7 @@ namespace MulticutInTrees
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree, random), new Counter());
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 21);
-            
+
             Random random2 = new Random(0);
             Tree<TreeNode> tree2 = TreeFromPruferSequence.GenerateTree(500, random2);
             CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(300, tree2, random2), new Counter());

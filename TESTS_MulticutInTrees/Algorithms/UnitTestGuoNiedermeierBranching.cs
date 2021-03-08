@@ -2,21 +2,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
-using MulticutInTrees.Exceptions;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Algorithms
 {
     [TestClass]
     public class UnitTestGuoNiedermeierBranching
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()

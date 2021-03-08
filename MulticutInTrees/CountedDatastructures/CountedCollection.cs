@@ -1,6 +1,6 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +63,7 @@ namespace MulticutInTrees.CountedDatastructures
 #if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements in a CountedCollection, but the Counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             return LinkedList.Count;
         }
 
@@ -81,7 +81,7 @@ namespace MulticutInTrees.CountedDatastructures
             Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements that fit a function in a CountedCollection, but the Counter is null!");
 #endif
             int res = LinkedList.Count(predicate);
-            _ = counter += res;
+            counter += res;
             return res;
         }
 
@@ -96,7 +96,7 @@ namespace MulticutInTrees.CountedDatastructures
 #if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the first element of a CountedCollection, but the Counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             return LinkedList.First.Value;
         }
 
@@ -115,7 +115,7 @@ namespace MulticutInTrees.CountedDatastructures
 #endif
             return LinkedList.First(elem =>
             {
-                _ = counter++;
+                counter++;
                 return predicate(elem);
             });
         }
@@ -131,7 +131,7 @@ namespace MulticutInTrees.CountedDatastructures
 #if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to get the last element of a CountedCollection, but the Counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             return LinkedList.Last.Value;
         }
 
@@ -152,7 +152,7 @@ namespace MulticutInTrees.CountedDatastructures
                 throw new AlreadyPresentException($"Trying to add {item} to a CountedCollection, but {item} is already present in this CountedCollection!");
             }
 #endif
-            _ = counter++;
+            counter++;
             LinkedListNode<T> node = new LinkedListNode<T>(item);
             Dictionary[item] = node;
             LinkedList.AddLast(node);
@@ -168,7 +168,7 @@ namespace MulticutInTrees.CountedDatastructures
 #if !EXPERIMENT
             Utils.NullCheck(counter, nameof(counter), "Trying to clear a CountedCollection, but the Counter is null!");
 #endif            
-            _ = counter += Dictionary.Count;
+            counter += Dictionary.Count;
             Dictionary.Clear();
             LinkedList.Clear();
         }
@@ -186,7 +186,7 @@ namespace MulticutInTrees.CountedDatastructures
             Utils.NullCheck(item, nameof(item), "Trying to check whether a CountedCollection contains an element, but the item is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to check whether a CountedCollection contains an element, but the Counter is null!");
 #endif            
-            _ = counter++;
+            counter++;
             return Dictionary.ContainsKey(item);
         }
 
@@ -217,7 +217,7 @@ namespace MulticutInTrees.CountedDatastructures
             Utils.NullCheck(item, nameof(item), "Trying to remove an item from a CountedCollection, but the item is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to remove an element from a CountedCollection, but the Counter is null!");
 #endif
-            _ = counter++;
+            counter++;
             if (!Dictionary.ContainsKey(item))
             {
                 return false;
@@ -237,12 +237,12 @@ namespace MulticutInTrees.CountedDatastructures
         public void RemoveFromStartWhile(Func<T, bool> predicate, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
+            Utils.NullCheck(predicate, nameof(predicate), "Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the start of a CountedCollection, but the Counter is null!");
 #endif
             while (predicate(LinkedList.First.Value))
             {
-                _ = counter++;
+                counter++;
                 Remove(LinkedList.First.Value, counter);
             }
         }
@@ -256,12 +256,12 @@ namespace MulticutInTrees.CountedDatastructures
         public void RemoveFromEndWhile(Func<T, bool> predicate, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(predicate, nameof(predicate), $"Trying to remove elements from the end of a CountedCollection, but the predicate is null!");
+            Utils.NullCheck(predicate, nameof(predicate), "Trying to remove elements from the end of a CountedCollection, but the predicate is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from end start of a CountedCollection, but the Counter is null!");
 #endif
             while (predicate(LinkedList.Last.Value))
             {
-                _ = counter++;
+                counter++;
                 Remove(LinkedList.Last.Value, counter);
             }
         }
@@ -285,7 +285,7 @@ namespace MulticutInTrees.CountedDatastructures
                 throw new InvalidOperationException($"Trying to change {oldElement} to {newElement} in {this}, but {oldElement} is not part of this collection!");
             }
 #endif
-            _ = counter++;
+            counter++;
             if (oldElement.Equals(newElement))
             {
                 return;
@@ -309,7 +309,7 @@ namespace MulticutInTrees.CountedDatastructures
 #endif
             foreach (T node in LinkedList)
             {
-                _ = counter++;
+                counter++;
                 T newNode = function(node);
                 ChangeElement(node, newNode, counter);
             }
@@ -333,7 +333,7 @@ namespace MulticutInTrees.CountedDatastructures
                 throw new InvalidOperationException($"Trying to find the element before and after {element} in {this}, but {element} is not part of this CountedCollection!");
             }
 #endif
-            _ = counter += 2;
+            counter += 2;
             LinkedListNode<T> node = Dictionary[element];
             T before = default;
             T after = default;

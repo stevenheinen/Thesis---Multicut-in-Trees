@@ -1,8 +1,7 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
@@ -13,7 +12,7 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestGraph
     {
-        private readonly static Counter counter = new Counter();
+        private static readonly Counter counter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
@@ -260,7 +259,7 @@ namespace TESTS_MulticutInTrees.Graphs
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, counter);
 
             Assert.IsFalse(graph.HasEdge(node0, node1, counter));
-            
+
             graph.AddEdge(node0, node1, counter);
 
             Assert.IsTrue(graph.HasEdge(node1, node0, counter));
@@ -380,7 +379,7 @@ namespace TESTS_MulticutInTrees.Graphs
             {
                 graph.HasEdge(node3, node4, counter);
             });
-            
+
             Assert.AreEqual(9, graph.NumberOfNodes(counter));
             Assert.IsFalse(node5.HasNeighbour(node4, counter));
 
@@ -685,7 +684,7 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node1 = new Node(1);
             Node node2 = new Node(2);
             Node node3 = new Node(3);
-            
+
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
             graph.AddEdges(new List<(Node, Node)>()
             {
