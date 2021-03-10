@@ -33,6 +33,7 @@ namespace MulticutInTrees
             if (args.Length == 0)
             {
                 args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=1000 --demandpairs=700 -v=true".Split();
+                args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Caterpillar --dps=Random --nodes=1000 --demandpairs=700 -v=true".Split();
             }
 
             Parser parser = new Parser(p => 
@@ -345,7 +346,7 @@ namespace MulticutInTrees
         {
             return inputTreeType switch
             {
-                InputTreeType.Caterpillar => throw new NotImplementedException("Caterpillars are not yet supported!"),
+                InputTreeType.Caterpillar => CaterpillarGenerator.CreateCaterpillar(numberOfNodes, random),
                 InputTreeType.CNFSAT => throw new NotImplementedException("CNF-SAT instances are not yet supported!"),
                 InputTreeType.Prüfer => TreeFromPruferSequence.GenerateTree(numberOfNodes, random),
                 InputTreeType.VertexCover => throw new NotImplementedException("Vertex Cover instances are not yet supported!"),
