@@ -32,7 +32,7 @@ namespace MulticutInTrees
 
             if (args.Length == 0)
             {
-                args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=1000 --demandpairs=800 -v=true".Split();
+                args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=500 --demandpairs=300 -v=true".Split();
             }
 
             Parser parser = new Parser(p => 
