@@ -65,6 +65,9 @@ namespace MulticutInTrees.Algorithms
             DisjointPaths disjointPaths = new DisjointPaths(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
 
+            OverloadedEdge overloadedEdge = new OverloadedEdge(Tree, DemandPairs, this, PartialSolution, K, DemandPairsPerEdge);
+            reductionRules.Add(overloadedEdge);
+
             // TODO: add other reduction rules.
             // ...
 

@@ -75,7 +75,7 @@ namespace MulticutInTrees.ReductionRules
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            List<DemandPair> pairsToBeRemoved = new List<DemandPair>();
+            HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
 
             foreach ((CountedList<(TreeNode, TreeNode)>, DemandPair) changedPath in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
