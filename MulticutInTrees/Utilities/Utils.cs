@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using MulticutInTrees.Graphs;
 
 namespace MulticutInTrees.Utilities
@@ -196,6 +197,78 @@ namespace MulticutInTrees.Utilities
             NullCheck(random, nameof(random), "Trying to pick a random element from an IEnumerable, but the random number generator is null!");
 #endif
             return list.ElementAt(random.Next(list.Count()));
+        }
+
+        /// <summary>
+        /// Finds the largest <see cref="int"/> for which <paramref name="function"/> returns <see langword="true"/>.
+        /// </summary>
+        /// <param name="minValue">The smallest value to check.</param>
+        /// <param name="maxValue">The largest value to check.</param>
+        /// <param name="function"><see cref="Func{T, TResult}"/> from <see cref="int"/> to <see cref="bool"/>. Given the numbers in the range between <paramref name="minValue"/> and <paramref name="maxValue"/>, should return any number of <see langword="true"/> results, followed by any number of <see langword="false"/> results.</param>
+        /// <returns>The largest <see cref="int"/> for which <paramref name="function"/> returns <see langword="true"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="minValue"/> is larger than <paramref name="maxValue"/>.</exception>
+        public static int BinarySearchGetLastTrue(int minValue, int maxValue, Func<int, bool> function)
+        {
+#if !EXPERIMENT
+            NullCheck(function, nameof(function), "Trying to binary search for the last value that results in true, but the function is null!");
+            if (minValue > maxValue)
+            {
+                throw new ArgumentException("Trying to binary search for the last value that results in true, but the start of the range of values to check is larger than the end of the range of values to check!");
+            }
+#endif
+            int answer = -1;
+            int current = (minValue + maxValue + 1) / 2;
+            while (minValue <= maxValue)
+            {
+                if (function(current))
+                {
+                    answer = current;
+                    minValue = current + 1;
+                }
+                else
+                {
+                    maxValue = current - 1;
+                }
+                current = (minValue + maxValue + 1) / 2;
+            }
+            return answer;
+        }
+
+        /// <summary>
+        /// Finds the smallest <see cref="int"/> for which <paramref name="function"/> returns <see langword="true"/>.
+        /// </summary>
+        /// <param name="minValue">The smallest value to check.</param>
+        /// <param name="maxValue">The largest value to check.</param>
+        /// <param name="function"><see cref="Func{T, TResult}"/> from <see cref="int"/> to <see cref="bool"/>. Given the numbers in the range between <paramref name="minValue"/> and <paramref name="maxValue"/>, should return any number of <see langword="false"/> results, followed by any number of <see langword="true"/> results.</param>
+        /// <returns>The smallest <see cref="int"/> for which <paramref name="function"/> returns <see langword="true"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="minValue"/> is larger than <paramref name="maxValue"/>.</exception>
+        public static int BinarySearchGetFirstTrue(int minValue, int maxValue, Func<int, bool> function)
+        {
+#if !EXPERIMENT
+            NullCheck(function, nameof(function), "Trying to binary search for the first value that results in true, but the function is null!");
+            if (minValue > maxValue)
+            {
+                throw new ArgumentException("Trying to binary search for the first value that results in true, but the start of the range of values to check is larger than the end of the range of values to check!");
+            }
+#endif
+            int answer = -1;
+            int current = (minValue + maxValue + 1) / 2;
+            while (minValue <= maxValue)
+            {
+                if (!function(current))
+                {
+                    minValue = current + 1;
+                }
+                else
+                {
+                    answer = current; 
+                    maxValue = current - 1;
+                }
+                current = (minValue + maxValue + 1) / 2;
+            }
+            return answer;
         }
     }
 }

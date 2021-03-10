@@ -3,7 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.CountedDatastructures
 {
@@ -32,8 +31,8 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedEnumerable(IEnumerable<T> enumerable, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(enumerable, nameof(enumerable), "Trying to create a CountedEnumerable, but the enumerable it should count is null!");
-            Utils.NullCheck(counter, nameof(counter), "Trying to create a CountedEnumerable, but the counter is null!");
+            Utilities.Utils.NullCheck(enumerable, nameof(enumerable), "Trying to create a CountedEnumerable, but the enumerable it should count is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to create a CountedEnumerable, but the counter is null!");
 #endif
             Counter = counter;
             Enumerable = enumerable;

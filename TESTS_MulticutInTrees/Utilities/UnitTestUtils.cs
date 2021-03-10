@@ -85,5 +85,25 @@ namespace TESTS_MulticutInTrees.Utilities
                 Assert.IsTrue(list.Contains(element));
             }
         }
+
+        [TestMethod]
+        public void TestBinarySearchGetFirstTrue()
+        {
+            Assert.AreEqual(-1, Utils.BinarySearchGetFirstTrue(0, 100, n => n > 500));
+            Assert.AreEqual(0, Utils.BinarySearchGetFirstTrue(0, 100, n => n > -1));
+            Assert.AreEqual(100, Utils.BinarySearchGetFirstTrue(0, 100, n => n >= 100));
+            Assert.AreEqual(21, Utils.BinarySearchGetFirstTrue(0, 100, n => n >= 21));
+            Assert.AreEqual(20, Utils.BinarySearchGetFirstTrue(0, 100, n => n >= 20));
+        }
+
+        [TestMethod]
+        public void TestBinarySearchGetLastTrue()
+        {
+            Assert.AreEqual(-1, Utils.BinarySearchGetLastTrue(0, 100, n => n > 500));
+            Assert.AreEqual(0, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 0));
+            Assert.AreEqual(100, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 100));
+            Assert.AreEqual(21, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 21));
+            Assert.AreEqual(20, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 20));
+        }
     }
 }

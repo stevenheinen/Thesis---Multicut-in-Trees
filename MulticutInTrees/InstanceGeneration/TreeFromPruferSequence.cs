@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.InstanceGeneration
 {
@@ -25,7 +24,7 @@ namespace MulticutInTrees.InstanceGeneration
         public static Tree<TreeNode> GenerateTree(int numberOfNodes, Random random)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(random, nameof(random), "Trying to generate a random tree from a Prüfer sequence, but the random is null!");
+            Utilities.Utils.NullCheck(random, nameof(random), "Trying to generate a random tree from a Prüfer sequence, but the random is null!");
             if (numberOfNodes < 3)
             {
                 throw new ArgumentOutOfRangeException(nameof(numberOfNodes), "A tree generated with a Prüfer sequence should have at least 3 nodes!");

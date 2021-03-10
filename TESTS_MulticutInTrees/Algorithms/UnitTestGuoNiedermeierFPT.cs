@@ -23,41 +23,41 @@ namespace TESTS_MulticutInTrees.Algorithms
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             Assert.IsNotNull(gnfpt);
             Assert.IsNotNull(gnfpt.ReductionRules);
 
-            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(demandPairsProperty.GetGetMethod(true));
             Assert.AreEqual(demandPairs, demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { }));
 
-            PropertyInfo inputProperty = typeof(GuoNiedermeierFPT).GetProperty("Tree", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo inputProperty = typeof(GuoNiedermeierKernelisation).GetProperty("Tree", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(inputProperty.GetGetMethod(true));
             Assert.AreEqual(tree, inputProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { }));
 
-            PropertyInfo partialSolutionProperty = typeof(GuoNiedermeierFPT).GetProperty("PartialSolution", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo partialSolutionProperty = typeof(GuoNiedermeierKernelisation).GetProperty("PartialSolution", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(partialSolutionProperty.GetGetMethod(true));
 
-            PropertyInfo lastIterationEdgeContractionProperty = typeof(GuoNiedermeierFPT).GetProperty("LastIterationEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo lastIterationEdgeContractionProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastIterationEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(lastIterationEdgeContractionProperty.GetGetMethod(true));
 
-            PropertyInfo lastIterationDemandPairRemovalProperty = typeof(GuoNiedermeierFPT).GetProperty("LastIterationDemandPairRemoval", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo lastIterationDemandPairRemovalProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastIterationDemandPairRemoval", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(lastIterationDemandPairRemovalProperty.GetGetMethod(true));
 
-            PropertyInfo lastIterationDemandPairChangeProperty = typeof(GuoNiedermeierFPT).GetProperty("LastIterationDemandPairChange", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo lastIterationDemandPairChangeProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastIterationDemandPairChange", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(lastIterationDemandPairChangeProperty.GetGetMethod(true));
 
-            PropertyInfo kProperty = typeof(GuoNiedermeierFPT).GetProperty("K", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo kProperty = typeof(GuoNiedermeierKernelisation).GetProperty("K", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(kProperty.GetGetMethod(true));
 
-            PropertyInfo lastContractedEdgesProperty = typeof(GuoNiedermeierFPT).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo lastContractedEdgesProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(lastContractedEdgesProperty.GetGetMethod(true));
 
-            PropertyInfo lastRemovedDemandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo lastRemovedDemandPairsProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(lastRemovedDemandPairsProperty.GetGetMethod(true));
 
-            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(GuoNiedermeierFPT).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(lastChangedEdgesPerDemandPairProperty.GetGetMethod(true));
         }
 
@@ -67,13 +67,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             TreeNode node = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
             TreeNode node2 = new TreeNode(2);
             DemandPair dp = new DemandPair(node1, node2);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierFPT g = new GuoNiedermeierFPT(null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierKernelisation g = new GuoNiedermeierKernelisation(null); });
             Assert.ThrowsException<ArgumentNullException>(() => { gnfpt.ChangeEndpointOfDemandPair(null, node, node, measurements); });
             Assert.ThrowsException<ArgumentNullException>(() => { gnfpt.ChangeEndpointOfDemandPair(dp, null, node, measurements); });
             Assert.ThrowsException<ArgumentNullException>(() => { gnfpt.ChangeEndpointOfDemandPair(dp, node, null, measurements); });
@@ -122,10 +122,10 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
-            PropertyInfo dictProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
+            PropertyInfo dictProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
             Assert.AreEqual(2, dict[(node2, node5), counter].Count(counter));
             Assert.AreEqual(1, dict[(node0, node2), counter].Count(counter));
             Assert.AreEqual(2, dict[(node0, node1), counter].Count(counter));
@@ -155,15 +155,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
-            PropertyInfo dictProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
+            PropertyInfo dictProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
 
-            MethodInfo method = typeof(GuoNiedermeierFPT).GetMethod("RemoveDemandPairFromEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo method = typeof(GuoNiedermeierKernelisation).GetMethod("RemoveDemandPairFromEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(gnfpt, new object[] { (node1, node0), dp3, measurements });
             Assert.AreEqual(1, dict[(node0, node1), counter].Count(counter));
-            Assert.AreEqual(dp1, dict[(node0, node1), counter][0, counter]);
+            Assert.AreEqual(dp1, dict[(node0, node1), counter].First(counter));
 
             method.Invoke(gnfpt, new object[] { (node0, node3), dp1, measurements });
             Assert.IsFalse(dict.ContainsKey((node0, node3), counter));
@@ -193,10 +193,10 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.CutEdge((node5, node2), measurements);
 
-            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.AreEqual(1, ((CountedList<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count(counter));
         }
 
@@ -224,10 +224,10 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.CutEdges(new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node0, node1), (node5, node2) }, counter), measurements);
 
-            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierFPT).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.AreEqual(0, ((CountedList<DemandPair>)demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { })).Count(counter));
         }
 
@@ -255,7 +255,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ContractEdge((node0, node2), measurements);
 
             Assert.AreEqual(5, tree.NumberOfNodes(counter));
@@ -285,7 +285,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ContractEdges(new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node0, node2), (node4, node1) }, counter), measurements);
 
             Assert.AreEqual(4, tree.NumberOfNodes(counter));
@@ -315,7 +315,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ChangeEndpointOfDemandPair(dp3, node5, node2, measurements);
             Assert.AreEqual(3, dp3.LengthOfPath(counter));
 
@@ -347,7 +347,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 100);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, TreeNode, TreeNode)>(new List<(DemandPair, TreeNode, TreeNode)>() { (dp3, node5, node2), (dp1, node4, node0) }, counter), measurements);
             Assert.AreEqual(3, dp3.LengthOfPath(counter));
             Assert.AreEqual(1, dp1.LengthOfPath(counter));

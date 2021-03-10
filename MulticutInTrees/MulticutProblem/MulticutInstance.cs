@@ -3,7 +3,6 @@
 using System;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.MulticutProblem
 {
@@ -34,15 +33,15 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than or equal to zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than zero.</exception>
         public MulticutInstance(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int k)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to create a multicut instance, but the tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");
-            if (k <= 0)
+            Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a multicut instance, but the tree is null!");
+            Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");
+            if (k < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(k), "Trying to create a multicut instance, but the maximum amount of edges that can be removed is smaller than or equal to zero!");
+                throw new ArgumentOutOfRangeException(nameof(k), "Trying to create a multicut instance, but the maximum amount of edges that can be removed is smaller than zero!");
             }
 #endif
             Tree = tree;

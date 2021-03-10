@@ -19,9 +19,9 @@ namespace MulticutInTrees.ReductionRules
     public class DominatedPath : ReductionRule
     {
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
         /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; }
+        private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
         /// Constructor for the <see cref="DominatedPath"/> reduction rule.
@@ -29,9 +29,9 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
-        /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.</param>
+        /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, nameof(DominatedPath))
+        public DominatedPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, nameof(DominatedPath))
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the dominated path reduction rule, but the input tree is null!");
@@ -124,7 +124,7 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Dominated Path reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
@@ -136,12 +136,12 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<DemandPair> pairsToBeRemoved = new HashSet<DemandPair>();
 
-            foreach (((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>) contraction in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> affectedDemandPairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 HashSet<DemandPair> otherDemandPairs = new HashSet<DemandPair>();
-                foreach (TreeNode neighbour in contraction.Item2.Neighbours(Measurements.TreeOperationsCounter))
+                foreach (TreeNode neighbour in newNode.Neighbours(Measurements.TreeOperationsCounter))
                 {
-                    if (!DemandPairsPerEdge.TryGetValue(Utils.OrderEdgeSmallToLarge((contraction.Item2, neighbour)), out CountedList<DemandPair> pairsOnEdge, Measurements.DemandPairsPerEdgeKeysCounter))
+                    if (!DemandPairsPerEdge.TryGetValue(Utils.OrderEdgeSmallToLarge((newNode, neighbour)), out CountedCollection<DemandPair> pairsOnEdge, Measurements.DemandPairsPerEdgeKeysCounter))
                     {
                         continue;
                     }
@@ -151,7 +151,7 @@ namespace MulticutInTrees.ReductionRules
                         otherDemandPairs.Add(pair);
                     }
                 }
-                foreach (DemandPair demandPair in contraction.Item3.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+                foreach (DemandPair demandPair in affectedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
                     if (pairsToBeRemoved.Contains(demandPair))
                     {

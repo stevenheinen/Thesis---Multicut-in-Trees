@@ -37,6 +37,7 @@
   </Choose>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.8.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />

@@ -3,7 +3,6 @@
 using System;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.InstanceGeneration
 {
@@ -26,7 +25,7 @@ namespace MulticutInTrees.InstanceGeneration
         public static Graph<Node> CreateErdosRenyiGraph(int numberOfNodes, double chancePerEdge, Random random)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(random, nameof(random), "Trying to create an Erdos-Renyi graph, but the random is null!");
+            Utilities.Utils.NullCheck(random, nameof(random), "Trying to create an Erdos-Renyi graph, but the random is null!");
             if (numberOfNodes < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numberOfNodes), "Trying to create an Erdos-Renyi graph with less than zero nodes!");

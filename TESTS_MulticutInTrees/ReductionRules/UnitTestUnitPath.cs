@@ -23,7 +23,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
 
@@ -36,7 +36,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
 
@@ -82,16 +82,16 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
 
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>();
-            CountedList<DemandPair> dpList = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
+            CountedCollection<DemandPair> dpList = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
             list.Add(((node2, node1), node1, dpList), counter);
             Assert.IsTrue(unitPath.AfterEdgeContraction(list));
 
-            list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> { ((node4, node5), node5, new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter)) }, counter);
+            list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> { ((node4, node5), node5, new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter)) }, counter);
             Assert.IsFalse(unitPath.AfterEdgeContraction(list));
         }
 
@@ -117,7 +117,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
 
@@ -150,7 +150,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
 
@@ -189,8 +189,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             MulticutInstance instance1 = new MulticutInstance(tree, demandPairs1, 1);
             MulticutInstance instance2 = new MulticutInstance(tree, demandPairs2, 1);
-            GuoNiedermeierFPT gnfpt1 = new GuoNiedermeierFPT(instance1);
-            GuoNiedermeierFPT gnfpt2 = new GuoNiedermeierFPT(instance2);
+            GuoNiedermeierKernelisation gnfpt1 = new GuoNiedermeierKernelisation(instance1);
+            GuoNiedermeierKernelisation gnfpt2 = new GuoNiedermeierKernelisation(instance2);
 
             UnitPath unitPath1 = new UnitPath(tree, demandPairs1, gnfpt1);
             UnitPath unitPath2 = new UnitPath(tree, demandPairs2, gnfpt2);

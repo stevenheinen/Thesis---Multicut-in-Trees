@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
@@ -69,8 +70,10 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Try to solve the instance.
         /// </summary>
+        /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that will be regularly checked and can stop the algorithm prematurely.</param>
         /// <returns>A tuple of an <see cref="bool"/> whether the instance is solvable and a <see cref="List{T}"/> of tuples of two <see cref="TreeNode"/>s representing the edges in the solution.</returns>
-        public (bool, List<(TreeNode, TreeNode)>) Run()
+        public (bool, List<(TreeNode, TreeNode)>) Run(bool findSmallest, CancellationToken cancellationToken)
         {
             FillDemandPathsPerEdge();
 
@@ -81,7 +84,7 @@ namespace MulticutInTrees.Algorithms
             CountedList<DemandPair> sortedDemandPairs = new CountedList<DemandPair>(LeastCommonAncestors.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key), Measurements.DemandPairsOperationsCounter);
             HashSet<DemandPair> solvedDemandPairs = new HashSet<DemandPair>();
             List<(TreeNode, TreeNode)> solution = new List<(TreeNode, TreeNode)>();
-            (bool solved, int _) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution);
+            (bool solved, int _) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution, findSmallest, cancellationToken);
 
             Measurements.TimeSpentModifyingInstance.Stop();
 
@@ -127,12 +130,19 @@ namespace MulticutInTrees.Algorithms
         /// <param name="currentIndex">The index of the current <see cref="DemandPair"/> in <paramref name="solvedDemandPairs"/> we need to look at.</param>
         /// <param name="solvedDemandPairs"><see cref="HashSet{T}"/> with <see cref="DemandPair"/>s that are already separated.</param>
         /// <param name="solution"><see cref="List{T}"/> with the solution thus far. Is added to in this method.</param>
+        /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that will be regularly checked and can stop the algorithm prematurely.</param>
         /// <returns><see langword="true"/> if a solution can be found with these parameters, <see langword="false"/> otherwise.</returns>
-        private (bool, int) RecSolve(CountedList<DemandPair> sortedDemandPairs, int currentIndex, HashSet<DemandPair> solvedDemandPairs, List<(TreeNode, TreeNode)> solution)
+        private (bool, int) RecSolve(CountedList<DemandPair> sortedDemandPairs, int currentIndex, HashSet<DemandPair> solvedDemandPairs, List<(TreeNode, TreeNode)> solution, bool findSmallest, CancellationToken cancellationToken)
         {
             int nrPairs = sortedDemandPairs.Count(Measurements.DemandPairsOperationsCounter);
             for (int i = currentIndex; i < nrPairs; i++)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return (false, -1);
+                }
+
                 if (solution.Count > K)
                 {
                     return (false, K + 1);
@@ -168,29 +178,35 @@ namespace MulticutInTrees.Algorithms
                     {
                         tempSolvedDemandPairs1.Add(solvedDemandPair);
                     }
+                    (bool solved1, int size1) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs1, tempSolution1, findSmallest, cancellationToken);
 
-                    (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(after);
-                    List<(TreeNode, TreeNode)> tempSolution2 = new List<(TreeNode, TreeNode)>(solution) { edge2 };
-                    HashSet<DemandPair> tempSolvedDemandPairs2 = new HashSet<DemandPair>(solvedDemandPairs);
-                    foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edge2, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
+                    if (!solved1 || findSmallest)
                     {
-                        tempSolvedDemandPairs2.Add(solvedDemandPair);
+                        (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(after);
+                        List<(TreeNode, TreeNode)> tempSolution2 = new List<(TreeNode, TreeNode)>(solution) { edge2 };
+                        HashSet<DemandPair> tempSolvedDemandPairs2 = new HashSet<DemandPair>(solvedDemandPairs);
+                        foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[edge2, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
+                        {
+                            tempSolvedDemandPairs2.Add(solvedDemandPair);
+                        }
+                        (bool solved2, int size2) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs2, tempSolution2, findSmallest, cancellationToken);
+                        
+                        if (!solved1 && !solved2)
+                        {
+                            return (false, K + 1);
+                        }
+                        if (solved1 && size1 <= size2)
+                        {
+                            edgeInSolution = edge1;
+                        }
+                        else // solved2 is true
+                        {
+                            edgeInSolution = edge2;
+                        }
                     }
-
-                    (bool solved1, int size1) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs1, tempSolution1);
-                    (bool solved2, int size2) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs2, tempSolution2);
-
-                    if (!solved1 && !solved2)
-                    {
-                        return (false, K + 1);
-                    }
-                    if (solved1 && size1 <= size2)
+                    else // we know for sure solved1 is true
                     {
                         edgeInSolution = edge1;
-                    }
-                    else // solved2 is true
-                    {
-                        edgeInSolution = edge2;
                     }
                 }
 

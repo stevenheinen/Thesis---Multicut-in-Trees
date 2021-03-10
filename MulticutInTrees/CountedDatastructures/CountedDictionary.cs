@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.CountedDatastructures
 {
@@ -31,7 +30,7 @@ namespace MulticutInTrees.CountedDatastructures
             get
             {
 #if !EXPERIMENT
-                Utils.NullCheck(counter, nameof(counter), "Trying to get the value corresponding to a key from a CountedDictionary, but the counter is null!");
+                Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the value corresponding to a key from a CountedDictionary, but the counter is null!");
 #endif
                 counter++;
                 return Dictionary[key];
@@ -39,7 +38,7 @@ namespace MulticutInTrees.CountedDatastructures
             set
             {
 #if !EXPERIMENT
-                Utils.NullCheck(counter, nameof(counter), "Trying to set the value corresponding to a key in a CountedDictionary, but the counter is null!");
+                Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to set the value corresponding to a key in a CountedDictionary, but the counter is null!");
 #endif
                 counter++;
                 Dictionary[key] = value;
@@ -63,8 +62,8 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedDictionary(Dictionary<TKey, TValue> dictionary, Counter counter) : this()
         {
 #if !EXPERIMENT
-            Utils.NullCheck(dictionary, nameof(dictionary), "Trying to create an instance of a CountedDictionary with elements, but the Dictionary with elements is null!");
-            Utils.NullCheck(counter, nameof(counter), "Trying to create an instance of a CountedDictionary with elements, but the counter is null!");
+            Utilities.Utils.NullCheck(dictionary, nameof(dictionary), "Trying to create an instance of a CountedDictionary with elements, but the Dictionary with elements is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to create an instance of a CountedDictionary with elements, but the counter is null!");
 #endif
             foreach (KeyValuePair<TKey, TValue> kvPair in dictionary)
             {
@@ -81,7 +80,7 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedEnumerable<TKey> GetKeys(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to get the keys in a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the keys in a CountedDictionary, but the counter is null!");
 #endif
             counter++;
             return new CountedEnumerable<TKey>(Dictionary.Keys, counter);
@@ -96,7 +95,7 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedEnumerable<TValue> GetValues(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to get the values in a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the values in a CountedDictionary, but the counter is null!");
 #endif
             counter++;
             return new CountedEnumerable<TValue>(Dictionary.Values, counter);
@@ -111,7 +110,7 @@ namespace MulticutInTrees.CountedDatastructures
         public int Count(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements in a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements in a CountedDictionary, but the counter is null!");
 #endif
             counter++;
             return Dictionary.Count;
@@ -127,7 +126,7 @@ namespace MulticutInTrees.CountedDatastructures
         public void Add(TKey key, TValue value, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to add an element to a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to add an element to a CountedDictionary, but the counter is null!");
 #endif
             counter++;
             Dictionary.Add(key, value);
@@ -143,7 +142,7 @@ namespace MulticutInTrees.CountedDatastructures
         public bool ContainsKey(TKey key, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to see if a CountedDictionary contains a certain key, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to see if a CountedDictionary contains a certain key, but the counter is null!");
 #endif
             counter++;
             return Dictionary.ContainsKey(key);
@@ -159,7 +158,7 @@ namespace MulticutInTrees.CountedDatastructures
         public bool Remove(TKey key, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to remove an element from a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove an element from a CountedDictionary, but the counter is null!");
 #endif
             counter++;
             return Dictionary.Remove(key);
@@ -176,7 +175,7 @@ namespace MulticutInTrees.CountedDatastructures
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to get the value of a given key from a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the value of a given key from a CountedDictionary, but the counter is null!");
 #endif
             counter++;
             return Dictionary.TryGetValue(key, out value);
@@ -190,7 +189,7 @@ namespace MulticutInTrees.CountedDatastructures
         public void Clear(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to clear a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to clear a CountedDictionary, but the counter is null!");
 #endif
             counter += Dictionary.Count;
             Dictionary.Clear();
@@ -205,7 +204,7 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedEnumerable<KeyValuePair<TKey, TValue>> GetCountedEnumerable(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), "Trying to get the enumerator of a CountedDictionary, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the enumerator of a CountedDictionary, but the counter is null!");
 #endif
             return new CountedEnumerable<KeyValuePair<TKey, TValue>>(Dictionary, counter);
         }

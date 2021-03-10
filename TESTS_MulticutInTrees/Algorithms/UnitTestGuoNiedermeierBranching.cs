@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
@@ -67,7 +68,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
+            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
 
             Assert.IsTrue(solution.Item1);
             Assert.AreEqual(3, solution.Item2.Count);
@@ -103,7 +104,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
+            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
 
             Assert.IsTrue(solution.Item1);
             Assert.AreEqual(2, solution.Item2.Count);
@@ -139,7 +140,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
+            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
 
             Assert.IsTrue(solution.Item1);
             Assert.AreEqual(1, solution.Item2.Count);
@@ -188,7 +189,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
+            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
 
             Assert.IsTrue(solution.Item1);
             Assert.AreEqual(3, solution.Item2.Count);
@@ -219,7 +220,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run();
+            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
 
             Assert.IsFalse(solution.Item1);
         }

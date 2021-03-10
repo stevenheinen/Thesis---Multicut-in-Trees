@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.Graphs
 {
@@ -61,8 +60,8 @@ namespace MulticutInTrees.Graphs
         internal Node(uint id, IEnumerable<Node> neighbours, Counter counter, bool directed = false) : this(id)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to create an instance of {GetType()} with neighbours but the counter is null!");
+            Utilities.Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to create an instance of {GetType()} with neighbours but the IEnumerable of neighbours is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to create an instance of {GetType()} with neighbours but the counter is null!");
 #endif
             InternalNeighbours = new CountedCollection<Node>(neighbours, counter);
 
@@ -90,8 +89,8 @@ namespace MulticutInTrees.Graphs
         public void AddNeighbour(Node neighbour, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to add a neighbour to {this}, but the neighbour is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to add a neighbour to {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to add a neighbour to {this}, but the neighbour is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to add a neighbour to {this}, but the counter is null!");
             if (neighbour == this)
             {
                 throw new AddNeighbourToSelfException($"Trying to add {neighbour} as a neighbour to itself!");
@@ -122,8 +121,8 @@ namespace MulticutInTrees.Graphs
         public void AddNeighbours(IEnumerable<Node> neighbours, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to add a list of neighbours to {this}, but the list is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to add a list of neighbours to {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to add a list of neighbours to {this}, but the list is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to add a list of neighbours to {this}, but the counter is null!");
 #endif
             foreach (Node neighbour in neighbours)
             {
@@ -143,7 +142,7 @@ namespace MulticutInTrees.Graphs
         public void RemoveAllNeighbours(Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to remove all neighbours from {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to remove all neighbours from {this}, but the counter is null!");
 #endif
             if (!directed)
             {
@@ -170,8 +169,8 @@ namespace MulticutInTrees.Graphs
         public void RemoveNeighbour(Node neighbour, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to remove a neighbour from {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(neighbour, nameof(neighbour), $"Trying to remove a neighbour from {this}, but the neighbour is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to remove a neighbour from {this}, but the counter is null!");
             if (!InternalNeighbours.Contains(neighbour, MockCounter))
             {
                 throw new NotANeighbourException($"Trying to remove {neighbour} from {this}'s neighbours, but {neighbour} is no neighbour of {this}!");
@@ -198,8 +197,8 @@ namespace MulticutInTrees.Graphs
         public void RemoveNeighbours(IEnumerable<Node> neighbours, Counter counter, bool directed = false)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to remove a list of neighbours from {this}, but the list is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to remove a list of neighbours from {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(neighbours, nameof(neighbours), $"Trying to remove a list of neighbours from {this}, but the list is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to remove a list of neighbours from {this}, but the counter is null!");
 #endif
             foreach (Node neighbour in neighbours)
             {
@@ -217,8 +216,8 @@ namespace MulticutInTrees.Graphs
         public bool HasNeighbour(Node node, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(node, nameof(node), $"Trying to see if {this} has a neighbour, but the neighbour is null!");
-            Utils.NullCheck(counter, nameof(counter), $"Trying to see if {this} has a neighbour, but the counter is null!");
+            Utilities.Utils.NullCheck(node, nameof(node), $"Trying to see if {this} has a neighbour, but the neighbour is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to see if {this} has a neighbour, but the counter is null!");
 #endif
             return InternalNeighbours.Contains(node, counter);
         }
@@ -243,7 +242,7 @@ namespace MulticutInTrees.Graphs
         public CountedEnumerable<Node> Neighbours(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the neighbours of {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to get the neighbours of {this}, but the counter is null!");
 #endif
             _ = counter++;
             return new CountedEnumerable<Node>(InternalNeighbours.GetLinkedList(), counter);
@@ -258,7 +257,7 @@ namespace MulticutInTrees.Graphs
         public int Degree(Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(counter, nameof(counter), $"Trying to get the degree of {this}, but the counter is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), $"Trying to get the degree of {this}, but the counter is null!");
 #endif
             return InternalNeighbours.Count(counter);
         }

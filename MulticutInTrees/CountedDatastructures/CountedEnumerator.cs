@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.CountedDatastructures
 {
@@ -52,8 +51,8 @@ namespace MulticutInTrees.CountedDatastructures
         public CountedEnumerator(IEnumerator<T> enumerator, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(enumerator, nameof(enumerator), "Trying to create an instance of a CountedEnumerator, but the IEnumerator is should use is null!");
-            Utils.NullCheck(counter, nameof(counter), "Trying to create an instance of a CountedEnumerator, but the counter is should use is null!");
+            Utilities.Utils.NullCheck(enumerator, nameof(enumerator), "Trying to create an instance of a CountedEnumerator, but the IEnumerator is should use is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to create an instance of a CountedEnumerator, but the counter is should use is null!");
 #endif
             Enumerator = enumerator;
             OperationsCounter = counter;

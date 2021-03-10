@@ -86,7 +86,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Unit Path rule after an edge was contracted, but the list of contracted edges is null!");
@@ -97,7 +97,7 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedList<DemandPair> pairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> pairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 foreach (DemandPair path in pairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
@@ -136,7 +136,7 @@ namespace MulticutInTrees.ReductionRules
         /// <inheritdoc/>
         protected override void Preprocess()
         {
-            
+
         }
 
         /// <summary>

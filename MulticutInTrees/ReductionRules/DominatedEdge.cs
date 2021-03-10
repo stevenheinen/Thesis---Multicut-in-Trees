@@ -20,10 +20,10 @@ namespace MulticutInTrees.ReductionRules
     public class DominatedEdge : ReductionRule
     {
         /// <summary>
-        /// A <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s as value.
+        /// A <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.
         /// The value is all the <see cref="DemandPair"/>s whose path passes through the key.
         /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> DemandPairsPerEdge { get; }
+        private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
         /// Constructor for <see cref="IdleEdge"/>.
@@ -31,9 +31,9 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
-        /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s as value.</param>
+        /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public DominatedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, nameof(DominatedEdge))
+        public DominatedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, nameof(DominatedEdge))
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the DominatedEdge reduction rule, but the input tree is null!");
@@ -66,14 +66,14 @@ namespace MulticutInTrees.ReductionRules
         /// Finds all edges that are on the shortest <see cref="DemandPair"/> through <paramref name="edge"/>.
         /// </summary>
         /// <param name="edge"></param>
-        /// <returns></returns>
+        /// <returns>A <see cref="ReadOnlyCollection{T}"/> with all edges on the shortest <see cref="DemandPair"/> through <paramref name="edge"/>.</returns>
         private ReadOnlyCollection<(TreeNode, TreeNode)> FindEdgesOnShortestDemandPathThroughEdge((TreeNode, TreeNode) edge)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to find all edges on the shortest demand path through this edge, but the first endpoint of the edge is null!");
             Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to find all edges on the shortest demand path through this edge, but the second endpoint of the edge is null!");
 #endif
-            if (!DemandPairsPerEdge.TryGetValue(edge, out CountedList<DemandPair> demandPathsOnEdge, Measurements.DemandPairsPerEdgeKeysCounter))
+            if (!DemandPairsPerEdge.TryGetValue(edge, out CountedCollection<DemandPair> demandPathsOnEdge, Measurements.DemandPairsPerEdgeKeysCounter))
             {
                 return new List<(TreeNode, TreeNode)>().AsReadOnly();
             }
@@ -181,7 +181,7 @@ namespace MulticutInTrees.ReductionRules
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList)
+        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Dominated Edge rule after an edge was contracted, but the IEnumerable of contracted edges is null!");

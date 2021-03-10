@@ -5,7 +5,6 @@ using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.ReductionRules
 {
@@ -35,25 +34,32 @@ namespace MulticutInTrees.ReductionRules
         protected PerformanceMeasurements Measurements { get; }
 
         /// <summary>
+        /// If a <see cref="ReductionRule"/> returns <see langword="true"/> when it is checked for applicability, and this value is also <see langword="true"/>, we have an instance that cannot be solved.
+        /// </summary>
+        public bool TrueMeansInfeasibleInstance { get; }
+
+        /// <summary>
         /// Constructor for a <see cref="ReductionRule"/>.
         /// </summary>
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
         /// <param name="name">The name of this <see cref="ReductionRule"/>.</param>
+        /// <param name="trueMeansInfeasibleInstance">If a <see cref="ReductionRule"/> returns <see langword="true"/> when it is checked for applicability, and this value is also <see langword="true"/>, we have an instance that cannot be solved. When a <see cref="ReductionRule"/> cannot determine that an instance is infeasible, pass <see langword="false"/> to this constructor.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="name"/> is <see langword="null"/>.</exception>
-        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, string name)
+        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, string name, bool trueMeansInfeasibleInstance = false)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a reduction rule, but the list of demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create a reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(name, nameof(name), "Trying to create a reduction rule, but its name is null!");
+            Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
+            Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a reduction rule, but the list of demand pairs is null!");
+            Utilities.Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create a reduction rule, but the algorithm it is part of is null!");
+            Utilities.Utils.NullCheck(name, nameof(name), "Trying to create a reduction rule, but its name is null!");
 #endif
             Tree = tree;
             DemandPairs = demandPairs;
             Algorithm = algorithm;
             Measurements = new PerformanceMeasurements(name);
+            TrueMeansInfeasibleInstance = trueMeansInfeasibleInstance;
 
             Preprocess();
         }
@@ -80,9 +86,9 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after one or more edges have been contracted in the last iteration.
         /// </summary>
-        /// <param name="contractedEdgeNodeTupleList">An <see cref="CountedList{T}"/> with tuples consisting of a tuple of <see cref="TreeNode"/>s (the contracted edge), a <see cref="TreeNode"/> (the result of the edge contraction), and a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s (the <see cref="DemandPair"/>s on the contracted edge).</param>
+        /// <param name="contractedEdgeNodeTupleList">An <see cref="CountedList{T}"/> with tuples consisting of a tuple of <see cref="TreeNode"/>s (the contracted edge), a <see cref="TreeNode"/> (the result of the edge contraction), and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s (the <see cref="DemandPair"/>s on the contracted edge).</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeNodeTupleList);
+        internal abstract bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList);
 
         /// <summary>
         /// Executed when this <see cref="ReductionRule"/> is applied after one or more <see cref="DemandPair"/>s have been removed in the last iteration.

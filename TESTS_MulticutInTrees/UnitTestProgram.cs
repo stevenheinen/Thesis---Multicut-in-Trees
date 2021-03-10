@@ -11,7 +11,7 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestMain()
         {
-            Program.Main();
+            Program.Main(new string[0]);
         }
     }
 }

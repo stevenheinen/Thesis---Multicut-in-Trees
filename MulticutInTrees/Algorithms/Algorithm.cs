@@ -8,7 +8,6 @@ using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.Algorithms
 {
@@ -60,7 +59,7 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// A <see cref="CountedList{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
         /// </summary>
-        protected CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> LastContractedEdges { get; set; }
+        protected CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> LastContractedEdges { get; set; }
 
         /// <summary>
         /// A <see cref="CountedList{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
@@ -91,8 +90,8 @@ namespace MulticutInTrees.Algorithms
         protected Algorithm(MulticutInstance instance, string algorithmName)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
-            Utils.NullCheck(algorithmName, nameof(algorithmName), "Trying to create an instance of a Multicut algorithm, but the name of the algorithm is null!");
+            Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
+            Utilities.Utils.NullCheck(algorithmName, nameof(algorithmName), "Trying to create an instance of a Multicut algorithm, but the name of the algorithm is null!");
 #endif
             Tree = instance.Tree;
             DemandPairs = instance.DemandPairs;
@@ -101,7 +100,7 @@ namespace MulticutInTrees.Algorithms
             MockCounter = new Counter();
             AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmName);
 
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>();
+            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
             LastRemovedDemandPairs = new CountedList<DemandPair>();
             LastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
         }
@@ -118,13 +117,11 @@ namespace MulticutInTrees.Algorithms
             {
                 if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
                 {
-                    PrintCounters();
-                    return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
+                    goto returntrue;
                 }
                 if (PartialSolution.Count == K)
                 {
-                    PrintCounters();
-                    return (false, Tree, PartialSolution, DemandPairs.GetInternalList());
+                    goto returnfalse;
                 }
 
 #if VERBOSEDEBUG
@@ -141,9 +138,17 @@ namespace MulticutInTrees.Algorithms
                     bool success = ReductionRules[i].RunFirstIteration();
                     if (success)
                     {
+                        if (ReductionRules[i].TrueMeansInfeasibleInstance)
+                        {
+                            goto returnfalse;
+                        }
+
                         // If the first application of the i-th reduction rule was a success, start again at rule 0.
                         i = -1;
                     }
+#if VERBOSEDEBUG
+                    Console.WriteLine($"The application of rule {i + 1} was not successful...");
+#endif
                     continue;
                 }
 
@@ -168,12 +173,22 @@ namespace MulticutInTrees.Algorithms
                 // If we applied the rule successfully, go back to rule 0.
                 if (successfulAfterDemandPairChanged || successfulAfterDemandPairRemoved || successfulAfterEdgeContracted)
                 {
+                    if (ReductionRules[i].TrueMeansInfeasibleInstance)
+                    {
+                        goto returnfalse;
+                    }
+
                     i = -1;
                 }
             }
 
+            returntrue:
             PrintCounters();
             return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
+
+            returnfalse:
+            PrintCounters();
+            return (false, Tree, PartialSolution, DemandPairs.GetInternalList());
         }
 
         /// <summary>
@@ -186,8 +201,8 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying rule {i + 1} after an edge was contracted.");
 #endif
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(LastContractedEdges.GetCountedEnumerable(MockCounter), MockCounter);
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>();
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(LastContractedEdges.GetCountedEnumerable(MockCounter), MockCounter);
+            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
             LastIterationEdgeContraction = false;
             bool successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges);
             if (!successful)
@@ -275,9 +290,9 @@ namespace MulticutInTrees.Algorithms
         protected void UpdateNodeTypesDuringEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
-            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
-            Utils.NullCheck(newNode, nameof(newNode), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
+            Utilities.Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
+            Utilities.Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
+            Utilities.Utils.NullCheck(newNode, nameof(newNode), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
             if (contractedEdge.Item1.Type == NodeType.Other)
             {
                 throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Item1} is not known. Please make sure every node has a nodetype to start with!");

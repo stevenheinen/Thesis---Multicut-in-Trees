@@ -30,7 +30,6 @@ namespace TESTS_MulticutInTrees.MulticutProblem
 
             Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(null, dps, 2); });
             Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(tree, null, 2); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, 0); });
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -1); });
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -8459472); });
         }

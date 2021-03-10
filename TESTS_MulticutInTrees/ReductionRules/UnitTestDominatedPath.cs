@@ -22,8 +22,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, dps, 10);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
             Assert.IsNotNull(dominatedPath);
@@ -35,8 +35,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(tree, dps, 10);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>();
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
 
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(null, dps, gnfpt, demandPairsPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedPath dominatedPath = new DominatedPath(tree, null, gnfpt, demandPairsPerEdge); });
@@ -71,13 +71,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
             MulticutInstance instance = new MulticutInstance(tree, dps, 10);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
             {
-                { (node0, node1), new CountedList<DemandPair>(new List<DemandPair>(){ dp1 }, counter) },
-                { (node0, node2), new CountedList<DemandPair>(new List<DemandPair>(){ dp1, dp2 }, counter) },
-                { (node1, node3), new CountedList<DemandPair>(new List<DemandPair>(){ dp3, dp4, dp5 }, counter) },
-                { (node1, node4), new CountedList<DemandPair>(new List<DemandPair>(){ dp3 }, counter) },
+                { (node0, node1), new CountedCollection<DemandPair>(new List<DemandPair>(){ dp1 }, counter) },
+                { (node0, node2), new CountedCollection<DemandPair>(new List<DemandPair>(){ dp1, dp2 }, counter) },
+                { (node1, node3), new CountedCollection<DemandPair>(new List<DemandPair>(){ dp3, dp4, dp5 }, counter) },
+                { (node1, node4), new CountedCollection<DemandPair>(new List<DemandPair>(){ dp3 }, counter) },
             }, counter);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
@@ -107,22 +107,22 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp2 = new DemandPair(node3, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
             {
-                { (node0, node1), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node1, node2), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node2, node3), new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
-                { (node2, node4), new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
+                { (node0, node1), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node1, node2), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node2, node3), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
+                { (node2, node4), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
             }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 2);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
 
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeInformation = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>()
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeInformation = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>()
             {
-                ((node3, node5), node3, new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter))
+                ((node3, node5), node3, new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter))
             }, counter);
 
             Assert.IsFalse(dominatedPath.AfterEdgeContraction(contractedEdgeInformation));
@@ -152,23 +152,23 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp3 = new DemandPair(node4, node6);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
             {
-                { (node0, node1), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node1, node2), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node2, node3), new CountedList<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
-                { (node2, node4), new CountedList<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
-                { (node3, node6), new CountedList<DemandPair>(new List<DemandPair>() { dp3 }, counter) },
+                { (node0, node1), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node1, node2), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node2, node3), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
+                { (node2, node4), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
+                { (node3, node6), new CountedCollection<DemandPair>(new List<DemandPair>() { dp3 }, counter) },
             }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 2);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
 
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)> contractedEdgeInformation = new CountedList<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedList<DemandPair>)>()
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeInformation = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>()
             {
-                ((node3, node5), node3, new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter) )
+                ((node3, node5), node3, new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) )
             }, counter);
 
             Assert.IsTrue(dominatedPath.AfterEdgeContraction(contractedEdgeInformation));
@@ -195,16 +195,16 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp3 = new DemandPair(node1, node3);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
             {
-                { (node0, node1), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node1, node2), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node2, node3), new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
-                { (node2, node4), new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
+                { (node0, node1), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node1, node2), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node2, node3), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
+                { (node2, node4), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
             }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 2);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
 
@@ -238,17 +238,17 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp3 = new DemandPair(node4, node3);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedList<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedList<DemandPair>>()
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
             {
-                { (node0, node1), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node1, node2), new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
-                { (node2, node3), new CountedList<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
-                { (node2, node4), new CountedList<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
-                { (node3, node5), new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
+                { (node0, node1), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node1, node2), new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter) },
+                { (node2, node3), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
+                { (node2, node4), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2, dp3 }, counter) },
+                { (node3, node5), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
             }, counter);
 
             MulticutInstance instance = new MulticutInstance(tree, dps, 2);
-            GuoNiedermeierFPT gnfpt = new GuoNiedermeierFPT(instance);
+            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
 
