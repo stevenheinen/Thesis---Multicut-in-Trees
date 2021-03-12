@@ -147,7 +147,10 @@ namespace MulticutInTrees.Algorithms
                         i = -1;
                     }
 #if VERBOSEDEBUG
-                    Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                    else
+                    {
+                        Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                    }
 #endif
                     continue;
                 }

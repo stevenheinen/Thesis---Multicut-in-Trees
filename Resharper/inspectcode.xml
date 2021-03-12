@@ -11,6 +11,7 @@
     <IssueType Id="ArrangeMissingParentheses" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Add parentheses to avoid non-obvious precedence" Severity="DO_NOT_SHOW" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeMissingParentheses" />
     <IssueType Id="ArrangeRedundantParentheses" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Remove redundant parentheses" Severity="HINT" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeRedundantParentheses" />
     <IssueType Id="AssignNullToNotNullAttribute" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Possible 'null' assignment to non-nullable entity" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AssignNullToNotNullAttribute" />
+    <IssueType Id="AutoPropertyCanBeMadeGetOnly.Local" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Private accessibility" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Local" />
     <IssueType Id="CSharpErrors" Category="C# Compiler Errors" CategoryId="CSharpErrors" Description="" Severity="ERROR" />
     <IssueType Id="CSharpWarnings::CS0162" Category="Compiler Warnings" CategoryId="CompilerWarnings" Description="Code is unreachable" Severity="WARNING" WikiUrl="https://msdn.microsoft.com/en-us/library/c0h4st1x.aspx" />
     <IssueType Id="CheckNamespace" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Namespace does not correspond to file location" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CheckNamespace" />
@@ -49,16 +50,21 @@
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="2824-2827" Line="62" Message="Accessor 'LastContractedEdges.set' can be made private" />
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3071-3074" Line="67" Message="Accessor 'LastRemovedDemandPairs.set' can be made private" />
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3387-3390" Line="72" Message="Accessor 'LastChangedEdgesPerDemandPair.set' can be made private" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16062-16082" Line="296" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16441-16461" Line="300" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="23489-23499" Line="419" Message="Only overrides of method 'Preprocess' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="23990-23997" Line="426" Message="Method 'CutEdge' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="25083-25095" Line="440" Message="Method 'ContractEdge' is never used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="26114-26130" Line="454" Message="Only overrides of method 'RemoveDemandPair' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="27355-27381" Line="470" Message="Only overrides of method 'ChangeEndpointOfDemandPair' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="28049-28076" Line="477" Message="Method 'ChangeEndpointOfDemandPairs' is never used" />
-      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="2278-2288" Line="43" Message="Virtual member call in constructor" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="15916-15922" Line="252" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16138-16158" Line="299" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16517-16537" Line="303" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="23565-23575" Line="422" Message="Only overrides of method 'Preprocess' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="24066-24073" Line="429" Message="Method 'CutEdge' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="25159-25171" Line="443" Message="Method 'ContractEdge' is never used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="26190-26206" Line="457" Message="Only overrides of method 'RemoveDemandPair' are used" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="27431-27457" Line="473" Message="Only overrides of method 'ChangeEndpointOfDemandPair' are used" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="1926-1930" Line="36" Message="Auto-property can be made get-only" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="2704-2714" Line="49" Message="Virtual member call in constructor" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="16706-16712" Line="261" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="18404-18424" Line="295" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="18431-18451" Line="295" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="23038-23056" Line="371" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="23181-23199" Line="375" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="23301-23319" Line="376" Message="Possible multiple enumeration" />
       <Issue TypeId="UnusedType.Global" File="Algorithms\_NamespaceDocAlgorithms.cs" Offset="468-480" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="RedundantUsingDirective" File="CommandLineOptions.cs" Offset="271-284" Line="3" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="CommandLineOptions.cs" Offset="286-319" Line="4" Message="Using directive is not required by the code and can be safely removed" />
@@ -94,10 +100,7 @@
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="2276-2283" Line="35" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="2586-2593" Line="43" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="3660-3677" Line="62" Message="Constructor 'CountedDictionary' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="5725-5734" Line="95" Message="Method 'GetValues' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="6601-6606" Line="110" Message="Method 'Count' is never used" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="6828-6835" Line="115" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="7471-7477" Line="126" Message="Method 'Add' can be made private" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="7720-7727" Line="131" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="8812-8819" Line="147" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="9567-9571" Line="158" Message="Method 'Remove' return value is never used" />
@@ -234,6 +237,7 @@
       <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="24430-24440" Line="447" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\TreeNode.cs" Offset="24759-24769" Line="450" Message="Possible multiple enumeration" />
       <Issue TypeId="UnusedType.Global" File="Graphs\_NamespaceDocGraphs.cs" Offset="443-455" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="InstanceGeneration\CaterpillarGenerator.cs" Offset="820-831" Line="19" Message="Name 'mockCounter' does not match rule 'Static readonly fields (private)'. Suggested name is 'MockCounter'." />
       <Issue TypeId="UnusedType.Global" File="InstanceGeneration\ErdosRenyiGraph.cs" Offset="528-543" Line="12" Message="Class 'ErdosRenyiGraph' is never used" />
       <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\ErdosRenyiGraph.cs" Offset="1711-1732" Line="25" Message="Method 'CreateErdosRenyiGraph' is never used" />
       <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\InputTreeType.cs" Offset="570-576" Line="13" Message="Enum member 'Prüfer' is never used" />
@@ -241,33 +245,43 @@
       <Issue TypeId="MultipleOrderBy" File="InstanceGeneration\TreeFromPruferSequence.cs" Offset="2298-2305" Line="39" Message="Multiple sequential 'OrderBy' invocations are meaningless. Possibly you mean 'ThenBy' instead" />
       <Issue TypeId="UnusedType.Global" File="InstanceGeneration\_NamespaceDocInstanceGeneration.cs" Offset="749-761" Line="10" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="746-758" Line="10" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="828-835" Line="23" Message="Class 'Program' is never instantiated" />
-      <Issue TypeId="RedundantStringInterpolation" File="Program.cs" Offset="3600-3601" Line="69" Message="Redundant string interpolation" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8659-8661" Line="148" Message="Cannot resolve symbol 'Pr'" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8661-8662" Line="148" Message="Unexpected token" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8662-8665" Line="148" Message="Cannot resolve symbol 'fer'" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8711-8712" Line="148" Message="; expected" />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Program.cs" Offset="8829-8831" Line="151" Message="Convert to method call with '?:' expression inside" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="9243-9247" Line="160" Message="Unexpected token" />
-      <Issue TypeId="UnusedMethodReturnValue.Local" File="Program.cs" Offset="10865-10868" Line="179" Message="Method 'FindMinimumSolutionSize' return value is never used" />
-      <Issue TypeId="MethodSupportsCancellation" File="Program.cs" Offset="11608-11611" Line="188" Message="Method has overload with cancellation support" />
-      <Issue TypeId="MethodSupportsCancellation" File="Program.cs" Offset="12374-12377" Line="205" Message="Method has overload with cancellation support" />
-      <Issue TypeId="ConvertToLambdaExpression" File="Program.cs" Offset="12416-12422" Line="207" Message="Use lambda expression" />
-      <Issue TypeId="CoVariantArrayConversion" File="Program.cs" Offset="12780-12785" Line="211" Message="Co-variant array conversion from Task&lt;int&gt;[] to Task[] can cause run-time exception on write operation" />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Program.cs" Offset="15562-15564" Line="249" Message="Convert to '?:' expression" />
-      <Issue TypeId="UnusedMethodReturnValue.Local" File="Program.cs" Offset="19004-19008" Line="299" Message="Method 'RunKernelisationAlgorithm' return value is never used" />
-      <Issue TypeId="UnusedParameter.Local" File="Program.cs" Offset="22661-22669" Line="344" Message="Parameter 'filePath' is never used" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23009-23011" Line="350" Message="Cannot resolve symbol 'Pr'" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23011-23012" Line="350" Message="=&gt; expected" />
-      <Issue TypeId="CSharpWarnings::CS0162" File="Program.cs" Offset="23012-23336" Line="350" Message="Code is unreachable" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23077-23078" Line="350" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23122-23124" Line="351" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23207-23208" Line="351" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23320-23322" Line="352" Message="; expected" />
-      <Issue TypeId="UnusedParameter.Local" File="Program.cs" Offset="24875-24894" Line="366" Message="Parameter 'distanceProbability' is never used" />
+      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="348-366" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="848-855" Line="24" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="RedundantStringInterpolation" File="Program.cs" Offset="3798-3799" Line="71" Message="Redundant string interpolation" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8857-8859" Line="150" Message="Cannot resolve symbol 'Pr'" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8859-8860" Line="150" Message="Unexpected token" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8860-8863" Line="150" Message="Cannot resolve symbol 'fer'" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="8909-8910" Line="150" Message="; expected" />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Program.cs" Offset="9027-9029" Line="153" Message="Convert to method call with '?:' expression inside" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="9441-9445" Line="162" Message="Unexpected token" />
+      <Issue TypeId="UnusedMethodReturnValue.Local" File="Program.cs" Offset="11063-11066" Line="181" Message="Method 'FindMinimumSolutionSize' return value is never used" />
+      <Issue TypeId="MethodSupportsCancellation" File="Program.cs" Offset="11806-11809" Line="190" Message="Method has overload with cancellation support" />
+      <Issue TypeId="MethodSupportsCancellation" File="Program.cs" Offset="12572-12575" Line="207" Message="Method has overload with cancellation support" />
+      <Issue TypeId="ConvertToLambdaExpression" File="Program.cs" Offset="12614-12620" Line="209" Message="Use lambda expression" />
+      <Issue TypeId="CoVariantArrayConversion" File="Program.cs" Offset="12978-12983" Line="213" Message="Co-variant array conversion from Task&lt;int&gt;[] to Task[] can cause run-time exception on write operation" />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Program.cs" Offset="15760-15762" Line="251" Message="Convert to '?:' expression" />
+      <Issue TypeId="UnusedMethodReturnValue.Local" File="Program.cs" Offset="19202-19206" Line="301" Message="Method 'RunKernelisationAlgorithm' return value is never used" />
+      <Issue TypeId="UnusedParameter.Local" File="Program.cs" Offset="22859-22867" Line="346" Message="Parameter 'filePath' is never used" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23196-23198" Line="352" Message="Cannot resolve symbol 'Pr'" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23198-23199" Line="352" Message="=&gt; expected" />
+      <Issue TypeId="CSharpWarnings::CS0162" File="Program.cs" Offset="23199-23523" Line="352" Message="Code is unreachable" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23264-23265" Line="352" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23309-23311" Line="353" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23394-23395" Line="353" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Program.cs" Offset="23507-23509" Line="354" Message="; expected" />
+      <Issue TypeId="UnusedParameter.Local" File="Program.cs" Offset="25062-25081" Line="368" Message="Parameter 'distanceProbability' is never used" />
       <Issue TypeId="NotResolvedInText" File="ReductionRules\DisjointPaths.cs" Offset="3285-3413" Line="49" Message="Cannot resolve symbol 'Trying to create an instance of the Disjoint Paths reduction rule, but the maximum solution size parameter is smaller than zero!'" />
-      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\DisjointPaths.cs" Offset="5829-5830" Line="107" Message="Redundant parentheses" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\DisjointPaths.cs" Offset="7074-7075" Line="119" Message="Redundant parentheses" />
       <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\DominatedEdge.cs" Offset="7288-7309" Line="82" Message="Convert to method group" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedCaterpillar.cs" Offset="1331-1335" Line="24" Message="Auto-property can be made get-only" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedCaterpillar.cs" Offset="1674-1678" Line="29" Message="Auto-property can be made get-only" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedCaterpillar.cs" Offset="2229-2233" Line="44" Message="Auto-property can be made get-only" />
+      <Issue TypeId="NotResolvedInText" File="ReductionRules\OverloadedCaterpillar.cs" Offset="5432-5568" Line="69" Message="Cannot resolve symbol 'Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!'" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedL3Leaves.cs" Offset="1275-1279" Line="23" Message="Auto-property can be made get-only" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedL3Leaves.cs" Offset="1822-1826" Line="38" Message="Auto-property can be made get-only" />
+      <Issue TypeId="NotResolvedInText" File="ReductionRules\OverloadedL3Leaves.cs" Offset="4546-4682" Line="61" Message="Cannot resolve symbol 'Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!'" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\OverloadedL3Leaves.cs" Offset="7398-7416" Line="113" Message="Name 'containsI3orL3node' does not match rule 'Local variables'. Suggested name is 'containsI3OrL3Node'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\OverloadedL3Leaves.cs" Offset="12000-12029" Line="186" Message="Name 'i3nodeToDemandPairsInChildren' does not match rule 'Local variables'. Suggested name is 'i3NodeToDemandPairsInChildren'." />
       <Issue TypeId="VirtualMemberCallInConstructor" File="ReductionRules\ReductionRule.cs" Offset="3895-3905" Line="64" Message="Virtual member call in constructor" />
       <Issue TypeId="UnusedType.Global" File="ReductionRules\_NamespaceDocReductionRules.cs" Offset="479-491" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\BFS.cs" Offset="1747-1748" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
@@ -278,18 +292,23 @@
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="4555-4556" Line="67" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="RedundantAssignment" File="Utilities\DFS.cs" Offset="5208-5219" Line="79" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="6714-6715" Line="96" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="10660-10661" Line="173" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="10810-10818" Line="176" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="11243-11251" Line="181" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="12759-12771" Line="209" Message="Method 'AreConnected' is never used" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="12772-12773" Line="209" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="14592-14593" Line="230" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="16193-16210" Line="251" Message="Method 'FindAllEdgesGraph' is never used" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="16211-16212" Line="251" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="16214-16215" Line="251" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="18482-18498" Line="295" Message="Method 'FindAllEdgesTree' is never used" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="18502-18503" Line="295" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="20730-20731" Line="331" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="10601-10602" Line="172" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="10723-10728" Line="175" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="11100-11105" Line="180" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedVariable" File="Utilities\DFS.cs" Offset="11302-11313" Line="187" Message="Local variable 'pushingNode' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="11403-11408" Line="189" Message="Possible multiple enumeration" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="13792-13793" Line="243" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="13942-13950" Line="246" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\DFS.cs" Offset="14375-14383" Line="251" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="15891-15903" Line="279" Message="Method 'AreConnected' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="15904-15905" Line="279" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="17724-17725" Line="300" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="19325-19342" Line="321" Message="Method 'FindAllEdgesGraph' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="19343-19344" Line="321" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="19346-19347" Line="321" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\DFS.cs" Offset="21614-21630" Line="365" Message="Method 'FindAllEdgesTree' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="21634-21635" Line="365" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DFS.cs" Offset="23862-23863" Line="401" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="UnusedType.Global" File="Utilities\DinicMaxFlow.cs" Offset="624-636" Line="15" Message="Class 'DinicMaxFlow' is never used" />
       <Issue TypeId="UnusedMember.Global" File="Utilities\DinicMaxFlow.cs" Offset="2088-2129" Line="30" Message="Method 'MaxFlowMultipleSourcesSinksUnitCapacities' is never used" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\DinicMaxFlow.cs" Offset="2130-2131" Line="30" Message="Name 'G' does not match rule 'Type parameters'. Suggested name is 'TG'." />
@@ -411,7 +430,6 @@
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10408-10412" Line="178" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10908-10912" Line="182" Message="Possible multiple enumeration" />
       <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Utils.cs" Offset="10924-10933" Line="182" Message="Convert to method group" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\Utils.cs" Offset="11691-11697" Line="193" Message="Method 'PickRandom' can be made private" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="11813-11817" Line="196" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12092-12096" Line="199" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12119-12123" Line="199" Message="Possible multiple enumeration" />

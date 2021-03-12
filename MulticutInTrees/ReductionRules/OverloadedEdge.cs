@@ -7,6 +7,7 @@ using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.ReductionRules
 {
@@ -51,11 +52,11 @@ namespace MulticutInTrees.ReductionRules
         public OverloadedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, nameof(OverloadedEdge))
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Overloaded Edge reduction rule, but the input tree is null!");
-            Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Overloaded Edge reduction rule, but the list of demand pairs is null!");
-            Utilities.Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Overloaded Edge reduction rule, but the algorithm it is part of is null!");
-            Utilities.Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to create an instance of the Overloaded Edge reduction rule, but the partial solution is null!");
-            Utilities.Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the Overloaded Edge reduction rule, but the dictionary with demand pairs per edge is null!");
+            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Overloaded Edge reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Overloaded Edge reduction rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Overloaded Edge reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to create an instance of the Overloaded Edge reduction rule, but the partial solution is null!");
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the Overloaded Edge reduction rule, but the dictionary with demand pairs per edge is null!");
             if (maxSolutionSize < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxSolutionSize), "Trying to create an instance of the Overloaded Edge reduction rule, but the maximum number of edges that can be cut is smaller than zero!");
@@ -87,18 +88,18 @@ namespace MulticutInTrees.ReductionRules
         /// Checks for a set of changed(!) <see cref="DemandPair"/>s whether one of their edges is now overloaded.
         /// </summary>
         /// <param name="demandPairs">The changed <see cref="DemandPair"/>s.</param>
-        /// <returns>A <see cref="List{T}"/> of overloaded edges.</returns>
-        private List<(TreeNode, TreeNode)> CheckForOverloadedEdges(IEnumerable<DemandPair> demandPairs)
+        /// <returns>A <see cref="HashSet{T}"/> of overloaded edges.</returns>
+        private HashSet<(TreeNode, TreeNode)> CheckForOverloadedEdges(IEnumerable<DemandPair> demandPairs)
         {
-            List<(TreeNode, TreeNode)> edgesToBeCut = new List<(TreeNode, TreeNode)>();
+            HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (DemandPair demandPair in demandPairs)
             {
                 if (demandPair.LengthOfPath(Measurements.DemandPairsOperationsCounter) != 2)
                 {
                     continue;
                 }
-                (TreeNode, TreeNode) edge1 = demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).First();
-                (TreeNode, TreeNode) edge2 = demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Last();
+                (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).First());
+                (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Last());
                 if (CheckEdgeForOverload(edge1))
                 {
                     edgesToBeCut.Add(edge1);
@@ -115,13 +116,13 @@ namespace MulticutInTrees.ReductionRules
         internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to execute the Overloaded Edge rule after a demand pair was changed, but the list with changed demand pairs is null!");
+            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to execute the Overloaded Edge rule after a demand pair was changed, but the list with changed demand pairs is null!");
 #endif
 #if VERBOSEDEBUG
             Console.WriteLine("Applying Overloaded Edge rule after a demand path was changed...");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
-            List<(TreeNode, TreeNode)> edgesToBeCut = CheckForOverloadedEdges(changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(i => i.Item2));
+            HashSet<(TreeNode, TreeNode)> edgesToBeCut = CheckForOverloadedEdges(changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(i => i.Item2));
             return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
 
@@ -129,7 +130,7 @@ namespace MulticutInTrees.ReductionRules
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to execute the Overloaded Edge rule after a demand pair was removed, but the list with removed demand pairs is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to execute the Overloaded Edge rule after a demand pair was removed, but the list with removed demand pairs is null!");
 #endif
 #if VERBOSEDEBUG
             Console.WriteLine("Applying Overloaded Edge rule after a demand path was removed...");
@@ -141,16 +142,19 @@ namespace MulticutInTrees.ReductionRules
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to execute the Overloaded Edge rule after an edge was contracted, but the list with contracted edges is null!");
+            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to execute the Overloaded Edge rule after an edge was contracted, but the list with contracted edges is null!");
 #endif
 #if VERBOSEDEBUG
             Console.WriteLine("Applying Overloaded Edge rule after an edge was contracted...");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
-            List<(TreeNode, TreeNode)> edgesToBeCut = new List<(TreeNode, TreeNode)>();
+            HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
             foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
-                edgesToBeCut.AddRange(CheckForOverloadedEdges(demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)));
+                foreach ((TreeNode, TreeNode) overloadedEdge in CheckForOverloadedEdges(demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
+                {
+                    edgesToBeCut.Add(overloadedEdge);
+                }
             }
             return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
@@ -170,8 +174,8 @@ namespace MulticutInTrees.ReductionRules
                     continue;
                 }
 
-                (TreeNode, TreeNode) edge1 = demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).First();
-                (TreeNode, TreeNode) edge2 = demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Last();
+                (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).First());
+                (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Last());
                 if (!edgeOccurrences.ContainsKey(edge1, MockCounter))
                 {
                     edgeOccurrences[edge1, MockCounter] = 0;
@@ -217,7 +221,7 @@ namespace MulticutInTrees.ReductionRules
         private bool TryCutEdges(CountedList<(TreeNode, TreeNode)> edgesToBeCut)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), "Trying to cut edges, but the Hashset with edges is null!");
+            Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), "Trying to cut edges, but the Hashset with edges is null!");
 #endif
             if (edgesToBeCut.Count(Measurements.TreeOperationsCounter) == 0)
             {

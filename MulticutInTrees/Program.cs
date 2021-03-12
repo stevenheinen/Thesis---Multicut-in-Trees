@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,8 +33,8 @@ namespace MulticutInTrees
 
             if (args.Length == 0)
             {
-                args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=1000 --demandpairs=700 -v=true".Split();
-                args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Caterpillar --dps=Random --nodes=1000 --demandpairs=700 -v=true".Split();
+                args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=30 --tree=Prüfer --dps=Random --nodes=1000 --demandpairs=700 -v=true".Split();
+                //args = "--seed=0 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Caterpillar --dps=Random --nodes=1000 --demandpairs=700 -v=true".Split();
             }
 
             Parser parser = new Parser(p => 

@@ -479,5 +479,88 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsFalse(freeNodes.Contains(node4));
             Assert.IsFalse(freeNodes.Contains(node5));
         }
+
+        [TestMethod]
+        public void TestCaterpillarComponents()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+            TreeNode node5 = new TreeNode(5);
+            TreeNode node6 = new TreeNode(6);
+            TreeNode node7 = new TreeNode(7);
+            TreeNode node8 = new TreeNode(8);
+            TreeNode node9 = new TreeNode(9);
+            TreeNode node10 = new TreeNode(10);
+            TreeNode node11 = new TreeNode(11);
+            TreeNode node12 = new TreeNode(12);
+            TreeNode node13 = new TreeNode(13);
+            TreeNode node14 = new TreeNode(14);
+            TreeNode node15 = new TreeNode(15);
+            TreeNode node16 = new TreeNode(16);
+            TreeNode node17 = new TreeNode(17);
+            TreeNode node18 = new TreeNode(18);
+            TreeNode node19 = new TreeNode(19);
+            TreeNode node20 = new TreeNode(20);
+            TreeNode node21 = new TreeNode(21);
+            TreeNode node22 = new TreeNode(22);
+
+            tree.AddRoot(node5, counter);
+            tree.AddChild(node5, node4, counter);
+            tree.AddChild(node4, node3, counter);
+            tree.AddChild(node4, node14, counter);
+            tree.AddChild(node3, node2, counter);
+            tree.AddChild(node3, node12, counter);
+            tree.AddChild(node3, node13, counter);
+            tree.AddChild(node2, node1, counter);
+            tree.AddChild(node1, node0, counter);
+            tree.AddChild(node1, node11, counter);
+            tree.AddChild(node5, node6, counter);
+            tree.AddChild(node5, node9, counter);
+            tree.AddChild(node5, node15, counter);
+            tree.AddChild(node6, node7, counter);
+            tree.AddChild(node7, node8, counter);
+            tree.AddChild(node7, node16, counter);
+            tree.AddChild(node7, node17, counter);
+            tree.AddChild(node7, node18, counter);
+            tree.AddChild(node8, node19, counter);
+            tree.AddChild(node8, node20, counter);
+            tree.AddChild(node9, node10, counter);
+            tree.AddChild(node9, node21, counter);
+            tree.AddChild(node10, node22, counter);
+
+            tree.UpdateNodeTypes();
+            Dictionary<TreeNode, int> caterpillars = DFS.DetermineCaterpillarComponents(tree.Nodes(counter), counter);
+
+            Assert.AreEqual(-1, caterpillars[node0]);
+            Assert.AreEqual(-1, caterpillars[node1]);
+            Assert.AreEqual(-1, caterpillars[node11]);
+            Assert.AreEqual(-1, caterpillars[node15]);
+            Assert.AreEqual(-1, caterpillars[node5]);
+            Assert.AreEqual(-1, caterpillars[node10]);
+            Assert.AreEqual(-1, caterpillars[node22]);
+            Assert.AreEqual(-1, caterpillars[node8]);
+            Assert.AreEqual(-1, caterpillars[node19]);
+            Assert.AreEqual(-1, caterpillars[node20]);
+            Assert.AreNotEqual(-1, caterpillars[node2]);
+            Assert.AreEqual(caterpillars[node2], caterpillars[node3]);
+            Assert.AreEqual(caterpillars[node2], caterpillars[node12]);
+            Assert.AreEqual(caterpillars[node2], caterpillars[node13]);
+            Assert.AreEqual(caterpillars[node2], caterpillars[node4]);
+            Assert.AreEqual(caterpillars[node2], caterpillars[node14]);
+            Assert.AreNotEqual(caterpillars[node2], caterpillars[node6]);
+            Assert.AreNotEqual(-1, caterpillars[node6]);
+            Assert.AreEqual(caterpillars[node6], caterpillars[node7]);
+            Assert.AreEqual(caterpillars[node6], caterpillars[node16]);
+            Assert.AreEqual(caterpillars[node6], caterpillars[node17]);
+            Assert.AreEqual(caterpillars[node6], caterpillars[node18]);
+            Assert.AreNotEqual(caterpillars[node6], caterpillars[node9]);
+            Assert.AreNotEqual(caterpillars[node2], caterpillars[node9]);
+            Assert.AreNotEqual(-1, caterpillars[node9]);
+            Assert.AreEqual(caterpillars[node9], caterpillars[node21]);
+        }
     }
 }

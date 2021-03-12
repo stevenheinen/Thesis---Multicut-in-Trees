@@ -162,6 +162,76 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
+        /// Computes the different caterpillar components in a set of nodes.
+        /// </summary>
+        /// <typeparam name="N">The type of nodes. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="nodes">The <see cref="IEnumerable{T}"/> of nodes for which we want to compute the caterpillar components.</param>
+        /// <param name="treeCounter">The <see cref="Counter"/> for tree operations.</param>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> from <typeparamref name="N"/> to an identifier of the caterpillar component this <typeparamref name="N"/> is in, or -1 if it is not part of a caterpillar component.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
+        public static Dictionary<N, int> DetermineCaterpillarComponents<N>(IEnumerable<N> nodes, Counter treeCounter) where N : INode<N>
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(nodes, nameof(nodes), "Trying to determine caterpillar components in a set of nodes, but the IEnumerable with nodes is null!");
+            Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to determine caterpillar components in a set of nodes, but the counter is null!");
+#endif
+            Dictionary<N, int> result = new Dictionary<N, int>();
+
+            if (!nodes.Any())
+            {
+                return result;
+            }
+
+            HashSet<N> seen = new HashSet<N>();
+            Stack<N> stack = new Stack<N>();
+            Dictionary<N, N> pushingNode = new Dictionary<N, N>();
+            int caterpillarNumber = 0;
+            N first = nodes.First();
+            stack.Push(first);
+            seen.Add(first);
+
+            if (first.Type == NodeType.I2 || first.Type == NodeType.L2)
+            {
+                result[first] = caterpillarNumber++;
+            }
+            else
+            {
+                result[first] = -1;
+            }
+
+            while (stack.Count > 0)
+            {
+                N node = stack.Pop();
+                
+                foreach (N neighbour in node.Neighbours(treeCounter))
+                {
+                    if (seen.Contains(neighbour))
+                    {
+                        continue;
+                    }
+
+                    if (neighbour.Type == NodeType.I1 || neighbour.Type == NodeType.I3 || neighbour.Type == NodeType.L1 || neighbour.Type == NodeType.L3)
+                    {
+                        result[neighbour] = -1;
+                    }
+                    else if (node.Type == NodeType.I1 || node.Type == NodeType.I3)
+                    {
+                        result[neighbour] = caterpillarNumber++;
+                    }
+                    else
+                    {
+                        result[neighbour] = result[node];
+                    }
+
+                    seen.Add(neighbour);
+                    stack.Push(neighbour);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Find all connected components for an <see cref="IEnumerable{T}"/> of <typeparamref name="N"/>s.
         /// </summary>
         /// <typeparam name="N">Imlementation of <see cref="INode{N}"/>.</typeparam>

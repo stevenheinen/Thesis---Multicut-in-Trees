@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>78513</CodebaseCost>
-    <TotalDuplicatesCost>2390</TotalDuplicatesCost>
-    <TotalFragmentsCost>4780</TotalFragmentsCost>
+    <CodebaseCost>85323</CodebaseCost>
+    <TotalDuplicatesCost>2746</TotalDuplicatesCost>
+    <TotalFragmentsCost>5492</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
     <Duplicate Cost="307">
@@ -33,13 +33,13 @@
     <Duplicate Cost="273">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="13007" End="13646"></OffsetRange>
-        <LineRange Start="209" End="219"></LineRange>
+        <OffsetRange Start="13797" End="14436"></OffsetRange>
+        <LineRange Start="218" End="228"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="29146" End="29785"></OffsetRange>
-        <LineRange Start="422" End="432"></LineRange>
+        <OffsetRange Start="37026" End="37665"></OffsetRange>
+        <LineRange Start="554" End="564"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="201">
@@ -54,28 +54,64 @@
         <LineRange Start="150" End="156"></LineRange>
       </Fragment>
     </Duplicate>
+    <Duplicate Cost="173">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
+        <OffsetRange Start="12738" End="13964"></OffsetRange>
+        <LineRange Start="215" End="237"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UnitPath.cs</FileName>
+        <OffsetRange Start="7718" End="8944"></OffsetRange>
+        <LineRange Start="142" End="164"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="163">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
+        <OffsetRange Start="12698" End="14036"></OffsetRange>
+        <LineRange Start="217" End="239"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\OverloadedCaterpillar.cs</FileName>
+        <OffsetRange Start="9119" End="10457"></OffsetRange>
+        <LineRange Start="140" End="162"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="152">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="19382" End="20061"></OffsetRange>
-        <LineRange Start="299" End="307"></LineRange>
+        <OffsetRange Start="27262" End="27941"></OffsetRange>
+        <LineRange Start="431" End="439"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="20264" End="20944"></OffsetRange>
-        <LineRange Start="312" End="320"></LineRange>
+        <OffsetRange Start="28144" End="28824"></OffsetRange>
+        <LineRange Start="444" End="452"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="149">
       <Fragment>
         <FileName>MulticutInTrees\Program.cs</FileName>
-        <OffsetRange Start="16126" End="16597"></OffsetRange>
-        <LineRange Start="260" End="264"></LineRange>
+        <OffsetRange Start="16324" End="16795"></OffsetRange>
+        <LineRange Start="262" End="266"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Program.cs</FileName>
-        <OffsetRange Start="19617" End="20088"></OffsetRange>
-        <LineRange Start="306" End="310"></LineRange>
+        <OffsetRange Start="19815" End="20286"></OffsetRange>
+        <LineRange Start="308" End="312"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="133">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
+        <OffsetRange Start="6232" End="6688"></OffsetRange>
+        <LineRange Start="97" End="102"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
+        <OffsetRange Start="10405" End="10863"></OffsetRange>
+        <LineRange Start="172" End="178"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="128">
@@ -114,28 +150,16 @@
         <LineRange Start="385" End="390"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="113">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
-        <OffsetRange Start="6236" End="6634"></OffsetRange>
-        <LineRange Start="96" End="101"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
-        <OffsetRange Start="10254" End="10654"></OffsetRange>
-        <LineRange Start="168" End="174"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="110">
       <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
-        <OffsetRange Start="13283" End="13754"></OffsetRange>
-        <LineRange Start="222" End="232"></LineRange>
+        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
+        <OffsetRange Start="21855" End="22214"></OffsetRange>
+        <LineRange Start="354" End="360"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\UnitPath.cs</FileName>
-        <OffsetRange Start="8462" End="8933"></OffsetRange>
-        <LineRange Start="153" End="163"></LineRange>
+        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
+        <OffsetRange Start="24446" End="24805"></OffsetRange>
+        <LineRange Start="397" End="403"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="109">
@@ -153,13 +177,13 @@
     <Duplicate Cost="99">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="9624" End="10011"></OffsetRange>
-        <LineRange Start="155" End="157"></LineRange>
+        <OffsetRange Start="10414" End="10801"></OffsetRange>
+        <LineRange Start="164" End="166"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="11661" End="12048"></OffsetRange>
-        <LineRange Start="190" End="192"></LineRange>
+        <OffsetRange Start="12451" End="12838"></OffsetRange>
+        <LineRange Start="199" End="201"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">

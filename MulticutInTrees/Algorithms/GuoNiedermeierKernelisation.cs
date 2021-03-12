@@ -31,6 +31,11 @@ namespace MulticutInTrees.Algorithms
         private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; set; }
 
         /// <summary>
+        /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="TreeNode"/> is part of, or -1 if it is not part of any caterpillar component.
+        /// </summary>
+        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; set; }
+
+        /// <summary>
         /// Constructor for <see cref="GuoNiedermeierKernelisation"/>.
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
@@ -40,6 +45,7 @@ namespace MulticutInTrees.Algorithms
 #if !EXPERIMENT
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
 #endif
+            CaterpillarComponentPerNode = new CountedDictionary<TreeNode, int>();
             Preprocess();
         }
 
@@ -68,8 +74,11 @@ namespace MulticutInTrees.Algorithms
             OverloadedEdge overloadedEdge = new OverloadedEdge(Tree, DemandPairs, this, PartialSolution, K, DemandPairsPerEdge);
             reductionRules.Add(overloadedEdge);
 
-            // TODO: add other reduction rules.
-            // ...
+            OverloadedCaterpillar overloadedCaterpillar = new OverloadedCaterpillar(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);
+            reductionRules.Add(overloadedCaterpillar);
+
+            OverloadedL3Leaves overloadedL3Leaves = new OverloadedL3Leaves(Tree, DemandPairs, this, DemandPairsPerNode, PartialSolution, K);
+            reductionRules.Add(overloadedL3Leaves);
 
             ReductionRules = new ReadOnlyCollection<ReductionRule>(reductionRules);
         }
@@ -257,6 +266,7 @@ namespace MulticutInTrees.Algorithms
 
             TreeNode newNode = parent;
             (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
+            UpdateCaterpillarComponents(usedEdge, measurements);
             UpdateNodeTypesDuringEdgeContraction(usedEdge, newNode);
             Tree.RemoveNode(child, measurements.TreeOperationsCounter);
             CountedCollection<DemandPair> pairsOnEdge = RemoveDemandPairsFromContractedEdge(usedEdge, newNode, measurements);
@@ -268,6 +278,128 @@ namespace MulticutInTrees.Algorithms
             measurements.NumberOfContractedEdgesCounter++;
 
             return newNode;
+        }
+
+        /// <summary>
+        /// Update the caterpillar components for the affected nodes when an edge is contracted.
+        /// </summary>
+        /// <param name="contractedEdge">The edge that is contracted.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
+        private void UpdateCaterpillarComponents((TreeNode, TreeNode) contractedEdge, PerformanceMeasurements measurements)
+        {
+            if (CaterpillarComponentPerNode.Count(MockCounter) == 0)
+            {
+                return;
+            }
+
+            switch (contractedEdge.Item1.Type, contractedEdge.Item2.Type)
+            {
+                case (NodeType.I1, NodeType.I2):
+                    UpdateCaterpillarComponentsI1I2Node(contractedEdge.Item2, measurements);
+                    break;
+                case (NodeType.I2, NodeType.I1):
+                    UpdateCaterpillarComponentsI1I2Node(contractedEdge.Item1, measurements);
+                    break;
+                case (NodeType.I1, NodeType.I3):
+                    UpdateCaterpillarComponentsI1I3Node(contractedEdge.Item1, contractedEdge.Item2, measurements);
+                    break;
+                case (NodeType.I3, NodeType.I1):
+                    UpdateCaterpillarComponentsI1I3Node(contractedEdge.Item2, contractedEdge.Item1, measurements);
+                    break;
+                case (NodeType.I2, NodeType.I3):
+                    UpdateCaterpillarComponentsI2I3Node(contractedEdge.Item1, measurements);
+                    break;
+                case (NodeType.I3, NodeType.I2):
+                    UpdateCaterpillarComponentsI2I3Node(contractedEdge.Item2, measurements);
+                    break;
+                case (NodeType.L1, NodeType.I1):
+                    UpdateCaterpillarComponentsL1I1Node(contractedEdge.Item2, measurements);
+                    break;
+                case (NodeType.I1, NodeType.L1):
+                    UpdateCaterpillarComponentsL1I1Node(contractedEdge.Item1, measurements);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Update the caterpillar components when an edge between a <see cref="NodeType.L1"/>-leaf and a <see cref="NodeType.I1"/>-node is contracted.
+        /// </summary>
+        /// <param name="i1Node">The <see cref="NodeType.I1"/>-node of the contracted edge.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
+        private void UpdateCaterpillarComponentsL1I1Node(TreeNode i1Node, PerformanceMeasurements measurements)
+        {
+            if (i1Node.Neighbours(measurements.TreeOperationsCounter).Count() > 2)
+            {
+                return;
+            }
+            TreeNode internalNeighbour = i1Node.Neighbours(measurements.TreeOperationsCounter).First(n => n.Degree(MockCounter) > 1);
+            int caterpillar = CaterpillarComponentPerNode[internalNeighbour, measurements.TreeOperationsCounter];
+            if (caterpillar == -1)
+            {
+                return;
+            }
+            CaterpillarComponentPerNode[internalNeighbour, measurements.TreeOperationsCounter] = -1;
+            foreach (TreeNode leaf in internalNeighbour.Neighbours(measurements.TreeOperationsCounter).Where(n => n.Degree(MockCounter) == 1))
+            {
+                CaterpillarComponentPerNode[leaf, measurements.TreeOperationsCounter] = -1;
+            }
+        }
+
+        /// <summary>
+        /// Update the caterpillar components when an edge between a <see cref="NodeType.I2"/>-node and a <see cref="NodeType.I3"/>-node is contracted.
+        /// </summary>
+        /// <param name="i2Node">The <see cref="NodeType.I2"/>-node of the contracted edge.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
+        private void UpdateCaterpillarComponentsI2I3Node(TreeNode i2Node, PerformanceMeasurements measurements)
+        {
+            foreach (TreeNode leaf in i2Node.Neighbours(measurements.TreeOperationsCounter).Where(n => n.Degree(MockCounter) == 1))
+            {
+                CaterpillarComponentPerNode[leaf, measurements.TreeOperationsCounter] = -1;
+            }
+            CaterpillarComponentPerNode[i2Node, measurements.TreeOperationsCounter] = -1;
+        }
+
+        /// <summary>
+        /// Update the caterpillar components when an edge between a <see cref="NodeType.I1"/>-node and a <see cref="NodeType.I3"/>-node is contracted.
+        /// </summary>
+        /// <param name="i1Node">The <see cref="NodeType.I1"/>-node of the contracted edge.</param>
+        /// <param name="i3Node">The <see cref="NodeType.I3"/>-node of the contracted edge.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
+        private void UpdateCaterpillarComponentsI1I3Node(TreeNode i1Node, TreeNode i3Node, PerformanceMeasurements measurements)
+        {
+            IEnumerable<TreeNode> internalNeighbours = i3Node.Neighbours(measurements.TreeOperationsCounter).Where(n => n.Degree(MockCounter) > 1);
+            if (internalNeighbours.Count() > 3)
+            {
+                return;
+            }
+            int oldValue = CaterpillarComponentPerNode[internalNeighbours.First(n => !n.Equals(i1Node)), MockCounter];
+            int newValue = CaterpillarComponentPerNode[internalNeighbours.Last(n => !n.Equals(i1Node)), MockCounter];
+            List<TreeNode> keysToBeModified = new List<TreeNode>();
+            foreach (KeyValuePair<TreeNode, int> kv in CaterpillarComponentPerNode.GetCountedEnumerable(measurements.TreeOperationsCounter))
+            {
+                if (kv.Value == oldValue)
+                {
+                    keysToBeModified.Add(kv.Key);
+                }
+            }
+            foreach (TreeNode key in keysToBeModified)
+            {
+                CaterpillarComponentPerNode[key, MockCounter] = newValue;
+            }
+        }
+
+        /// <summary>
+        /// Update the caterpillar components when an edge between a <see cref="NodeType.I1"/>-node and a <see cref="NodeType.I2"/>-node is contracted.
+        /// </summary>
+        /// <param name="i2Node">The <see cref="NodeType.I2"/>-node of the contracted edge.</param>
+        /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
+        private void UpdateCaterpillarComponentsI1I2Node(TreeNode i2Node, PerformanceMeasurements measurements)
+        {
+            foreach (TreeNode leaf in i2Node.Neighbours(measurements.TreeOperationsCounter).Where(n => n.Degree(MockCounter) == 1))
+            {
+                CaterpillarComponentPerNode[leaf, measurements.TreeOperationsCounter] = -1;
+            }
+            CaterpillarComponentPerNode[i2Node, measurements.TreeOperationsCounter] = -1;
         }
 
         /// <summary>

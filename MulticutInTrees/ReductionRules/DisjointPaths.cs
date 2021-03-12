@@ -60,8 +60,12 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
+#if !EXPERIMENT
+            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Disjoint Paths reduction rule after a demand path was changed, but the list with information about changed demand paths is null!");
+#endif
 #if VERBOSEDEBUG
             Console.WriteLine("Executing Disjoint Paths rule after a demand path was changed.");
 #endif
@@ -70,14 +74,22 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
+#if !EXPERIMENT
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Disjoint Paths reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
+#endif
             return false;
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
         {
+#if !EXPERIMENT
+            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Disjoint Paths reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
+#endif
 #if VERBOSEDEBUG
             Console.WriteLine("Executing Disjoint Paths rule after an edge was contracted.");
 #endif
