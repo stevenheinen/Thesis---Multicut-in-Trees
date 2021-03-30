@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 
@@ -21,7 +22,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, dps, 10);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 10);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
 
@@ -34,7 +35,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, dps, 10);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 10);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
 
@@ -70,7 +71,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp5 = new DemandPair(node3, node1);
 
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
-            MulticutInstance instance = new MulticutInstance(tree, dps, 10);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 10);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
             {
@@ -115,7 +116,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node2, node4), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, dps, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
@@ -161,7 +162,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node3, node6), new CountedCollection<DemandPair>(new List<DemandPair>() { dp3 }, counter) },
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, dps, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
@@ -203,7 +204,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node2, node4), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, dps, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);
@@ -247,7 +248,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 { (node3, node5), new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, counter) },
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, dps, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             DominatedPath dominatedPath = new DominatedPath(tree, dps, gnfpt, demandPairsPerEdge);

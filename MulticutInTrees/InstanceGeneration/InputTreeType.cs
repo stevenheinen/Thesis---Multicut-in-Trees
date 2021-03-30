@@ -5,7 +5,7 @@ namespace MulticutInTrees.InstanceGeneration
     /// <summary>
     /// The type of input tree used in an experiment.
     /// </summary>
-    internal enum InputTreeType
+    public enum InputTreeType
     {
         /// <summary>
         /// Random trees generated using a Prüfer sequence.
@@ -22,6 +22,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// Trees generated from CNF-SAT instances.
         /// </summary>
-        CNFSAT
+        CNFSAT,
+        /// <summary>
+        /// A fixed tree, for instance used in tests.
+        /// </summary>
+        Fixed
     }
 }

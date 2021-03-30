@@ -192,6 +192,10 @@ namespace MulticutInTrees.ReductionRules
                         continue;
                     }
                     TreeNode parent = otherEndpoint.GetParent(Measurements.TreeOperationsCounter);
+                    if (parent is null)
+                    {
+                        parent = otherEndpoint.Children(Measurements.TreeOperationsCounter).First();
+                    }
                     if (!i3nodeToDemandPairsInChildren.ContainsKey(parent, MockCounter))
                     {
                         i3nodeToDemandPairsInChildren[parent, MockCounter] = new CountedList<DemandPair>();

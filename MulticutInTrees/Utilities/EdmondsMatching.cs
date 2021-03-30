@@ -279,7 +279,11 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(adjacentVertices, nameof(adjacentVertices), "Trying to create path P', but the set with adjacent vertices in D is null!");
             Utils.NullCheck(nodesInMiddleOfArcs, nameof(nodesInMiddleOfArcs), "Trying to create path P', but the dictionary with nodes in the middle of arcs in D is null!");
 #endif
-            Node start = nodesInD.First(n => unmatchedVertices.Contains(originalNodes[n]));
+            Node start = nodesInD.FirstOrDefault(n => unmatchedVertices.Contains(originalNodes[n]));
+            if (start is null)
+            {
+                return new List<(N, N)>();
+            }
             HashSet<Node> target = new HashSet<Node>(nodesInD.Where(n => n != start && adjacentVertices.Contains(originalNodes[n])));
 
             if (target.Count == 0)
@@ -307,7 +311,15 @@ namespace MulticutInTrees.Utilities
             }
             catch (NotInGraphException)
             {
-                pathPPrime = new List<(N, N)>() { unmatchedEdges.First(n => unmatchedVertices.Contains(n.Item1) && unmatchedVertices.Contains(n.Item2)) };
+                (N, N) edge = unmatchedEdges.FirstOrDefault(n => unmatchedVertices.Contains(n.Item1) && unmatchedVertices.Contains(n.Item2));
+                if (!edge.Equals(default))
+                {
+                    pathPPrime = new List<(N, N)>() { edge };
+                }
+                else
+                {
+                    pathPPrime = new List<(N, N)>();
+                }
             }
 
             return pathPPrime;

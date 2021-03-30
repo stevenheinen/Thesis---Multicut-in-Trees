@@ -31,7 +31,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// The <see cref="PerformanceMeasurements"/> used to measure the performance of this <see cref="ReductionRule"/>.
         /// </summary>
-        protected PerformanceMeasurements Measurements { get; }
+        public PerformanceMeasurements Measurements { get; }
 
         /// <summary>
         /// If a <see cref="ReductionRule"/> returns <see langword="true"/> when it is checked for applicability, and this value is also <see langword="true"/>, we have an instance that cannot be solved.
@@ -68,14 +68,6 @@ namespace MulticutInTrees.ReductionRules
         /// Everything that needs to happen before the reduction rule can be executed.
         /// </summary>
         protected abstract void Preprocess();
-
-        /// <summary>
-        /// Print all counters that this <see cref="ReductionRule"/> needed.
-        /// </summary>
-        internal void PrintCounters()
-        {
-            Console.WriteLine(Measurements);
-        }
 
         /// <summary>
         /// First iteration of this <see cref="ReductionRule"/>. There is no information about last iterations available.

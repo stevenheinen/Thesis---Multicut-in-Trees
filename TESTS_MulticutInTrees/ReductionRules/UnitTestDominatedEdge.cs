@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 
@@ -43,7 +44,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsNotNull(dominatedEdge);
         }
@@ -75,7 +76,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(null, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, null, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new DominatedEdge(tree, demandPairs, null, demandPairPerEdge); });
@@ -117,7 +118,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair2 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.RunFirstIteration());
 
@@ -172,7 +173,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair2, demandPair5 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterDemandPathRemove(new CountedList<DemandPair>(new List<DemandPair>() { demandPair3 }, counter)));
 
@@ -215,7 +216,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node3), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair5 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node1, node0) }, counter), demandPair3) }, counter)));
         }
@@ -251,7 +252,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node2, node3), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair2, demandPair4, demandPair5 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node1, node0) }, counter), demandPair3) }, counter)));
         }
@@ -290,7 +291,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node3, node4), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair4, demandPair5 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsTrue(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node3, node2) }, counter), demandPair4) }, counter)));
         }
@@ -330,7 +331,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node3, node4), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair4, demandPair5, demandPair6 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterDemandPathChanged(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node3, node2) }, counter), demandPair4) }, counter)));
         }
@@ -367,7 +368,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node2, node3), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair2, demandPair4, demandPair5 }, counter) }
             }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsFalse(dominatedEdge.AfterEdgeContraction(new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>() { ((node3, node4), node3, new CountedCollection<DemandPair>()) }, counter)));
         }

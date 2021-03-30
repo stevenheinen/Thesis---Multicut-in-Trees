@@ -5,7 +5,7 @@ namespace MulticutInTrees.Algorithms
     /// <summary>
     /// The type of <see cref="Algorithm"/> to run in the current experiment.
     /// </summary>
-    internal enum AlgorithmType
+    public enum AlgorithmType
     {
         /// <summary>
         /// The branching algorithm by Guo and Niedermeier.

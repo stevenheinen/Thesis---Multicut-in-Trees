@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 
@@ -22,7 +23,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
@@ -35,7 +36,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
@@ -81,7 +82,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
@@ -116,7 +117,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
@@ -149,7 +150,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
@@ -187,8 +188,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedList<DemandPair> demandPairs1 = new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter);
             CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter);
 
-            MulticutInstance instance1 = new MulticutInstance(tree, demandPairs1, 1);
-            MulticutInstance instance2 = new MulticutInstance(tree, demandPairs2, 1);
+            MulticutInstance instance1 = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs1, 1);
+            MulticutInstance instance2 = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs2, 1);
             GuoNiedermeierKernelisation gnfpt1 = new GuoNiedermeierKernelisation(instance1);
             GuoNiedermeierKernelisation gnfpt2 = new GuoNiedermeierKernelisation(instance2);
 

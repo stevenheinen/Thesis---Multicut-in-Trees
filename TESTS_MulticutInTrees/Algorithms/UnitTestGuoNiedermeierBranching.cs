@@ -6,7 +6,9 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Experiments;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 
 namespace TESTS_MulticutInTrees.Algorithms
@@ -21,7 +23,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
             Assert.IsNotNull(gnb);
@@ -32,7 +34,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1);
 
             Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(null); });
         }
@@ -65,13 +67,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, counter);
 
             int k = 3;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
+            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
 
-            Assert.IsTrue(solution.Item1);
-            Assert.AreEqual(3, solution.Item2.Count);
+            Assert.IsTrue(solution.Item2.Solvable);
+            Assert.AreEqual(3, solution.Item1.Count);
         }
 
         [TestMethod]
@@ -101,13 +103,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 2;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
+            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
 
-            Assert.IsTrue(solution.Item1);
-            Assert.AreEqual(2, solution.Item2.Count);
+            Assert.IsTrue(solution.Item2.Solvable);
+            Assert.AreEqual(2, solution.Item1.Count);
         }
 
         [TestMethod]
@@ -137,13 +139,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 1;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
+            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
 
-            Assert.IsTrue(solution.Item1);
-            Assert.AreEqual(1, solution.Item2.Count);
+            Assert.IsTrue(solution.Item2.Solvable);
+            Assert.AreEqual(1, solution.Item1.Count);
         }
 
         [TestMethod]
@@ -186,13 +188,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 3;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
+            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
 
-            Assert.IsTrue(solution.Item1);
-            Assert.AreEqual(3, solution.Item2.Count);
+            Assert.IsTrue(solution.Item2.Solvable);
+            Assert.AreEqual(3, solution.Item1.Count);
         }
 
         [TestMethod]
@@ -217,12 +219,12 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 4;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, k);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (bool, List<(TreeNode, TreeNode)>) solution = gnb.Run(true, CancellationToken.None);
+            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
 
-            Assert.IsFalse(solution.Item1);
+            Assert.IsFalse(solution.Item2.Solvable);
         }
     }
 }

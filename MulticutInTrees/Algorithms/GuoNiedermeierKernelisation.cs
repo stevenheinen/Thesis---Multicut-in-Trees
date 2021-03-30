@@ -40,7 +40,7 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
-        public GuoNiedermeierKernelisation(MulticutInstance instance) : base(instance, nameof(GuoNiedermeierKernelisation))
+        public GuoNiedermeierKernelisation(MulticutInstance instance) : base(instance, AlgorithmType.GuoNiedermeierKernelisation)
         {
 #if !EXPERIMENT
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");

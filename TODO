@@ -1,3 +1,0 @@
-- Create extra node class for tree instead of graph with parent
-- When adding connection also add reverse connection
-- When removing connection also remove reverse connection

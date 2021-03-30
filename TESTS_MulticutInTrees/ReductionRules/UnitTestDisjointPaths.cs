@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 
@@ -24,7 +25,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             int maxSize = 10;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, maxSize);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
@@ -38,7 +39,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             int maxSize = 10;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, maxSize);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
@@ -88,8 +89,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             demandPairs2.Add(dp2, MockCounter);
 
             int maxSize = 2;
-            MulticutInstance instance1 = new MulticutInstance(tree, demandPairs1, maxSize);
-            MulticutInstance instance2 = new MulticutInstance(tree, demandPairs2, maxSize);
+            MulticutInstance instance1 = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs1, maxSize);
+            MulticutInstance instance2 = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs2, maxSize);
             GuoNiedermeierKernelisation algorithm1 = new GuoNiedermeierKernelisation(instance1);
             GuoNiedermeierKernelisation algorithm2 = new GuoNiedermeierKernelisation(instance2);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
@@ -131,7 +132,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             demandPairs.Add(dp3, MockCounter);
 
             int maxSize = 2;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, maxSize);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
@@ -153,7 +154,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             int maxSize = 2;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, maxSize);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
             DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, maxSize);
@@ -187,7 +188,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             demandPairs.Add(dp2, MockCounter);
 
             int maxSize = 1;
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, maxSize);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 

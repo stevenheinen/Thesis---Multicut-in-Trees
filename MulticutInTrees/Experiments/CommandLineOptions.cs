@@ -1,13 +1,10 @@
 ﻿// This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using CommandLine;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.InstanceGeneration;
 
-namespace MulticutInTrees
+namespace MulticutInTrees.Experiments
 {
     /// <summary>
     /// Class containing all command line options for this project.
@@ -15,10 +12,16 @@ namespace MulticutInTrees
     internal class CommandLineOptions
     {
         /// <summary>
-        /// The seed to use for the random number generator.
+        /// The seed to use for the random number generator that generates the random numbers for the experiments.
         /// </summary>
-        [Option("seed", HelpText = "The seed to use in this experiment for the random number generator.")]
+        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments.")]
         public int RandomSeed { get; set; }
+
+        /// <summary>
+        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator. Not necessary when running the branching algorithm.
+        /// </summary>
+        [Option("repetitions", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator. Not necessary when running the branching algorithm.")]
+        public int Repetitions { get; set; }
 
         /// <summary>
         /// The type of algorithm to run.
@@ -36,7 +39,7 @@ namespace MulticutInTrees
         /// How to generate the demand pairs for this instance.
         /// </summary>
         [Option("dps", Required = true, HelpText = "The way to generate the input demand pairs in this experiment.")]
-        public InputDemandPairType InputDemandPairType { get; set; }
+        public InputDemandPairsType InputDemandPairType { get; set; }
 
         /// <summary>
         /// The number of nodes in this instance.
@@ -67,6 +70,12 @@ namespace MulticutInTrees
         /// </summary>
         [Option("maxSolutionSize", HelpText = "The maximum size the solution is allowed to be.")]
         public int MaxSolutionSize { get; set; }
+        
+        /// <summary>
+        /// The directory where the output of the experiments should be saved.
+        /// </summary>
+        [Option("outputDir", Required = true, HelpText = "The directory where the output of the experiments should be saved.")]
+        public string OutputDirectory { get; set; }
 
         /// <summary>
         /// Whether the program should run in debug mode.

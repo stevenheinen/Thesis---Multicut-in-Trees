@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Experiments;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
@@ -20,6 +21,11 @@ namespace MulticutInTrees.Algorithms
         /// The <see cref="ReadOnlyCollection{T}"/> of reduction rules (of type <see cref="ReductionRule"/>) this <see cref="Algorithm"/> uses.
         /// </summary>
         public ReadOnlyCollection<ReductionRule> ReductionRules { get; protected set; }
+
+        /// <summary>
+        /// The <see cref="MulticutInstance"/> this <see cref="Algorithm"/> is trying to solve.
+        /// </summary>
+        protected MulticutInstance Instance { get; }
 
         /// <summary>
         /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the input.
@@ -82,23 +88,29 @@ namespace MulticutInTrees.Algorithms
         protected PerformanceMeasurements AlgorithmPerformanceMeasurements { get; }
 
         /// <summary>
+        /// The <see cref="AlgorithmType"/> of this <see cref="Algorithm"/>.
+        /// </summary>
+        protected AlgorithmType AlgorithmType { get; }
+
+        /// <summary>
         /// Constructor for an <see cref="Algorithm"/>.
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
-        /// <param name="algorithmName">The name of the current <see cref="Algorithm"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> or <paramref name="algorithmName"/> is <see langword="null"/>.</exception>
-        protected Algorithm(MulticutInstance instance, string algorithmName)
+        /// <param name="algorithmType">The <see cref="AlgorithmType"/> of the current <see cref="Algorithm"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
+        protected Algorithm(MulticutInstance instance, AlgorithmType algorithmType)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
-            Utilities.Utils.NullCheck(algorithmName, nameof(algorithmName), "Trying to create an instance of a Multicut algorithm, but the name of the algorithm is null!");
 #endif
+            Instance = instance;
             Tree = instance.Tree;
             DemandPairs = instance.DemandPairs;
             K = instance.K;
             PartialSolution = new List<(TreeNode, TreeNode)>();
             MockCounter = new Counter();
-            AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmName);
+            AlgorithmType = algorithmType;
+            AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmType.ToString());
 
             LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
             LastRemovedDemandPairs = new CountedList<DemandPair>();
@@ -108,8 +120,8 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Try to solve the instance.
         /// </summary>
-        /// <returns>A tuple with a <see cref="bool"/> that states whether the instance is solvable, the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
-        public (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) Run()
+        /// <returns>A tuple with the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
+        public (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) Run()
         {
             bool[] appliedReductionRule = new bool[ReductionRules.Count];
 
@@ -186,12 +198,10 @@ namespace MulticutInTrees.Algorithms
             }
 
             returntrue:
-            PrintCounters();
-            return (true, Tree, PartialSolution, DemandPairs.GetInternalList());
+            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, true, Tree.NumberOfNodes(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
 
             returnfalse:
-            PrintCounters();
-            return (false, Tree, PartialSolution, DemandPairs.GetInternalList());
+            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, false, Tree.NumberOfNodes(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>
@@ -267,20 +277,6 @@ namespace MulticutInTrees.Algorithms
                 LastChangedEdgesPerDemandPair = oldLastChangedEdgesPerDemandPair;
             }
             return successful;
-        }
-
-        /// <summary>
-        /// Print all counters that are used by this <see cref="Algorithm"/>.
-        /// </summary>
-        private void PrintCounters()
-        {
-            Console.WriteLine();
-            Console.WriteLine(AlgorithmPerformanceMeasurements);
-            foreach (ReductionRule reductionRule in ReductionRules)
-            {
-                reductionRule.PrintCounters();
-            }
-            Console.WriteLine();
         }
 
         /// <summary>

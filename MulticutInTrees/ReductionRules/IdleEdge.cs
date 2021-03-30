@@ -100,7 +100,24 @@ namespace MulticutInTrees.ReductionRules
 #if !EXPERIMENT
             Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to execute the IdleEdge rule after edges were contracted, but the IEnumerable with contracted edge information is null!");
 #endif
-            return false;
+            Measurements.TimeSpentCheckingApplicability.Start();
+            
+            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
+            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            {
+                foreach (TreeNode neighbour in newNode.Neighbours(Measurements.TreeOperationsCounter))
+                {
+                    (TreeNode, TreeNode) edge = (newNode, neighbour);
+                    if (CanEdgeBeContracted(edge))
+                    {
+                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
+                    }
+                }
+            }
+
+            Measurements.TimeSpentCheckingApplicability.Stop();
+
+            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>

@@ -15,7 +15,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// The name of the user of this <see cref="PerformanceMeasurements"/>.
         /// </summary>
-        private string Owner { get; }
+        public string Owner { get; }
 
         /// <summary>
         /// <see cref="Counter"/> for the number of operations on the <see cref="Graphs.Tree{N}"/> in the instance.

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Experiments;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -24,9 +25,9 @@ namespace MulticutInTrees.Algorithms
         private CountedList<DemandPair> DemandPairs { get; }
 
         /// <summary>
-        /// The size the cutset is allowed to be.
+        /// The <see cref="MulticutInstance"/> this <see cref="Algorithm"/> runs on.
         /// </summary>
-        private int K { get; }
+        private MulticutInstance Instance { get; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing the <see cref="TreeNode"/> that is the least common ancestor per <see cref="DemandPair"/>.
@@ -59,7 +60,7 @@ namespace MulticutInTrees.Algorithms
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the GuoNiedermeier branching algorithm, but the instance we want to solve is null!");
 #endif
             DemandPairs = instance.DemandPairs;
-            K = instance.K;
+            Instance = instance;
 
             Measurements = new PerformanceMeasurements("Guo and Niedermeier branching");
             MockCounter = new Counter();
@@ -72,8 +73,8 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> that will be regularly checked and can stop the algorithm prematurely.</param>
-        /// <returns>A tuple of an <see cref="bool"/> whether the instance is solvable and a <see cref="List{T}"/> of tuples of two <see cref="TreeNode"/>s representing the edges in the solution.</returns>
-        public (bool, List<(TreeNode, TreeNode)>) Run(bool findSmallest, CancellationToken cancellationToken)
+        /// <returns>A tuple of a <see cref="List{T}"/> of tuples of two <see cref="TreeNode"/>s representing the edges in the solution, and an <see cref="ExperimentOutput"/> that contains the information about the time required.</returns>
+        public (List<(TreeNode, TreeNode)>, ExperimentOutput) Run(bool findSmallest, CancellationToken cancellationToken)
         {
             FillDemandPathsPerEdge();
 
@@ -88,17 +89,9 @@ namespace MulticutInTrees.Algorithms
 
             Measurements.TimeSpentModifyingInstance.Stop();
 
-            PrintCounters();
+            ExperimentOutput experimentOutput = new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType.GuoNiederMeierBranching, Instance.RandomSeed, solved, -1, Measurements, new List<PerformanceMeasurements>().AsReadOnly());
 
-            return (solved, solution);
-        }
-
-        /// <summary>
-        /// Print the <see cref="PerformanceMeasurements"/> this algorithm used to the console.
-        /// </summary>
-        private void PrintCounters()
-        {
-            Console.WriteLine(Measurements);
+            return (solution, experimentOutput);
         }
 
         /// <summary>
@@ -143,9 +136,9 @@ namespace MulticutInTrees.Algorithms
                     return (false, -1);
                 }
 
-                if (solution.Count > K)
+                if (solution.Count > Instance.K)
                 {
-                    return (false, K + 1);
+                    return (false, Instance.K + 1);
                 }
 
                 DemandPair demandPair = sortedDemandPairs[i, Measurements.DemandPairsOperationsCounter];
@@ -193,7 +186,7 @@ namespace MulticutInTrees.Algorithms
                         
                         if (!solved1 && !solved2)
                         {
-                            return (false, K + 1);
+                            return (false, Instance.K + 1);
                         }
                         if (solved1 && size1 <= size2)
                         {
@@ -217,9 +210,9 @@ namespace MulticutInTrees.Algorithms
                 }
             }
 
-            if (solution.Count > K)
+            if (solution.Count > Instance.K)
             {
-                return (false, K + 1);
+                return (false, Instance.K + 1);
             }
             return (true, solution.Count);
         }

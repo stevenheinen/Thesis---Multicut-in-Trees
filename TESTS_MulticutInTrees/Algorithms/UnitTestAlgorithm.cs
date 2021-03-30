@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Experiments;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
@@ -35,13 +36,13 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.UpdateNodeTypes();
 
             DemandPair dp = new DemandPair(node0, node3);
-            MulticutInstance instance = new MulticutInstance(tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3);
             GuoNiedermeierKernelisation g = new GuoNiedermeierKernelisation(instance);
-            (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) solution = g.Run();
-            Assert.IsTrue(solution.Item1);
-            Assert.AreEqual(0, solution.Item2.NumberOfEdges(counter));
-            Assert.AreEqual(1, solution.Item3.Count);
-            Assert.AreEqual(0, solution.Item4.Count);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) solution = g.Run();
+            Assert.IsTrue(solution.Item4.Solvable);
+            Assert.AreEqual(0, solution.Item1.NumberOfEdges(counter));
+            Assert.AreEqual(1, solution.Item2.Count);
+            Assert.AreEqual(0, solution.Item3.Count);
         }
 
 
@@ -88,21 +89,21 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 3);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 3);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
-            (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
-            Assert.IsTrue(result.Item1);
-            Assert.AreEqual(1, result.Item2.NumberOfNodes(counter));
-            Assert.AreEqual(3, result.Item3.Count);
-            Assert.AreEqual(0, result.Item4.Count);
+            Assert.IsTrue(result.Item4.Solvable);
+            Assert.AreEqual(1, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(3, result.Item2.Count);
+            Assert.AreEqual(0, result.Item3.Count);
 
-            foreach (DemandPair dp in result.Item4)
+            foreach (DemandPair dp in result.Item3)
             {
-                if (!result.Item2.HasNode(dp.Node1, counter) || !result.Item2.HasNode(dp.Node2, counter))
+                if (!result.Item1.HasNode(dp.Node1, counter) || !result.Item1.HasNode(dp.Node2, counter))
                 {
-                    Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item2.Nodes(counter).Print()}.");
+                    Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item1.Nodes(counter).Print()}.");
                 }
             }
         }
@@ -113,13 +114,14 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(273);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(500, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 500);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prüfer, InputDemandPairsType.Random, 273, tree, demandPairs, 500);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
-            (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
+            Assert.IsNotNull(result.Item4);
         }
 
         [TestMethod]
@@ -128,13 +130,14 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(789456);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(2000, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 2000);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prüfer, InputDemandPairsType.Random, 789456, tree, demandPairs, 2000);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
-            (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
+            Assert.IsNotNull(result.Item4);
         }
 
         [TestMethod]
@@ -143,13 +146,14 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(8765);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(400, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(tree, demandPairs, 400);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prüfer, InputDemandPairsType.Random, 8765, tree, demandPairs, 400);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
-            (bool, Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>) result = gnfpt.Run();
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
+            Assert.IsNotNull(result.Item4);
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 
 namespace TESTS_MulticutInTrees.MulticutProblem
@@ -17,7 +18,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
 
-            MulticutInstance instance = new MulticutInstance(tree, dps, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2);
 
             Assert.IsNotNull(instance);
         }
@@ -28,10 +29,10 @@ namespace TESTS_MulticutInTrees.MulticutProblem
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(null, dps, 2); });
-            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(tree, null, 2); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -1); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(tree, dps, -8459472); });
+            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, null, dps, 2); });
+            Assert.ThrowsException<ArgumentNullException>(() => { MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, null, 2); });
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -1); });
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -8459472); });
         }
     }
 }

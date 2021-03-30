@@ -5,7 +5,7 @@ namespace MulticutInTrees.InstanceGeneration
     /// <summary>
     /// The type of input demand pairs used in an experiment.
     /// </summary>
-    internal enum InputDemandPairType
+    public enum InputDemandPairsType
     {
         /// <summary>
         /// Create demand pairs by uniform randomly picking two nodes.
@@ -14,6 +14,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// Create demand pairs by uniform randomly picking a node, and picking a node with a certain distance from this node.
         /// </summary>
-        LengthDistribution
+        LengthDistribution,
+        /// <summary>
+        /// A fixed set of demand pairs, for instance used in tests.
+        /// </summary>
+        Fixed
     }
 }
