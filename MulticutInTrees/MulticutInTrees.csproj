@@ -52,6 +52,12 @@
     </AssemblyAttribute>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="gurobi91.netstandard20">
+      <HintPath>C:\gurobi911\win64\lib\gurobi91.netstandard20.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
   </Target>

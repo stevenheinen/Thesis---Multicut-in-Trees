@@ -270,5 +270,49 @@ namespace MulticutInTrees.Utilities
             }
             return answer;
         }
+
+        /// <summary>
+        /// Find all subsets of size <paramref name="subsetSize"/> in <paramref name="list"/>.
+        /// <br/>
+        /// Source: <see href="https://stackoverflow.com/questions/23974569/how-to-generate-all-subsets-of-a-given-size"/>
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the <paramref name="list"/>.</typeparam>
+        /// <param name="list">The <see cref="IEnumerable{T}"/> in which to find subsets.</param>
+        /// <param name="subsetSize">The required size of the subsets.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> with subsets of <paramref name="list"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
+        public static IEnumerable<IEnumerable<T>> AllSubsetsOfSize<T>(this IEnumerable<T> list, int subsetSize)
+        {
+#if !EXPERIMENT
+            NullCheck(list, nameof(list), "Trying to find all subsets of a certain size in an IEnumerable, but the IEnumerable is null!");
+#endif
+            // Generate list of sequences containing only 1 element e.g. {1}, {2}, ...
+            IEnumerable<T[]> oneElemSequences = list.Select(x => new[] { x });
+
+            // Generate List of T sequences
+            List<List<T>> result = new List<List<T>>
+            {
+                // Add initial empty set
+                new List<T>()
+            };
+
+            // Generate powerset, but skip sequences that are too long
+            foreach (T[] oneElemSequence in oneElemSequences)
+            {
+                int length = result.Count;
+
+                for (int i = 0; i < length; i++)
+                {
+                    if (result[i].Count >= subsetSize)
+                    {
+                        continue;
+                    }
+
+                    result.Add(result[i].Concat(oneElemSequence).ToList());
+                }
+            }
+
+            return result.Where(x => x.Count == subsetSize);
+        }
     }
 }

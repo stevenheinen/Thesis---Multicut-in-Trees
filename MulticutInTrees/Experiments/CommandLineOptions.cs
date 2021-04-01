@@ -12,9 +12,9 @@ namespace MulticutInTrees.Experiments
     internal class CommandLineOptions
     {
         /// <summary>
-        /// The seed to use for the random number generator that generates the random numbers for the experiments.
+        /// The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.
         /// </summary>
-        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments.")]
+        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.")]
         public int RandomSeed { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace MulticutInTrees.Experiments
         /// How to generate the demand pairs for this instance.
         /// </summary>
         [Option("dps", Required = true, HelpText = "The way to generate the input demand pairs in this experiment.")]
-        public InputDemandPairsType InputDemandPairType { get; set; }
+        public InputDemandPairsType InputDemandPairsType { get; set; }
 
         /// <summary>
         /// The number of nodes in this instance.
@@ -48,11 +48,17 @@ namespace MulticutInTrees.Experiments
         public int NumberOfNodes { get; set; }
 
         /// <summary>
-        /// The path to the file with the CNF-SAT or VC instance to generate the input tree from.
+        /// The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.
         /// </summary>
-        [Option("file", HelpText = "The path to the file with either the CNF-SAT or Vertex Cover instance. Only necessary for CNFSAT or VertexCover input tree types.")]
+        [Option("instanceFile", HelpText = "The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.")]
         public string InstanceFilePath { get; set; }
-                
+
+        /// <summary>
+        /// The path to the file with the endpoints of the demand pairs. Only necessary for fixed input demand pairs.
+        /// </summary>
+        [Option("dpFile", HelpText = "The path to the file with the endpoints of the demand pairs. Only necessary for fixed input demand pairs.")]
+        public string DemandPairFilePath { get; set; }
+
         /// <summary>
         /// The number of Demand Pairs in the instance.
         /// </summary>
@@ -70,12 +76,18 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         [Option("maxSolutionSize", HelpText = "The maximum size the solution is allowed to be.")]
         public int MaxSolutionSize { get; set; }
-        
+
         /// <summary>
         /// The directory where the output of the experiments should be saved.
         /// </summary>
         [Option("outputDir", Required = true, HelpText = "The directory where the output of the experiments should be saved.")]
         public string OutputDirectory { get; set; }
+
+        /// <summary>
+        /// The directory where the instances are stored or should be stored.
+        /// </summary>
+        [Option("instanceDir", Required = true, HelpText = "The directory where the instances are stored or should be stored.")]
+        public string InstanceDirectory { get; set; }
 
         /// <summary>
         /// Whether the program should run in debug mode.

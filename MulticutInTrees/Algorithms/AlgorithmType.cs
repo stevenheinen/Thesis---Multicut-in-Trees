@@ -15,5 +15,9 @@ namespace MulticutInTrees.Algorithms
         /// The kernelisation algorithm by Guo and Niedermeier that finds a kernel of size O(k^{3k}).
         /// </summary>
         GuoNiedermeierKernelisation,
+        /// <summary>
+        /// The MIP solver used to find the minimum possible solution size.
+        /// </summary>
+        GurobiMIPSolver,
     }
 }

@@ -23,7 +23,7 @@ namespace MulticutInTrees.ReductionRules
         /// A <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.
         /// The value is all the <see cref="DemandPair"/>s whose path passes through the key.
         /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
+        protected CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
         /// Constructor for <see cref="IdleEdge"/>.
@@ -51,7 +51,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="otherEdge">The edge we are comparing <paramref name="contractEdge"/> against.</param>
         /// <returns><see langword="true"/> if all <see cref="DemandPair"/>s that pas through <paramref name="contractEdge"/> also pass through <paramref name="otherEdge"/>, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="contractEdge"/> or <paramref name="otherEdge"/> is <see langword="null"/>.</exception>
-        private bool AllDemandPairsPassThroughAnotherEdge((TreeNode, TreeNode) contractEdge, (TreeNode, TreeNode) otherEdge)
+        protected bool AllDemandPairsPassThroughAnotherEdge((TreeNode, TreeNode) contractEdge, (TreeNode, TreeNode) otherEdge)
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractEdge.Item1, nameof(contractEdge.Item1), "Trying to see whether all demand paths that pass through an edge also pass through another, but the first endpoint of the first edge is null!");
@@ -67,7 +67,7 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         /// <param name="edge"></param>
         /// <returns>A <see cref="ReadOnlyCollection{T}"/> with all edges on the shortest <see cref="DemandPair"/> through <paramref name="edge"/>.</returns>
-        private ReadOnlyCollection<(TreeNode, TreeNode)> FindEdgesOnShortestDemandPathThroughEdge((TreeNode, TreeNode) edge)
+        protected ReadOnlyCollection<(TreeNode, TreeNode)> FindEdgesOnShortestDemandPathThroughEdge((TreeNode, TreeNode) edge)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to find all edges on the shortest demand path through this edge, but the first endpoint of the edge is null!");
@@ -237,7 +237,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted">The <see cref="CountedList{T}"/> with all edges to be contracted.</param>
         /// <returns><see langword="true"/> if <paramref name="edgesToBeContracted"/> has any elements, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeContracted"/> is <see langword="null"/>.</exception>
-        private bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
+        protected bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), "Trying to contract edges, but the List with edges is null!");

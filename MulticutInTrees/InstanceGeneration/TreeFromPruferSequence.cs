@@ -54,7 +54,7 @@ namespace MulticutInTrees.InstanceGeneration
             while (queue.Count > 0)
             {
                 TreeNode node = queue.Dequeue();
-                List<TreeNode> children = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]).ToList();
+                IEnumerable<TreeNode> children = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]);
                 edges = edges.Where(n => n.Item1 != node.ID && n.Item2 != node.ID).ToList();
                 tree.AddChildren(node, children, counter);
                 foreach (TreeNode child in children)

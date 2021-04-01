@@ -36,13 +36,14 @@ namespace MulticutInTrees
             {
                 string[] split;
                 
-                //split = "--seed=0 --repetitions=10 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=5000 --demandpairs=4000 --outputDir=\"P:\\Thesis - MulticutInTrees\\ExperimentResults\"".Split();
+                //split = "--seed=0 --repetitions=10 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=5000 --demandpairs=4000.Split();
                 //split = "--seed=0 --repetitions=1 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Caterpillar --dps=Random --nodes=1000 --demandpairs=700 -v".Split();
-                split = "--seed=0 --repetitions=10 --algorithm=GuoNiedermeierKernelisation --tree=Prüfer --dps=Random --nodes=500 --demandpairs=500 --maxSolutionSize=28".Split();
+                split = "--seed=0 --repetitions=10 --algorithm=GuoNiedermeierKernelisation --tree=Prüfer --dps=Random --nodes=500 --demandpairs=350 --maxSolutionSize=28".Split();
                 
-                args = new string[split.Length + 1];
+                args = new string[split.Length + 2];
                 split.CopyTo(args, 0);
-                args[^1] = "--outputDir=P:\\Thesis - Multicut in Trees\\ExperimentResults";
+                args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
+                args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
             }
 
             Parser parser = new Parser(p => 

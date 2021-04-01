@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -27,18 +26,17 @@ namespace MulticutInTrees.Experiments
         /// <exception cref="NotSupportedException">Thrown when there is no experiment that can be executed given these command line options.</exception>
         internal static void RunExperiment(CommandLineOptions options)
         {
-            Dictionary<(int, int), double> distanceDictionary = ParseLengthDistributionDictionary(options.DistanceDistribution);
-            switch (options.AlgorithmType, options.MaxSolutionSize)
+            switch (options.AlgorithmType)
             {
-                case (AlgorithmType.GuoNiederMeierBranching, 0):
-                    FindMinimumSolutionSize(options.RandomSeed, options.InputTreeType, options.NumberOfNodes, options.InstanceFilePath, options.InputDemandPairType, options.NumberOfDemandPairs, distanceDictionary, options.Verbose);
+                case AlgorithmType.GurobiMIPSolver:
+                    FindMinimumSolutionSize(options);
                     break;
-                case (AlgorithmType.GuoNiederMeierBranching, _):
-                    List<ExperimentOutput> result1 = RunBranchingAlgorithmExperiments(options.RandomSeed, options.Repetitions, options.InputTreeType, options.NumberOfNodes, options.InstanceFilePath, options.InputDemandPairType, options.NumberOfDemandPairs, distanceDictionary, options.MaxSolutionSize, options.Verbose);
+                case AlgorithmType.GuoNiederMeierBranching:
+                    List<ExperimentOutput> result1 = RunBranchingAlgorithmExperiments(options);
                     result1.WriteOutput(options.OutputDirectory);
                     break;
-                case (AlgorithmType.GuoNiedermeierKernelisation, _):
-                    List<ExperimentOutput> result2 = RunKernelisationAlgorithmExperiments(options.RandomSeed, options.Repetitions, options.AlgorithmType, options.InputTreeType, options.NumberOfNodes, options.InstanceFilePath, options.InputDemandPairType, options.NumberOfDemandPairs, distanceDictionary, options.MaxSolutionSize, options.Verbose);
+                case AlgorithmType.GuoNiedermeierKernelisation:
+                    List<ExperimentOutput> result2 = RunKernelisationAlgorithmExperiments(options);
                     result2.WriteOutput(options.OutputDirectory);
                     break;
                 default:
@@ -49,30 +47,20 @@ namespace MulticutInTrees.Experiments
         /// <summary>
         /// Runs a number of experiments with a kernelisation algorithm.
         /// </summary>
-        /// <param name="randomSeed">The seed to use for the random number generation.</param>
-        /// <param name="repetitions">The number of experiments to run with these settings.</param>
-        /// <param name="algorithmType">The type of algorithm to run.</param>
-        /// <param name="inputTreeType">The way to generate the input tree.</param>
-        /// <param name="numberOfNodes">The number of nodes in the input tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file that contains the CNF-SAT or Vertex Cover instance to generate the tree from. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairType">The way to generate the demand pairs. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="distanceProbability">The distribution on the required distances for demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="maxSolutionSize">The maximum size the solution is allowed to have.</param>
-        /// <param name="verbose">Whether additional information should be written to the console.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>A <see cref="List{T}"/> of <see cref="ExperimentOutput"/>s that result from these experiments.</returns>
-        private static List<ExperimentOutput> RunKernelisationAlgorithmExperiments(int randomSeed, int repetitions, AlgorithmType algorithmType, InputTreeType inputTreeType, int numberOfNodes, string filePath, InputDemandPairsType inputDemandPairType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, int maxSolutionSize, bool verbose = false)
+        private static List<ExperimentOutput> RunKernelisationAlgorithmExperiments(CommandLineOptions options)
         {
-            if (verbose)
+            if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput($"Running the {algorithmType} algorithm", randomSeed, repetitions, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability, maxSolutionSize));
+                Console.WriteLine(FormatParseOutput($"Running the {options.AlgorithmType} algorithm", options.RandomSeed, options));
             }
 
             List<ExperimentOutput> output = new List<ExperimentOutput>();
 
-            for (int i = 0; i < repetitions; i++)
+            for (int i = 0; i < options.Repetitions; i++)
             {
-                ExperimentOutput algorithmOutput = RunKernelisationAlgorithm(randomSeed + i, algorithmType, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability, maxSolutionSize, verbose);
+                ExperimentOutput algorithmOutput = RunKernelisationAlgorithm(options.RandomSeed + i, options);
                 output.Add(algorithmOutput);
             }
 
@@ -82,39 +70,20 @@ namespace MulticutInTrees.Experiments
         /// <summary>
         /// Runs a number of experiments with the branching algorithm.
         /// </summary>
-        /// <param name="randomSeed">The seed to use for the random number generation.</param>
-        /// <param name="repetitions">The number of experiments to run with these settings.</param>
-        /// <param name="inputTreeType">The way to generate the input tree.</param>
-        /// <param name="numberOfNodes">The number of nodes in the input tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file that contains the CNF-SAT or Vertex Cover instance to generate the tree from. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairType">The way to generate the demand pairs. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="distanceProbability">The distribution on the required distances for demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="maxSolutionSize">The maximum size the solution is allowed to have.</param>
-        /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
-        /// <param name="verbose">Whether additional information should be written to the console.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>A <see cref="List{T}"/> of <see cref="ExperimentOutput"/>s that result from these experiments.</returns>
-        private static List<ExperimentOutput> RunBranchingAlgorithmExperiments(int randomSeed, int repetitions, InputTreeType inputTreeType, int numberOfNodes, string filePath, InputDemandPairsType inputDemandPairType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, int maxSolutionSize, bool findSmallest, bool verbose = false)
+        private static List<ExperimentOutput> RunBranchingAlgorithmExperiments(CommandLineOptions options)
         {
-            if (verbose)
+            if (options.Verbose)
             {
-                string smallest;
-                if (findSmallest)
-                {
-                    smallest = ", trying to find the smallest possible solution,";
-                }
-                else
-                {
-                    smallest = ", trying to find a solution with size at most k,";
-                }
-                Console.WriteLine(FormatParseOutput($"Running Guo and Niedermeiers branching algorithm{smallest}", randomSeed, 1, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability, maxSolutionSize));
+                Console.WriteLine(FormatParseOutput($"Running Guo and Niedermeiers branching algorithm, trying to find a solution with size at most {options.MaxSolutionSize}", options.RandomSeed, options));
             }
 
             List<ExperimentOutput> output = new List<ExperimentOutput>();
 
-            for (int i = 0; i < repetitions; i++)
+            for (int i = 0; i < options.Repetitions; i++)
             {
-                ExperimentOutput algorithmOutput = RunBranchingAlgorithm(randomSeed + i, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability, maxSolutionSize, findSmallest, CancellationToken.None, verbose).experimentOutput;
+                ExperimentOutput algorithmOutput = RunBranchingAlgorithm(options.RandomSeed + i, options).experimentOutput;
                 output.Add(algorithmOutput);
             }
 
@@ -126,147 +95,81 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="experimentMessage">The message that is specific to an experiment.</param>
         /// <param name="randomSeed">The seed used for random number generation.</param>
-        /// <param name="repetitions">The number of experiments to run with these settings.</param>
-        /// <param name="inputTreeType">The way to generate the input tree.</param>
-        /// <param name="numberOfNodes">The number of nodes in the input tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file that contains the CNF-SAT or Vertex Cover instance to generate the tree from. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairType">The way to generate the demand pairs. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="distanceProbability">The distribution on the required distances for demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="maxSolutionSize">The maximum size the solution is allowed to have.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>A <see cref="string"/> with a formatted representation of the command line arguments.</returns>
-        private static string FormatParseOutput(string experimentMessage, int randomSeed, int repetitions, InputTreeType inputTreeType, int numberOfNodes, string filePath, InputDemandPairsType inputDemandPairType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, int maxSolutionSize = -1)
+        private static string FormatParseOutput(string experimentMessage, int randomSeed, CommandLineOptions options)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{experimentMessage} on the following instance: {repetitions} repetitions, random seed {randomSeed}, ");
-            if (maxSolutionSize != -1)
+            sb.Append($"{experimentMessage} on the following instance: {options.Repetitions} repetitions, random seed {randomSeed}, ");
+            if (options.MaxSolutionSize != -1)
             {
-                sb.Append($"a maximum solution size of {maxSolutionSize}, ");
+                sb.Append($"a maximum solution size of {options.MaxSolutionSize}, ");
             }
-            if (inputTreeType == InputTreeType.Prüfer || inputTreeType == InputTreeType.Caterpillar)
+            if (options.InputTreeType == InputTreeType.Prüfer || options.InputTreeType == InputTreeType.Caterpillar)
             {
-                sb.Append($"a {inputTreeType} tree with {numberOfNodes} nodes, ");
-                if (inputDemandPairType == InputDemandPairsType.Random)
+                sb.Append($"a {options.InputTreeType} tree with {options.NumberOfNodes} nodes, ");
+                if (options.InputDemandPairsType == InputDemandPairsType.Random)
                 {
-                    sb.Append($"and {numberOfDemandPairs} randomly generated demand pairs.");
+                    sb.Append($"and {options.NumberOfDemandPairs} randomly generated demand pairs.");
                 }
                 else
                 {
-                    sb.Append($"and {numberOfDemandPairs} demand pairs generated using {distanceProbability.Print()} as distribution.");
+                    sb.Append($"and {options.NumberOfDemandPairs} demand pairs generated using {options.DistanceDistribution} as distribution.");
                 }
             }
             else
             {
-                sb.Append($"and a tree and demand pairs from the {inputTreeType} instance found here \"{filePath}\".");
+                sb.Append($"and a tree and demand pairs from the {options.InputTreeType} instance found here \"{options.InstanceFilePath}\".");
             }
             return sb.ToString();
         }
 
         /// <summary>
-        /// Uses the branching algorithm and binary search to determine the smallest possible solution size on this instance.
+        /// Uses the gurobi MIP solver to determine the smallest possible solution size on this instance.
         /// </summary>
-        /// <param name="randomSeed">The seed to use for the random number generation.</param>
-        /// <param name="inputTreeType">The way to generate the input tree.</param>
-        /// <param name="numberOfNodes">The number of nodes in the input tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file that contains the CNF-SAT or Vertex Cover instance to generate the tree from. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairType">The way to generate the demand pairs. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="distanceProbability">The distribution on the required distances for demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="verbose">Whether additional information should be written to the console.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>The smallest possible solution size on the instance defined by the parametes in this function.</returns>
-        private static int FindMinimumSolutionSize(int randomSeed, InputTreeType inputTreeType, int numberOfNodes, string filePath, InputDemandPairsType inputDemandPairType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, bool verbose = false)
+        private static int FindMinimumSolutionSize(CommandLineOptions options)
         {
-            if (verbose)
+            if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput("Finding the minimum possible value for the maximum solution size using Guo and Niedermeiers branching algorithm", randomSeed, 1, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability));
+                Console.WriteLine(FormatParseOutput("Finding the minimum possible value for the maximum solution size using the Gurobi MIP solver", options.RandomSeed, options));
             }
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs) = GetInstance(options.RandomSeed, options);
+            GurobiMIPAlgorithm algorithm = new GurobiMIPAlgorithm(tree, demandPairs.GetInternalList());
+            int minimumSize = algorithm.Run(options.Verbose);
 
-            Task<int> binarySearch = Task.Run(() =>
+            if (options.Verbose)
             {
-                return Utils.BinarySearchGetFirstTrue(0, Math.Min(numberOfDemandPairs, numberOfNodes - 1), n =>
-                {
-                    if (cancellationTokenSource.Token.IsCancellationRequested)
-                    {
-                        return false;
-                    }
-
-                    if (verbose)
-                    {
-                        Console.WriteLine($"Now checking {n}");
-                    }
-                    return RunBranchingAlgorithm(randomSeed, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability, n, false, cancellationTokenSource.Token).experimentOutput.Solvable;
-                });
-            });
-
-            Task<int> branchExact = Task.Run(() =>
-            {
-                return RunBranchingAlgorithm(randomSeed, inputTreeType, numberOfNodes, filePath, inputDemandPairType, numberOfDemandPairs, distanceProbability, numberOfDemandPairs, true, cancellationTokenSource.Token).solution.Count;
-            });
-
-            Task<int>[] tasks = new Task<int>[] { binarySearch, branchExact };
-            int firstDoneIndex = Task.WaitAny(tasks);
-            cancellationTokenSource.Cancel();
-            int smallestSolutionSize = tasks[firstDoneIndex].Result;
-
-            if (verbose)
-            {
-                string name = "Exact Branching";
-                if (firstDoneIndex == 0)
-                {
-                    name = "Binary Search";
-                }
-
-                Console.WriteLine($"Task {name} finished first. The smallest found solution size is {smallestSolutionSize}!");
+                Console.WriteLine($"Smallest possible K found! It is equal to {minimumSize}!");
             }
 
-            return smallestSolutionSize;
+            return minimumSize;
         }
 
         /// <summary>
         /// Runs an experiment with the branching algorithm.
         /// </summary>
         /// <param name="randomSeed">The seed to use for the random number generation.</param>
-        /// <param name="inputTreeType">The way to generate the input tree.</param>
-        /// <param name="numberOfNodes">The number of nodes in the input tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file that contains the CNF-SAT or Vertex Cover instance to generate the tree from. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairsType">The way to generate the demand pairs. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="distanceProbability">The distribution on the required distances for demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="maxSolutionSize">The maximum size the solution is allowed to have.</param>
-        /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that will be regularly checked and can stop the algorithm prematurely.</param>
-        /// <param name="verbose">Whether additional information should be written to the console.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>A tuple with the solution and the <see cref="ExperimentOutput"/> of this algorithm.</returns>
-        private static (List<(TreeNode, TreeNode)> solution, ExperimentOutput experimentOutput) RunBranchingAlgorithm(int randomSeed, InputTreeType inputTreeType, int numberOfNodes, string filePath, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, int maxSolutionSize, bool findSmallest, CancellationToken cancellationToken, bool verbose = false)
+        private static (List<(TreeNode, TreeNode)> solution, ExperimentOutput experimentOutput) RunBranchingAlgorithm(int randomSeed, CommandLineOptions options)
         {
-            if (verbose)
+            if (options.Verbose)
             {
-                string smallest;
-                if (findSmallest)
-                {
-                    smallest = ", trying to find the smallest possible solution,";
-                }
-                else
-                {
-                    smallest = ", trying to find a solution with size at most k,";
-                }
-                Console.WriteLine(FormatParseOutput($"Running Guo and Niedermeiers branching algorithm{smallest}", randomSeed, 1, inputTreeType, numberOfNodes, filePath, inputDemandPairsType, numberOfDemandPairs, distanceProbability, maxSolutionSize));
+                Console.WriteLine(FormatParseOutput($"Running Guo and Niedermeiers branching algorithm, trying to find a solution with size at most {options.MaxSolutionSize}", randomSeed, options));
             }
 
-            Random treeRandom = new Random(randomSeed);
-            Random demandPairRandom = new Random(randomSeed);
-            Tree<TreeNode> tree = CreateInputTree(inputTreeType, treeRandom, numberOfNodes, filePath);
-            CountedList<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, inputDemandPairsType, numberOfDemandPairs, distanceProbability);
-            MulticutInstance instance = new MulticutInstance(inputTreeType, inputDemandPairsType, randomSeed, tree, demandPairs, maxSolutionSize);
+            (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs) = GetInstance(randomSeed, options);
+            MulticutInstance instance = new MulticutInstance(options.InputTreeType, options.InputDemandPairsType, randomSeed, tree, demandPairs, options.MaxSolutionSize);
             GuoNiedermeierBranching gnBranching = new GuoNiedermeierBranching(instance);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            (List<(TreeNode, TreeNode)> solution, ExperimentOutput experimentOutput) = gnBranching.Run(findSmallest, cancellationToken);
+            (List<(TreeNode, TreeNode)> solution, ExperimentOutput experimentOutput) = gnBranching.Run(false, CancellationToken.None);
             stopwatch.Stop();
 
-            if (verbose)
+            if (options.Verbose)
             {
                 Console.WriteLine();
                 Console.WriteLine("Branching algorithm result:");
@@ -284,30 +187,19 @@ namespace MulticutInTrees.Experiments
         /// Runs an experiment with a kernelisation algorithm.
         /// </summary>
         /// <param name="randomSeed">The seed to use for the random number generation.</param>
-        /// <param name="algorithmType">The type of algorithm to run.</param>
-        /// <param name="inputTreeType">The way to generate the input tree.</param>
-        /// <param name="numberOfNodes">The number of nodes in the input tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file that contains the CNF-SAT or Vertex Cover instance to generate the tree from. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairsType">The way to generate the demand pairs. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="distanceProbability">The distribution on the required distances for demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="maxSolutionSize">The maximum size the solution is allowed to have.</param>
-        /// <param name="verbose">Whether additional information should be written to the console.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>The <see cref="ExperimentOutput"/> of this algorithm.</returns>
-        private static ExperimentOutput RunKernelisationAlgorithm(int randomSeed, AlgorithmType algorithmType, InputTreeType inputTreeType, int numberOfNodes, string filePath, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, int maxSolutionSize, bool verbose = false)
+        private static ExperimentOutput RunKernelisationAlgorithm(int randomSeed, CommandLineOptions options)
         {
-            Random treeRandom = new Random(randomSeed);
-            Random demandPairRandom = new Random(randomSeed);
-            Tree<TreeNode> tree = CreateInputTree(inputTreeType, treeRandom, numberOfNodes, filePath);
-            CountedList<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, inputDemandPairsType, numberOfDemandPairs, distanceProbability);
-            MulticutInstance instance = new MulticutInstance(inputTreeType, inputDemandPairsType, randomSeed, tree, demandPairs, maxSolutionSize);
-            Algorithm algorithm = CreateAlgorithmInstance(algorithmType, instance);
+            (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs) = GetInstance(randomSeed, options);
+            MulticutInstance instance = new MulticutInstance(options.InputTreeType, options.InputDemandPairsType, randomSeed, tree, demandPairs, options.MaxSolutionSize);
+            Algorithm algorithm = CreateAlgorithmInstance(options.AlgorithmType, instance);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             (Tree<TreeNode> _, List<(TreeNode, TreeNode)> partialSolution, List<DemandPair> finalDemandPairs, ExperimentOutput experimentOutput) = algorithm.Run();
             stopwatch.Stop();
 
-            if (verbose)
+            if (options.Verbose)
             {
                 Console.WriteLine();
                 Console.WriteLine($"FPT algorithm ({algorithm.GetType()}) result:");
@@ -323,6 +215,46 @@ namespace MulticutInTrees.Experiments
             }
 
             return experimentOutput;
+        }
+
+        /// <summary>
+        /// Tries to find whether this instance already exists in the files. If so, it grabs it from there. If not, it creates it, finds the optimal K and writes it to the files for future reference.
+        /// </summary>
+        /// <param name="randomSeed">The seed used for the random number generator.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
+        /// <returns>A tuple with a <see cref="Tree{N}"/> and a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s. The required information for an instance to run.</returns>
+        private static (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs) GetInstance(int randomSeed, CommandLineOptions options)
+        {
+            (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(options.InstanceDirectory, randomSeed, options.InputTreeType, options.NumberOfNodes, options.InstanceFilePath, options.InputDemandPairsType, options.NumberOfDemandPairs, options.DemandPairFilePath, options.DistanceDistribution);
+            if (tree is null)
+            {
+                if (options.Verbose)
+                {
+                    Console.WriteLine("Instance not yet found in the instance files, creating it!");
+                }
+
+                Random treeRandom = new Random(randomSeed);
+                Random demandPairRandom = new Random(randomSeed);
+                tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
+                Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
+
+                GurobiMIPAlgorithm algorithm = new GurobiMIPAlgorithm(tree, demandPairs.GetInternalList());
+                optimalK = algorithm.Run(options.Verbose);
+                
+                InstanceReaderWriter.WriteInstance(options.InstanceDirectory, randomSeed, tree, options.InputTreeType, options.InstanceFilePath, demandPairs.GetInternalList(), options.InputDemandPairsType, options.DemandPairFilePath, options.DistanceDistribution, optimalK);
+
+                if (options.Verbose)
+                {
+                    Console.WriteLine($"Instance created! Minimum possible solution size: {optimalK}. This experiment is using {options.MaxSolutionSize}.");
+                }
+            }
+            else if (options.Verbose)
+            {
+                Console.WriteLine($"Found the instance in the instance files! Minimum possible solution size: {optimalK}. This experiment is using {options.MaxSolutionSize}.");
+            }
+
+            return (tree, demandPairs);
         }
 
         /// <summary>
@@ -354,13 +286,15 @@ namespace MulticutInTrees.Experiments
         /// <param name="inputDemandPairType">The <see cref="InputDemandPairsType"/> that says which method to use to create the <see cref="DemandPair"/>s.</param>
         /// <param name="numberOfDemandPairs">The required number of <see cref="DemandPair"/>s.</param>
         /// <param name="distanceProbability">A <see cref="Dictionary{TKey, TValue}"/> from a lower and upperbound on a distance to the probability of choosing that distance for the length of a <see cref="DemandPair"/>. Not required for all <see cref="InputTreeType"/>s.</param>
+        /// <param name="filePath">The path to the file with the endpoints of the the <see cref="DemandPair"/>s. Only required for the <see cref="InputDemandPairsType.Fixed"/> type.</param>
         /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s that were generated according to the method given by <paramref name="inputDemandPairType"/>.</returns>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="inputDemandPairType"/> is not supported as demand pair generation type.</exception>
-        private static CountedList<DemandPair> CreateInputDemandPairs(Random random, Tree<TreeNode> inputTree, InputDemandPairsType inputDemandPairType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability)
+        private static CountedList<DemandPair> CreateInputDemandPairs(Random random, Tree<TreeNode> inputTree, InputDemandPairsType inputDemandPairType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
         {
             return inputDemandPairType switch
             {
-                InputDemandPairsType.LengthDistribution => throw new NotImplementedException("Demand pairs witgh a preferred length distribution are not yet supported!"),
+                InputDemandPairsType.Fixed => throw new NotImplementedException("Demand pairs with fixed endpoints are not yet supported!"),
+                InputDemandPairsType.LengthDistribution => throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!"),
                 InputDemandPairsType.Random => new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(numberOfDemandPairs, inputTree, random), new Counter()),
                 _ => throw new NotSupportedException($"The input demand pair type {inputDemandPairType} is not supported!")
             };

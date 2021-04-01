@@ -21,6 +21,7 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="list">The <see cref="IEnumerable{T}"/> of <see cref="ExperimentOutput"/>s to write to the CSV file.</param>
         /// <param name="outputDirectory">The filepath to the directory to place the CSV file in.</param>
+        /// <exception cref="UnauthorizedAccessException">Thrown when the file to write to cannot be opened.</exception>
         internal static void WriteOutput(this IEnumerable<ExperimentOutput> list, string outputDirectory)
         {
 #if !EXPERIMENT
@@ -30,13 +31,22 @@ namespace MulticutInTrees.Experiments
                 throw new ArgumentOutOfRangeException(nameof(list), $"Cannot write the output of less than 1 ExperimentOutputs! (List contains {list.Count()} ExperimentOutputs)");
             }
 #endif
-            string fileName = $@"{outputDirectory}\Experiments_{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.csv";
-            using StreamWriter streamWriter = new StreamWriter(fileName);
-            using CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
-            CreateHeader(csvWriter, list.First().ReductionRulesOperations.Count);
-            foreach (ExperimentOutput output in list)
+            try
             {
-                WriteSingleOutput(csvWriter, output);
+                string fileName = $@"{outputDirectory}\Experiments_{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.csv";
+                using StreamWriter streamWriter = new StreamWriter(fileName);
+                using CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+                CreateHeader(csvWriter, list.First().ReductionRulesOperations.Count);
+                foreach (ExperimentOutput output in list)
+                {
+                    WriteSingleOutput(csvWriter, output);
+                }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine("An UnauthorizedAccessException was thrown! Message: " + e.Message);
+                Console.WriteLine("Do you have enough permissions to write to this file? Is your antivirus software blocking access?");
+                Console.WriteLine("File is not written, continuing...");
             }
         }
 
