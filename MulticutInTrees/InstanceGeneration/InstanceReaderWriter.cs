@@ -3,11 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
+using MulticutInTrees.CommandLineArguments;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.InstanceGeneration
 {
@@ -24,22 +25,23 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// Write an instance to a file.
         /// </summary>
-        /// <param name="instanceDirectoryPath">The path to the directory where instances are placed.</param>
         /// <param name="randomSeed">The seed used for random number generation.</param>
+        /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
         /// <param name="tree">The <see cref="Tree{N}"/> to be written.</param>
-        /// <param name="inputTreeType">The <see cref="InputTreeType"/> used to generate the tree in the current instance.</param>
-        /// <param name="treeFileName">The name of the file that contains the instance from which we created the current tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
         /// <param name="demandPairs">The <see cref="DemandPair"/>s to be written.</param>
-        /// <param name="inputDemandPairsType">The <see cref="InputDemandPairsType"/> used to generate the demand pairs in the current instance.</param>
-        /// <param name="dpFileName">The name of the file that contains the fixed demand pair endpoints. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="dpLengthDist">The length distribution for the demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
         /// <param name="optimalK">The optimal K value for the current instance.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/>, <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="UnauthorizedAccessException">Thrown when the file to write to cannot be opened.</exception>
-        public static void WriteInstance(string instanceDirectoryPath, int randomSeed, Tree<TreeNode> tree, InputTreeType inputTreeType, string treeFileName, List<DemandPair> demandPairs, InputDemandPairsType inputDemandPairsType, string dpFileName, string dpLengthDist, int optimalK)
+        public static void WriteInstance(int randomSeed, CommandLineOptions options, Tree<TreeNode> tree, List<DemandPair> demandPairs, int optimalK)
         {
+#if !EXPERIMENT
+            Utils.NullCheck(options, nameof(options), "Trying to write an instance to a file, but the command line options are null!");
+            Utils.NullCheck(tree, nameof(tree), "Trying to write an instance to a file, but the tree in the instance is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to write an instance to a file, but the list of demand pairs is null!");
+#endif
             int numberOfNodes = tree.NumberOfNodes(MockCounter);
             int numberOfDPs = demandPairs.Count;
-            string fileName = CreateFilePath(instanceDirectoryPath, randomSeed, inputTreeType, numberOfNodes, treeFileName, inputDemandPairsType, numberOfDPs, dpFileName, dpLengthDist);
+            string fileName = CreateFilePath(randomSeed, options);
 
             try
             {
@@ -78,129 +80,102 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// Read an instance from a file.
         /// </summary>
-        /// <param name="instanceDirectoryPath">The path to the directory where instances are placed.</param>
         /// <param name="randomSeed">The seed used for random number generation.</param>
-        /// <param name="inputTreeType">The <see cref="InputTreeType"/> used to generate the tree in the current instance.</param>
-        /// <param name="numberOfNodes">The number of nodes in the tree in the current instance. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="treeFileName">The name of the file that contains the instance from which we created the current tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairsType">The <see cref="InputDemandPairsType"/> used to generate the demand pairs in the current instance.</param>
-        /// <param name="numberOfDPs">The number of demand pairs in the instance. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="dpFileName">The name of the file that contains the fixed demand pair endpoints. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="dpLengthDist">The length distribution for the demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
+        /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
         /// <returns>If the file with this instance exists: a tuple with the <see cref="Tree{N}"/>, a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s and the optimal K value. Otherwise, a tuple with <see langword="null"/>, <see langword="null"/> and -1.</returns>
-        public static (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) ReadInstance(string instanceDirectoryPath, int randomSeed, InputTreeType inputTreeType, int numberOfNodes, string treeFileName, InputDemandPairsType inputDemandPairsType, int numberOfDPs, string dpFileName, string dpLengthDist)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
+        public static (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) ReadInstance(int randomSeed, CommandLineOptions options)
         {
-            string fileName = CreateFilePath(instanceDirectoryPath, randomSeed, inputTreeType, numberOfNodes, treeFileName,  inputDemandPairsType, numberOfDPs, dpFileName, dpLengthDist);
+#if !EXPERIMENT
+            Utils.NullCheck(options, nameof(options), "Trying to read an instance from a file, but the command line options are null!");
+#endif
+            string fileName = CreateFilePath(randomSeed, options);
 
-            if (File.Exists(fileName))
+            if (!File.Exists(fileName))
             {
-                Tree<TreeNode> tree = new Tree<TreeNode>();
-                CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-                int optimalK;
+                // The file does not exist, return an empty instance so it can be created and written.
+                return (null, null, -1);
+            }
 
-                using (StreamReader sr = new StreamReader(fileName))
+            int optimalK;
+            int numberOfNodes;
+            int numberOfDPs;
+
+            int root;
+            List<(int, int)> edges = new List<(int, int)>();
+
+            List<(int, int)> dps = new List<(int, int)>();
+
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                // Skip the first line with a comment
+                sr.ReadLine();
+                string[] header = sr.ReadLine().Split();
+                numberOfNodes = int.Parse(header[0]);
+                numberOfDPs = int.Parse(header[1]);
+                optimalK = int.Parse(header[2]);
+
+                sr.ReadLine();
+                root = int.Parse(sr.ReadLine());
+
+                // Reading edges, skip comment line
+                sr.ReadLine();
+                for (int i = 0; i < numberOfNodes - 1; i++)
                 {
-                    // Skip the first line with a comment
-                    sr.ReadLine();
-                    string[] header = sr.ReadLine().Split();
-                    numberOfNodes = int.Parse(header[0]);
-                    numberOfDPs = int.Parse(header[1]);
-                    optimalK = int.Parse(header[2]);
-
-                    List<TreeNode> nodes = new List<TreeNode>();
-                    for (uint i = 0; i < numberOfNodes; i++)
-                    {
-                        nodes.Add(new TreeNode(i));
-                    }
-
-                    sr.ReadLine();
-                    TreeNode root = nodes[int.Parse(sr.ReadLine())];
-                    tree.AddRoot(root, MockCounter);
-
-                    // Reading edges, skip comment line
-                    sr.ReadLine();
-                    List<(TreeNode, TreeNode)> edges = new List<(TreeNode, TreeNode)>();
-                    for (int i = 0; i < numberOfNodes - 1; i++)
-                    {
-                        string[] edge = sr.ReadLine().Split();
-                        TreeNode endpoint1 = nodes[int.Parse(edge[0])];
-                        TreeNode endpoint2 = nodes[int.Parse(edge[1])];
-                        edges.Add((endpoint1, endpoint2));
-                    }
-
-                    // Actually add the edges to the tree
-                    Queue<TreeNode> queue = new Queue<TreeNode>();
-                    queue.Enqueue(root);
-                    while (queue.Count > 0)
-                    {
-                        TreeNode node = queue.Dequeue();
-                        IEnumerable<TreeNode> children = edges.Where(n => n.Item1 == node || n.Item2 == node).Select(n => n.Item1 == node ? n.Item2 : n.Item1);
-                        edges = edges.Where(n => n.Item1 != node && n.Item2 != node).ToList();
-                        tree.AddChildren(node, children, MockCounter);
-                        foreach (TreeNode child in children)
-                        {
-                            queue.Enqueue(child);
-                        }
-                    }
-
-                    tree.UpdateNodeTypes();
-
-                    // Reading demand pairs, skip comment line
-                    sr.ReadLine();
-                    for (int i = 0; i < numberOfDPs; i++)
-                    {
-                        string[] dp = sr.ReadLine().Split();
-                        TreeNode endpoint1 = nodes[int.Parse(dp[0])];
-                        TreeNode endpoint2 = nodes[int.Parse(dp[1])];
-                        demandPairs.Add(new DemandPair(endpoint1, endpoint2), MockCounter);
-                    }
+                    string[] edge = sr.ReadLine().Split();
+                    edges.Add((int.Parse(edge[0]), int.Parse(edge[1])));
                 }
 
-                return (tree, demandPairs, optimalK);
+                // Reading demand pairs, skip comment line
+                sr.ReadLine();
+                for (int i = 0; i < numberOfDPs; i++)
+                {
+                    string[] dp = sr.ReadLine().Split();
+                    dps.Add((int.Parse(dp[0]), int.Parse(dp[1])));
+                }
             }
-           
-            // The file does not exist, return an empty instance so it can be created and written.
-            return (null, null, -1);
+
+            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(numberOfNodes, edges);
+            CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, dps);
+
+            return (tree, demandPairs, optimalK);           
         }
 
         /// <summary>
         /// Create the path of the file with the correct identifiers.
         /// </summary>
-        /// <param name="instanceDirectoryPath">The path to the directory where instances are placed.</param>
         /// <param name="randomSeed">The seed used for random number generation.</param>
-        /// <param name="inputTreeType">The <see cref="InputTreeType"/> used to generate the tree in the current instance.</param>
-        /// <param name="numberOfNodes">The number of nodes in the tree in the current instance. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="treeFileName">The name of the file that contains the instance from which we created the current tree. Not necessary for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="inputDemandPairsType">The <see cref="InputDemandPairsType"/> used to generate the demand pairs in the current instance.</param>
-        /// <param name="numberOfDPs">The number of demand pairs in the instance. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="dpFileName">The name of the file that contains the fixed demand pair endpoints. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
-        /// <param name="dpLengthDist">The length distribution for the demand pairs. Not necessary for all <see cref="InputDemandPairsType"/>s.</param>
+        /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
         /// <returns>The path of the file for the instance with the given parameters.</returns>
-        private static string CreateFilePath(string instanceDirectoryPath, int randomSeed, InputTreeType inputTreeType, int numberOfNodes, string treeFileName, InputDemandPairsType inputDemandPairsType, int numberOfDPs, string dpFileName, string dpLengthDist)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
+        private static string CreateFilePath(int randomSeed, CommandLineOptions options)
         {
+#if !EXPERIMENT
+            Utils.NullCheck(options, nameof(options), "Trying to create the filename for an instance given command line options, but the command line options are null!");
+#endif
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.Append($"{instanceDirectoryPath}\\multicutinstance_seed={randomSeed}_treetype={inputTreeType}_dptype={inputDemandPairsType}");
+            fileNameBuilder.Append($"{options.InstanceDirectory}\\MulticutInstance_seed={randomSeed}_treeType={options.InputTreeType}_dpType={options.InputDemandPairsType}");
 
-            if (inputTreeType == InputTreeType.Prüfer || inputTreeType == InputTreeType.Caterpillar)
+            if (options.InputTreeType == InputTreeType.Prüfer || options.InputTreeType == InputTreeType.Caterpillar)
             {
-                fileNameBuilder.Append($"_nrNodes={numberOfNodes}");
+                fileNameBuilder.Append($"_nrNodes={options.NumberOfNodes}");
             }
             else
             {
-                fileNameBuilder.Append($"_treeFile=({treeFileName})");
+                fileNameBuilder.Append($"_treeFile=({options.InstanceFilePath})".Replace(".", "[dot]"));
             }
 
-            if (inputDemandPairsType == InputDemandPairsType.Random)
+            if (options.InputDemandPairsType == InputDemandPairsType.Random)
             {
-                fileNameBuilder.Append($"_nrDPs={numberOfDPs}");
+                fileNameBuilder.Append($"_nrDPs={options.NumberOfDemandPairs}");
             }
-            else if (inputDemandPairsType == InputDemandPairsType.Fixed)
+            else if (options.InputDemandPairsType == InputDemandPairsType.Fixed)
             {
-                fileNameBuilder.Append($"_dpFile=({dpFileName})");
+                fileNameBuilder.Append($"_dpFile=({options.DemandPairFilePath})".Replace(".", "[dot]"));
             }
-            else
+            else if (options.InputDemandPairsType == InputDemandPairsType.LengthDistribution)
             {
-                fileNameBuilder.Append($"_dpLengthDist=({dpLengthDist})");
+                fileNameBuilder.Append($"_dpLengthDist=({options.DistanceDistribution})");
             }
 
             fileNameBuilder.Append(".txt");

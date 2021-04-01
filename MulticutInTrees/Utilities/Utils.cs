@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 
 namespace MulticutInTrees.Utilities
 {
@@ -281,10 +282,15 @@ namespace MulticutInTrees.Utilities
         /// <param name="subsetSize">The required size of the subsets.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> with subsets of <paramref name="list"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="subsetSize"/> is negative.</exception>
         public static IEnumerable<IEnumerable<T>> AllSubsetsOfSize<T>(this IEnumerable<T> list, int subsetSize)
         {
 #if !EXPERIMENT
             NullCheck(list, nameof(list), "Trying to find all subsets of a certain size in an IEnumerable, but the IEnumerable is null!");
+            if (subsetSize < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(subsetSize), $"Trying to find all subsets of size {subsetSize} in a list. Make sure the asked subsetsize is not negative!");
+            }
 #endif
             // Generate list of sequences containing only 1 element e.g. {1}, {2}, ...
             IEnumerable<T[]> oneElemSequences = list.Select(x => new[] { x });
@@ -313,6 +319,120 @@ namespace MulticutInTrees.Utilities
             }
 
             return result.Where(x => x.Count == subsetSize);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Tree{N}"/> with the given number of nodes and all edges in <paramref name="edges"/>.
+        /// </summary>
+        /// <param name="numberOfNodes">The required number of nodes in the <see cref="Tree{N}"/>.</param>
+        /// <param name="edges"><see cref="IEnumerable{T}"/> with tuples of <see cref="int"/>s that represent the identifiers of the endpoints of the edges.</param>
+        /// <returns>A <see cref="Tree{N}"/> with <paramref name="numberOfNodes"/> nodes and an edge for each element in <paramref name="edges"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is negative.</exception>
+        /// <exception cref="ArgumentException">Thrown when there are not <paramref name="numberOfNodes"/> - 1 edges, or when <paramref name="edges"/> contains an identifier that is negative, or equal to or larger than <paramref name="numberOfNodes"/>.</exception>
+        public static Tree<TreeNode> CreateTreeWithEdges(int numberOfNodes, IEnumerable<(int, int)> edges)
+        {
+#if !EXPERIMENT
+            NullCheck(edges, nameof(edges), "Trying to create a tree with a given list of int tuples as edges, but the list with int tuples is null!");
+            if (numberOfNodes < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(numberOfNodes), $"Trying to create a tree with a given list of edges, but the number of nodes in the tree is negative ({numberOfNodes})!");
+            }
+            if (edges.Count() != numberOfNodes - 1)
+            {
+                throw new ArgumentException($"Trying to create a tree with a given list of edges, but the number of edges in the tree is not equal to the number of nodes - 1 ({numberOfNodes} nodes, {edges.Count()} edges)!", nameof(edges));
+            }
+            foreach ((int, int) edge in edges)
+            {
+                if (edge.Item1 < 0 || edge.Item1 >= numberOfNodes)
+                {
+                    throw new ArgumentException($"Trying to create a tree with a given list of edges, but an edge has an invalid endpoint (should be in range 0..{numberOfNodes - 1}, but is {edge.Item1})!", nameof(edges));
+                }
+                if (edge.Item2 < 0 || edge.Item2 >= numberOfNodes)
+                {
+                    throw new ArgumentException($"Trying to create a tree with a given list of edges, but an edge has an invalid endpoint (should be in range 0..{numberOfNodes - 1}, but is {edge.Item2})!", nameof(edges));
+                }
+            }
+#endif
+            Counter mockCounter = new Counter();
+
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+
+            TreeNode[] nodes = new TreeNode[numberOfNodes];
+            for (uint i = 0; i < numberOfNodes; i++)
+            {
+                nodes[i] = new TreeNode(i);
+            }
+
+            tree.AddRoot(nodes[0], mockCounter);
+
+            Queue<TreeNode> queue = new Queue<TreeNode>();
+            queue.Enqueue(nodes[0]);
+
+            while (queue.Count > 0)
+            {
+                TreeNode node = queue.Dequeue();
+                IEnumerable<TreeNode> children = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]);
+                edges = edges.Where(n => n.Item1 != node.ID && n.Item2 != node.ID).ToList();
+                tree.AddChildren(node, children, mockCounter);
+                foreach (TreeNode child in children)
+                {
+                    queue.Enqueue(child);
+                }
+            }
+
+            tree.UpdateNodeTypes();
+
+           return tree;
+        }
+
+        /// <summary>
+        /// Create a set of <see cref="DemandPair"/>s in <paramref name="tree"/> with endpoints identified by the <see cref="int"/> tuples in <paramref name="endpoints"/>.
+        /// </summary>
+        /// <param name="tree">The <see cref="Tree{N}"/> in which to create the <see cref="DemandPair"/>s.</param>
+        /// <param name="endpoints">The <see cref="IEnumerable{T}"/> with <see cref="int"/> tuples that represent the IDs of the <see cref="TreeNode"/>s that are the endpoints of that <see cref="DemandPair"/>.</param>
+        /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="endpoints"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when a tuple in <paramref name="endpoints"/> has a value that is not the ID of a <see cref="TreeNode"/> in <paramref name="tree"/>.</exception>
+        public static CountedList<DemandPair> CreateDemandPairs(Tree<TreeNode> tree, IEnumerable<(int, int)> endpoints)
+        {
+#if !EXPERIMENT
+            NullCheck(tree, nameof(tree), "Trying to create demand pairs given a list with int endpoints, but the tree is null!");
+            NullCheck(endpoints, nameof(endpoints), "Trying to create demand pairs given a list with int endpoints, but the list with endpoints is null!");
+            int nrNodes = tree.NumberOfNodes(new Counter());
+            foreach ((int, int) dp in endpoints)
+            {
+                if (dp.Item1 < 0)
+                {
+                    throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (should be in range 0..{nrNodes - 1}, but is {dp.Item1})!", nameof(endpoints));
+                }
+                if (dp.Item2 < 0)
+                {
+                    throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (should be in range 0..{nrNodes - 1}, but is {dp.Item2})!", nameof(endpoints));
+                }
+            }
+#endif
+            Counter mockCounter = new Counter();
+            CountedList<DemandPair> result = new CountedList<DemandPair>();
+
+            foreach ((int, int) dp in endpoints)
+            {
+                TreeNode node1 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item1);
+                TreeNode node2 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item2);
+#if !EXPERIMENT
+                if (node1 == default(TreeNode))
+                {
+                    throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (it is {dp.Item1}, but is does not exist in the tree)!", nameof(endpoints));
+                }
+                if (node2 == default(TreeNode))
+                {
+                    throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (it is {dp.Item2}, but is does not exist in the tree)!", nameof(endpoints));
+                }
+#endif
+                result.Add(new DemandPair(node1, node2), mockCounter);
+            }
+
+            return result;
         }
     }
 }

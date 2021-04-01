@@ -2,8 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.Utilities
@@ -11,6 +14,8 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestUtils
     {
+        private readonly static Counter MockCounter = new Counter();
+
         [TestMethod]
         public void TestNullParameter()
         {
@@ -29,6 +34,12 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentNullException>(() => Utils.PickRandomWhere(list, n => true, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.PickRandom<int>(null, random));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.PickRandom(list, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.BinarySearchGetLastTrue(0, 10, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.BinarySearchGetFirstTrue(0, 10, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.AllSubsetsOfSize<int>(null, 3));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateTreeWithEdges(10, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(null, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(new Tree<TreeNode>(), null));
         }
 
         [TestMethod]
@@ -49,6 +60,9 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsTrue(a.Message == "Value cannot be null. (Parameter 'testName')");
 
             Assert.ThrowsException<ArgumentNullException>(() => Utils.NullCheck<Node>(null, null));
+
+            int x = 3;
+            Utils.NullCheck(x, nameof(x), "This test should pass");
         }
 
         [TestMethod]
@@ -89,6 +103,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestBinarySearchGetFirstTrue()
         {
+            Assert.ThrowsException<ArgumentException>(() => Utils.BinarySearchGetFirstTrue(10, 5, x => x > 7));
             Assert.AreEqual(-1, Utils.BinarySearchGetFirstTrue(0, 100, n => n > 500));
             Assert.AreEqual(0, Utils.BinarySearchGetFirstTrue(0, 100, n => n > -1));
             Assert.AreEqual(100, Utils.BinarySearchGetFirstTrue(0, 100, n => n >= 100));
@@ -99,11 +114,104 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestBinarySearchGetLastTrue()
         {
+            Assert.ThrowsException<ArgumentException>(() => Utils.BinarySearchGetLastTrue(10, 5, x => x > 7));
             Assert.AreEqual(-1, Utils.BinarySearchGetLastTrue(0, 100, n => n > 500));
             Assert.AreEqual(0, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 0));
             Assert.AreEqual(100, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 100));
             Assert.AreEqual(21, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 21));
             Assert.AreEqual(20, Utils.BinarySearchGetLastTrue(0, 100, n => n <= 20));
+        }
+
+        [TestMethod]
+        public void TestAllSubsetsOfSize()
+        {
+            List<int> list = new List<int>() { 1, 2, 3, 4, 5 };
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => list.AllSubsetsOfSize(-1));
+
+            int size = 0;
+            IEnumerable<IEnumerable<int>> res = list.AllSubsetsOfSize(size);
+            Assert.AreEqual(1, res.Count());
+            foreach (IEnumerable<int> subset in res)
+            {
+                Assert.AreEqual(size, subset.Count());
+            }
+
+            size = 5;
+            res = list.AllSubsetsOfSize(size);
+            Assert.AreEqual(1, res.Count());
+            foreach (IEnumerable<int> subset in res)
+            {
+                Assert.AreEqual(size, subset.Count());
+            }
+
+            size = 4;
+            res = list.AllSubsetsOfSize(size);
+            Assert.AreEqual(5, res.Count());
+            foreach (IEnumerable<int> subset in res)
+            {
+                Assert.AreEqual(size, subset.Count());
+            }
+
+            size = 3;
+            res = list.AllSubsetsOfSize(size);
+            Assert.AreEqual(10, res.Count());
+            foreach (IEnumerable<int> subset in res)
+            {
+                Assert.AreEqual(size, subset.Count());
+            }
+
+            size = 2;
+            res = list.AllSubsetsOfSize(size);
+            Assert.AreEqual(10, res.Count());
+            foreach (IEnumerable<int> subset in res)
+            {
+                Assert.AreEqual(size, subset.Count());
+            }
+
+            size = 1;
+            res = list.AllSubsetsOfSize(size);
+            Assert.AreEqual(5, res.Count());
+            foreach (IEnumerable<int> subset in res)
+            {
+                Assert.AreEqual(size, subset.Count());
+            }
+        }
+
+        [TestMethod]
+        public void TestCreateTreeWithEdges()
+        {
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(-1, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3), (2, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (5, 0), (4, 3), (-5, 0), (1, 3) }));
+
+            Tree<TreeNode> test = Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            Assert.IsNotNull(test);
+            Assert.AreEqual(5, test.NumberOfNodes(MockCounter));
+            Assert.AreEqual(4, test.NumberOfEdges(MockCounter));
+            Assert.AreEqual(3, test.Height(MockCounter));
+        }
+
+        [TestMethod]
+        public void TestCreateDemandPairs()
+        {
+            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (5, 0), (4, 3), (-5, 0), (1, 3) }));
+
+            tree.RemoveNode(tree.Nodes(MockCounter).First(n => n.ID == 3), MockCounter);
+
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (3, 0), (2, 1) }));
+
+            CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 4) });
+            Assert.IsNotNull(demandPairs);
+            Assert.AreEqual(3, demandPairs.Count(MockCounter));
         }
     }
 }

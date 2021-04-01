@@ -21,14 +21,17 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="list">The <see cref="IEnumerable{T}"/> of <see cref="ExperimentOutput"/>s to write to the CSV file.</param>
         /// <param name="outputDirectory">The filepath to the directory to place the CSV file in.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> or <paramref name="outputDirectory"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="list"/> contains no elements.</exception>
         /// <exception cref="UnauthorizedAccessException">Thrown when the file to write to cannot be opened.</exception>
         internal static void WriteOutput(this IEnumerable<ExperimentOutput> list, string outputDirectory)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(list, nameof(list), "Trying to write a list of experiment outputs, but the list is null!");
-            if (list.Count() < 1)
+            Utilities.Utils.NullCheck(outputDirectory, nameof(outputDirectory), "Trying to write a list of experiment outputs, but the output directory is null!");
+            if (!list.Any())
             {
-                throw new ArgumentOutOfRangeException(nameof(list), $"Cannot write the output of less than 1 ExperimentOutputs! (List contains {list.Count()} ExperimentOutputs)");
+                throw new ArgumentException($"Cannot write the output of less than 1 ExperimentOutputs! (List contains {list.Count()} ExperimentOutputs)", nameof(list));
             }
 #endif
             try

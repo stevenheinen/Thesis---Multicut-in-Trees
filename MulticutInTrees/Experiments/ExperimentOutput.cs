@@ -77,7 +77,7 @@ namespace MulticutInTrees.Experiments
         /// <param name="algorithmOperations">The <see cref="PerformanceMeasurements"/> the <see cref="Algorithm"/> itself used.</param>
         /// <param name="reductionRulesOperations"><see cref="ReadOnlyCollection{T}"/> of the <see cref="PerformanceMeasurements"/> per <see cref="ReductionRules.ReductionRule"/> in the algorithm.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="algorithmOperations"/> or <paramref name="reductionRulesOperations"/> is <see langword="null"/>.</exception>
-        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int seed, bool solvable, int kernelSize, PerformanceMeasurements algorithmOperations,ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
+        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int seed, bool solvable, int kernelSize, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(algorithmOperations, nameof(algorithmOperations), "Trying to creat an experiment output, but the performance measures of the algorithm is null!"); 

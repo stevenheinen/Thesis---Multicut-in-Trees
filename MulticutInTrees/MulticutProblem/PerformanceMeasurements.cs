@@ -111,8 +111,8 @@ namespace MulticutInTrees.MulticutProblem
             sb.Append("==============================================================\n");
             sb.Append($"Time spent checking applicability (in ticks): {TimeSpentCheckingApplicability.ElapsedTicks}\n");
             sb.Append($"Time spent modifying the instance (in ticks): {TimeSpentModifyingInstance.ElapsedTicks}\n");
-            sb.Append($"Time spent checking applicability (TimeSpan): {TimeSpentCheckingApplicability.Elapsed}\n");
-            sb.Append($"Time spent modifying the instance (TimeSpan): {TimeSpentModifyingInstance.Elapsed}\n");
+            sb.Append($"Time spent checking applicability (TimeSpan): {TimeSpentCheckingApplicability.Elapsed:hh\\:mm\\:ss\\.fffffff}\n");
+            sb.Append($"Time spent modifying the instance (TimeSpan): {TimeSpentModifyingInstance.Elapsed:hh\\:mm\\:ss\\.fffffff}\n");
             sb.Append("==============================================================\n");
             sb.Append("\n");
 

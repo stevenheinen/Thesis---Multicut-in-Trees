@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
+using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.InstanceGeneration
 {
@@ -34,37 +35,7 @@ namespace MulticutInTrees.InstanceGeneration
 
             List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes, random);
 
-            // Sort the edge tuples in the list from smallest to largest
-            edges = edges.Select(n => n.Item1 < n.Item2 ? n : (n.Item2, n.Item1)).ToList();
-            edges = edges.OrderBy(n => n.Item2).OrderBy(n => n.Item1).ToList();
-
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-
-            TreeNode[] nodes = new TreeNode[numberOfNodes];
-            for (uint i = 0; i < numberOfNodes; i++)
-            {
-                nodes[i] = new TreeNode(i);
-            }
-
-            tree.AddRoot(nodes[0], counter);
-
-            Queue<TreeNode> queue = new Queue<TreeNode>();
-            queue.Enqueue(nodes[0]);
-
-            while (queue.Count > 0)
-            {
-                TreeNode node = queue.Dequeue();
-                IEnumerable<TreeNode> children = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]);
-                edges = edges.Where(n => n.Item1 != node.ID && n.Item2 != node.ID).ToList();
-                tree.AddChildren(node, children, counter);
-                foreach (TreeNode child in children)
-                {
-                    queue.Enqueue(child);
-                }
-            }
-
-            tree.UpdateNodeTypes();
-            return tree;
+            return Utils.CreateTreeWithEdges(numberOfNodes, edges);
         }
 
         /// <summary>

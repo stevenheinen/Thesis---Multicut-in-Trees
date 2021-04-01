@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>91902</CodebaseCost>
-    <TotalDuplicatesCost>2695</TotalDuplicatesCost>
-    <TotalFragmentsCost>5390</TotalFragmentsCost>
+    <CodebaseCost>94278</CodebaseCost>
+    <TotalDuplicatesCost>2841</TotalDuplicatesCost>
+    <TotalFragmentsCost>5682</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
     <Duplicate Cost="307">
@@ -114,6 +114,30 @@
         <LineRange Start="413" End="429"></LineRange>
       </Fragment>
     </Duplicate>
+    <Duplicate Cost="124">
+      <Fragment>
+        <FileName>MulticutInTrees\InstanceGeneration\FixedTreeReader.cs</FileName>
+        <OffsetRange Start="2204" End="2419"></OffsetRange>
+        <LineRange Start="44" End="48"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\InstanceGeneration\InstanceReaderWriter.cs</FileName>
+        <OffsetRange Start="6413" End="6628"></OffsetRange>
+        <LineRange Start="123" End="127"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="120">
+      <Fragment>
+        <FileName>MulticutInTrees\InstanceGeneration\FixedDemandPairsReader.cs</FileName>
+        <OffsetRange Start="2656" End="2857"></OffsetRange>
+        <LineRange Start="47" End="51"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\InstanceGeneration\InstanceReaderWriter.cs</FileName>
+        <OffsetRange Start="6740" End="6941"></OffsetRange>
+        <LineRange Start="131" End="135"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="120">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
@@ -172,18 +196,6 @@
         <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
         <OffsetRange Start="12457" End="12844"></OffsetRange>
         <LineRange Start="199" End="201"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="98">
-      <Fragment>
-        <FileName>MulticutInTrees\Experiments\ExperimentManager.cs</FileName>
-        <OffsetRange Start="8457" End="8723"></OffsetRange>
-        <LineRange Start="164" End="165"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\Experiments\ExperimentManager.cs</FileName>
-        <OffsetRange Start="10182" End="10448"></OffsetRange>
-        <LineRange Start="194" End="195"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">

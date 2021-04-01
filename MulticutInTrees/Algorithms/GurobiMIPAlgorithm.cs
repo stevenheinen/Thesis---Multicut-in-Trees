@@ -31,20 +31,30 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         private Counter MockCounter { get; }
 
-        /// <summary>
-        /// Constructor for the <see cref="GurobiMIPAlgorithm"/>.
-        /// </summary>
-        /// <param name="tree">The <see cref="Tree{T}"/> in the instance.</param>
-        /// <param name="demandPairs">The <see cref="DemandPair"/>s in the instance.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
-        public GurobiMIPAlgorithm(Tree<TreeNode> tree, List<DemandPair> demandPairs)
+        // todo: comment
+        internal GurobiMIPAlgorithm(Tree<TreeNode> tree, List<DemandPair> demandPairs)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Gurobi MIP algorithm, but the tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Gurobi MIP algorithm, but the list with demand pairs is null!");
+            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Gurobi MIP algorithm, but the tree in the instance is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Gurobi MIP algorithm, but the list of demandpairs in the instance is null!");
 #endif
             Tree = tree;
             DemandPairs = demandPairs;
+            MockCounter = new Counter();
+        }
+
+        /// <summary>
+        /// Constructor for the <see cref="GurobiMIPAlgorithm"/>.
+        /// </summary>
+        /// <param name="instance">The <see cref="MulticutInstance"/> to solve.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
+        public GurobiMIPAlgorithm(MulticutInstance instance)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the Gurobi MIP algorithm, but the instance to solve is null!");
+#endif
+            Tree = instance.Tree;
+            DemandPairs = instance.DemandPairs.GetInternalList();
             MockCounter = new Counter();
         }
 

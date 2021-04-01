@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MulticutInTrees.CountedDatastructures
 {
@@ -34,6 +35,7 @@ namespace MulticutInTrees.CountedDatastructures
         }
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         object IEnumerator.Current
         {
             get

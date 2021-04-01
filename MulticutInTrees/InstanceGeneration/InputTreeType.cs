@@ -8,6 +8,10 @@ namespace MulticutInTrees.InstanceGeneration
     public enum InputTreeType
     {
         /// <summary>
+        /// Default value. Should not be used.
+        /// </summary>
+        None,
+        /// <summary>
         /// Random trees generated using a Prüfer sequence.
         /// </summary>
         Prüfer,

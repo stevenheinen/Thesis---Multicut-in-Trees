@@ -8,6 +8,10 @@ namespace MulticutInTrees.Algorithms
     public enum AlgorithmType
     {
         /// <summary>
+        /// Default value. Should not be used.
+        /// </summary>
+        None,
+        /// <summary>
         /// The branching algorithm by Guo and Niedermeier.
         /// </summary>
         GuoNiederMeierBranching,
@@ -19,5 +23,9 @@ namespace MulticutInTrees.Algorithms
         /// The MIP solver used to find the minimum possible solution size.
         /// </summary>
         GurobiMIPSolver,
+        /// <summary>
+        /// Brute force algorithm that checks all possible subsets of edges of a certain size.
+        /// </summary>
+        BruteForce,
     }
 }

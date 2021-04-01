@@ -36,6 +36,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.UpdateNodeTypes();
 
             DemandPair dp = new DemandPair(node0, node3);
+
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3);
             GuoNiedermeierKernelisation g = new GuoNiedermeierKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) solution = g.Run();

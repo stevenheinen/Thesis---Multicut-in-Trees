@@ -53,7 +53,7 @@ namespace TESTS_MulticutInTrees.Utilities
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(10, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
             int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
-            Assert.AreEqual(4, flow);
+            Assert.AreEqual(3, flow);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace TESTS_MulticutInTrees.Utilities
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(90, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
             int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
-            Assert.AreEqual(13, flow);
+            Assert.AreEqual(10, flow);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace TESTS_MulticutInTrees.Utilities
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(1000, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
             int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
-            Assert.AreEqual(33, flow);
+            Assert.AreEqual(36, flow);
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace TESTS_MulticutInTrees.Utilities
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(4000, tree, random);
             IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
             int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
-            Assert.AreEqual(73, flow);
+            Assert.AreEqual(76, flow);
         }
     }
 }

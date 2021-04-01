@@ -8,6 +8,10 @@ namespace MulticutInTrees.InstanceGeneration
     public enum InputDemandPairsType
     {
         /// <summary>
+        /// Default value. Should not be used.
+        /// </summary>
+        None,
+        /// <summary>
         /// Create demand pairs by uniform randomly picking two nodes.
         /// </summary>
         Random,
@@ -18,6 +22,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// A fixed set of demand pairs, for instance used in tests.
         /// </summary>
-        Fixed
+        Fixed,
+        /// <summary>
+        /// The demand pairs are generated from the same instance as the tree. For instance in the CNF-SAT tree.
+        /// </summary>
+        FromTreeInstance,
     }
 }

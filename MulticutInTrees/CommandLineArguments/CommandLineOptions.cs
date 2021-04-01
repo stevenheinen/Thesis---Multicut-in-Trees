@@ -4,12 +4,12 @@ using CommandLine;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.InstanceGeneration;
 
-namespace MulticutInTrees.Experiments
+namespace MulticutInTrees.CommandLineArguments
 {
     /// <summary>
     /// Class containing all command line options for this project.
     /// </summary>
-    internal class CommandLineOptions
+    public class CommandLineOptions
     {
         /// <summary>
         /// The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.
@@ -18,9 +18,9 @@ namespace MulticutInTrees.Experiments
         public int RandomSeed { get; set; }
 
         /// <summary>
-        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator. Not necessary when running the branching algorithm.
+        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator.
         /// </summary>
-        [Option("repetitions", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator. Not necessary when running the branching algorithm.")]
+        [Option("repetitions", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator.")]
         public int Repetitions { get; set; }
 
         /// <summary>
