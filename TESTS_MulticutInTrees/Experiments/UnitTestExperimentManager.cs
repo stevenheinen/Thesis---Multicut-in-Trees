@@ -93,7 +93,11 @@ namespace TESTS_MulticutInTrees.Experiments
         [TestMethod]
         public void TestGurobiMIPExperiment()
         {
-            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GurobiMIPSolver, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, Repetitions = 3, Verbose = true };
+            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GurobiMIPSolver, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, Repetitions = 3, Experiments = 2, Verbose = true };
+
+            ExperimentManager.RunExperiment(options);
+
+            options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GurobiMIPSolver, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, Repetitions = 2, Experiments = 1 };
 
             ExperimentManager.RunExperiment(options);
         }
@@ -101,19 +105,19 @@ namespace TESTS_MulticutInTrees.Experiments
         [TestMethod]
         public void TestBruteForceExperiment()
         {
-            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.BruteForce, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Verbose = true };
+            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.BruteForce, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Experiments = 2, Verbose = true };
 
             ExperimentManager.RunExperiment(options);
             
-            CommandLineOptions options2 = new CommandLineOptions() { AlgorithmType = AlgorithmType.BruteForce, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 1, Repetitions = 3, Verbose = true };
+            options = new CommandLineOptions() { AlgorithmType = AlgorithmType.BruteForce, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 1, Repetitions = 3, Experiments = 2, Verbose = true };
 
-            ExperimentManager.RunExperiment(options2);
+            ExperimentManager.RunExperiment(options);
         }
 
         [TestMethod]
         public void TestBranchingAlgorithmExperiment()
         {
-            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GuoNiederMeierBranching, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Verbose = true };
+            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GuoNiederMeierBranching, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Experiments = 2, Verbose = true };
 
             ExperimentManager.RunExperiment(options);
         }
@@ -121,7 +125,7 @@ namespace TESTS_MulticutInTrees.Experiments
         [TestMethod]
         public void TestGuoNiedermeierKernelisationExperiment()
         {
-            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Verbose = true };
+            CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Experiments = 2, Verbose = true };
 
             ExperimentManager.RunExperiment(options);
         }

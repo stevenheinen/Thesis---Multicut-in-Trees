@@ -20,6 +20,10 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         GuoNiedermeierKernelisation,
         /// <summary>
+        /// Guo and Niedermeier's kernelisation algorithm with improved reduction rules.
+        /// </summary>
+        ImprovedGuoNiedermeierKernelisation,
+        /// <summary>
         /// The MIP solver used to find the minimum possible solution size.
         /// </summary>
         GurobiMIPSolver,

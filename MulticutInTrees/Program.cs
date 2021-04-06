@@ -22,10 +22,11 @@ namespace MulticutInTrees
             if (args.Length == 0)
             {
                 string[] split;
-                
+
                 //split = "--seed=0 --repetitions=10 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Prüfer --dps=Random --nodes=5000 --demandpairs=4000.Split();
                 //split = "--seed=0 --repetitions=1 --algorithm=GuoNiedermeierKernelisation --maxSolutionSize=400 --tree=Caterpillar --dps=Random --nodes=1000 --demandpairs=700 -v".Split();
-                split = "--seed=0 --repetitions=10 --algorithm=GuoNiedermeierKernelisation --tree=Prüfer --dps=Random --nodes=500 --demandpairs=350 --maxSolutionSize=28".Split();
+                split = "--seed=0 --repetitions=1 --experiments=1 --algorithm=ImprovedGuoNiedermeierKernelisation --tree=Prüfer --dps=Random --nodes=50 --demandpairs=40 --maxSolutionSize=23 -v".Split();
+                //split = "--seed=0 --repetitions=1 --experiments=5 --algorithm=GurobiMIPSolver --tree=Prüfer --dps=Random --nodes=5000 --demandpairs=4000 -v".Split();
                 
                 args = new string[split.Length + 2];
                 split.CopyTo(args, 0);

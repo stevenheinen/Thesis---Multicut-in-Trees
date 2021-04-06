@@ -14,13 +14,19 @@ namespace MulticutInTrees.CommandLineArguments
         /// <summary>
         /// The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.
         /// </summary>
-        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.")]
+        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple experiments, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.")]
         public int RandomSeed { get; set; }
 
         /// <summary>
-        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator.
+        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment.
         /// </summary>
-        [Option("repetitions", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator.")]
+        [Option("experiments", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment.")]
+        public int Experiments { get; set; }
+        
+        /// <summary>
+        /// The number of repetitions to run per experiment.
+        /// </summary>
+        [Option("repetitions", Default = 1, HelpText = "The number of repetitions to run per experiment.")]
         public int Repetitions { get; set; }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public DisjointPaths(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm, nameof(DisjointPaths), true)
+        public DisjointPaths(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm, true)
         {
 #if !Experiment
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Disjoint Paths reduction rule, but the input tree is null!");

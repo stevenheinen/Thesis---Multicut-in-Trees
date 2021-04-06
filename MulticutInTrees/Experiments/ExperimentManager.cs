@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using MulticutInTrees.Algorithms;
@@ -35,6 +36,7 @@ namespace MulticutInTrees.Experiments
             List<ExperimentOutput> results = options.AlgorithmType switch
             {
                 AlgorithmType.GuoNiedermeierKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
+                AlgorithmType.ImprovedGuoNiedermeierKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
                 AlgorithmType.GurobiMIPSolver => RunMultipleExperiments(options, RunGurobiMIPAlgorithm),
                 AlgorithmType.GuoNiederMeierBranching => RunMultipleExperiments(options, RunBranchingAlgorithm),
                 AlgorithmType.BruteForce => RunMultipleExperiments(options, RunBruteForceAlgorithm),
@@ -64,10 +66,13 @@ namespace MulticutInTrees.Experiments
 
             List<ExperimentOutput> output = new List<ExperimentOutput>();
 
-            for (int i = 0; i < options.Repetitions; i++)
+            for (int i = 0; i < options.Experiments; i++)
             {
-                ExperimentOutput algorithmOutput = singleExperimentMethod(options.RandomSeed + i, options);
-                output.Add(algorithmOutput);
+                for (int j = 0; j < options.Repetitions; j++)
+                {
+                    ExperimentOutput algorithmOutput = singleExperimentMethod(options.RandomSeed + i, options);
+                    output.Add(algorithmOutput);
+                }
             }
 
             return output;
@@ -87,7 +92,7 @@ namespace MulticutInTrees.Experiments
             Utils.NullCheck(options, nameof(options), "Trying to format the parse output to a nice readable message, but the command line arguments are null!");
 #endif
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{experimentMessage} on the following instance: {options.Repetitions} repetitions, random seed {randomSeed}, ");
+            sb.Append($"{experimentMessage} on the following instance: {options.Experiments} different experiments, each with {options.Repetitions} repetitions, random seed {randomSeed}, ");
             if (options.MaxSolutionSize != -1)
             {
                 sb.Append($"a maximum solution size of {options.MaxSolutionSize}, ");
@@ -257,6 +262,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine($"Partial solution size:            {partialSolution.Count}");
                 Console.WriteLine($"Remaining tree:                   {tree}");
                 Console.WriteLine($"Remaining number of demand pairs: {finalDemandPairs.Count}");
+                Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, finalDemandPairs.Select(dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
                 Console.WriteLine($"Time required (ticks):            {stopwatch.ElapsedTicks}");
                 Console.WriteLine($"Entire partial solution:          {partialSolution.Print()}");
                 Console.WriteLine($"Remaining edges:                  {tree.Edges(new Counter()).Print()}");
@@ -283,6 +289,7 @@ namespace MulticutInTrees.Experiments
             return algorithmType switch
             {
                 AlgorithmType.GuoNiedermeierKernelisation => new GuoNiedermeierKernelisation(instance),
+                AlgorithmType.ImprovedGuoNiedermeierKernelisation => new ImprovedGuoNiedermeierKernelisation(instance),
                 _ => throw new NotSupportedException($"The algorithm type {algorithmType} is not supported!")
             };
         }

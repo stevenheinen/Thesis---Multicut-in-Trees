@@ -44,21 +44,19 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
-        /// <param name="name">The name of this <see cref="ReductionRule"/>.</param>
         /// <param name="trueMeansInfeasibleInstance">If a <see cref="ReductionRule"/> returns <see langword="true"/> when it is checked for applicability, and this value is also <see langword="true"/>, we have an instance that cannot be solved. When a <see cref="ReductionRule"/> cannot determine that an instance is infeasible, pass <see langword="false"/> to this constructor.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="name"/> is <see langword="null"/>.</exception>
-        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, string name, bool trueMeansInfeasibleInstance = false)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
+        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, bool trueMeansInfeasibleInstance = false)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
             Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a reduction rule, but the list of demand pairs is null!");
             Utilities.Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create a reduction rule, but the algorithm it is part of is null!");
-            Utilities.Utils.NullCheck(name, nameof(name), "Trying to create a reduction rule, but its name is null!");
 #endif
             Tree = tree;
             DemandPairs = demandPairs;
             Algorithm = algorithm;
-            Measurements = new PerformanceMeasurements(name);
+            Measurements = new PerformanceMeasurements(GetType().Name);
             TrueMeansInfeasibleInstance = trueMeansInfeasibleInstance;
 
             Preprocess();

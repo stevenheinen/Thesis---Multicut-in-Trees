@@ -23,36 +23,52 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
         /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; set; }
+        protected CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; set; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
         /// </summary>
-        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; set; }
+        protected CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; set; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="TreeNode"/> is part of, or -1 if it is not part of any caterpillar component.
         /// </summary>
-        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; set; }
+        protected CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; set; }
 
         /// <summary>
         /// Constructor for <see cref="GuoNiedermeierKernelisation"/>.
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
-        public GuoNiedermeierKernelisation(MulticutInstance instance) : base(instance, AlgorithmType.GuoNiedermeierKernelisation)
+        public GuoNiedermeierKernelisation(MulticutInstance instance) : this(instance, AlgorithmType.GuoNiedermeierKernelisation)
         {
 #if !EXPERIMENT
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
+#endif
+            // Performs a call to the protected constructor.
+        }
+
+        /// <summary>
+        /// Constructor for <see cref="GuoNiedermeierKernelisation"/> with an overwritten <see cref="AlgorithmType"/> for subclasses of this algorithm.
+        /// </summary>
+        /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
+        /// <param name="overwrittenAlgorithmType">The <see cref="AlgorithmType"/> of the current algorithm.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> or <paramref name="overwrittenAlgorithmType"/> is <see langword="null"/>.</exception>
+        protected GuoNiedermeierKernelisation(MulticutInstance instance, AlgorithmType overwrittenAlgorithmType) : base(instance, overwrittenAlgorithmType)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
+            Utils.NullCheck(overwrittenAlgorithmType, nameof(overwrittenAlgorithmType), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the AlgorithmType of the algorithm is null!");
 #endif
             CaterpillarComponentPerNode = new CountedDictionary<TreeNode, int>();
             Preprocess();
         }
 
         /// <summary>
-        /// Create the <see cref="List{T}"/> of <see cref="ReductionRule"/>s used by this algorithm.
+        /// Create the <see cref="ReadOnlyCollection{T}"/> of <see cref="ReductionRule"/>s used by this algorithm.
         /// </summary>
-        private void CreateReductionRules()
+        /// <returns>A <see cref="ReadOnlyCollection{T}"/> with the <see cref="ReductionRule"/>s used by this algorithm.</returns>
+        protected virtual ReadOnlyCollection<ReductionRule> CreateReductionRules()
         {
             List<ReductionRule> reductionRules = new List<ReductionRule>();
 
@@ -80,7 +96,7 @@ namespace MulticutInTrees.Algorithms
             OverloadedL3Leaves overloadedL3Leaves = new OverloadedL3Leaves(Tree, DemandPairs, this, DemandPairsPerNode, PartialSolution, K);
             reductionRules.Add(overloadedL3Leaves);
 
-            ReductionRules = new ReadOnlyCollection<ReductionRule>(reductionRules);
+            return new ReadOnlyCollection<ReductionRule>(reductionRules);
         }
 
         /// <summary>
@@ -148,7 +164,7 @@ namespace MulticutInTrees.Algorithms
         protected override void Preprocess()
         {
             FillDemandPathsPerEdge();
-            CreateReductionRules();
+            ReductionRules = CreateReductionRules();
         }
 
         /// <summary>

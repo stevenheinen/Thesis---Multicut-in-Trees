@@ -31,7 +31,12 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         private Counter MockCounter { get; }
 
-        // todo: comment
+        /// <summary>
+        /// Constructor for the <see cref="GurobiMIPAlgorithm"/> directly from a <see cref="Tree{N}"/> and <see cref="DemandPair"/>s instead of a <see cref="MulticutInstance"/>.
+        /// </summary>
+        /// <param name="tree">The <see cref="Tree{N}"/> to run the algorithm on.</param>
+        /// <param name="demandPairs">The <see cref="DemandPair"/>s in the instance.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         internal GurobiMIPAlgorithm(Tree<TreeNode> tree, List<DemandPair> demandPairs)
         {
 #if !EXPERIMENT

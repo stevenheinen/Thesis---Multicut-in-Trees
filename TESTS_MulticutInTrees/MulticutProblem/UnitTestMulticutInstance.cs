@@ -33,7 +33,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestPublicConstructor()
         {
-            CommandLineOptions existingOptions = new CommandLineOptions() { RandomSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "no.txt", OutputDirectory = "", InstanceDirectory = "", Verbose = true };
+            CommandLineOptions existingOptions = new CommandLineOptions() { RandomSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "no.txt", OutputDirectory = Directory.GetCurrentDirectory(), InstanceDirectory = Directory.GetCurrentDirectory(), Verbose = true };
 
             MethodInfo fileNameMethod = typeof(InstanceReaderWriter).GetMethod("CreateFilePath", BindingFlags.NonPublic | BindingFlags.Static);
             string existingFile = (string)fileNameMethod.Invoke(null, new object[] { 0, existingOptions });
@@ -88,7 +88,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
                 sw.WriteLine("4 5");
             }
 
-            CommandLineOptions notExistingOptions = new CommandLineOptions() { RandomSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "tree.txt", DemandPairFilePath = "dp.txt", OutputDirectory = "", InstanceDirectory = "", Verbose = true };
+            CommandLineOptions notExistingOptions = new CommandLineOptions() { RandomSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "tree.txt", DemandPairFilePath = "dp.txt", OutputDirectory = Directory.GetCurrentDirectory(), InstanceDirectory = Directory.GetCurrentDirectory(), Verbose = true };
 
             string notExistingFile = (string)fileNameMethod.Invoke(null, new object[] { 0, notExistingOptions });
             File.Delete(notExistingFile);
