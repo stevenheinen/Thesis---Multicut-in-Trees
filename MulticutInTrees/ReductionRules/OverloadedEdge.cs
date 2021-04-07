@@ -211,29 +211,5 @@ namespace MulticutInTrees.ReductionRules
             }
             return overloadedEdges;
         }
-
-        /// <summary>
-        /// Cut all edges in <paramref name="edgesToBeCut"/>.
-        /// </summary>
-        /// <param name="edgesToBeCut">The <see cref="CountedList{T}"/> with all edges to be cut.</param>
-        /// <returns><see langword="true"/> if <paramref name="edgesToBeCut"/> has any elements, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeCut"/> is <see langword="null"/>.</exception>
-        private bool TryCutEdges(CountedList<(TreeNode, TreeNode)> edgesToBeCut)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), "Trying to cut edges, but the Hashset with edges is null!");
-#endif
-            if (edgesToBeCut.Count(Measurements.TreeOperationsCounter) == 0)
-            {
-                Measurements.TimeSpentCheckingApplicability.Stop();
-                return false;
-            }
-
-            Measurements.TimeSpentCheckingApplicability.Stop();
-            Measurements.TimeSpentModifyingInstance.Start();
-            Algorithm.CutEdges(edgesToBeCut, Measurements);
-            Measurements.TimeSpentModifyingInstance.Stop();
-            return true;
-        }
     }
 }

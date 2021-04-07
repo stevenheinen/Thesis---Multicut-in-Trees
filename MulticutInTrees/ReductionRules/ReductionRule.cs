@@ -63,6 +63,78 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <summary>
+        /// Cut all edges in <paramref name="edgesToBeCut"/>.
+        /// </summary>
+        /// <param name="edgesToBeCut">The <see cref="CountedList{T}"/> with all edges to be cut.</param>
+        /// <returns><see langword="true"/> if <paramref name="edgesToBeCut"/> has any elements, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeCut"/> is <see langword="null"/>.</exception>
+        protected bool TryCutEdges(CountedList<(TreeNode, TreeNode)> edgesToBeCut)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), "Trying to cut edges, but the Hashset with edges is null!");
+#endif
+            if (edgesToBeCut.Count(Measurements.TreeOperationsCounter) == 0)
+            {
+                Measurements.TimeSpentCheckingApplicability.Stop();
+                return false;
+            }
+
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentModifyingInstance.Start();
+            Algorithm.CutEdges(edgesToBeCut, Measurements);
+            Measurements.TimeSpentModifyingInstance.Stop();
+            return true;
+        }
+
+        /// <summary>
+        /// Remove all <see cref="DemandPair"/>s in <paramref name="pairsToBeRemoved"/>.
+        /// </summary>
+        /// <param name="pairsToBeRemoved">The <see cref="CountedList{T}"/> with all <see cref="DemandPair"/>s to be removed.</param>
+        /// <returns><see langword="true"/> if <paramref name="pairsToBeRemoved"/> has any elements, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="pairsToBeRemoved"/> is <see langword="null"/>.</exception>
+        protected bool TryRemoveDemandPairs(CountedList<DemandPair> pairsToBeRemoved)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(pairsToBeRemoved, nameof(pairsToBeRemoved), "Trying to remove demand pairs, but the List with demand pairs is null!");
+#endif
+            if (pairsToBeRemoved.Count(Measurements.DemandPairsOperationsCounter) == 0)
+            {
+                Measurements.TimeSpentCheckingApplicability.Stop();
+                return false;
+            }
+
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentModifyingInstance.Start();
+            Algorithm.RemoveDemandPairs(pairsToBeRemoved, Measurements);
+            Measurements.TimeSpentModifyingInstance.Stop();
+            return true;
+        }
+
+        /// <summary>
+        /// Contract all edges in <paramref name="edgesToBeContracted"/>.
+        /// </summary>
+        /// <param name="edgesToBeContracted">The <see cref="CountedList{T}"/> with all edges to be contracted.</param>
+        /// <returns><see langword="true"/> if <paramref name="edgesToBeContracted"/> has any elements, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeContracted"/> is <see langword="null"/>.</exception>
+        protected bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), "Trying to contract edges, but the List with edges is null!");
+#endif
+            if (edgesToBeContracted.Count(Measurements.TreeOperationsCounter) == 0)
+            {
+                Measurements.TimeSpentCheckingApplicability.Stop();
+                return false;
+            }
+
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            Measurements.TimeSpentModifyingInstance.Start();
+            Algorithm.ContractEdges(edgesToBeContracted, Measurements);
+            Measurements.TimeSpentModifyingInstance.Start();
+            return true;
+        }
+
+        /// <summary>
         /// Everything that needs to happen before the reduction rule can be executed.
         /// </summary>
         protected abstract void Preprocess();

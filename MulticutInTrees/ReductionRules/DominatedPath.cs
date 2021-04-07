@@ -213,29 +213,5 @@ namespace MulticutInTrees.ReductionRules
 
             return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
-
-        /// <summary>
-        /// Remove all <see cref="DemandPair"/>s in <paramref name="pairsToBeRemoved"/>.
-        /// </summary>
-        /// <param name="pairsToBeRemoved">The <see cref="CountedList{T}"/> with all <see cref="DemandPair"/>s to be removed.</param>
-        /// <returns><see langword="true"/> if <paramref name="pairsToBeRemoved"/> has any elements, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="pairsToBeRemoved"/> is <see langword="null"/>.</exception>
-        private bool TryRemoveDemandPairs(CountedList<DemandPair> pairsToBeRemoved)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(pairsToBeRemoved, nameof(pairsToBeRemoved), "Trying to remove demand pairs, but the List with demand pairs is null!");
-#endif
-            if (pairsToBeRemoved.Count(Measurements.DemandPairsOperationsCounter) == 0)
-            {
-                Measurements.TimeSpentCheckingApplicability.Stop();
-                return false;
-            }
-
-            Measurements.TimeSpentCheckingApplicability.Stop();
-            Measurements.TimeSpentModifyingInstance.Start();
-            Algorithm.RemoveDemandPairs(pairsToBeRemoved, Measurements);
-            Measurements.TimeSpentModifyingInstance.Stop();
-            return true;
-        }
     }
 }

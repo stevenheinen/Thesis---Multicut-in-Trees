@@ -225,29 +225,5 @@ namespace MulticutInTrees.ReductionRules
         {
 
         }
-
-        /// <summary>
-        /// Contract all edges in <paramref name="edgesToBeContracted"/>.
-        /// </summary>
-        /// <param name="edgesToBeContracted">The <see cref="CountedList{T}"/> with all edges to be contracted.</param>
-        /// <returns><see langword="true"/> if <paramref name="edgesToBeContracted"/> has any elements, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeContracted"/> is <see langword="null"/>.</exception>
-        protected bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), "Trying to contract edges, but the List with edges is null!");
-#endif
-            if (edgesToBeContracted.Count(Measurements.TreeOperationsCounter) == 0)
-            {
-                Measurements.TimeSpentCheckingApplicability.Stop();
-                return false;
-            }
-
-            Measurements.TimeSpentCheckingApplicability.Stop();
-            Measurements.TimeSpentModifyingInstance.Start();
-            Algorithm.ContractEdges(edgesToBeContracted, Measurements);
-            Measurements.TimeSpentModifyingInstance.Start();
-            return true;
-        }
     }
 }

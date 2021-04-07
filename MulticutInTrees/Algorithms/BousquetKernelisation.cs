@@ -54,7 +54,8 @@ namespace MulticutInTrees.Algorithms
             DisjointPaths disjointPaths = new DisjointPaths(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
 
-            // todo: Unique direction reduction rule
+            UniqueDirection uniqueDirection = new UniqueDirection(Tree, DemandPairs, this, DemandPairsPerNode);
+            reductionRules.Add(uniqueDirection);
 
             DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
