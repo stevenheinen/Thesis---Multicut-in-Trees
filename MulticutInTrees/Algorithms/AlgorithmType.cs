@@ -12,17 +12,9 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         None,
         /// <summary>
-        /// The branching algorithm by Guo and Niedermeier.
+        /// No algorithm, just generating instances.
         /// </summary>
-        GuoNiederMeierBranching,
-        /// <summary>
-        /// The kernelisation algorithm by Guo and Niedermeier that finds a kernel of size O(k^{3k}).
-        /// </summary>
-        GuoNiedermeierKernelisation,
-        /// <summary>
-        /// Guo and Niedermeier's kernelisation algorithm with improved reduction rules.
-        /// </summary>
-        ImprovedGuoNiedermeierKernelisation,
+        GenerateInstances,
         /// <summary>
         /// The MIP solver used to find the minimum possible solution size.
         /// </summary>
@@ -31,5 +23,21 @@ namespace MulticutInTrees.Algorithms
         /// Brute force algorithm that checks all possible subsets of edges of a certain size.
         /// </summary>
         BruteForce,
+        /// <summary>
+        /// The branching algorithm by Guo and Niedermeier.
+        /// </summary>
+        GuoNiederMeierBranching,
+        /// <summary>
+        /// The kernelisation algorithm by Guo and Niedermeier that finds a kernel of size O(k^{3k}).
+        /// </summary>
+        GuoNiedermeierKernelisation,
+        /// <summary>
+        /// The kernelisation algorithm by Bousquet et al. that finds a kernel of size O(k^6).
+        /// </summary>
+        BousquetKernelisation,
+        /// <summary>
+        /// Guo and Niedermeier's kernelisation algorithm with improved reduction rules.
+        /// </summary>
+        ImprovedGuoNiedermeierKernelisation,
     }
 }

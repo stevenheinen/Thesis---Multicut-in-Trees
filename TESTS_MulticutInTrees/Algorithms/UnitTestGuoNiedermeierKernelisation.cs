@@ -23,7 +23,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 2, 2);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             Assert.IsNotNull(gnfpt);
@@ -67,7 +67,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             TreeNode node = new TreeNode(0);
             TreeNode node1 = new TreeNode(1);
@@ -122,7 +122,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -155,7 +155,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -193,7 +193,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.CutEdge((node5, node2), measurements);
 
@@ -224,7 +224,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.CutEdges(new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node0, node1), (node5, node2) }, counter), measurements);
 
@@ -255,7 +255,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ContractEdge((node0, node2), measurements);
 
@@ -285,7 +285,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ContractEdges(new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node0, node2), (node4, node1) }, counter), measurements);
 
@@ -315,7 +315,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ChangeEndpointOfDemandPair(dp3, node5, node2, measurements);
             Assert.AreEqual(3, dp3.LengthOfPath(counter));
@@ -347,7 +347,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(node5, node4);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             gnfpt.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, TreeNode, TreeNode)>(new List<(DemandPair, TreeNode, TreeNode)>() { (dp3, node5, node2), (dp1, node4, node0) }, counter), measurements);
             Assert.AreEqual(3, dp3.LengthOfPath(counter));
@@ -414,14 +414,14 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, 0 },
             };
 
-            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200);
+            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new GuoNiedermeierKernelisation(i);
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
             dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("InternalContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             update.Invoke(a, new object[] { (node2, node1), m });
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
@@ -488,14 +488,14 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 },
             };
 
-            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200);
+            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new GuoNiedermeierKernelisation(i);
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
             dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("InternalContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             update.Invoke(a, new object[] { (node4, node5), m });
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
@@ -560,14 +560,14 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, -1 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, -1 },
             };
 
-            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200);
+            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new GuoNiedermeierKernelisation(i);
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
             dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("InternalContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             update.Invoke(a, new object[] { (node5, node9), m });
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
@@ -637,14 +637,14 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, -1 }, { node24, -1 },
             };
 
-            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200);
+            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new GuoNiedermeierKernelisation(i);
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
             dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("InternalContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             update.Invoke(a, new object[] { (node5, node23), m });
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
@@ -712,14 +712,14 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, 0 },
             };
 
-            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200);
+            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new GuoNiedermeierKernelisation(i);
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
             dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("InternalContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             update.Invoke(a, new object[] { (node0, node1), m });
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
@@ -788,14 +788,14 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, 0 },
             };
 
-            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200);
+            MulticutInstance i = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new GuoNiedermeierKernelisation(i);
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
             dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("InternalContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             update.Invoke(a, new object[] { (node0, node1), m });
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });

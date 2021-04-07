@@ -37,7 +37,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             DemandPair dp = new DemandPair(node0, node3);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3, 1);
             GuoNiedermeierKernelisation g = new GuoNiedermeierKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) solution = g.Run();
             Assert.IsTrue(solution.Item4.Solvable);
@@ -90,7 +90,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, counter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 3);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 3, 3);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
@@ -115,7 +115,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(273);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(500, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Prüfer, InputDemandPairsType.Random, 273, tree, demandPairs, 500);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, 273, tree, demandPairs, 500, 28);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -131,7 +131,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(789456);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(2000, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Prüfer, InputDemandPairsType.Random, 789456, tree, demandPairs, 2000);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, 789456, tree, demandPairs, 2000, 54);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -147,7 +147,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Random random = new Random(8765);
             Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(400, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Prüfer, InputDemandPairsType.Random, 8765, tree, demandPairs, 400);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, 8765, tree, demandPairs, 400, 24);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 

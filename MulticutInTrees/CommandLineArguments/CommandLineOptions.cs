@@ -12,9 +12,9 @@ namespace MulticutInTrees.CommandLineArguments
     public class CommandLineOptions
     {
         /// <summary>
-        /// The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.
+        /// The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.
         /// </summary>
-        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple experiments, the seeds used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seed 0, 1, 2, 3 and 4 respectively.")]
+        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple experiments, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.")]
         public int RandomSeed { get; set; }
 
         /// <summary>
@@ -38,19 +38,19 @@ namespace MulticutInTrees.CommandLineArguments
         /// <summary>
         /// How to generate the tree for this instance.
         /// </summary>
-        [Option("tree", Required = true, HelpText = "The way to generate the input tree in this experiment.")]
+        [Option("treeType", Required = true, HelpText = "The way to generate the input tree in this experiment.")]
         public InputTreeType InputTreeType { get; set; }
 
         /// <summary>
         /// How to generate the demand pairs for this instance.
         /// </summary>
-        [Option("dps", Required = true, HelpText = "The way to generate the input demand pairs in this experiment.")]
+        [Option("dpType", Required = true, HelpText = "The way to generate the input demand pairs in this experiment.")]
         public InputDemandPairsType InputDemandPairsType { get; set; }
 
         /// <summary>
         /// The number of nodes in this instance.
         /// </summary>
-        [Option("nodes", HelpText = "The number of nodes in this instance. Only necessary for Prüfer or Caterpillar input tree types.")]
+        [Option("nrNodes", HelpText = "The number of nodes in this instance. Only necessary for Prüfer or Caterpillar input tree types.")]
         public int NumberOfNodes { get; set; }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace MulticutInTrees.CommandLineArguments
         /// <summary>
         /// The number of Demand Pairs in the instance.
         /// </summary>
-        [Option("demandpairs", HelpText = "The number of demand pairs to generate. Only necessary for Prüfer or Caterpillar input trees.")]
+        [Option("nrDPs", HelpText = "The number of demand pairs to generate. Only necessary for Prüfer or Caterpillar input trees.")]
         public int NumberOfDemandPairs { get; set; }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace MulticutInTrees.CommandLineArguments
         public string DistanceDistribution { get; set; }
 
         /// <summary>
-        /// The maximum size the solution is allowed to be.
+        /// The maximum size the solution is allowed to be. If this value is 0 or smaller, the optimal possible value will be used.
         /// </summary>
-        [Option("maxSolutionSize", HelpText = "The maximum size the solution is allowed to be.")]
+        [Option("maxSolutionSize", HelpText = "The maximum size the solution is allowed to be. If this value is 0 or smaller, the optimal possible value will be used.")]
         public int MaxSolutionSize { get; set; }
 
         /// <summary>

@@ -156,7 +156,7 @@ namespace MulticutInTrees.InstanceGeneration
             StringBuilder fileNameBuilder = new StringBuilder();
             fileNameBuilder.Append($"{options.InstanceDirectory}\\MulticutInstance_seed={randomSeed}_treeType={options.InputTreeType}_dpType={options.InputDemandPairsType}");
 
-            if (options.InputTreeType == InputTreeType.Prüfer || options.InputTreeType == InputTreeType.Caterpillar)
+            if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar)
             {
                 fileNameBuilder.Append($"_nrNodes={options.NumberOfNodes}");
             }

@@ -11,7 +11,13 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestMain()
         {
-            Program.Main(new string[0]);
+            string[] split = "--seed=0 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
+            string[] args = new string[split.Length + 2];
+            split.CopyTo(args, 0);
+            args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
+            args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
+
+            Program.Main(args);
         }
     }
 }

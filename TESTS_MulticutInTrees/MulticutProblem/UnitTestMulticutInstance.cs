@@ -25,7 +25,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
 
             Assert.IsNotNull(instance);
         }
@@ -104,16 +104,16 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
 
             Random random = new Random(12395);
             Dictionary<(int, int), double> distProb = new Dictionary<(int, int), double>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, null, dps, 2));
-            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, null, 2));
+            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, null, dps, 2, 2));
+            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, null, 2, 2));
             Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(0, null));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -1));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -8459472));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -1, 2));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -8459472, 2));
 
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
@@ -135,7 +135,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
             MethodInfo method = typeof(MulticutInstance).GetMethod("ParseLengthDistributionDictionary", BindingFlags.NonPublic | BindingFlags.Instance);
 
             string test1 = "shouldNotWork";

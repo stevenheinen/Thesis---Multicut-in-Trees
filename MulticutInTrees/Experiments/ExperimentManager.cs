@@ -40,10 +40,13 @@ namespace MulticutInTrees.Experiments
                 AlgorithmType.GurobiMIPSolver => RunMultipleExperiments(options, RunGurobiMIPAlgorithm),
                 AlgorithmType.GuoNiederMeierBranching => RunMultipleExperiments(options, RunBranchingAlgorithm),
                 AlgorithmType.BruteForce => RunMultipleExperiments(options, RunBruteForceAlgorithm),
+                AlgorithmType.GenerateInstances => RunMultipleExperiments(options, RunGenerateInstance),
                 _ => throw new NotSupportedException($"Trying to run an experiment, but there is no experiment supported with the given command line options. (Algorithm {options.AlgorithmType} is not supported.)"),
             };
 
+#if EXPERIMENT
             results.WriteOutput(options.OutputDirectory);
+#endif
         }
 
         /// <summary>
@@ -93,11 +96,15 @@ namespace MulticutInTrees.Experiments
 #endif
             StringBuilder sb = new StringBuilder();
             sb.Append($"{experimentMessage} on the following instance: {options.Experiments} different experiments, each with {options.Repetitions} repetitions, random seed {randomSeed}, ");
-            if (options.MaxSolutionSize != -1)
+            if (options.MaxSolutionSize > 0)
             {
                 sb.Append($"a maximum solution size of {options.MaxSolutionSize}, ");
             }
-            if (options.InputTreeType == InputTreeType.Prüfer || options.InputTreeType == InputTreeType.Caterpillar)
+            else
+            {
+                sb.Append($"the optimal solution size, ");
+            }
+            if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar)
             {
                 sb.Append($"a {options.InputTreeType} tree with {options.NumberOfNodes} nodes, ");
                 if (options.InputDemandPairsType == InputDemandPairsType.Random)
@@ -114,6 +121,35 @@ namespace MulticutInTrees.Experiments
                 sb.Append($"and a tree and demand pairs from the {options.InputTreeType} instance found here \"{options.InstanceFilePath}\".");
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Does not run any algorithm, but does generate instances for future use. If these instances do not exist already, the Gurobi MIP solver will be used to compute the optimal K value for these instances.
+        /// </summary>
+        /// <param name="randomSeed">The seed to use for the random number generator.</param>
+        /// <param name="options">The options given to the program via the command line.</param>
+        /// <returns>A basically empty <see cref="ExperimentOutput"/>, since no algorithm was run.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
+        private static ExperimentOutput RunGenerateInstance(int randomSeed, CommandLineOptions options)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(options, nameof(options), "Trying to run an experiment with the brute force algorithm, but the command line options are null!");
+#endif
+            if (options.Verbose)
+            {
+                Console.WriteLine(FormatParseOutput("Generating the instance", options.RandomSeed, options));
+            }
+
+            MulticutInstance instance = new MulticutInstance(randomSeed, options);
+
+            if (options.Verbose)
+            {
+                Console.WriteLine("Instance generated!");
+            }
+
+            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, randomSeed, instance.K, instance.OptimalK, true, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+
+            return output;
         }
 
         /// <summary>
@@ -149,7 +185,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, randomSeed, solved, options.MaxSolutionSize, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, randomSeed, instance.K, instance.OptimalK, solved, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -187,7 +223,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, true, minimumSize, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
             
             return output;
         }

@@ -23,11 +23,10 @@ namespace MulticutInTrees.Algorithms
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
 #endif
-            Preprocess();
         }
 
-        /// <inheritdoc/>
-        protected override ReadOnlyCollection<ReductionRule> CreateReductionRules()
+        /// <inheritdoc cref="Algorithm.CreateReductionRules"/>
+        protected override void CreateReductionRules()
         {
             List<ReductionRule> reductionRules = new List<ReductionRule>();
 
@@ -55,7 +54,7 @@ namespace MulticutInTrees.Algorithms
             OverloadedL3Leaves overloadedL3Leaves = new OverloadedL3Leaves(Tree, DemandPairs, this, DemandPairsPerNode, PartialSolution, K);
             reductionRules.Add(overloadedL3Leaves);
 
-            return new ReadOnlyCollection<ReductionRule>(reductionRules);
+            ReductionRules = new ReadOnlyCollection<ReductionRule>(reductionRules);
         }
     }
 }

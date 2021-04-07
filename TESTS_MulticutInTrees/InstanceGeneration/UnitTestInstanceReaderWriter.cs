@@ -56,9 +56,9 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
             string expected3 = "instanceDir\\MulticutInstance_seed=5330_treeType=Caterpillar_dpType=Fixed_nrNodes=50_dpFile=(D:\\Documents\\dp[dot]txt).txt";
             Assert.AreEqual(expected3, fileName3);
 
-            CommandLineOptions options4 = new CommandLineOptions() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.Prüfer, NumberOfNodes = 50, InputDemandPairsType = InputDemandPairsType.LengthDistribution, DistanceDistribution = "(2, 4, 0.5), (5, 10, 0.2), (50, 100, 0.3)" };
+            CommandLineOptions options4 = new CommandLineOptions() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.Prufer, NumberOfNodes = 50, InputDemandPairsType = InputDemandPairsType.LengthDistribution, DistanceDistribution = "(2, 4, 0.5), (5, 10, 0.2), (50, 100, 0.3)" };
             string fileName4 = (string)method.Invoke(null, new object[] { 5330, options4 });
-            string expected4 = "instanceDir\\MulticutInstance_seed=5330_treeType=Prüfer_dpType=LengthDistribution_nrNodes=50_dpLengthDist=((2, 4, 0.5), (5, 10, 0.2), (50, 100, 0.3)).txt";
+            string expected4 = "instanceDir\\MulticutInstance_seed=5330_treeType=Prufer_dpType=LengthDistribution_nrNodes=50_dpLengthDist=((2, 4, 0.5), (5, 10, 0.2), (50, 100, 0.3)).txt";
             Assert.AreEqual(expected4, fileName4);
         }
     }

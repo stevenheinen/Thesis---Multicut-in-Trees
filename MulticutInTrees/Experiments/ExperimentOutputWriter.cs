@@ -66,8 +66,11 @@ namespace MulticutInTrees.Experiments
             writer.WriteField("DPType");
             writer.WriteField("Algorithm");
             writer.WriteField("Seed");
+            writer.WriteField("Optimal K");
+            writer.WriteField("K used");
             writer.WriteField("Solvable");
-            writer.WriteField("KernelSize");
+            writer.WriteField("Remaining nodes");
+            writer.WriteField("Remaining DPs");
             writer.WriteField("AlgTreeOps");
             writer.WriteField("AlgDPOps");
             writer.WriteField("AlgDPEdgeKeyOps");
@@ -110,8 +113,11 @@ namespace MulticutInTrees.Experiments
             writer.WriteField(output.DPType);
             writer.WriteField(output.Algorithm);
             writer.WriteField(output.Seed);
+            writer.WriteField(output.OptimalMaxSolutionSize);
+            writer.WriteField(output.MaxSolutionSize);
             writer.WriteField(output.Solvable);
-            writer.WriteField(output.KernelSize);
+            writer.WriteField(output.RemainingNodes);
+            writer.WriteField(output.RemainingDPs);
             writer.WriteField(output.AlgorithmOperations.TreeOperationsCounter);
             writer.WriteField(output.AlgorithmOperations.DemandPairsOperationsCounter);
             writer.WriteField(output.AlgorithmOperations.DemandPairsPerEdgeKeysCounter);

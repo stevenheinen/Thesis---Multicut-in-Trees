@@ -11,9 +11,8 @@
     <IssueType Id="ArrangeMissingParentheses" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Add parentheses to avoid non-obvious precedence" Severity="DO_NOT_SHOW" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeMissingParentheses" />
     <IssueType Id="ArrangeRedundantParentheses" Category="Syntax Style" CategoryId="CodeStyleIssues" Description="Remove redundant parentheses" Severity="HINT" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ArrangeRedundantParentheses" />
     <IssueType Id="AssignNullToNotNullAttribute" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Possible 'null' assignment to non-nullable entity" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AssignNullToNotNullAttribute" />
+    <IssueType Id="AutoPropertyCanBeMadeGetOnly.Global" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Global" />
     <IssueType Id="AutoPropertyCanBeMadeGetOnly.Local" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Private accessibility" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Local" />
-    <IssueType Id="CSharpErrors" Category="C# Compiler Errors" CategoryId="CSharpErrors" Description="" Severity="ERROR" />
-    <IssueType Id="CSharpWarnings::CS0162" Category="Compiler Warnings" CategoryId="CompilerWarnings" Description="Code is unreachable" Severity="WARNING" WikiUrl="https://msdn.microsoft.com/en-us/library/c0h4st1x.aspx" />
     <IssueType Id="CheckNamespace" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Namespace does not correspond to file location" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CheckNamespace" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
     <IssueType Id="ConvertClosureToMethodGroup" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert lambda expression to method group" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertClosureToMethodGroup" />
@@ -43,53 +42,78 @@
     <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type is never used" Description="Type is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global" />
     <IssueType Id="UnusedVariable" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Unused local variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedVariable" />
     <IssueType Id="VirtualMemberCallInConstructor" Category="Potential Code Quality Issues" CategoryId="CodeSmell" Description="Virtual member call in constructor" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=VirtualMemberCallInConstructor" />
+    <IssueType Id="VirtualMemberNeverOverridden.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Virtual (overridable) member is never overridden" Description="Virtual (overridable) member is never overridden: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=VirtualMemberNeverOverridden.Global" />
   </IssueTypes>
   <Issues>
     <Project Name="MulticutInTrees">
-      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="982-988" Line="23" Message="Property 'ReductionRules' can be made protected" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="1217-1226" Line="28" Message="Property 'Instance' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3060-3063" Line="68" Message="Accessor 'LastContractedEdges.set' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3307-3310" Line="73" Message="Accessor 'LastRemovedDemandPairs.set' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3623-3626" Line="78" Message="Accessor 'LastChangedEdgesPerDemandPair.set' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="4347-4356" Line="93" Message="Property 'AlgorithmType' can be made private" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16444-16464" Line="295" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16823-16843" Line="299" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="23871-23881" Line="418" Message="Only overrides of method 'Preprocess' are used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="24372-24379" Line="425" Message="Method 'CutEdge' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="25465-25477" Line="439" Message="Method 'ContractEdge' is never used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="26496-26512" Line="453" Message="Only overrides of method 'RemoveDemandPair' are used" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="27737-27763" Line="469" Message="Only overrides of method 'ChangeEndpointOfDemandPair' are used" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="1051-1057" Line="25" Message="Property 'ReductionRules' can be made protected" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="1505-1508" Line="30" Message="Accessor 'DemandPairsPerEdge.set' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="1828-1831" Line="35" Message="Accessor 'DemandPairsPerNode.set' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="2181-2184" Line="40" Message="Accessor 'CaterpillarComponentPerNode.set' can be made private" />
+      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Global" File="Algorithms\Algorithm.cs" Offset="2181-2185" Line="40" Message="Auto-property can be made get-only" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="2343-2352" Line="45" Message="Property 'Instance' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3295-3304" Line="70" Message="Property 'LastIterationEdgeContraction' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3534-3543" Line="75" Message="Property 'LastIterationDemandPairRemoval' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="3775-3784" Line="80" Message="Property 'LastIterationDemandPairChange' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="4072-4081" Line="85" Message="Property 'LastContractedEdges' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="4369-4378" Line="90" Message="Property 'LastRemovedDemandPairs' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="4641-4650" Line="95" Message="Property 'LastChangedEdgesPerDemandPair' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="4968-4977" Line="100" Message="Property 'MockCounter' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="5261-5270" Line="105" Message="Property 'AlgorithmPerformanceMeasurements' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="5473-5482" Line="110" Message="Property 'AlgorithmType' can be made private" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="6102-6112" Line="121" Message="Qualifier is redundant" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="12584-12592" Line="236" Message="Method 'ContractEdge' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="12593-12600" Line="236" Message="Virtual method 'ContractEdge' is never overridden" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="13738-13744" Line="256" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="15379-15387" Line="284" Message="Method 'RemoveDemandPair' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="15388-15395" Line="284" Message="Virtual method 'RemoveDemandPair' is never overridden" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="18209-18217" Line="326" Message="Method 'ChangeEndpointOfDemandPair' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="18218-18225" Line="326" Message="Virtual method 'ChangeEndpointOfDemandPair' is never overridden" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="22299-22307" Line="377" Message="Method 'CutEdge' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="22308-22315" Line="377" Message="Virtual method 'CutEdge' is never overridden" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="32077-32086" Line="522" Message="Method 'RemoveDemandPairFromEdge' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="34376-34385" Line="548" Message="Method 'RemoveDemandPairsFromContractedEdge' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="36701-36710" Line="579" Message="Method 'UpdateDemandPairsGoingThroughChild' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="41271-41280" Line="637" Message="Method 'UpdateDemandPairsStartingAtContractedEdge' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="44216-44225" Line="667" Message="Method 'UpdateCaterpillarComponents' can be made private" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="44493-44513" Line="674" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="44520-44540" Line="674" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="49127-49145" Line="750" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="49270-49288" Line="754" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="49390-49408" Line="755" Message="Possible multiple enumeration" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="58835-58844" Line="902" Message="Method 'UpdateNodeTypesDuringEdgeContraction' can be made private" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="58983-58993" Line="905" Message="Qualifier is redundant" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="59226-59236" Line="906" Message="Qualifier is redundant" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="59470-59480" Line="907" Message="Qualifier is redundant" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="59712-59732" Line="908" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="60091-60111" Line="912" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="67165-67185" Line="1031" Message="Only overrides of method 'CreateReductionRules' are used" />
       <Issue TypeId="UnusedMember.Global" File="Algorithms\AlgorithmType.cs" Offset="571-575" Line="13" Message="Enum member 'None' is never used" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Algorithms\AlgorithmType.cs" Offset="1040-1055" Line="25" Message="Name 'GurobiMIPSolver' does not match rule 'Enum members'. Suggested name is 'GurobiMipSolver'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Algorithms\AlgorithmType.cs" Offset="839-854" Line="21" Message="Name 'GurobiMIPSolver' does not match rule 'Enum members'. Suggested name is 'GurobiMipSolver'." />
+      <Issue TypeId="UnusedType.Global" File="Algorithms\BousquetKernelisation.cs" Offset="680-701" Line="16" Message="Class 'BousquetKernelisation' is never used" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\BousquetKernelisation.cs" Offset="2711-2731" Line="43" Message="Virtual member call in constructor" />
       <Issue TypeId="RedundantUsingDirective" File="Algorithms\BruteForceAlgorithm.cs" Offset="321-339" Line="5" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="RedundantUsingDirective" File="Algorithms\BruteForceAlgorithm.cs" Offset="341-359" Line="6" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\BruteForceAlgorithm.cs" Offset="2976-2982" Line="63" Message="Possible multiple enumeration" />
-      <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="1926-1930" Line="36" Message="Auto-property can be made get-only" />
-      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="2710-2720" Line="49" Message="Virtual member call in constructor" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="16712-16718" Line="261" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="18410-18430" Line="295" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="18437-18457" Line="295" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="23044-23062" Line="371" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="23187-23205" Line="375" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="23307-23325" Line="376" Message="Possible multiple enumeration" />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Algorithms\GurobiMIPAlgorithm.cs" Offset="3182-3184" Line="72" Message="Convert to method call with '?:' expression inside" />
-      <Issue TypeId="PossibleIntendedRethrow" File="Algorithms\GurobiMIPAlgorithm.cs" Offset="5184-5185" Line="120" Message="Exception rethrow possibly intended" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="Algorithms\GuoNiedermeierKernelisation.cs" Offset="2686-2706" Line="43" Message="Virtual member call in constructor" />
+      <Issue TypeId="PossibleIntendedRethrow" File="Algorithms\GurobiMIPAlgorithm.cs" Offset="5789-5790" Line="126" Message="Exception rethrow possibly intended" />
       <Issue TypeId="UnusedType.Global" File="Algorithms\_NamespaceDocAlgorithms.cs" Offset="468-480" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="547-565" Line="12" Message="Class 'CommandLineOptions' is never instantiated" />
       <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="1323-1327" Line="18" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="1721-1725" Line="24" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="1974-1978" Line="30" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2250-2254" Line="36" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2555-2559" Line="42" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2841-2845" Line="48" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3317-3321" Line="54" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3689-3693" Line="60" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3990-3994" Line="66" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4554-4558" Line="72" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4813-4817" Line="78" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5124-5128" Line="84" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5437-5441" Line="90" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5684-5688" Line="96" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="1879-1883" Line="24" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2153-2157" Line="30" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2406-2410" Line="36" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2686-2690" Line="42" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2994-2998" Line="48" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3282-3286" Line="54" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3758-3762" Line="60" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4130-4134" Line="66" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4425-4429" Line="72" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4989-4993" Line="78" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5392-5396" Line="84" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedMember.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5680-5695" Line="90" Message="Property 'OutputDirectory' is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6016-6020" Line="96" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6263-6267" Line="102" Message="Auto-property accessor is never used" />
       <Issue TypeId="UnusedType.Global" File="CommandLineArguments\_NamespaceDocCommandLineArguments.cs" Offset="487-499" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedCollection.cs" Offset="2376-2386" Line="45" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedCollection.cs" Offset="2731-2741" Line="48" Message="Possible multiple enumeration" />
@@ -169,8 +193,13 @@
       <Issue TypeId="UnusedMember.Global" File="Exceptions\ZeroLengthDemandPathException.cs" Offset="688-717" Line="16" Message="Constructor 'ZeroLengthDemandPathException' is never used" />
       <Issue TypeId="UnusedMember.Global" File="Exceptions\ZeroLengthDemandPathException.cs" Offset="1496-1525" Line="35" Message="Constructor 'ZeroLengthDemandPathException' is never used" />
       <Issue TypeId="UnusedType.Global" File="Exceptions\_NamespaceDocExceptions.cs" Offset="457-469" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Experiments\ExperimentManager.cs" Offset="5947-5949" Line="98" Message="Convert to method call with '?:' expression inside" />
-      <Issue TypeId="RedundantStringInterpolation" File="Experiments\ExperimentManager.cs" Offset="12073-12074" Line="204" Message="Redundant string interpolation" />
+      <Issue TypeId="UnusedVariable" File="Experiments\ExperimentManager.cs" Offset="1761-1768" Line="36" Message="Local variable 'results' is never used" />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Experiments\ExperimentManager.cs" Offset="5989-5991" Line="99" Message="Convert to method call with '?:' expression inside" />
+      <Issue TypeId="RedundantStringInterpolation" File="Experiments\ExperimentManager.cs" Offset="6199-6200" Line="105" Message="Redundant string interpolation" />
+      <Issue TypeId="ConvertIfStatementToConditionalTernaryExpression" File="Experiments\ExperimentManager.cs" Offset="6497-6499" Line="110" Message="Convert to method call with '?:' expression inside" />
+      <Issue TypeId="RedundantStringInterpolation" File="Experiments\ExperimentManager.cs" Offset="14489-14490" Line="245" Message="Redundant string interpolation" />
+      <Issue TypeId="UnusedType.Global" File="Experiments\ExperimentOutputWriter.cs" Offset="673-695" Line="17" Message="Class 'ExperimentOutputWriter' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Experiments\ExperimentOutputWriter.cs" Offset="1641-1652" Line="27" Message="Method 'WriteOutput' is never used" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="1785-1789" Line="30" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2060-2064" Line="32" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2208-2212" Line="34" Message="Possible multiple enumeration" />
@@ -263,7 +292,6 @@
       <Issue TypeId="TooWideLocalVariableScope" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2424-2435" Line="40" Message="Local variable 'numberOfDPs' can be declared in inner scope" />
       <Issue TypeId="AssignNullToNotNullAttribute" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2621-2634" Line="45" Message="Possible 'null' assignment to non-nullable entity" />
       <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2748-2761" Line="49" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedMethodReturnValue.Global" File="InstanceGeneration\FixedTreeReader.cs" Offset="1488-1502" Line="26" Message="Method 'ReadTree' return value is never used" />
       <Issue TypeId="UnusedVariable" File="InstanceGeneration\FixedTreeReader.cs" Offset="1918-1929" Line="35" Message="Local variable 'mockCounter' is never used" />
       <Issue TypeId="AssignNullToNotNullAttribute" File="InstanceGeneration\FixedTreeReader.cs" Offset="2169-2182" Line="42" Message="Possible 'null' assignment to non-nullable entity" />
       <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedTreeReader.cs" Offset="2304-2317" Line="46" Message="Possible 'System.NullReferenceException'" />
@@ -280,43 +308,31 @@
       <Issue TypeId="RedundantNameQualifier" File="InstanceGeneration\TreeFromPruferSequence.cs" Offset="1623-1633" Line="28" Message="Qualifier is redundant" />
       <Issue TypeId="UnusedVariable" File="InstanceGeneration\TreeFromPruferSequence.cs" Offset="2005-2012" Line="34" Message="Local variable 'counter' is never used" />
       <Issue TypeId="UnusedType.Global" File="InstanceGeneration\_NamespaceDocInstanceGeneration.cs" Offset="749-761" Line="10" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="MulticutProblem\MulticutInstance.cs" Offset="3247-3263" Line="69" Message="Constructor 'MulticutInstance' is never used" />
-      <Issue TypeId="RedundantAssignment" File="MulticutProblem\MulticutInstance.cs" Offset="5608-5616" Line="109" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10418-10420" Line="183" Message="Cannot resolve symbol 'Pr'" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10420-10421" Line="183" Message="=&gt; expected" />
-      <Issue TypeId="CSharpWarnings::CS0162" File="MulticutProblem\MulticutInstance.cs" Offset="10421-10821" Line="183" Message="Code is unreachable" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10486-10487" Line="183" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10531-10533" Line="184" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10616-10617" Line="184" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10655-10657" Line="185" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10692-10693" Line="185" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10805-10807" Line="186" Message="; expected" />
-      <Issue TypeId="UnusedParameter.Local" File="MulticutProblem\MulticutInstance.cs" Offset="12726-12745" Line="202" Message="Parameter 'distanceProbability' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="MulticutProblem\MulticutInstance.cs" Offset="3490-3506" Line="75" Message="Constructor 'MulticutInstance' is never used" />
+      <Issue TypeId="UnusedParameter.Local" File="MulticutProblem\MulticutInstance.cs" Offset="13169-13188" Line="211" Message="Parameter 'distanceProbability' is never used" />
       <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="746-758" Line="10" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="461-468" Line="11" Message="Class 'Program' is never instantiated" />
       <Issue TypeId="JoinDeclarationAndInitializer" File="Program.cs" Offset="931-936" Line="24" Message="Join declaration and assignment" />
-      <Issue TypeId="NotResolvedInText" File="ReductionRules\DisjointPaths.cs" Offset="3285-3413" Line="49" Message="Cannot resolve symbol 'Trying to create an instance of the Disjoint Paths reduction rule, but the maximum solution size parameter is smaller than zero!'" />
-      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\DisjointPaths.cs" Offset="7074-7075" Line="119" Message="Redundant parentheses" />
+      <Issue TypeId="NotResolvedInText" File="ReductionRules\DisjointPaths.cs" Offset="3262-3390" Line="49" Message="Cannot resolve symbol 'Trying to create an instance of the Disjoint Paths reduction rule, but the maximum solution size parameter is smaller than zero!'" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\DisjointPaths.cs" Offset="7051-7052" Line="119" Message="Redundant parentheses" />
       <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\DominatedEdge.cs" Offset="1338-1347" Line="26" Message="Property 'DemandPairsPerEdge' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\DominatedEdge.cs" Offset="4317-4326" Line="54" Message="Method 'AllDemandPairsPassThroughAnotherEdge' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\DominatedEdge.cs" Offset="6113-6122" Line="70" Message="Method 'FindEdgesOnShortestDemandPathThroughEdge' can be made private" />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\DominatedEdge.cs" Offset="7294-7315" Line="82" Message="Convert to method group" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\DominatedEdge.cs" Offset="14676-14685" Line="240" Message="Method 'TryContractEdges' can be made private" />
-      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="271-284" Line="3" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="286-319" Line="4" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="321-339" Line="5" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="UnusedType.Global" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="632-653" Line="17" Message="Class 'ImprovedDominatedEdge' is never used" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\DominatedEdge.cs" Offset="7276-7297" Line="82" Message="Convert to method group" />
+      <Issue TypeId="RedundantUsingDirective" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="341-359" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="6441-6462" Line="98" Message="Convert to method group" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="8426-8447" Line="128" Message="Convert to method group" />
+      <Issue TypeId="PossibleNullReferenceException" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="11173-11183" Line="182" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="ReductionRules\ImprovedDominatedEdge.cs" Offset="11373-11383" Line="183" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedCaterpillar.cs" Offset="1331-1335" Line="24" Message="Auto-property can be made get-only" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedCaterpillar.cs" Offset="1674-1678" Line="29" Message="Auto-property can be made get-only" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedCaterpillar.cs" Offset="2229-2233" Line="44" Message="Auto-property can be made get-only" />
-      <Issue TypeId="NotResolvedInText" File="ReductionRules\OverloadedCaterpillar.cs" Offset="5432-5568" Line="69" Message="Cannot resolve symbol 'Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!'" />
+      <Issue TypeId="NotResolvedInText" File="ReductionRules\OverloadedCaterpillar.cs" Offset="5401-5537" Line="69" Message="Cannot resolve symbol 'Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!'" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedL3Leaves.cs" Offset="1275-1279" Line="23" Message="Auto-property can be made get-only" />
       <Issue TypeId="AutoPropertyCanBeMadeGetOnly.Local" File="ReductionRules\OverloadedL3Leaves.cs" Offset="1822-1826" Line="38" Message="Auto-property can be made get-only" />
-      <Issue TypeId="NotResolvedInText" File="ReductionRules\OverloadedL3Leaves.cs" Offset="4546-4682" Line="61" Message="Cannot resolve symbol 'Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!'" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\OverloadedL3Leaves.cs" Offset="7398-7416" Line="113" Message="Name 'containsI3orL3node' does not match rule 'Local variables'. Suggested name is 'containsI3OrL3Node'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\OverloadedL3Leaves.cs" Offset="12000-12029" Line="186" Message="Name 'i3nodeToDemandPairsInChildren' does not match rule 'Local variables'. Suggested name is 'i3NodeToDemandPairsInChildren'." />
-      <Issue TypeId="ConvertIfStatementToNullCoalescingExpression" File="ReductionRules\OverloadedL3Leaves.cs" Offset="12617-12619" Line="195" Message="Convert to '??' expression" />
-      <Issue TypeId="VirtualMemberCallInConstructor" File="ReductionRules\ReductionRule.cs" Offset="3892-3902" Line="64" Message="Virtual member call in constructor" />
+      <Issue TypeId="NotResolvedInText" File="ReductionRules\OverloadedL3Leaves.cs" Offset="4518-4654" Line="61" Message="Cannot resolve symbol 'Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!'" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\OverloadedL3Leaves.cs" Offset="7370-7388" Line="113" Message="Name 'containsI3orL3node' does not match rule 'Local variables'. Suggested name is 'containsI3OrL3Node'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\OverloadedL3Leaves.cs" Offset="11972-12001" Line="186" Message="Name 'i3nodeToDemandPairsInChildren' does not match rule 'Local variables'. Suggested name is 'i3NodeToDemandPairsInChildren'." />
+      <Issue TypeId="ConvertIfStatementToNullCoalescingExpression" File="ReductionRules\OverloadedL3Leaves.cs" Offset="12589-12591" Line="195" Message="Convert to '??' expression" />
+      <Issue TypeId="VirtualMemberCallInConstructor" File="ReductionRules\ReductionRule.cs" Offset="3658-3668" Line="62" Message="Virtual member call in constructor" />
       <Issue TypeId="UnusedType.Global" File="ReductionRules\_NamespaceDocReductionRules.cs" Offset="479-491" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Utilities\BFS.cs" Offset="1747-1748" Line="26" Message="Name 'N' does not match rule 'Type parameters'. Suggested name is 'TN'." />
       <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DFS.cs" Offset="1455-1461" Line="26" Message="Method 'FindConnectedComponent' can be made private" />

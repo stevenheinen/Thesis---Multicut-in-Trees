@@ -14,7 +14,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// Random trees generated using a Prüfer sequence.
         /// </summary>
-        Prüfer,
+        Prufer,
         /// <summary>
         /// Randomly generated caterpillars.
         /// </summary>

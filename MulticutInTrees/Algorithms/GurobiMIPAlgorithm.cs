@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Gurobi;
 using MulticutInTrees.CountedDatastructures;
@@ -77,12 +78,12 @@ namespace MulticutInTrees.Algorithms
                 if (verbose)
                 {
                     env.Set("LogToConsole", "1");
+                    env.Set("LogFile", Directory.GetCurrentDirectory() + "\\mipMinSolSizeSolver.log");
                 }
                 else
                 {
                     env.Set("LogToConsole", "0");
                 }
-                env.Set("LogFile", "mipMinSolSizeSolver.log");
                 env.Start();
 
                 GRBModel model = new GRBModel(env);
