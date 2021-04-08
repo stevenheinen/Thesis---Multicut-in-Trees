@@ -65,7 +65,7 @@ namespace MulticutInTrees.ReductionRules
             {
                 if (DemandPathHasLengthOne(path))
                 {
-                    edgesToBeCut.Add(path.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
+                    edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(path.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First()));
                 }
             }
 
@@ -126,7 +126,7 @@ namespace MulticutInTrees.ReductionRules
             {
                 if (DemandPathHasLengthOne(dp))
                 {
-                    edgesToBeCut.Add(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
+                    edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First()));
                 }
             }
 

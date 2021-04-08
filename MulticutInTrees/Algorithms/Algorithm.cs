@@ -118,7 +118,7 @@ namespace MulticutInTrees.Algorithms
         protected Algorithm(MulticutInstance instance, AlgorithmType algorithmType)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
+            Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a Multicut algorithm, but the problem instance is null!");
 #endif
             Instance = instance;
             Tree = instance.Tree;
@@ -135,6 +135,53 @@ namespace MulticutInTrees.Algorithms
             LastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
             
             FillDemandPathsPerEdge();
+        }
+
+        // todo: check whether this results in smaller kernels. It is probably a lot slower. Smaller kernels? Yes. A lot slower? Not as much as expected, but it is slower.
+        /// <summary>
+        /// Runs the algorithm by using the <see cref="ReductionRule.RunFirstIteration"/> method exclusively. This means unnecessary parts of the graph are checked, but it results in smaller kernels. This part is still WIP. We would like to find a way to skip checking unnecessary parts, but still find the smallest kernel.
+        /// </summary>
+        /// <returns>A tuple with the <see cref="Tree{N}"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="TreeNode"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
+        public (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) RunNaively()
+        {
+            for (int i = 0; i < ReductionRules.Count; i++)
+            {
+                if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
+                {
+                    goto returntrue;
+                }
+                if (PartialSolution.Count == K)
+                {
+                    goto returnfalse;
+                }
+
+#if VERBOSEDEBUG
+                Console.WriteLine($"Now applying rule {i + 1}.");
+#endif
+                bool success = ReductionRules[i].RunFirstIteration();
+                if (success)
+                {
+                    if (ReductionRules[i].TrueMeansInfeasibleInstance)
+                    {
+                        goto returnfalse;
+                    }
+
+                    // If the application of the i-th reduction rule was a success, start again at rule 0.
+                    i = -1;
+                }
+#if VERBOSEDEBUG
+                else
+                {
+                    Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                }
+#endif
+            }
+
+            returntrue:
+            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+
+            returnfalse:
+            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>

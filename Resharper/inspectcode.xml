@@ -15,6 +15,7 @@
     <IssueType Id="AutoPropertyCanBeMadeGetOnly.Local" Category="Common Practices and Code Improvements" CategoryId="BestPractice" SubCategory="Auto-property can be made get-only" Description="Auto-property can be made get-only: Private accessibility" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=AutoPropertyCanBeMadeGetOnly.Local" />
     <IssueType Id="CheckNamespace" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Namespace does not correspond to file location" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CheckNamespace" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
+    <IssueType Id="CollectionNeverUpdated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Collection is never updated" Description="Collection is never updated: Non-private accessibility" Severity="WARNING" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CollectionNeverUpdated.Global" />
     <IssueType Id="ConvertClosureToMethodGroup" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert lambda expression to method group" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertClosureToMethodGroup" />
     <IssueType Id="ConvertIfStatementToConditionalTernaryExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '?:' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToConditionalTernaryExpression" />
     <IssueType Id="ConvertIfStatementToNullCoalescingExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '??' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToNullCoalescingExpression" />
@@ -34,6 +35,7 @@
     <IssueType Id="RedundantStringInterpolation" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant string interpolation" Severity="SUGGESTION" />
     <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
     <IssueType Id="TooWideLocalVariableScope" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Local variable has too wide declaration scope" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=TooWideLocalVariableScope" />
+    <IssueType Id="UnassignedGetOnlyAutoProperty" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Get-only auto-property is never assigned" Severity="WARNING" />
     <IssueType Id="UnusedAutoPropertyAccessor.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Auto-property accessor is never used" Description="Auto-property accessor is never used: Non-private accessibility" Severity="WARNING" Global="True" />
     <IssueType Id="UnusedMember.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never used" Description="Type member is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedMember.Global" />
     <IssueType Id="UnusedMemberInSuper.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never accessed via base type" Description="Type member is never accessed via base type: Non-private accessibility" Severity="SUGGESTION" Global="True" />
@@ -61,33 +63,33 @@
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="4968-4977" Line="100" Message="Property 'MockCounter' can be made private" />
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="5261-5270" Line="105" Message="Property 'AlgorithmPerformanceMeasurements' can be made private" />
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="5473-5482" Line="110" Message="Property 'AlgorithmType' can be made private" />
-      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="6102-6112" Line="121" Message="Qualifier is redundant" />
-      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="12584-12592" Line="236" Message="Method 'ContractEdge' can be made protected" />
-      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="12593-12600" Line="236" Message="Virtual method 'ContractEdge' is never overridden" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="13738-13744" Line="256" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="15379-15387" Line="284" Message="Method 'RemoveDemandPair' can be made protected" />
-      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="15388-15395" Line="284" Message="Virtual method 'RemoveDemandPair' is never overridden" />
-      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="18209-18217" Line="326" Message="Method 'ChangeEndpointOfDemandPair' can be made protected" />
-      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="18218-18225" Line="326" Message="Virtual method 'ChangeEndpointOfDemandPair' is never overridden" />
-      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="22299-22307" Line="377" Message="Method 'CutEdge' can be made protected" />
-      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="22308-22315" Line="377" Message="Virtual method 'CutEdge' is never overridden" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="32077-32086" Line="522" Message="Method 'RemoveDemandPairFromEdge' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="34376-34385" Line="548" Message="Method 'RemoveDemandPairsFromContractedEdge' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="36701-36710" Line="579" Message="Method 'UpdateDemandPairsGoingThroughChild' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="41271-41280" Line="637" Message="Method 'UpdateDemandPairsStartingAtContractedEdge' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="44216-44225" Line="667" Message="Method 'UpdateCaterpillarComponents' can be made private" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="44493-44513" Line="674" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="44520-44540" Line="674" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="49127-49145" Line="750" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="49270-49288" Line="754" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="49390-49408" Line="755" Message="Possible multiple enumeration" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="58835-58844" Line="902" Message="Method 'UpdateNodeTypesDuringEdgeContraction' can be made private" />
-      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="58983-58993" Line="905" Message="Qualifier is redundant" />
-      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="59226-59236" Line="906" Message="Qualifier is redundant" />
-      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="59470-59480" Line="907" Message="Qualifier is redundant" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="59712-59732" Line="908" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="60091-60111" Line="912" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="67165-67185" Line="1031" Message="Only overrides of method 'CreateReductionRules' are used" />
+      <Issue TypeId="UnusedMember.Global" File="Algorithms\Algorithm.cs" Offset="8052-8062" Line="145" Message="Method 'RunNaively' is never used" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="15590-15598" Line="283" Message="Method 'ContractEdge' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="15599-15606" Line="283" Message="Virtual method 'ContractEdge' is never overridden" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="16744-16750" Line="303" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="18385-18393" Line="331" Message="Method 'RemoveDemandPair' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="18394-18401" Line="331" Message="Virtual method 'RemoveDemandPair' is never overridden" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="21215-21223" Line="373" Message="Method 'ChangeEndpointOfDemandPair' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="21224-21231" Line="373" Message="Virtual method 'ChangeEndpointOfDemandPair' is never overridden" />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Algorithms\Algorithm.cs" Offset="25305-25313" Line="424" Message="Method 'CutEdge' can be made protected" />
+      <Issue TypeId="VirtualMemberNeverOverridden.Global" File="Algorithms\Algorithm.cs" Offset="25314-25321" Line="424" Message="Virtual method 'CutEdge' is never overridden" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="35083-35092" Line="569" Message="Method 'RemoveDemandPairFromEdge' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="37382-37391" Line="595" Message="Method 'RemoveDemandPairsFromContractedEdge' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="39707-39716" Line="626" Message="Method 'UpdateDemandPairsGoingThroughChild' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="44277-44286" Line="684" Message="Method 'UpdateDemandPairsStartingAtContractedEdge' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="47222-47231" Line="714" Message="Method 'UpdateCaterpillarComponents' can be made private" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="47499-47519" Line="721" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="47526-47546" Line="721" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="52133-52151" Line="797" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="52276-52294" Line="801" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="52396-52414" Line="802" Message="Possible multiple enumeration" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\Algorithm.cs" Offset="61841-61850" Line="949" Message="Method 'UpdateNodeTypesDuringEdgeContraction' can be made private" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="61989-61999" Line="952" Message="Qualifier is redundant" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="62232-62242" Line="953" Message="Qualifier is redundant" />
+      <Issue TypeId="RedundantNameQualifier" File="Algorithms\Algorithm.cs" Offset="62476-62486" Line="954" Message="Qualifier is redundant" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="62718-62738" Line="955" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Algorithms\Algorithm.cs" Offset="63097-63117" Line="959" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedMemberInSuper.Global" File="Algorithms\Algorithm.cs" Offset="70171-70191" Line="1078" Message="Only overrides of method 'CreateReductionRules' are used" />
       <Issue TypeId="UnusedMember.Global" File="Algorithms\AlgorithmType.cs" Offset="571-575" Line="13" Message="Enum member 'None' is never used" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Algorithms\AlgorithmType.cs" Offset="839-854" Line="21" Message="Name 'GurobiMIPSolver' does not match rule 'Enum members'. Suggested name is 'GurobiMipSolver'." />
       <Issue TypeId="UnusedType.Global" File="Algorithms\BousquetKernelisation.cs" Offset="680-701" Line="16" Message="Class 'BousquetKernelisation' is never used" />
@@ -313,6 +315,28 @@
       <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="746-758" Line="10" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="461-468" Line="11" Message="Class 'Program' is never instantiated" />
       <Issue TypeId="JoinDeclarationAndInitializer" File="Program.cs" Offset="931-936" Line="24" Message="Join declaration and assignment" />
+      <Issue TypeId="UnusedType.Global" File="ReductionRules\CommonFactor.cs" Offset="1084-1096" Line="19" Message="Class 'CommonFactor' is never used" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="1319-1328" Line="24" Message="Property 'IntersectingDemandPairs' can be made private" />
+      <Issue TypeId="UnassignedGetOnlyAutoProperty" File="ReductionRules\CommonFactor.cs" Offset="1390-1413" Line="24" Message="Get-only auto-property 'IntersectingDemandPairs' is never assigned" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="1620-1629" Line="29" Message="Property 'DemandPairIntersections' can be made private" />
+      <Issue TypeId="UnassignedGetOnlyAutoProperty" File="ReductionRules\CommonFactor.cs" Offset="1715-1738" Line="29" Message="Get-only auto-property 'DemandPairIntersections' is never assigned" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="1913-1922" Line="34" Message="Property 'DemandPairIDs' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="2095-2104" Line="39" Message="Property 'MaxSolutionSize' can be made private" />
+      <Issue TypeId="UnassignedGetOnlyAutoProperty" File="ReductionRules\CommonFactor.cs" Offset="2109-2124" Line="39" Message="Get-only auto-property 'MaxSolutionSize' is never assigned" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="2260-2269" Line="44" Message="Property 'PartialSolution' can be made private" />
+      <Issue TypeId="CollectionNeverUpdated.Global" File="ReductionRules\CommonFactor.cs" Offset="2297-2312" Line="44" Message="Content of collection 'PartialSolution' is never updated" />
+      <Issue TypeId="UnassignedGetOnlyAutoProperty" File="ReductionRules\CommonFactor.cs" Offset="2297-2312" Line="44" Message="Get-only auto-property 'PartialSolution' is never assigned" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="2528-2537" Line="50" Message="Property 'MockCounter' can be made private" />
+      <Issue TypeId="NotResolvedInText" File="ReductionRules\CommonFactor.cs" Offset="4595-4722" Line="71" Message="Cannot resolve symbol 'Trying to craete an instance of the Common Factor reduction rule, but the maximum solution size parameter is smaller than zero!'" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="5852-5861" Line="96" Message="Method 'GetIntersectionKey' can be made private" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\CommonFactor.cs" Offset="7168-7189" Line="111" Message="Convert to method group" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="8516-8522" Line="137" Message="Possible multiple enumeration" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\CommonFactor.cs" Offset="9362-9371" Line="157" Message="Method 'CheckApplicability' can be made private" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\CommonFactor.cs" Offset="10924-10945" Line="191" Message="Convert to method group" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="ReductionRules\CommonFactor.cs" Offset="11272-11293" Line="195" Message="Convert to method group" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="11369-11374" Line="196" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="11421-11433" Line="198" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="12436-12448" Line="215" Message="Possible multiple enumeration" />
       <Issue TypeId="NotResolvedInText" File="ReductionRules\DisjointPaths.cs" Offset="3262-3390" Line="49" Message="Cannot resolve symbol 'Trying to create an instance of the Disjoint Paths reduction rule, but the maximum solution size parameter is smaller than zero!'" />
       <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\DisjointPaths.cs" Offset="7051-7052" Line="119" Message="Redundant parentheses" />
       <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\DominatedEdge.cs" Offset="1338-1347" Line="26" Message="Property 'DemandPairsPerEdge' can be made private" />

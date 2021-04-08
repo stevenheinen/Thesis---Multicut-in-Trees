@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>97405</CodebaseCost>
-    <TotalDuplicatesCost>3590</TotalDuplicatesCost>
-    <TotalFragmentsCost>7180</TotalFragmentsCost>
+    <CodebaseCost>102547</CodebaseCost>
+    <TotalDuplicatesCost>3735</TotalDuplicatesCost>
+    <TotalFragmentsCost>7470</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
+    <Duplicate Cost="326">
+      <Fragment>
+        <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
+        <OffsetRange Start="9209" End="10101"></OffsetRange>
+        <LineRange Start="180" End="184"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
+        <OffsetRange Start="13775" End="14667"></OffsetRange>
+        <LineRange Start="267" End="271"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="307">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
@@ -45,13 +57,13 @@
     <Duplicate Cost="273">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="28662" End="29301"></OffsetRange>
-        <LineRange Start="471" End="481"></LineRange>
+        <OffsetRange Start="31668" End="32307"></OffsetRange>
+        <LineRange Start="518" End="528"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="30666" End="31305"></OffsetRange>
-        <LineRange Start="501" End="511"></LineRange>
+        <OffsetRange Start="33672" End="34311"></OffsetRange>
+        <LineRange Start="548" End="558"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="201">
@@ -78,30 +90,6 @@
         <LineRange Start="73" End="82"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="173">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
-        <OffsetRange Start="12714" End="13940"></OffsetRange>
-        <LineRange Start="215" End="237"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\UnitPath.cs</FileName>
-        <OffsetRange Start="7700" End="8926"></OffsetRange>
-        <LineRange Start="142" End="164"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="163">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
-        <OffsetRange Start="12675" End="14013"></OffsetRange>
-        <LineRange Start="217" End="239"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\OverloadedCaterpillar.cs</FileName>
-        <OffsetRange Start="9088" End="10426"></OffsetRange>
-        <LineRange Start="140" End="162"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="158">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
@@ -117,13 +105,13 @@
     <Duplicate Cost="152">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="38425" End="39104"></OffsetRange>
-        <LineRange Start="598" End="606"></LineRange>
+        <OffsetRange Start="41431" End="42110"></OffsetRange>
+        <LineRange Start="645" End="653"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="39307" End="39986"></OffsetRange>
-        <LineRange Start="611" End="619"></LineRange>
+        <OffsetRange Start="42313" End="42992"></OffsetRange>
+        <LineRange Start="658" End="666"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="133">
@@ -186,18 +174,6 @@
         <LineRange Start="131" End="135"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="120">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
-        <OffsetRange Start="14621" End="15174"></OffsetRange>
-        <LineRange Start="238" End="248"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\IdleEdge.cs</FileName>
-        <OffsetRange Start="11523" End="12088"></OffsetRange>
-        <LineRange Start="189" End="199"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="118">
       <Fragment>
         <FileName>MulticutInTrees\Graphs\Graph.cs</FileName>
@@ -213,13 +189,13 @@
     <Duplicate Cost="110">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="47944" End="48303"></OffsetRange>
-        <LineRange Start="733" End="739"></LineRange>
+        <OffsetRange Start="50950" End="51309"></OffsetRange>
+        <LineRange Start="780" End="786"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="50535" End="50894"></OffsetRange>
-        <LineRange Start="776" End="782"></LineRange>
+        <OffsetRange Start="53541" End="53900"></OffsetRange>
+        <LineRange Start="823" End="829"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="109">
@@ -234,6 +210,18 @@
         <LineRange Start="226" End="240"></LineRange>
       </Fragment>
     </Duplicate>
+    <Duplicate Cost="96">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UniqueDirection.cs</FileName>
+        <OffsetRange Start="7490" End="7901"></OffsetRange>
+        <LineRange Start="114" End="121"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UniqueDirection.cs</FileName>
+        <OffsetRange Start="11052" End="11463"></OffsetRange>
+        <LineRange Start="183" End="190"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="93">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\ImprovedDominatedEdge.cs</FileName>
@@ -244,6 +232,30 @@
         <FileName>MulticutInTrees\ReductionRules\ImprovedDominatedEdge.cs</FileName>
         <OffsetRange Start="5650" End="5950"></OffsetRange>
         <LineRange Start="84" End="87"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="92">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UniqueDirection.cs</FileName>
+        <OffsetRange Start="6662" End="7064"></OffsetRange>
+        <LineRange Start="99" End="106"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UniqueDirection.cs</FileName>
+        <OffsetRange Start="10224" End="10626"></OffsetRange>
+        <LineRange Start="168" End="175"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="87">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
+        <OffsetRange Start="2536" End="3015"></OffsetRange>
+        <LineRange Start="37" End="39"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UniqueDirection.cs</FileName>
+        <OffsetRange Start="3052" End="3531"></OffsetRange>
+        <LineRange Start="43" End="45"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">
