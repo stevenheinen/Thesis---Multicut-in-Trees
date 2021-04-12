@@ -28,13 +28,14 @@ namespace MulticutInTrees.ReductionRules
         public ImprovedDominatedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, demandPairsPerEdge)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the ImprovedDominatedEdge reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the ImprovedDominatedEdge reduction rule, but the list of demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the ImprovedDominatedEdge reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the ImprovedDominatedEdge reduction rule, but the dictionary with demand paths per edge is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand paths per edge is null!");
 #endif
         }
 
+        /*
         /// <inheritdoc cref="ReductionRule.AfterDemandPathRemove(CountedList{DemandPair})"/>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
@@ -60,7 +61,9 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Stop();
             return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
+        */
 
+        /*
         /// <inheritdoc cref="ReductionRule.AfterDemandPathChanged(CountedList{ValueTuple{CountedList{ValueTuple{TreeNode, TreeNode}}, DemandPair}})"/>
         internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
@@ -86,7 +89,9 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Stop();
             return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
+        */
 
+        /*
         /// <inheritdoc cref="ReductionRule.RunFirstIteration"/>
         internal override bool RunFirstIteration()
         {
@@ -100,7 +105,48 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Stop();
             return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
+        */
 
+        /// <summary>
+        /// Try to apply this <see cref="ReductionRule"/> on the edges in <paramref name="edgesToCheck"/>.
+        /// </summary>
+        /// <param name="edgesToCheck">The <see cref="IEnumerable{T}"/> with edges we want to check.</param>
+        /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
+        protected override bool TryApplyReductionRule(IEnumerable<(TreeNode, TreeNode)> edgesToCheck)
+        {
+            Dictionary<(TreeNode, TreeNode), (TreeNode, TreeNode)> comparedEdge = new Dictionary<(TreeNode, TreeNode), (TreeNode, TreeNode)>();
+            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
+
+            foreach ((TreeNode, TreeNode) edge in edgesToCheck)
+            {
+                if (edgesToBeContracted.Contains(edge) || !Tree.HasNode(edge.Item1, Measurements.TreeOperationsCounter) || !Tree.HasNode(edge.Item2, Measurements.TreeOperationsCounter) || !Tree.HasEdge(edge, Measurements.TreeOperationsCounter))
+                {
+                    continue;
+                }
+
+                // Compare the edge to its neighbours. If we contracted it this way, go to the next edge.
+                if (CompareEdgeToNeighbours(edge, edgesToBeContracted, comparedEdge))
+                {
+                    continue;
+                }
+
+                // We have not contracted this edge yet, so we will look at all the edges (that are not yet contracted) on the shortest demand path through this edge and compare this edge to those.
+                IEnumerable<(TreeNode, TreeNode)> demandPairEdges = FindEdgesOnShortestDemandPathThroughEdge(edge).Where(e => e != edge && !edgesToBeContracted.Contains(e));
+                foreach ((TreeNode, TreeNode) otherEdge in demandPairEdges)
+                {
+                    if (AllDemandPairsPassThroughAnotherEdge(edge, otherEdge))
+                    {
+                        edgesToBeContracted.Add(edge);
+                        comparedEdge[edge] = otherEdge;
+                        break;
+                    }
+                }
+            }
+
+            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
+        }
+
+        /*
         /// <summary>
         /// Determine the edges in <paramref name="possibleEdges"/> that can be contracted.
         /// </summary>
@@ -125,7 +171,7 @@ namespace MulticutInTrees.ReductionRules
                 }
 
                 // We have not contracted this edge yet, so we will look at all the edges (that are not yet contracted) on the shortest demand path through this edge and compare this edge to those.
-                IEnumerable<(TreeNode, TreeNode)> demandPairEdges = FindEdgesOnShortestDemandPathThroughEdge(edge).Select(e => Utils.OrderEdgeSmallToLarge(e)).Where(e => e != edge && !edgesToBeContracted.Contains(e));
+                IEnumerable<(TreeNode, TreeNode)> demandPairEdges = FindEdgesOnShortestDemandPathThroughEdge(edge).Where(e => e != edge && !edgesToBeContracted.Contains(e));
                 foreach ((TreeNode, TreeNode) otherEdge in demandPairEdges)
                 {
                     if (AllDemandPairsPassThroughAnotherEdge(edge, otherEdge))
@@ -139,6 +185,7 @@ namespace MulticutInTrees.ReductionRules
 
             return edgesToBeContracted;
         }
+        */
 
         /// <summary>
         /// Compare <paramref name="edge"/> to its direct neighbours and see if we can contract it.

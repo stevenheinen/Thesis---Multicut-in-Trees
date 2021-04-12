@@ -61,13 +61,13 @@ namespace MulticutInTrees.ReductionRules
         public CommonFactor(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to craete an instance of the Common Factor reduction rule, but the tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to craete an instance of the Common Factor reduction rule, but the list with demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to craete an instance of the Common Factor reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to craete an instance of the Common Factor reduction rule, but the list with the partial solution is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with the partial solution is null!");
             if (maxSolutionSize < 0)
             {
-                throw new ArgumentOutOfRangeException("Trying to craete an instance of the Common Factor reduction rule, but the maximum solution size parameter is smaller than zero!");
+                throw new ArgumentOutOfRangeException($"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum solution size parameter is smaller than zero!");
             }
 #endif
             MockCounter = new Counter();
@@ -217,12 +217,13 @@ namespace MulticutInTrees.ReductionRules
             }
         }
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Command Factor reduction rule after a demand pair was changed, but the list with information about changed demand pairs is null!");
+            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Common Factor reduction rule after a demand pair was changed, but the list with information about changed demand pairs is null!");
 #endif
 #if VERBOSEDEBUG
             Console.WriteLine("Executing Common Factor rule after a demand pair was changed.");
@@ -239,13 +240,15 @@ namespace MulticutInTrees.ReductionRules
 
             return CheckApplicability(demandPairsToCheck);
         }
+        */
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Command Factor reduction rule after a demand pair was removed, but the list with information about removed demand pairs is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Common Factor reduction rule after a demand pair was removed, but the list with information about removed demand pairs is null!");
 #endif
 #if VERBOSEDEBUG
             Console.WriteLine("Executing Common Factor rule after a demand pair was removed.");
@@ -255,13 +258,15 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
             return CheckApplicability(removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }
+        */
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Command Factor reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
+            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Common Factor reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
 #endif
 #if VERBOSEDEBUG
             Console.WriteLine("Executing Common Factor rule after an edge was contracted.");
@@ -281,12 +286,31 @@ namespace MulticutInTrees.ReductionRules
 
             return CheckApplicability(demandPairsToCheck);
         }
+        */
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
+        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand pair was removed, but the list with information about removed demand pairs is null!");
+            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand pair was changed, but the list with information about changed demand pairs is null!");
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine($"Executing {GetType().Name} rule in a later iterations");
+#endif
+            // TODO: WIP!! INTERSECTIONS STILL NEED TO BE UPDATED
+            // TODO: WIP!! ALSO JUST THE IMPLEMENTATION
+
+            throw new NotImplementedException();
+        }
 
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
 #if VERBOSEDEBUG
-            Console.WriteLine("Executing Common Factor rule for the first time...");
+            Console.WriteLine($"Executing {GetType().Name} rule for the first time");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
             return CheckApplicability(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));

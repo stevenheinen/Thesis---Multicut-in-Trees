@@ -51,14 +51,14 @@ namespace MulticutInTrees.ReductionRules
         public OverloadedL3Leaves(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<TreeNode, CountedCollection<DemandPair>> demandPairsPerNode, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the input tree is null!");
-            Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the list with demand pairs is null!");
-            Utilities.Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the algorithm it is part of is null!");
-            Utilities.Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the dictionary with demand pairs per node is null!");
-            Utilities.Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the list with the partial solution is null!");
+            Utilities.Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
+            Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with demand pairs is null!");
+            Utilities.Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utilities.Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per node is null!");
+            Utilities.Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with the partial solution is null!");
             if (maxSolutionSize < 0)
             {
-                throw new ArgumentOutOfRangeException("Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!");
+                throw new ArgumentOutOfRangeException($"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum solution size parameter is smaller than zero!");
             }
 #endif
             DemandPairsPerNode = demandPairsPerNode;
@@ -73,6 +73,7 @@ namespace MulticutInTrees.ReductionRules
             
         }
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
@@ -83,9 +84,12 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine("Applying the Overloaded L3-Leaves reduction rule after a demand path was changed...");
 #endif
+            changedEdgesPerDemandPairList.Clear(Measurements.DemandPairsOperationsCounter);
             return false;
         }
+        */
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
@@ -96,9 +100,12 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine("Applying the Overloaded L3-Leaves reduction rule after a demand path was removed...");
 #endif
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             return false;
         }
+        */
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
@@ -125,12 +132,63 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
             CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> overloadedLeaves = FindOverloadedL3Leaves();
+            contractedEdgeNodeTupleList.Clear(Measurements.TreeOperationsCounter);
+            return HandleOverloadedL3Leaves(overloadedLeaves);
+        }
+        */
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
+        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
+            Utilities.Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
+            Utilities.Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine($"Applying the {GetType().Name} reduction rule in a later iteration");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+            
+            if (contractedEdges.Count(MockCounter) == 0)
+            {
+                removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+                changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+                Measurements.TimeSpentCheckingApplicability.Stop();
+                return false;
+            }
+
+            bool containsI3orL3node = false;
+            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            {
+                if (newNode.Type == NodeType.I3 || newNode.Type == NodeType.L3)
+                {
+                    containsI3orL3node = true;
+                    break;
+                }
+            }
+            if (!containsI3orL3node)
+            {
+                contractedEdges.Clear(Measurements.TreeOperationsCounter);
+                removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+                changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+                Measurements.TimeSpentCheckingApplicability.Stop();
+                return false;
+            }
+            CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> overloadedLeaves = FindOverloadedL3Leaves();
+            contractedEdges.Clear(Measurements.TreeOperationsCounter);
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             return HandleOverloadedL3Leaves(overloadedLeaves);
         }
 
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
+#if VERBOSEDEBUG
+            Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
+#endif
             Measurements.TimeSpentCheckingApplicability.Start();
             CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> overloadedLeaves = FindOverloadedL3Leaves();
             return HandleOverloadedL3Leaves(overloadedLeaves);

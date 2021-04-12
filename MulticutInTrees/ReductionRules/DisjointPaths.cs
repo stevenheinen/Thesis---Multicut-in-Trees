@@ -40,13 +40,13 @@ namespace MulticutInTrees.ReductionRules
         public DisjointPaths(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm, true)
         {
 #if !Experiment
-            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Disjoint Paths reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Disjoint Paths reduction rule, but the list of demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Disjoint Paths reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to create an instance of the Disjoint Paths reduction rule, but the list with the partial solution is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with the partial solution is null!");
             if (maxSolutionSize < 0)
             {
-                throw new ArgumentOutOfRangeException("Trying to create an instance of the Disjoint Paths reduction rule, but the maximum solution size parameter is smaller than zero!");
+                throw new ArgumentOutOfRangeException($"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum solution size parameter is smaller than zero!");
             }
 #endif
             PartialSolution = partialSolution;
@@ -59,6 +59,7 @@ namespace MulticutInTrees.ReductionRules
             
         }
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
@@ -70,9 +71,12 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine("Executing Disjoint Paths rule after a demand path was changed.");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
+            changedEdgesPerDemandPairList.Clear(Measurements.DemandPairsOperationsCounter);
             return DisjointPathsGreaterThanK();
         }
+        */
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
@@ -80,9 +84,12 @@ namespace MulticutInTrees.ReductionRules
 #if !EXPERIMENT
             Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Disjoint Paths reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
 #endif
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             return false;
         }
+        */
 
+        /*
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
         internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
@@ -94,16 +101,39 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine("Executing Disjoint Paths rule after an edge was contracted.");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
+            contractedEdgeNodeTupleList.Clear(Measurements.TreeOperationsCounter);
             return DisjointPathsGreaterThanK();
         }
+        */
 
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
 #if VERBOSEDEBUG
-            Console.WriteLine("Executing Disjoint Paths rule for the first time.");
+            Console.WriteLine($"Executing {GetType().Name} rule for the first time");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
+            return DisjointPathsGreaterThanK();
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
+        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
+            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was changed, but the list with information about changed demand paths is null!");
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+
+            contractedEdges.Clear(Measurements.TreeOperationsCounter);
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+
             return DisjointPathsGreaterThanK();
         }
 

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
@@ -16,7 +17,29 @@ namespace TESTS_MulticutInTrees.ReductionRules
     [TestClass]
     public class UnitTestUnitPath
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
+        private static readonly PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestUnitPath));
+
+        private (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) GetLaterIterationInformation(Algorithm algorithm)
+        {
+            PropertyInfo lastContractedEdgesProperty = typeof(Algorithm).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>> lastContractedEdges = (List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>>)lastContractedEdgesProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+
+            PropertyInfo lastRemovedDemandPairsProperty = typeof(Algorithm).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<CountedList<DemandPair>> lastRemovedDemandPairs = (List<CountedList<DemandPair>>)lastRemovedDemandPairsProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+
+            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(Algorithm).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>> lastChangedEdgesPerDemandPair = (List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>>)lastChangedEdgesPerDemandPairProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+
+            int index = GetIndexOfReductionRule(algorithm);
+
+            return (lastContractedEdges[index], lastRemovedDemandPairs[index], lastChangedEdgesPerDemandPair[index]);
+        }
+
+        private int GetIndexOfReductionRule(Algorithm algorithm)
+        {
+            return algorithm.ReductionRules.IndexOf(algorithm.ReductionRules.First(rr => rr.GetType() == typeof(UnitPath)));
+        }
 
         [TestMethod]
         public void TestConstructor()
@@ -43,13 +66,17 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             Assert.IsNotNull(unitPath);
 
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
+            CountedList<DemandPair> removedDemandPairs = new CountedList<DemandPair>();
+            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
+
             Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(null, demandPairs, gnfpt); });
             Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, null, gnfpt); });
             Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, null); });
 
-            Assert.ThrowsException<ArgumentNullException>(() => unitPath.AfterDemandPathChanged(null));
-            Assert.ThrowsException<ArgumentNullException>(() => unitPath.AfterDemandPathRemove(null));
-            Assert.ThrowsException<ArgumentNullException>(() => unitPath.AfterEdgeContraction(null));
+            Assert.ThrowsException<ArgumentNullException>(() => unitPath.RunLaterIteration(null, removedDemandPairs, changedEdgesPerDemandPairList));
+            Assert.ThrowsException<ArgumentNullException>(() => unitPath.RunLaterIteration(contractedEdgeNodeTupleList, null, changedEdgesPerDemandPairList));
+            Assert.ThrowsException<ArgumentNullException>(() => unitPath.RunLaterIteration(contractedEdgeNodeTupleList, removedDemandPairs, null));
 
             MethodInfo method = typeof(UnitPath).GetMethod("DemandPathHasLengthOne", BindingFlags.NonPublic | BindingFlags.Instance);
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
@@ -60,7 +87,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         }
 
         [TestMethod]
-        public void TestAfterEdgeContraction()
+        public void TestAfterEdgeContraction1()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
@@ -70,30 +97,67 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node4 = new TreeNode(4);
             TreeNode node5 = new TreeNode(5);
 
-            tree.AddRoot(node0, counter);
-            tree.AddChild(node0, node1, counter);
-            tree.AddChild(node1, node3, counter);
-            tree.AddChild(node3, node5, counter);
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node2, MockCounter);
+            tree.AddChild(node2, node3, MockCounter);
+            tree.AddChild(node3, node4, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(node0, node5);
+            DemandPair dp1 = new DemandPair(node0, node4);
             DemandPair dp2 = new DemandPair(node1, node3);
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
 
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
-            CountedCollection<DemandPair> dpList = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
-            list.Add(((node2, node1), node1, dpList), counter);
-            Assert.IsTrue(unitPath.AfterEdgeContraction(list));
+            algorithm.ContractEdge((node1, node2), MockMeasurements);
 
-            list = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(new List<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> { ((node4, node5), node5, new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, counter)) }, counter);
-            Assert.IsFalse(unitPath.AfterEdgeContraction(list));
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
+
+            Assert.IsTrue(unitPath.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+        }
+
+        [TestMethod]
+        public void TestAfterEdgeContraction2()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+            TreeNode node5 = new TreeNode(5);
+
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node2, MockCounter);
+            tree.AddChild(node2, node3, MockCounter);
+            tree.AddChild(node3, node4, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(node0, node4);
+            DemandPair dp2 = new DemandPair(node1, node3);
+
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
+
+            algorithm.ContractEdge((node3, node4), MockMeasurements);
+
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
+
+            Assert.IsFalse(unitPath.RunLaterIteration(info.Item1, info.Item2, info.Item3));
         }
 
         [TestMethod]
@@ -105,28 +169,32 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node3 = new TreeNode(3);
             TreeNode node5 = new TreeNode(5);
 
-            tree.AddRoot(node0, counter);
-            tree.AddChild(node0, node1, counter);
-            tree.AddChild(node1, node3, counter);
-            tree.AddChild(node3, node5, counter);
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node3, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
 
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node5);
             DemandPair dp2 = new DemandPair(node1, node3);
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
 
-            Assert.IsFalse(unitPath.AfterDemandPathRemove(demandPairs));
+            algorithm.RemoveDemandPair(dp1, MockMeasurements);
+
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
+
+            Assert.IsFalse(unitPath.RunLaterIteration(info.Item1, info.Item2, info.Item3));
         }
 
         [TestMethod]
-        public void TestAfterDemandPathChanged()
+        public void TestAfterDemandPathChanged1()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
@@ -136,34 +204,34 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node4 = new TreeNode(4);
             TreeNode node5 = new TreeNode(5);
 
-            tree.AddRoot(node0, counter);
-            tree.AddChild(node0, node1, counter);
-            tree.AddChild(node1, node2, counter);
-            tree.AddChild(node2, node3, counter);
-            tree.AddChild(node3, node4, counter);
-            tree.AddChild(node3, node5, counter);
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node2, MockCounter);
+            tree.AddChild(node2, node3, MockCounter);
+            tree.AddChild(node3, node4, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
 
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node4);
-            DemandPair dp2 = new DemandPair(node1, node2);
+            DemandPair dp2 = new DemandPair(node1, node3);
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, counter);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
 
-            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> list = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)>() { (node4, node5) }, counter), dp1) }, counter);
-            Assert.IsFalse(unitPath.AfterDemandPathChanged(list));
+            algorithm.ChangeEndpointOfDemandPair(dp1, node4, node3, MockMeasurements);
 
-            list = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(new List<(CountedList<(TreeNode, TreeNode)>, DemandPair)>() { (new CountedList<(TreeNode, TreeNode)>(new List<(TreeNode, TreeNode)> { (node3, node2) }, counter), dp2) }, counter);
-            Assert.IsTrue(unitPath.AfterDemandPathChanged(list));
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
+
+            Assert.IsFalse(unitPath.RunLaterIteration(info.Item1, info.Item2, info.Item3));
         }
 
         [TestMethod]
-        public void TestRunFirstIteration()
+        public void TestAfterDemandPathChanged2()
         {
             Tree<TreeNode> tree = new Tree<TreeNode>();
             TreeNode node0 = new TreeNode(0);
@@ -173,31 +241,94 @@ namespace TESTS_MulticutInTrees.ReductionRules
             TreeNode node4 = new TreeNode(4);
             TreeNode node5 = new TreeNode(5);
 
-            tree.AddRoot(node0, counter);
-            tree.AddChild(node0, node1, counter);
-            tree.AddChild(node1, node2, counter);
-            tree.AddChild(node2, node3, counter);
-            tree.AddChild(node3, node4, counter);
-            tree.AddChild(node3, node5, counter);
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node2, MockCounter);
+            tree.AddChild(node2, node3, MockCounter);
+            tree.AddChild(node3, node4, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
 
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new DemandPair(node0, node4);
+            DemandPair dp2 = new DemandPair(node1, node3);
+
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
+
+            algorithm.ChangeEndpointOfDemandPair(dp2, node3, node2, MockMeasurements);
+
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
+
+            Assert.IsTrue(unitPath.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+        }
+
+        [TestMethod]
+        public void TestRunFirstIteration1()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+            TreeNode node5 = new TreeNode(5);
+
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node2, MockCounter);
+            tree.AddChild(node2, node3, MockCounter);
+            tree.AddChild(node3, node4, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(node0, node4);
+
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, MockCounter);
+
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
+
+            Assert.IsFalse(unitPath.RunFirstIteration());
+        }
+
+        [TestMethod]
+        public void TestRunFirstIteration2()
+        {
+            Tree<TreeNode> tree = new Tree<TreeNode>();
+            TreeNode node0 = new TreeNode(0);
+            TreeNode node1 = new TreeNode(1);
+            TreeNode node2 = new TreeNode(2);
+            TreeNode node3 = new TreeNode(3);
+            TreeNode node4 = new TreeNode(4);
+            TreeNode node5 = new TreeNode(5);
+
+            tree.AddRoot(node0, MockCounter);
+            tree.AddChild(node0, node1, MockCounter);
+            tree.AddChild(node1, node2, MockCounter);
+            tree.AddChild(node2, node3, MockCounter);
+            tree.AddChild(node3, node4, MockCounter);
+            tree.AddChild(node3, node5, MockCounter);
+
+            tree.UpdateNodeTypes();
+
             DemandPair dp2 = new DemandPair(node1, node2);
 
-            CountedList<DemandPair> demandPairs1 = new CountedList<DemandPair>(new List<DemandPair>() { dp1 }, counter);
-            CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, counter);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp2 }, MockCounter);
 
-            MulticutInstance instance1 = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs1, 1, 1);
-            MulticutInstance instance2 = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs2, 1, 1);
-            GuoNiedermeierKernelisation gnfpt1 = new GuoNiedermeierKernelisation(instance1);
-            GuoNiedermeierKernelisation gnfpt2 = new GuoNiedermeierKernelisation(instance2);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
 
-            UnitPath unitPath1 = new UnitPath(tree, demandPairs1, gnfpt1);
-            UnitPath unitPath2 = new UnitPath(tree, demandPairs2, gnfpt2);
+            UnitPath unitPath = new UnitPath(tree, demandPairs, algorithm);
 
-            Assert.IsFalse(unitPath1.RunFirstIteration());
-            Assert.IsTrue(unitPath2.RunFirstIteration());
+            Assert.IsTrue(unitPath.RunFirstIteration());
         }
     }
 }

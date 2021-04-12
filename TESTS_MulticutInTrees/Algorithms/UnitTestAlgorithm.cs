@@ -29,38 +29,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             Assert.IsNotNull(gnfpt);
             Assert.IsNotNull(gnfpt.ReductionRules);
-
-            PropertyInfo demandPairsProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(demandPairsProperty.GetGetMethod(true));
-            Assert.AreEqual(demandPairs, demandPairsProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { }));
-
-            PropertyInfo inputProperty = typeof(GuoNiedermeierKernelisation).GetProperty("Tree", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(inputProperty.GetGetMethod(true));
-            Assert.AreEqual(tree, inputProperty.GetGetMethod(true).Invoke(gnfpt, new object[] { }));
-
-            PropertyInfo partialSolutionProperty = typeof(GuoNiedermeierKernelisation).GetProperty("PartialSolution", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(partialSolutionProperty.GetGetMethod(true));
-
-            PropertyInfo lastIterationEdgeContractionProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastIterationEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(lastIterationEdgeContractionProperty.GetGetMethod(true));
-
-            PropertyInfo lastIterationDemandPairRemovalProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastIterationDemandPairRemoval", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(lastIterationDemandPairRemovalProperty.GetGetMethod(true));
-
-            PropertyInfo lastIterationDemandPairChangeProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastIterationDemandPairChange", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(lastIterationDemandPairChangeProperty.GetGetMethod(true));
-
-            PropertyInfo kProperty = typeof(GuoNiedermeierKernelisation).GetProperty("K", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(kProperty.GetGetMethod(true));
-
-            PropertyInfo lastContractedEdgesProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(lastContractedEdgesProperty.GetGetMethod(true));
-
-            PropertyInfo lastRemovedDemandPairsProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(lastRemovedDemandPairsProperty.GetGetMethod(true));
-
-            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(GuoNiedermeierKernelisation).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(lastChangedEdgesPerDemandPairProperty.GetGetMethod(true));
+            Assert.AreNotEqual(0, gnfpt.ReductionRules.Count);
         }
 
         [TestMethod]
