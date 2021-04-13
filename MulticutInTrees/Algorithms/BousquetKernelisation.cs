@@ -49,7 +49,7 @@ namespace MulticutInTrees.Algorithms
 
             UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
-            
+
             DisjointPaths disjointPaths = new DisjointPaths(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
 

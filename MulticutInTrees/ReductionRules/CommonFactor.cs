@@ -21,32 +21,34 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with per <see cref="DemandPair"/> the <see cref="DemandPair"/>s it intersects with.
         /// </summary>
-        protected CountedDictionary<DemandPair, CountedCollection<DemandPair>> IntersectingDemandPairs { get; }
+        private CountedDictionary<DemandPair, CountedCollection<DemandPair>> IntersectingDemandPairs { get; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with the edges that are the intersection between two <see cref="DemandPair"/>s.
         /// </summary>
-        protected CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>> DemandPairIntersections { get; }
+        private CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>> DemandPairIntersections { get; }
 
+        // todo; give each demand pair its own id
         /// <summary>
         /// <see cref="Dictionary{TKey, TValue}"/> with a unique identifier per <see cref="DemandPair"/>.
         /// </summary>
-        protected Dictionary<DemandPair, int> DemandPairIDs { get; }
+        private Dictionary<DemandPair, int> DemandPairIDs { get; }
 
         /// <summary>
         /// The maximum size the solution is allowed to have.
         /// </summary>
-        protected int MaxSolutionSize { get; }
+        private int MaxSolutionSize { get; }
 
         /// <summary>
         /// The part of the solution that has been found thus far.
         /// </summary>
-        protected List<(TreeNode, TreeNode)> PartialSolution { get; }
+        private List<(TreeNode, TreeNode)> PartialSolution { get; }
 
+        // todo: give RR itself the mockcounter
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not influence the performance of this <see cref="ReductionRule"/>.
         /// </summary>
-        protected Counter MockCounter { get; }
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for <see cref="CommonFactor"/>.
@@ -72,6 +74,10 @@ namespace MulticutInTrees.ReductionRules
 #endif
             MockCounter = new Counter();
             DemandPairIDs = new Dictionary<DemandPair, int>();
+            PartialSolution = partialSolution;
+            MaxSolutionSize = maxSolutionSize;
+            IntersectingDemandPairs = new CountedDictionary<DemandPair, CountedCollection<DemandPair>>();
+            DemandPairIntersections = new CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>>();
             FillDemandPairIDs();
         }
 
@@ -87,17 +93,6 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <summary>
-        /// Uses <see cref="DemandPairIDs"/> to sort <paramref name="dp1"/> and <paramref name="dp2"/> in order to be used as key for <see cref="DemandPairIntersections"/>.
-        /// </summary>
-        /// <param name="dp1">The first <see cref="DemandPair"/>.</param>
-        /// <param name="dp2">The second <see cref="DemandPair"/>.</param>
-        /// <returns>A tuple with <paramref name="dp1"/> and <paramref name="dp2"/> sorted on their unique ID to be used as key for <see cref="DemandPairIntersections"/>.</returns>
-        protected (DemandPair, DemandPair) GetIntersectionKey(DemandPair dp1, DemandPair dp2)
-        {
-            return DemandPairIDs[dp1] < DemandPairIDs[dp2] ? (dp1, dp2) : (dp2, dp1);
-        }
-
-        /// <summary>
         /// Checks whether this <see cref="ReductionRule"/> is applicable on <paramref name="p0"/>.
         /// </summary>
         /// <param name="p0">The <see cref="DemandPair"/> for which we want to know if this rule is applicable.</param>
@@ -107,7 +102,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> can be applied on <paramref name="p0"/>, <see langword="false"/> otherwise.</returns>
         private bool CheckApplicabilitySinglePair(DemandPair p0, CountedCollection<DemandPair> intersectingPairs, int intersectingPairCount, int k)
         {
-            IEnumerable<(TreeNode, TreeNode)> p0Path = p0.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(e => Utils.OrderEdgeSmallToLarge(e));
+            IEnumerable<(TreeNode, TreeNode)> p0Path = p0.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(Utils.OrderEdgeSmallToLarge);
             int subsetFailCount = 0;
             HashSet<(DemandPair, DemandPair)> checkedPairs = new HashSet<(DemandPair, DemandPair)>();
             foreach (DemandPair pi in intersectingPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
@@ -149,11 +144,22 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <summary>
+        /// Uses <see cref="DemandPairIDs"/> to sort <paramref name="dp1"/> and <paramref name="dp2"/> in order to be used as key for <see cref="DemandPairIntersections"/>.
+        /// </summary>
+        /// <param name="dp1">The first <see cref="DemandPair"/>.</param>
+        /// <param name="dp2">The second <see cref="DemandPair"/>.</param>
+        /// <returns>A tuple with <paramref name="dp1"/> and <paramref name="dp2"/> sorted on their unique ID to be used as key for <see cref="DemandPairIntersections"/>.</returns>
+        private (DemandPair, DemandPair) GetIntersectionKey(DemandPair dp1, DemandPair dp2)
+        {
+            return DemandPairIDs[dp1] < DemandPairIDs[dp2] ? (dp1, dp2) : (dp2, dp1);
+        }
+
+        /// <summary>
         /// Checks whether this <see cref="ReductionRule"/> is applicable on any of the <see cref="DemandPair"/>s in <paramref name="demandPairsToCheck"/>, and applies it.
         /// </summary>
         /// <param name="demandPairsToCheck">The <see cref="DemandPair"/>s we want to try this <see cref="ReductionRule"/> on.</param>
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/>, <see langword="false"/> otherwise.</returns>
-        protected bool CheckApplicability(IEnumerable<DemandPair> demandPairsToCheck)
+        private bool CheckApplicability(IEnumerable<DemandPair> demandPairsToCheck)
         {
             List<DemandPair> pairsToBeRemoved = new List<DemandPair>();
 
@@ -187,11 +193,11 @@ namespace MulticutInTrees.ReductionRules
             for (int i = 0; i < numberOfDPs - 1; i++)
             {
                 DemandPair dp1 = DemandPairs[i, Measurements.DemandPairsOperationsCounter];
-                IEnumerable<(TreeNode, TreeNode)> path1 = dp1.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(e => Utils.OrderEdgeSmallToLarge(e));
+                IEnumerable<(TreeNode, TreeNode)> path1 = dp1.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(Utils.OrderEdgeSmallToLarge);
                 for (int j = i + 1; j < numberOfDPs; j++)
                 {
                     DemandPair dp2 = DemandPairs[j, Measurements.DemandPairsOperationsCounter];
-                    IEnumerable<(TreeNode, TreeNode)> path2 = dp2.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(e => Utils.OrderEdgeSmallToLarge(e));
+                    IEnumerable<(TreeNode, TreeNode)> path2 = dp2.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(Utils.OrderEdgeSmallToLarge);
                     IEnumerable<(TreeNode, TreeNode)> intersection = path1.Intersect(path2);
 
                     if (!intersection.Any())
@@ -204,7 +210,7 @@ namespace MulticutInTrees.ReductionRules
                         IntersectingDemandPairs[dp1, MockCounter] = new CountedCollection<DemandPair>();
                     }
                     IntersectingDemandPairs[dp1, Measurements.DemandPairsOperationsCounter].Add(dp2, Measurements.DemandPairsOperationsCounter);
-                    
+
                     if (!IntersectingDemandPairs.ContainsKey(dp2, MockCounter))
                     {
                         IntersectingDemandPairs[dp2, MockCounter] = new CountedCollection<DemandPair>();
@@ -216,77 +222,6 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
         }
-
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Common Factor reduction rule after a demand pair was changed, but the list with information about changed demand pairs is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Common Factor rule after a demand pair was changed.");
-#endif
-            // TODO: WIP!! INTERSECTIONS STILL NEED TO BE UPDATED
-
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<DemandPair> demandPairsToCheck = new HashSet<DemandPair>();
-            foreach ((CountedList<(TreeNode, TreeNode)> _, DemandPair dp) in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                demandPairsToCheck.Add(dp);
-            }
-
-            return CheckApplicability(demandPairsToCheck);
-        }
-        */
-
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Common Factor reduction rule after a demand pair was removed, but the list with information about removed demand pairs is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Common Factor rule after a demand pair was removed.");
-#endif
-            // TODO: WIP!! INTERSECTIONS STILL NEED TO BE UPDATED
-
-            Measurements.TimeSpentCheckingApplicability.Start();
-            return CheckApplicability(removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
-        }
-        */
-
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Common Factor reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Common Factor rule after an edge was contracted.");
-#endif
-            // TODO: WIP!! INTERSECTIONS STILL NEED TO BE UPDATED
-
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<DemandPair> demandPairsToCheck = new HashSet<DemandPair>();
-            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                foreach (DemandPair dp in demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-                {
-                    demandPairsToCheck.Add(dp);
-                }
-            }
-
-            return CheckApplicability(demandPairsToCheck);
-        }
-        */
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>

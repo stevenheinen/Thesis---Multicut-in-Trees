@@ -22,7 +22,7 @@ namespace MulticutInTrees.ReductionRules
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per <see cref="TreeNode"/>.
         /// </summary>
         private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
-        
+
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge.
         /// </summary>
@@ -87,13 +87,80 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
         private void CheckApplicabilityInternalNode(TreeNode node, CountedCollection<DemandPair> dpsAtNode, HashSet<(TreeNode, TreeNode)> edgesToBeContracted)
         {
+            (TreeNode, TreeNode) firstEdge = DetermineCommonEdge(node, dpsAtNode);
+
+            if (firstEdge.Item1 is null)
+            {
+                return;
+            }
+
+            // For the other edges connected to this node, check if we can contract it. We can contract it if, for each demand path on it, not all edges on that demand path are being contracted.
+            foreach ((TreeNode, TreeNode) edge in node.Neighbours(Measurements.TreeOperationsCounter).Select(n => Utils.OrderEdgeSmallToLarge((node, n))).Where(e => e != firstEdge))
+            {
+                if (CanContractNeighbouringEdge(edge, edgesToBeContracted))
+                {
+                    edgesToBeContracted.Add(edge);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks for a given edge whether it can be contracted. This is the case when it is not used by a <see cref="DemandPair"/> whose all other edges will be contracted.
+        /// </summary>
+        /// <param name="edge">The edge we will potentially contract.</param>
+        /// <param name="edgesToBeContracted">The <see cref="HashSet{T}"/> with all edges that will be contracted.</param>
+        /// <returns><see langword="true"/> if we can contract <paramref name="edge"/>, <see langword="false"/> otherwise.</returns>
+        private bool CanContractNeighbouringEdge((TreeNode, TreeNode) edge, HashSet<(TreeNode, TreeNode)> edgesToBeContracted)
+        {
+            if (!DemandPairsPerEdge.TryGetValue(edge, out CountedCollection<DemandPair> dps, Measurements.DemandPairsPerEdgeKeysCounter))
+            {
+                // No demand pairs use this edge, so we can safely contract it.
+                return true;
+            }
+
+            bool canBeContracted = true;
+            foreach (DemandPair dp in dps.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
+            {
+                bool allOtherEdgesOnPathWillBeContracted = true;
+                foreach ((TreeNode, TreeNode) e in dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
+                {
+                    if (edge == Utils.OrderEdgeSmallToLarge(e))
+                    {
+                        continue;
+                    }
+
+                    if (!edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(e)))
+                    {
+                        allOtherEdgesOnPathWillBeContracted = false;
+                        break;
+                    }
+                }
+
+                if (allOtherEdgesOnPathWillBeContracted)
+                {
+                    canBeContracted = false;
+                    break;
+                }
+            }
+
+            return canBeContracted;
+        }
+
+        /// <summary>
+        /// Determine the edge that all <see cref="DemandPair"/>s that start at <paramref name="node"/> have in common, if it exists.
+        /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> at which all <see cref="DemandPair"/>s start.</param>
+        /// <param name="dpsAtNode">The <see cref="DemandPair"/>s that start at <paramref name="node"/>.</param>
+        /// <returns>The edge connected to <paramref name="node"/> that all <see cref="DemandPair"/>s in <paramref name="dpsAtNode"/> use, or a tuple of two times <see langword="null"/> if that edge does not exist.</returns>
+        private (TreeNode, TreeNode) DetermineCommonEdge(TreeNode node, CountedCollection<DemandPair> dpsAtNode)
+        {
             (TreeNode, TreeNode) firstEdge = (null, null);
 
             // Determine whether the demand pairs that start at this node go in the same direction.
             foreach (DemandPair dp in dpsAtNode.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
                 (TreeNode, TreeNode) edge;
-                
+
                 if (dp.Node1 == node)
                 {
                     edge = Utils.OrderEdgeSmallToLarge(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).ElementAt(0));
@@ -110,50 +177,11 @@ namespace MulticutInTrees.ReductionRules
                 }
                 else if (firstEdge != edge)
                 {
-                    return;
+                    return (null, null);
                 }
             }
-            
-            // For the other edges connected to this node, check if we can contract it. We can contract it if, for each demand path on it, not all edges on that demand path are being contracted.
-            foreach ((TreeNode, TreeNode) edge in node.Neighbours(Measurements.TreeOperationsCounter).Select(n => Utils.OrderEdgeSmallToLarge((node, n))).Where(e => e != firstEdge))
-            {
-                if (!DemandPairsPerEdge.TryGetValue(edge, out CountedCollection<DemandPair> dps, Measurements.DemandPairsPerEdgeKeysCounter))
-                {
-                    // No demand pairs use this edge, so we can safely contract it.
-                    edgesToBeContracted.Add(edge);
-                    continue;
-                }
 
-                bool canBeContracted = true;
-                foreach (DemandPair dp in dps.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
-                {
-                    bool allOtherEdgesOnPathWillBeContracted = true;
-                    foreach ((TreeNode, TreeNode) e in dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
-                    {
-                        if (edge == Utils.OrderEdgeSmallToLarge(e))
-                        {
-                            continue;
-                        }
-
-                        if (!edgesToBeContracted.Contains(Utils.OrderEdgeSmallToLarge(e)))
-                        {
-                            allOtherEdgesOnPathWillBeContracted = false;
-                            break;
-                        }
-                    }
-
-                    if (allOtherEdgesOnPathWillBeContracted)
-                    {
-                        canBeContracted = false;
-                        break;
-                    }
-                }
-
-                if (canBeContracted)
-                {
-                    edgesToBeContracted.Add(edge);
-                }
-            }
+            return firstEdge;
         }
 
         /// <summary>
@@ -175,11 +203,11 @@ namespace MulticutInTrees.ReductionRules
 
                 (TreeNode, TreeNode) edge;
                 bool allOtherEdgesOnPathWillBeContracted = true;
-                
+
                 if (dp.Node1 == leaf)
                 {
                     edge = Utils.OrderEdgeSmallToLarge(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).ElementAt(1));
-                    
+
                     // Check whether all other edges on this demand path are already being contracted. If so, we cannot contract this edge.
                     foreach ((TreeNode, TreeNode) e in dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).Skip(1))
                     {
@@ -246,75 +274,6 @@ namespace MulticutInTrees.ReductionRules
 
         }
 
-        /*
-        /// <inheritdoc/>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Unique Direction rule after a demand path was changed, but the IEnumerable of removed demand paths is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Unique Direction rule after a demand path was changed...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<TreeNode> nodesToCheck = new HashSet<TreeNode>();
-            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                foreach ((TreeNode n1, TreeNode n2) in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-                {
-                    nodesToCheck.Add(n1);
-                    nodesToCheck.Add(n2);
-                }
-            }
-
-            changedEdgesPerDemandPairList.Clear(Measurements.DemandPairsOperationsCounter);
-            return TryApplyReductionRule(nodesToCheck);
-        }
-        */
-
-        /*
-        /// <inheritdoc/>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Unique Direction rule after a demand path was removed, but the IEnumerable of removed demand paths is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Unique Direction rule after a demand pair was removed...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<TreeNode> nodesToCheck = new HashSet<TreeNode>();
-            foreach (DemandPair dp in removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                nodesToCheck.Add(dp.Node1);
-                nodesToCheck.Add(dp.Node2);
-            }
-
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            return TryApplyReductionRule(nodesToCheck);
-        }
-        */
-
-        /*
-        /// <inheritdoc/>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Unique Direction rule after an edge was contracted, but the IEnumerable of contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Unique Direction rule after an edge was contracted...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<TreeNode> nodesToCheck = new HashSet<TreeNode>(contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter).Select(t => t.Item2));
-            contractedEdgeNodeTupleList.Clear(Measurements.TreeOperationsCounter);
-            return TryApplyReductionRule(nodesToCheck);
-        }
-        */
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
         internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
@@ -328,7 +287,7 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
             HashSet<TreeNode> nodesToCheck = new HashSet<TreeNode>();
-           
+
             foreach (((TreeNode, TreeNode) _, TreeNode node, CountedCollection<DemandPair> _) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 nodesToCheck.Add(node);

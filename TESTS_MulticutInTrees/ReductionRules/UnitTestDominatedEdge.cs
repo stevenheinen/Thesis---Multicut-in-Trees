@@ -192,7 +192,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair5 = new DemandPair(node1, node3);
             DemandPair demandPair6 = new DemandPair(node1, node4);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5, demandPair6 }, MockCounter);
-            
+
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
@@ -232,7 +232,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            
+
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, algorithm, demandPairPerEdge);
@@ -270,7 +270,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            
+
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, algorithm, demandPairPerEdge);
@@ -312,7 +312,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
             DominatedEdge dominatedEdge = new DominatedEdge(tree, demandPairs, algorithm, demandPairPerEdge);
-           
+
             algorithm.ChangeEndpointOfDemandPair(demandPair3, node0, node1, MockMeasurements);
 
             (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);

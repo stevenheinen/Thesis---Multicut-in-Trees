@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using MulticutInTrees.CommandLineArguments;
 using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -20,7 +21,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not affect performance.
         /// </summary>
-        private readonly static Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         /// <summary>
         /// Write an instance to a file.
@@ -84,6 +85,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
         /// <returns>If the file with this instance exists: a tuple with the <see cref="Tree{N}"/>, a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s and the optimal K value. Otherwise, a tuple with <see langword="null"/>, <see langword="null"/> and -1.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
+        /// <exception cref="BadFileFormatException">Thrown when one of the lines in the file we are reading is not in the correct format.</exception>
         public static (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) ReadInstance(int randomSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
@@ -99,46 +101,90 @@ namespace MulticutInTrees.InstanceGeneration
 
             int optimalK;
             int numberOfNodes;
-            int numberOfDPs;
 
             int root;
             List<(int, int)> edges = new List<(int, int)>();
-
             List<(int, int)> dps = new List<(int, int)>();
 
             using (StreamReader sr = new StreamReader(fileName))
             {
-                // Skip the first line with a comment
-                sr.ReadLine();
-                string[] header = sr.ReadLine().Split();
-                numberOfNodes = int.Parse(header[0]);
-                numberOfDPs = int.Parse(header[1]);
-                optimalK = int.Parse(header[2]);
+                string line = sr.ReadLine();
 
-                sr.ReadLine();
-                root = int.Parse(sr.ReadLine());
-
-                // Reading edges, skip comment line
-                sr.ReadLine();
-                for (int i = 0; i < numberOfNodes - 1; i++)
+                // Skip the lines with a comment
+                while (line.StartsWith("//"))
                 {
-                    string[] edge = sr.ReadLine().Split();
-                    edges.Add((int.Parse(edge[0]), int.Parse(edge[1])));
+                    line = sr.ReadLine();
                 }
 
-                // Reading demand pairs, skip comment line
-                sr.ReadLine();
+                string[] header = line.Split();
+
+                if (header.Length != 3 || !int.TryParse(header[0], out numberOfNodes) || !int.TryParse(header[1], out int numberOfDPs) || !int.TryParse(header[2], out optimalK))
+                {
+                    throw new BadFileFormatException($"Trying to read an instance from a file. The second line ({line}) is not in the correct format. Expected line with three integers, separated by a space. The first one should represent the number of nodes, the second one the number of demand pairs, and the final one the optimal K value.");
+                }
+
+                line = sr.ReadLine();
+                while (line.StartsWith("//"))
+                {
+                    line = sr.ReadLine();
+                }
+
+                if (!int.TryParse(line, out root))
+                {
+                    throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line a single integer, representing the ID of the root of the tree.");
+                }
+
+                // Reading edges, skip comment line
+                line = sr.ReadLine();
+                while (line.StartsWith("//"))
+                {
+                    line = sr.ReadLine();
+                }
+               
+                for (int i = 0; i < numberOfNodes - 1; i++)
+                {
+                    string[] edge = line.Split();
+
+                    if (edge.Length != 2 || !int.TryParse(edge[0], out int endpoint1) || !int.TryParse(edge[1], out int endpoint2))
+                    {
+                        throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line with two integers, separated by a space, representing the IDs of the endpoints of an edge.");
+                    }
+
+                    edges.Add((endpoint1, endpoint2));
+                    line = sr.ReadLine();
+                    while (line.StartsWith("//"))
+                    {
+                        line = sr.ReadLine();
+                    }
+                }
+
+                // Reading demand pairs
                 for (int i = 0; i < numberOfDPs; i++)
                 {
-                    string[] dp = sr.ReadLine().Split();
-                    dps.Add((int.Parse(dp[0]), int.Parse(dp[1])));
+                    string[] dp = line.Split();
+
+                    if (dp.Length != 2 || !int.TryParse(dp[0], out int endpoint1) || !int.TryParse(dp[1], out int endpoint2))
+                    {
+                        throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line with two integers, separated by a space, representing the IDs of the endpoints of a demand pair.");
+                    }
+
+                    dps.Add((endpoint1, endpoint2));
+
+                    if (i != numberOfDPs - 1)
+                    {
+                        line = sr.ReadLine();
+                        while (line.StartsWith("//"))
+                        {
+                            line = sr.ReadLine();
+                        }
+                    }
                 }
             }
 
-            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(numberOfNodes, edges);
+            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(numberOfNodes, root, edges);
             CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, dps);
 
-            return (tree, demandPairs, optimalK);           
+            return (tree, demandPairs, optimalK);
         }
 
         /// <summary>

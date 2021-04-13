@@ -206,11 +206,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
-            
+
             DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, maxSize);
 
             algorithm.RemoveDemandPair(dp3, MockMeasurements);
-           
+
             (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
 
             Assert.IsFalse(disjointPaths.RunLaterIteration(info.Item1, info.Item2, info.Item3));

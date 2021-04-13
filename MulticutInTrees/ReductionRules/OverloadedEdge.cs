@@ -56,7 +56,7 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the partial solution is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per edge is null!"); 
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per edge is null!");
             if (maxSolutionSize < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxSolutionSize), $"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum number of edges that can be cut is smaller than zero!");
@@ -64,113 +64,68 @@ namespace MulticutInTrees.ReductionRules
 #endif
             MaxSolutionSize = maxSolutionSize;
             PartialSolution = partialSolution;
-            DemandPairsPerEdge = demandPairsPerEdge; 
+            DemandPairsPerEdge = demandPairsPerEdge;
             MockCounter = new Counter();
         }
 
-        /// <inheritdoc/>
-        protected override void Preprocess()
+        /// <summary>
+        /// Checks, given a <see cref="Dictionary{TKey, TValue}"/> with per edge how many length-2 <see cref="DemandPair"/>s pass through it, which edges are overloaded.
+        /// </summary>
+        /// <param name="edgeOccurrences"><see cref="Dictionary{TKey, TValue}"/> with the number of length-2 <see cref="DemandPair"/>s per edge.</param>
+        /// <returns>A <see cref="CountedList{T}"/> of edges that can be cut.</returns>
+        private CountedList<(TreeNode, TreeNode)> DetermineOverloadedEdges(CountedDictionary<(TreeNode, TreeNode), int> edgeOccurrences)
         {
-            
+            CountedList<(TreeNode, TreeNode)> overloadedEdges = new CountedList<(TreeNode, TreeNode)>();
+            int k = MaxSolutionSize - PartialSolution.Count;
+            foreach (KeyValuePair<(TreeNode, TreeNode), int> edge in edgeOccurrences.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            {
+                if (edge.Value > k)
+                {
+                    overloadedEdges.Add(edge.Key, Measurements.TreeOperationsCounter);
+                }
+            }
+            return overloadedEdges;
         }
 
-        /*
         /// <summary>
-        /// Checks if a given edge is overloaded.
+        /// Try to apply this <see cref="ReductionRule"/> on the <see cref="DemandPair"/>s in <paramref name="demandPairsToCheck"/>.
         /// </summary>
-        /// <param name="edge">The edge to be checked.</param>
-        /// <returns><see langword="true"/> if <paramref name="edge"/> has more than k length-2 demand paths passing through it, <see langword="false"/> otherwise.</returns>
-        private bool CheckEdgeForOverload((TreeNode, TreeNode) edge)
+        /// <param name="demandPairsToCheck">The <see cref="IEnumerable{T}"/> with edges we want to check.</param>
+        /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
+        private bool TryApplyReductionRule(IEnumerable<DemandPair> demandPairsToCheck)
         {
-            return DemandPairsPerEdge[edge, Measurements.DemandPairsPerEdgeKeysCounter].Count(dp => dp.LengthOfPath(Measurements.DemandPairsOperationsCounter) == 2, Measurements.DemandPairsPerEdgeValuesCounter) > MaxSolutionSize - PartialSolution.Count;
-        }
-        */
-
-        /*
-        /// <summary>
-        /// Checks for a set of changed(!) <see cref="DemandPair"/>s whether one of their edges is now overloaded.
-        /// </summary>
-        /// <param name="demandPairs">The changed <see cref="DemandPair"/>s.</param>
-        /// <returns>A <see cref="HashSet{T}"/> of overloaded edges.</returns>
-        private HashSet<(TreeNode, TreeNode)> CheckForOverloadedEdges(IEnumerable<DemandPair> demandPairs)
-        {
-            HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (DemandPair demandPair in demandPairs)
+            CountedDictionary<(TreeNode, TreeNode), int> edgeOccurrences = new CountedDictionary<(TreeNode, TreeNode), int>();
+            foreach (DemandPair demandPair in demandPairsToCheck)
             {
                 if (demandPair.LengthOfPath(Measurements.DemandPairsOperationsCounter) != 2)
                 {
                     continue;
                 }
-                (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).First());
-                (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Last());
-                if (CheckEdgeForOverload(edge1))
+
+                (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
+                (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).Last());
+                if (!edgeOccurrences.ContainsKey(edge1, MockCounter))
                 {
-                    edgesToBeCut.Add(edge1);
+                    edgeOccurrences[edge1, MockCounter] = 0;
                 }
-                if (CheckEdgeForOverload(edge2))
+                if (!edgeOccurrences.ContainsKey(edge2, MockCounter))
                 {
-                    edgesToBeCut.Add(edge2);
+                    edgeOccurrences[edge2, MockCounter] = 0;
                 }
+
+                edgeOccurrences[edge1, Measurements.TreeOperationsCounter]++;
+                edgeOccurrences[edge2, Measurements.TreeOperationsCounter]++;
             }
-            return edgesToBeCut;
-        }
-        */
 
-        /*
-        /// <inheritdoc/>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to execute the Overloaded Edge rule after a demand pair was changed, but the list with changed demand pairs is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Overloaded Edge rule after a demand path was changed...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            HashSet<(TreeNode, TreeNode)> edgesToBeCut = CheckForOverloadedEdges(changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(i => i.Item2));
-            changedEdgesPerDemandPairList.Clear(Measurements.DemandPairsOperationsCounter);
-            return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
+            CountedList<(TreeNode, TreeNode)> edgesToBeCut = DetermineOverloadedEdges(edgeOccurrences);
+            return TryCutEdges(edgesToBeCut);
         }
-        */
 
-        /*
         /// <inheritdoc/>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
+        protected override void Preprocess()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to execute the Overloaded Edge rule after a demand pair was removed, but the list with removed demand pairs is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Overloaded Edge rule after a demand path was removed...");
-#endif
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            return false;
-        }
-        */
 
-        /*
-        /// <inheritdoc/>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to execute the Overloaded Edge rule after an edge was contracted, but the list with contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Overloaded Edge rule after an edge was contracted...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
-            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                foreach ((TreeNode, TreeNode) overloadedEdge in CheckForOverloadedEdges(demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
-                {
-                    edgesToBeCut.Add(overloadedEdge);
-                }
-            }
-            contractedEdgeNodeTupleList.Clear(Measurements.TreeOperationsCounter);
-            return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
-        */
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
@@ -185,7 +140,7 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
-            
+
             HashSet<DemandPair> demandPairsToCheck = new HashSet<DemandPair>();
 
             foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
@@ -234,59 +189,6 @@ namespace MulticutInTrees.ReductionRules
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
             return TryApplyReductionRule(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
-        }
-
-        /// <summary>
-        /// Try to apply this <see cref="ReductionRule"/> on the <see cref="DemandPair"/>s in <paramref name="demandPairsToCheck"/>.
-        /// </summary>
-        /// <param name="demandPairsToCheck">The <see cref="IEnumerable{T}"/> with edges we want to check.</param>
-        /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
-        protected bool TryApplyReductionRule(IEnumerable<DemandPair> demandPairsToCheck)
-        {
-            CountedDictionary<(TreeNode, TreeNode), int> edgeOccurrences = new CountedDictionary<(TreeNode, TreeNode), int>();
-            foreach (DemandPair demandPair in demandPairsToCheck)
-            {
-                if (demandPair.LengthOfPath(Measurements.DemandPairsOperationsCounter) != 2)
-                {
-                    continue;
-                }
-
-                (TreeNode, TreeNode) edge1 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
-                (TreeNode, TreeNode) edge2 = Utils.OrderEdgeSmallToLarge(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).Last());
-                if (!edgeOccurrences.ContainsKey(edge1, MockCounter))
-                {
-                    edgeOccurrences[edge1, MockCounter] = 0;
-                }
-                if (!edgeOccurrences.ContainsKey(edge2, MockCounter))
-                {
-                    edgeOccurrences[edge2, MockCounter] = 0;
-                }
-
-                edgeOccurrences[edge1, Measurements.TreeOperationsCounter]++;
-                edgeOccurrences[edge2, Measurements.TreeOperationsCounter]++;
-            }
-
-            CountedList<(TreeNode, TreeNode)> edgesToBeCut = DetermineOverloadedEdges(edgeOccurrences);
-            return TryCutEdges(edgesToBeCut);
-        }
-
-        /// <summary>
-        /// Checks, given a <see cref="Dictionary{TKey, TValue}"/> with per edge how many length-2 <see cref="DemandPair"/>s pass through it, which edges are overloaded.
-        /// </summary>
-        /// <param name="edgeOccurrences"><see cref="Dictionary{TKey, TValue}"/> with the number of length-2 <see cref="DemandPair"/>s per edge.</param>
-        /// <returns>A <see cref="CountedList{T}"/> of edges that can be cut.</returns>
-        private CountedList<(TreeNode, TreeNode)> DetermineOverloadedEdges(CountedDictionary<(TreeNode, TreeNode), int> edgeOccurrences)
-        {
-            CountedList<(TreeNode, TreeNode)> overloadedEdges = new CountedList<(TreeNode, TreeNode)>();
-            int k = MaxSolutionSize - PartialSolution.Count;
-            foreach (KeyValuePair<(TreeNode, TreeNode), int> edge in edgeOccurrences.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                if (edge.Value > k)
-                {
-                    overloadedEdges.Add(edge.Key, Measurements.TreeOperationsCounter);
-                }
-            }
-            return overloadedEdges;
         }
     }
 }

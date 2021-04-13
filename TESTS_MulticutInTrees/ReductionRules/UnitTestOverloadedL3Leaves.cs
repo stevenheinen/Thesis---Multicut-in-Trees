@@ -132,7 +132,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
-            
+
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> demandPairsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
             OverloadedL3Leaves overloadedL3Leaves = new OverloadedL3Leaves(tree, demandPairs, algorithm, demandPairsPerNode, partialSolution, maxSize);

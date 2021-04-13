@@ -17,8 +17,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
     [TestClass]
     public class UnitTestUniqueDirection
     {
-        private readonly static Counter MockCounter = new Counter();
-        private readonly static PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestUniqueDirection));
+        private static readonly Counter MockCounter = new Counter();
+        private static readonly PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestUniqueDirection));
 
         private (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) GetLaterIterationInformation(Algorithm algorithm)
         {
@@ -277,7 +277,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new DemandPair(node4, node5);
             DemandPair dp5 = new DemandPair(node3, node5);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
-            
+
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
@@ -317,7 +317,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new DemandPair(node4, node5);
             DemandPair dp5 = new DemandPair(node3, node5);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
-            
+
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 

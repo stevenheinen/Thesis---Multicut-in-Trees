@@ -153,28 +153,5 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="changedDemandPairs">The <see cref="CountedList{T}"/> with tuples with a <see cref="CountedList{T}"/> with tuples of <see cref="TreeNode"/>s that represent the edges that were removed from the demand path, and a <see cref="DemandPair"/>.</param>
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
         internal abstract bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs);
-
-        /*
-        /// <summary>
-        /// Executed when this <see cref="ReductionRule"/> is applied after one or more edges have been contracted in the last iteration.
-        /// </summary>
-        /// <param name="contractedEdgeNodeTupleList">An <see cref="CountedList{T}"/> with tuples consisting of a tuple of <see cref="TreeNode"/>s (the contracted edge), a <see cref="TreeNode"/> (the result of the edge contraction), and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s (the <see cref="DemandPair"/>s on the contracted edge).</param>
-        /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList);
-
-        /// <summary>
-        /// Executed when this <see cref="ReductionRule"/> is applied after one or more <see cref="DemandPair"/>s have been removed in the last iteration.
-        /// </summary>
-        /// <param name="removedDemandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s that were removed in the last iteration.</param>
-        /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs);
-
-        /// <summary>
-        /// Executed when this <see cref="ReductionRule"/> is applied after the endpoint of one or more <see cref="DemandPair"/>s were changed in the last iteration.
-        /// </summary>
-        /// <param name="changedEdgesPerDemandPairList">The <see cref="CountedList{T}"/> with tuples with a <see cref="CountedList{T}"/> with tuples of <see cref="TreeNode"/>s that represent the edges that were removed from the demand path, and a <see cref="DemandPair"/>.</param>
-        /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> was applied successfully, <see langword="false"/> otherwise.</returns>
-        internal abstract bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList);
-        */
     }
 }

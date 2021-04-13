@@ -21,13 +21,13 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
         /// </summary>
-        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; set; }
+        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="TreeNode"/> is part of, or -1 if it is not part of any caterpillar component.
         /// </summary>
-        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; set; }
-        
+        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; }
+
         /// <summary>
         /// The maximum size the solution is allowed to have.
         /// </summary>
@@ -41,7 +41,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not impact performance.
         /// </summary>
-        private Counter MockCounter { get; set; }
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for <see cref="OverloadedCaterpillar"/>.
@@ -76,59 +76,54 @@ namespace MulticutInTrees.ReductionRules
             MockCounter = new Counter();
         }
 
+        /// <summary>
+        /// Determine the <see cref="DemandPair"/>s that can be deleted. A <see cref="DemandPair"/> can be deleted when there are at least k+1 <see cref="DemandPair"/>s starting at a node v and going to nodes in the same caterpillar component that does not contain v. We delete the longest of these paths.
+        /// </summary>
+        /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s that can be deleted.</returns>
+        private CountedList<DemandPair> DeterminePairsToBeDeleted()
+        {
+            int k = MaxSolutionSize - PartialSolution.Count;
+            CountedList<DemandPair> result = new CountedList<DemandPair>();
+            foreach (TreeNode node in DemandPairsPerNode.GetKeys(Measurements.DemandPairsPerEdgeKeysCounter))
+            {
+                CountedCollection<DemandPair> demandPairs = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter];
+                if (demandPairs.Count(Measurements.DemandPairsOperationsCounter) <= k)
+                {
+                    continue;
+                }
+                int caterpillarComponent = CaterpillarComponentPerNode[node, Measurements.TreeOperationsCounter];
+                CountedDictionary<int, CountedList<DemandPair>> pairsPerComponent = new CountedDictionary<int, CountedList<DemandPair>>();
+                foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
+                {
+                    TreeNode endpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;
+                    int otherComponent = CaterpillarComponentPerNode[endpoint, Measurements.TreeOperationsCounter];
+                    if (otherComponent == -1 || otherComponent == caterpillarComponent)
+                    {
+                        continue;
+                    }
+                    if (!pairsPerComponent.ContainsKey(otherComponent, MockCounter))
+                    {
+                        pairsPerComponent[otherComponent, MockCounter] = new CountedList<DemandPair>();
+                    }
+                    pairsPerComponent[otherComponent, MockCounter].Add(demandPair, Measurements.DemandPairsOperationsCounter);
+                }
+                foreach (CountedList<DemandPair> pairsToComponent in pairsPerComponent.GetValues(Measurements.DemandPairsOperationsCounter))
+                {
+                    if (pairsToComponent.Count(Measurements.DemandPairsOperationsCounter) <= k)
+                    {
+                        continue;
+                    }
+                    result.Add(pairsToComponent.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Aggregate((n, m) => n.LengthOfPath(Measurements.DemandPairsOperationsCounter) > m.LengthOfPath(Measurements.DemandPairsOperationsCounter) ? n : m), Measurements.DemandPairsOperationsCounter);
+                }
+            }
+            return result;
+        }
+
         /// <inheritdoc/>
         protected override void Preprocess()
         {
-            
-        }
-        
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Overloaded Caterpillar reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying the Overloaded Caterpillar reduction rule after a demand path was changed...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
-            changedEdgesPerDemandPairList.Clear(Measurements.DemandPairsOperationsCounter);
-            return TryRemoveDemandPairs(pairsToBeDeleted);
-        }
-        */
 
-        /*
-        /// <inheritdoc/>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Overloaded Caterpillar reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
-#endif
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            return false;
         }
-        */
-
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Overloaded Caterpillar reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying the Overloaded Caterpillar reduction rule after an edge was contracted...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
-            contractedEdgeNodeTupleList.Clear(Measurements.TreeOperationsCounter);
-            return TryRemoveDemandPairs(pairsToBeDeleted);
-        }
-        */
 
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
@@ -174,49 +169,6 @@ namespace MulticutInTrees.ReductionRules
             changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return TryRemoveDemandPairs(pairsToBeDeleted);
-        }
-
-        /// <summary>
-        /// Determine the <see cref="DemandPair"/>s that can be deleted. A <see cref="DemandPair"/> can be deleted when there are at least k+1 <see cref="DemandPair"/>s starting at a node v and going to nodes in the same caterpillar component that does not contain v. We delete the longest of these paths.
-        /// </summary>
-        /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s that can be deleted.</returns>
-        private CountedList<DemandPair> DeterminePairsToBeDeleted()
-        {
-            int k = MaxSolutionSize - PartialSolution.Count;
-            CountedList<DemandPair> result = new CountedList<DemandPair>();
-            foreach (TreeNode node in DemandPairsPerNode.GetKeys(Measurements.DemandPairsPerEdgeKeysCounter))
-            {
-                CountedCollection<DemandPair> demandPairs = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter];
-                if (demandPairs.Count(Measurements.DemandPairsOperationsCounter) <= k)
-                {
-                    continue;
-                }
-                int caterpillarComponent = CaterpillarComponentPerNode[node, Measurements.TreeOperationsCounter];
-                CountedDictionary<int, CountedList<DemandPair>> pairsPerComponent = new CountedDictionary<int, CountedList<DemandPair>>();
-                foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
-                {
-                    TreeNode endpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;
-                    int otherComponent = CaterpillarComponentPerNode[endpoint, Measurements.TreeOperationsCounter];
-                    if (otherComponent == -1 || otherComponent == caterpillarComponent)
-                    {
-                        continue;
-                    }
-                    if (!pairsPerComponent.ContainsKey(otherComponent, MockCounter))
-                    {
-                        pairsPerComponent[otherComponent, MockCounter] = new CountedList<DemandPair>();
-                    }
-                    pairsPerComponent[otherComponent, MockCounter].Add(demandPair, Measurements.DemandPairsOperationsCounter);
-                }
-                foreach (CountedList<DemandPair> pairsToComponent in pairsPerComponent.GetValues(Measurements.DemandPairsOperationsCounter))
-                {
-                    if (pairsToComponent.Count(Measurements.DemandPairsOperationsCounter) <= k)
-                    {
-                        continue;
-                    }
-                    result.Add(pairsToComponent.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Aggregate((n, m) => n.LengthOfPath(Measurements.DemandPairsOperationsCounter) > m.LengthOfPath(Measurements.DemandPairsOperationsCounter) ? n : m), Measurements.DemandPairsOperationsCounter);
-                }
-            }
-            return result;
         }
     }
 }

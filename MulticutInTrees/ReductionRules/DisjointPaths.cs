@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -53,58 +54,23 @@ namespace MulticutInTrees.ReductionRules
             MaxSolutionSize = maxSolutionSize;
         }
 
+        /// <summary>
+        /// Returns whether the current number of edge-disjoint demand pairs in the instance is larger than what can be added to the solution.
+        /// </summary>
+        /// <returns><see langword="true"/> if the current number of edge-disjoint demand pairs in the instance is larger than the amount of edges that can still be added to the solution, <see langword="false"/> otherwise.</returns>
+        private bool DisjointPathsGreaterThanK()
+        {
+            IEnumerable<(TreeNode, TreeNode)> commodities = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(dp => (dp.Node1, dp.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(Tree, commodities, Measurements);
+            Measurements.TimeSpentCheckingApplicability.Stop();
+            return flow > MaxSolutionSize - PartialSolution.Count;
+        }
+
         /// <inheritdoc/>
         protected override void Preprocess()
         {
-            
-        }
 
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Disjoint Paths reduction rule after a demand path was changed, but the list with information about changed demand paths is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Disjoint Paths rule after a demand path was changed.");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            changedEdgesPerDemandPairList.Clear(Measurements.DemandPairsOperationsCounter);
-            return DisjointPathsGreaterThanK();
         }
-        */
-
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Disjoint Paths reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
-#endif
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            return false;
-        }
-        */
-
-        /*
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Disjoint Paths reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Disjoint Paths rule after an edge was contracted.");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            contractedEdgeNodeTupleList.Clear(Measurements.TreeOperationsCounter);
-            return DisjointPathsGreaterThanK();
-        }
-        */
 
         /// <inheritdoc/>
         internal override bool RunFirstIteration()
@@ -135,32 +101,6 @@ namespace MulticutInTrees.ReductionRules
             changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return DisjointPathsGreaterThanK();
-        }
-
-        /// <summary>
-        /// Returns whether the current number of edge-disjoint demand pairs in the instance is larger than what can be added to the solution.
-        /// </summary>
-        /// <returns><see langword="true"/> if the current number of edge-disjoint demand pairs in the instance is larger than the amount of edges that can still be added to the solution, <see langword="false"/> otherwise.</returns>
-        private bool DisjointPathsGreaterThanK()
-        {
-            List<(TreeNode, TreeNode)> commodities = DemandPairToCommodity();
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(Tree, commodities, Measurements);
-            Measurements.TimeSpentCheckingApplicability.Stop();
-            return flow > (MaxSolutionSize - PartialSolution.Count);
-        }
-
-        /// <summary>
-        /// Transforms <see cref="ReductionRule.DemandPairs"/> into a list of pairs of endpoints that can be used as commodities for the disjoint-path algorithm.
-        /// </summary>
-        /// <returns>A <see cref="List{T}"/> with, for each <see cref="DemandPair"/> in the instance, a tuple of two <see cref="TreeNode"/>s that are the endpoints of that <see cref="DemandPair"/>.</returns>
-        private List<(TreeNode, TreeNode)> DemandPairToCommodity()
-        {
-            List<(TreeNode, TreeNode)> result = new List<(TreeNode, TreeNode)>();
-            foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                result.Add((demandPair.Node1, demandPair.Node2));
-            }
-            return result;
         }
     }
 }

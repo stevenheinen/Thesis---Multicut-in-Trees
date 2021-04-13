@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CommandLineArguments;
@@ -32,7 +31,7 @@ namespace TESTS_MulticutInTrees.Experiments
                 method.Invoke(null, new object[] { null, func });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunMultipleExperiments", BindingFlags.NonPublic | BindingFlags.Static);
@@ -53,35 +52,35 @@ namespace TESTS_MulticutInTrees.Experiments
                 method.Invoke(null, new object[] { "test", 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunGurobiMIPAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
                 method.Invoke(null, new object[] { 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunBranchingAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
                 method.Invoke(null, new object[] { 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunBruteForceAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
                 method.Invoke(null, new object[] { 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunKernelisationAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
                 method.Invoke(null, new object[] { 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            
+
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("CreateAlgorithmInstance", BindingFlags.NonPublic | BindingFlags.Static);
@@ -108,7 +107,7 @@ namespace TESTS_MulticutInTrees.Experiments
             CommandLineOptions options = new CommandLineOptions() { AlgorithmType = AlgorithmType.BruteForce, InputTreeType = InputTreeType.Prufer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 4, Repetitions = 3, Experiments = 2, Verbose = true };
 
             ExperimentManager.RunExperiment(options);
-            
+
             options = new CommandLineOptions() { AlgorithmType = AlgorithmType.BruteForce, InputTreeType = InputTreeType.Prufer, NumberOfNodes = 10, InputDemandPairsType = InputDemandPairsType.Random, NumberOfDemandPairs = 6, InstanceDirectory = Directory.GetCurrentDirectory(), OutputDirectory = Directory.GetCurrentDirectory(), RandomSeed = 3, MaxSolutionSize = 1, Repetitions = 3, Experiments = 2, Verbose = true };
 
             ExperimentManager.RunExperiment(options);

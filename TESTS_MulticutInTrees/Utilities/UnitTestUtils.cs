@@ -14,7 +14,7 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestUtils
     {
-        private readonly static Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         [TestMethod]
         public void TestNullParameter()
@@ -37,7 +37,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentNullException>(() => Utils.BinarySearchGetLastTrue(0, 10, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.BinarySearchGetFirstTrue(0, 10, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.AllSubsetsOfSize<int>(null, 3));
-            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateTreeWithEdges(10, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateTreeWithEdges(10, 1, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(null, new List<(int, int)>()));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(new Tree<TreeNode>(), null));
         }
@@ -180,15 +180,18 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCreateTreeWithEdges()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(-1, new List<(int, int)>()));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3), (2, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (5, 0), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(-1, 1, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(5, -2, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(5, 5, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(5, 500, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 1, new List<(int, int)>() { (1, 0), (4, 3), (2, 0) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 4, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3), (2, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 3, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 2, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 0, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 4, new List<(int, int)>() { (5, 0), (4, 3), (-5, 0), (1, 3) }));
 
-            Tree<TreeNode> test = Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            Tree<TreeNode> test = Utils.CreateTreeWithEdges(5, 1, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
             Assert.IsNotNull(test);
             Assert.AreEqual(5, test.NumberOfNodes(MockCounter));
             Assert.AreEqual(4, test.NumberOfEdges(MockCounter));
@@ -198,7 +201,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCreateDemandPairs()
         {
-            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(5, 1, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));

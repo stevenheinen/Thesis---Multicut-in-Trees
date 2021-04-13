@@ -17,13 +17,13 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Find all nodes that are connected to the given startnode.
         /// </summary>
-        /// <typeparam name="N">Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">Implementation of <see cref="INode{N}"/>.</typeparam>
         /// <param name="startNode">The node to start with.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
-        /// <returns>A <see cref="List{T}"/> with all <typeparamref name="N"/>s that are connected to <paramref name="startNode"/>.</returns>
+        /// <returns>A <see cref="List{T}"/> with all <typeparamref name="TNode"/>s that are connected to <paramref name="startNode"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static List<N> FindConnectedComponent<N>(N startNode, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
+        public static List<TNode> FindConnectedComponent<TNode>(TNode startNode, Counter graphCounter, HashSet<TNode> seen = null) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find a connected component of an INode, but the start node is null!");
@@ -33,15 +33,15 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Checks if a given graph of type <typeparamref name="G"/> is acyclic.
+        /// Checks if a given graph of type <typeparamref name="TGraph"/> is acyclic.
         /// </summary>
-        /// <typeparam name="G">The type of graph.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> for which we want to know if it is acyclic.</param>
+        /// <typeparam name="TGraph">The type of graph.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> for which we want to know if it is acyclic.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
         /// <returns><see langword="true"/> if <paramref name="inputGraph"/> is acyclic, <see langword="false"/> if it is cyclic.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static bool IsAcyclicGraph<G, N>(G inputGraph, Counter graphCounter) where G : IGraph<N> where N : INode<N>
+        public static bool IsAcyclicGraph<TGraph, TNode>(TGraph inputGraph, Counter graphCounter) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to see if a graph is acyclic, but the graph is null!");
@@ -55,16 +55,16 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Checks if a given tree of type <typeparamref name="T"/> is acyclic.
+        /// Checks if a given tree of type <typeparamref name="TTree"/> is acyclic.
         /// </summary>
-        /// <typeparam name="T">The type of tree.</typeparam>
-        /// <typeparam name="N">The type of nodes in the tree.</typeparam>
-        /// <param name="inputTree">The <typeparamref name="T"/> for which we want to know if it is acyclic.</param>
+        /// <typeparam name="TTree">The type of tree.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the tree.</typeparam>
+        /// <param name="inputTree">The <typeparamref name="TTree"/> for which we want to know if it is acyclic.</param>
         /// <param name="treeCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
         /// <returns><see langword="true"/> if <paramref name="inputTree"/> is acyclic, <see langword="false"/> if it is cyclic.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputTree"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoRootException">Thrown when <see cref="ITree{N}.GetRoot(Counter)"/> of <paramref name="inputTree"/> returns <see langword="null"/>.</exception>
-        public static bool IsAcyclicTree<T, N>(T inputTree, Counter treeCounter) where T : ITree<N> where N : ITreeNode<N>
+        public static bool IsAcyclicTree<TTree, TNode>(TTree inputTree, Counter treeCounter) where TTree : ITree<TNode> where TNode : ITreeNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputTree, nameof(inputTree), "Trying to see if a tree is acyclic, but the tree is null!");
@@ -85,27 +85,27 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Find all nodes that are connected to the given startnode.
         /// </summary>
-        /// <typeparam name="N">Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">Implementation of <see cref="INode{N}"/>.</typeparam>
         /// <param name="startNode">The node to start with.</param>
         /// <param name="findNode">The node that needs to be found, or <see langword="default"/> if there is none.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
         /// <param name="acyclicCheck">Optional. If <see langword="true"/> and a cycle is encountered, an empty list will be returned. Ignored if <see langword="false"/>.</param>
-        /// <param name="findPath">Optional. If <see langword="true"/>, <paramref name="findNode"/> should be given as well. The method will then return a list with all <typeparamref name="N"/>s on the path from <paramref name="startNode"/> to <paramref name="findNode"/>.</param>
-        /// <returns>A <see cref="List{T}"/> with all <typeparamref name="N"/>s that are connected to <paramref name="startNode"/>.</returns>
-        private static List<N> FindConnectedComponent<N>(N startNode, N findNode, Counter graphCounter, HashSet<N> seen = null, bool acyclicCheck = false, bool findPath = false) where N : INode<N>
+        /// <param name="findPath">Optional. If <see langword="true"/>, <paramref name="findNode"/> should be given as well. The method will then return a list with all <typeparamref name="TNode"/>s on the path from <paramref name="startNode"/> to <paramref name="findNode"/>.</param>
+        /// <returns>A <see cref="List{T}"/> with all <typeparamref name="TNode"/>s that are connected to <paramref name="startNode"/>.</returns>
+        private static List<TNode> FindConnectedComponent<TNode>(TNode startNode, TNode findNode, Counter graphCounter, HashSet<TNode> seen = null, bool acyclicCheck = false, bool findPath = false) where TNode : INode<TNode>
         {
             Counter mockCounter = new Counter();
 
-            List<N> result = new List<N>();
-            seen ??= new HashSet<N>();
-            Stack<N> stack = new Stack<N>();
+            List<TNode> result = new List<TNode>();
+            seen ??= new HashSet<TNode>();
+            Stack<TNode> stack = new Stack<TNode>();
             stack.Push(startNode);
             seen.Add(startNode);
             result.Add(startNode);
 
             // Keep track of which node pushed which node onto the stack to test for cycles.
-            Dictionary<N, N> pushingNode = new Dictionary<N, N>();
+            Dictionary<TNode, TNode> pushingNode = new Dictionary<TNode, TNode>();
             if (acyclicCheck || findPath)
             {
                 pushingNode[startNode] = startNode;
@@ -113,10 +113,10 @@ namespace MulticutInTrees.Utilities
 
             while (stack.Count > 0)
             {
-                N node = stack.Pop();
+                TNode node = stack.Pop();
 
                 // Potentially push this node's neighbours onto the stack.
-                foreach (N neighbour in node.Neighbours(mockCounter))
+                foreach (TNode neighbour in node.Neighbours(mockCounter))
                 {
                     if (!seen.Contains(neighbour))
                     {
@@ -125,7 +125,7 @@ namespace MulticutInTrees.Utilities
                         {
                             if (findPath)
                             {
-                                List<N> path = new List<N>
+                                List<TNode> path = new List<TNode>
                                 {
                                     findNode
                                 };
@@ -154,7 +154,7 @@ namespace MulticutInTrees.Utilities
                     // If we have seen this neighbour, are looking for cycles, and this neighbour is not the one that pushed the current node, we have found a cycle.
                     else if (acyclicCheck && !pushingNode[node].Equals(neighbour))
                     {
-                        return new List<N>();
+                        return new List<TNode>();
                     }
                 }
             }
@@ -164,29 +164,28 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Computes the different caterpillar components in a set of nodes.
         /// </summary>
-        /// <typeparam name="N">The type of nodes. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of nodes. Implements <see cref="INode{N}"/>.</typeparam>
         /// <param name="nodes">The <see cref="IEnumerable{T}"/> of nodes for which we want to compute the caterpillar components.</param>
         /// <param name="treeCounter">The <see cref="Counter"/> for tree operations.</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> from <typeparamref name="N"/> to an identifier of the caterpillar component this <typeparamref name="N"/> is in, or -1 if it is not part of a caterpillar component.</returns>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> from <typeparamref name="TNode"/> to an identifier of the caterpillar component this <typeparamref name="TNode"/> is in, or -1 if it is not part of a caterpillar component.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodes"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
-        public static Dictionary<N, int> DetermineCaterpillarComponents<N>(IEnumerable<N> nodes, Counter treeCounter) where N : INode<N>
+        public static Dictionary<TNode, int> DetermineCaterpillarComponents<TNode>(IEnumerable<TNode> nodes, Counter treeCounter) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(nodes, nameof(nodes), "Trying to determine caterpillar components in a set of nodes, but the IEnumerable with nodes is null!");
             Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to determine caterpillar components in a set of nodes, but the counter is null!");
 #endif
-            Dictionary<N, int> result = new Dictionary<N, int>();
+            Dictionary<TNode, int> result = new Dictionary<TNode, int>();
 
             if (!nodes.Any())
             {
                 return result;
             }
 
-            HashSet<N> seen = new HashSet<N>();
-            Stack<N> stack = new Stack<N>();
-            Dictionary<N, N> pushingNode = new Dictionary<N, N>();
+            HashSet<TNode> seen = new HashSet<TNode>();
+            Stack<TNode> stack = new Stack<TNode>();
             int caterpillarNumber = 0;
-            N first = nodes.First();
+            TNode first = nodes.First();
             stack.Push(first);
             seen.Add(first);
 
@@ -201,9 +200,9 @@ namespace MulticutInTrees.Utilities
 
             while (stack.Count > 0)
             {
-                N node = stack.Pop();
-                
-                foreach (N neighbour in node.Neighbours(treeCounter))
+                TNode node = stack.Pop();
+
+                foreach (TNode neighbour in node.Neighbours(treeCounter))
                 {
                     if (seen.Contains(neighbour))
                     {
@@ -232,30 +231,30 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Find all connected components for an <see cref="IEnumerable{T}"/> of <typeparamref name="N"/>s.
+        /// Find all connected components for an <see cref="IEnumerable{T}"/> of <typeparamref name="TNode"/>s.
         /// </summary>
-        /// <typeparam name="N">Imlementation of <see cref="INode{N}"/>.</typeparam>
-        /// <param name="allNodes"><see cref="IEnumerable{T}"/> with all <typeparamref name="N"/>s.</param>
+        /// <typeparam name="TNode">Imlementation of <see cref="INode{N}"/>.</typeparam>
+        /// <param name="allNodes"><see cref="IEnumerable{T}"/> with all <typeparamref name="TNode"/>s.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
         /// <returns>A <see cref="List{T}"/> of connected components, where each connected component is also a <see cref="List{T}"/> by itself.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="allNodes"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static List<List<N>> FindAllConnectedComponents<N>(IEnumerable<N> allNodes, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
+        public static List<List<TNode>> FindAllConnectedComponents<TNode>(IEnumerable<TNode> allNodes, Counter graphCounter, HashSet<TNode> seen = null) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(allNodes, nameof(allNodes), "Trying to find all connected components of an IEnumerable with nodes, but the IEnumberable is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all connected components of an IEnumerable with nodes, but the counter is null!");
 #endif
-            List<List<N>> result = new List<List<N>>();
-            seen ??= new HashSet<N>();
-            foreach (N node in allNodes)
+            List<List<TNode>> result = new List<List<TNode>>();
+            seen ??= new HashSet<TNode>();
+            foreach (TNode node in allNodes)
             {
                 if (!seen.Contains(node))
                 {
                     seen.Add(node);
-                    List<N> component = FindConnectedComponent(node, graphCounter, seen);
+                    List<TNode> component = FindConnectedComponent(node, graphCounter, seen);
                     result.Add(component);
-                    foreach (N found in component)
+                    foreach (TNode found in component)
                     {
                         seen.Add(found);
                     }
@@ -267,44 +266,44 @@ namespace MulticutInTrees.Utilities
 
         // todo: delete?
         /// <summary>
-        /// Checks whether two <typeparamref name="N"/>s are connected to each other.
+        /// Checks whether two <typeparamref name="TNode"/>s are connected to each other.
         /// </summary>
-        /// <typeparam name="N">Implementation of <see cref="ITreeNode{N}"/>.</typeparam>
-        /// <param name="node1">The first <typeparamref name="N"/>.</param>
-        /// <param name="node2">The second <typeparamref name="N"/>.</param>
+        /// <typeparam name="TNode">Implementation of <see cref="ITreeNode{N}"/>.</typeparam>
+        /// <param name="node1">The first <typeparamref name="TNode"/>.</param>
+        /// <param name="node2">The second <typeparamref name="TNode"/>.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
         /// <returns><see langword="true"/> if <paramref name="node1"/> and <paramref name="node2"/> are connected, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/>, <paramref name="node2"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static bool AreConnected<N>(N node1, N node2, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
+        public static bool AreConnected<TNode>(TNode node1, TNode node2, Counter graphCounter, HashSet<TNode> seen = null) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(node1, nameof(node1), "Trying to find whether two nodes are connected, but the first of these nodes is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to find whether two nodes are connected, but the second of these nodes is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find whether two nodes are connected, but the counter is null!");
 #endif
-            List<N> connectedComponent = FindConnectedComponent(node1, node2, graphCounter, seen);
+            List<TNode> connectedComponent = FindConnectedComponent(node1, node2, graphCounter, seen);
             return connectedComponent.Count == 1;
         }
 
         /// <summary>
-        /// Finds all <typeparamref name="N"/>s on the path from <paramref name="node1"/> to <paramref name="node2"/>.
+        /// Finds all <typeparamref name="TNode"/>s on the path from <paramref name="node1"/> to <paramref name="node2"/>.
         /// </summary>
-        /// <typeparam name="N">Implementation of <see cref="INode{N}"/>.</typeparam>
-        /// <param name="node1">The start <typeparamref name="N"/>.</param>
-        /// <param name="node2">The goal <typeparamref name="N"/>.</param>
+        /// <typeparam name="TNode">Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <param name="node1">The start <typeparamref name="TNode"/>.</param>
+        /// <param name="node2">The goal <typeparamref name="TNode"/>.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
-        /// <param name="seen">Optional. <typeparamref name="N"/>s in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
-        /// <returns>A <see cref="List{T}"/> of <typeparamref name="N"/>s with all <typeparamref name="N"/>s on the path from <paramref name="node1"/> to <paramref name="node2"/>/</returns>
+        /// <param name="seen">Optional. <typeparamref name="TNode"/>s in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
+        /// <returns>A <see cref="List{T}"/> of <typeparamref name="TNode"/>s with all <typeparamref name="TNode"/>s on the path from <paramref name="node1"/> to <paramref name="node2"/>/</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/>, <paramref name="node2"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static List<N> FindPathBetween<N>(N node1, N node2, Counter graphCounter, HashSet<N> seen = null) where N : INode<N>
+        public static List<TNode> FindPathBetween<TNode>(TNode node1, TNode node2, Counter graphCounter, HashSet<TNode> seen = null) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(node1, nameof(node1), "Trying to find whether two nodes are connected, but the first of these nodes is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to find whether two nodes are connected, but the second of these nodes is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find whether two nodes are connected, but counter is null!");
 #endif
-            List<N> result = FindConnectedComponent(node1, node2, graphCounter, seen, false, true);
+            List<TNode> result = FindConnectedComponent(node1, node2, graphCounter, seen, false, true);
             result.Reverse();
             return result;
         }
@@ -312,13 +311,13 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Finds all edges in <paramref name="graph"/>.
         /// </summary>
-        /// <typeparam name="G">The type of graph. Must implement <see cref="IGraph{N}"/>.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph. Must implement <see cref="INode{N}"/>.</typeparam>
-        /// <param name="graph">The <typeparamref name="G"/> in which we want to find all edges.</param>
+        /// <typeparam name="TGraph">The type of graph. Must implement <see cref="IGraph{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph. Must implement <see cref="INode{N}"/>.</typeparam>
+        /// <param name="graph">The <typeparamref name="TGraph"/> in which we want to find all edges.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
-        /// <returns>A <see cref="List{T}"/> of tuples of <typeparamref name="N"/>s that represent the edges.</returns>
+        /// <returns>A <see cref="List{T}"/> of tuples of <typeparamref name="TNode"/>s that represent the edges.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static List<(N, N)> FindAllEdgesGraph<G, N>(G graph, Counter graphCounter) where G : IGraph<N> where N : INode<N>
+        public static List<(TNode, TNode)> FindAllEdgesGraph<TGraph, TNode>(TGraph graph, Counter graphCounter) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find all edges in a graph, but the graph is null!");
@@ -326,18 +325,18 @@ namespace MulticutInTrees.Utilities
 #endif
             Counter mockCounter = new Counter();
 
-            List<(N, N)> result = new List<(N, N)>();
+            List<(TNode, TNode)> result = new List<(TNode, TNode)>();
             if (graph.NumberOfNodes(graphCounter) == 0)
             {
                 return result;
             }
-            Stack<N> stack = new Stack<N>();
+            Stack<TNode> stack = new Stack<TNode>();
             stack.Push(graph.Nodes(graphCounter).First());
-            HashSet<(N, N)> seen = new HashSet<(N, N)>();
+            HashSet<(TNode, TNode)> seen = new HashSet<(TNode, TNode)>();
             while (stack.Count > 0)
             {
-                N node = stack.Pop();
-                foreach (N child in node.Neighbours(mockCounter))
+                TNode node = stack.Pop();
+                foreach (TNode child in node.Neighbours(mockCounter))
                 {
                     if (seen.Contains((node, child)) || seen.Contains((child, node)))
                     {
@@ -356,30 +355,30 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Finds all edges in <paramref name="tree"/>.
         /// </summary>
-        /// <typeparam name="T">The type of tree. Must implement <see cref="ITree{N}"/>.</typeparam>
-        /// <typeparam name="N">The type of nodes in the tree. Must implement <see cref="ITreeNode{N}"/>.</typeparam>
-        /// <param name="tree">The <typeparamref name="T"/> in which we want to find all edges.</param>
+        /// <typeparam name="TTree">The type of tree. Must implement <see cref="ITree{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the tree. Must implement <see cref="ITreeNode{N}"/>.</typeparam>
+        /// <param name="tree">The <typeparamref name="TTree"/> in which we want to find all edges.</param>
         /// <param name="treeCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
-        /// <returns>A <see cref="List{T}"/> of tuples of <typeparamref name="N"/>s that represent the edges.</returns>
+        /// <returns>A <see cref="List{T}"/> of tuples of <typeparamref name="TNode"/>s that represent the edges.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
-        public static List<(N, N)> FindAllEdgesTree<T, N>(T tree, Counter treeCounter) where T : ITree<N> where N : ITreeNode<N>
+        public static List<(TNode, TNode)> FindAllEdgesTree<TTree, TNode>(TTree tree, Counter treeCounter) where TTree : ITree<TNode> where TNode : ITreeNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to find all edges in a tree, but the tree is null!");
             Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to find all edges in a tree, but the counter is null!");
 #endif
-            List<(N, N)> result = new List<(N, N)>();
-            N root = tree.GetRoot(new Counter());
+            List<(TNode, TNode)> result = new List<(TNode, TNode)>();
+            TNode root = tree.GetRoot(new Counter());
             if (root is null)
             {
                 return result;
             }
-            Stack<N> stack = new Stack<N>();
+            Stack<TNode> stack = new Stack<TNode>();
             stack.Push(root);
             while (stack.Count > 0)
             {
-                N node = stack.Pop();
-                foreach (N child in node.Children(treeCounter))
+                TNode node = stack.Pop();
+                foreach (TNode child in node.Children(treeCounter))
                 {
                     _ = treeCounter++;
                     result.Add((node, child));
@@ -390,15 +389,15 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Finds all <typeparamref name="N"/>s that are "free" considering <paramref name="unmatchedNodes"/> and <paramref name="matching"/>.
+        /// Finds all <typeparamref name="TNode"/>s that are "free" considering <paramref name="unmatchedNodes"/> and <paramref name="matching"/>.
         /// </summary>
-        /// <typeparam name="N">The type of nodes in the problem instance. Implements <see cref="INode{N}"/>.</typeparam>
-        /// <param name="unmatchedNodes"><see cref="List{T}"/> of <typeparamref name="N"/>s that are unmatched considering <paramref name="matching"/>.</param>
-        /// <param name="matching"><see cref="HashSet{T}"/> with tuples of two <typeparamref name="N"/>s representing edges in the current matching.</param>
+        /// <typeparam name="TNode">The type of nodes in the problem instance. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="unmatchedNodes"><see cref="List{T}"/> of <typeparamref name="TNode"/>s that are unmatched considering <paramref name="matching"/>.</param>
+        /// <param name="matching"><see cref="HashSet{T}"/> with tuples of two <typeparamref name="TNode"/>s representing edges in the current matching.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
-        /// <returns>A <see cref="List{T}"/> of <typeparamref name="N"/>s that are reachable from any <typeparamref name="N"/> in <paramref name="unmatchedNodes"/> considering <paramref name="matching"/>.</returns>
+        /// <returns>A <see cref="List{T}"/> of <typeparamref name="TNode"/>s that are reachable from any <typeparamref name="TNode"/> in <paramref name="unmatchedNodes"/> considering <paramref name="matching"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="unmatchedNodes"/>, <paramref name="matching"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
-        public static List<N> FreeNodes<N>(List<N> unmatchedNodes, HashSet<(N, N)> matching, Counter graphCounter) where N : INode<N>
+        public static List<TNode> FreeNodes<TNode>(List<TNode> unmatchedNodes, HashSet<(TNode, TNode)> matching, Counter graphCounter) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(unmatchedNodes, nameof(unmatchedNodes), "Trying to find all free nodes, but the list with unmatched nodes is null!");
@@ -407,12 +406,12 @@ namespace MulticutInTrees.Utilities
 #endif
             Counter mockCounter = new Counter();
 
-            HashSet<N> seen = new HashSet<N>();
-            List<N> result = new List<N>();
+            HashSet<TNode> seen = new HashSet<TNode>();
+            List<TNode> result = new List<TNode>();
 
             // Bool in the stack means: NextShouldBeInMatching
-            Stack<(N, bool, int)> stack = new Stack<(N, bool, int)>();
-            foreach (N node in unmatchedNodes)
+            Stack<(TNode, bool, int)> stack = new Stack<(TNode, bool, int)>();
+            foreach (TNode node in unmatchedNodes)
             {
                 stack.Push((node, false, 1));
                 seen.Add(node);
@@ -420,8 +419,8 @@ namespace MulticutInTrees.Utilities
 
             while (stack.Count > 0)
             {
-                (N node, bool nextShouldBeMatched, int pathLength) = stack.Pop();
-                foreach (N neighbour in node.Neighbours(mockCounter))
+                (TNode node, bool nextShouldBeMatched, int pathLength) = stack.Pop();
+                foreach (TNode neighbour in node.Neighbours(mockCounter))
                 {
                     if (seen.Contains(neighbour))
                     {
