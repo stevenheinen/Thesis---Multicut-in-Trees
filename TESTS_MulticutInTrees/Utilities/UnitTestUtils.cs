@@ -195,7 +195,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsNotNull(test);
             Assert.AreEqual(5, test.NumberOfNodes(MockCounter));
             Assert.AreEqual(4, test.NumberOfEdges(MockCounter));
-            Assert.AreEqual(3, test.Height(MockCounter));
+            Assert.AreEqual(2, test.Height(MockCounter));
         }
 
         [TestMethod]

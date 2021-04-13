@@ -128,10 +128,10 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
 
-            PropertyInfo dictProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo dictProperty = typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dict = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)dictProperty.GetGetMethod(true).Invoke(gnfpt, new object[0]);
 
-            MethodInfo method = typeof(GuoNiedermeierKernelisation).GetMethod("RemoveDemandPairFromEdge", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo method = typeof(Algorithm).GetMethod("RemoveDemandPairFromEdge", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(gnfpt, new object[] { (node1, node0), dp3, measurements });
             Assert.AreEqual(1, dict[(node0, node1), counter].Count(counter));
             Assert.AreEqual(dp1, dict[(node0, node1), counter].First(counter));
@@ -389,10 +389,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
-            dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
+            CountedDictionary<TreeNode, int> caterpillarComponentPerNode = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
+            
+            caterpillarComponentPerNode.Clear(counter);
+            foreach (KeyValuePair<TreeNode, int> kv in caterpillars)
+            {
+                caterpillarComponentPerNode.Add(kv.Key, kv.Value, counter);
+            }
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            update.Invoke(a, new object[] { (node2, node1), m });
+            a.ContractEdge((node2, node1), m);
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
@@ -463,10 +468,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
-            dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
+            CountedDictionary<TreeNode, int> caterpillarComponentPerNode = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            update.Invoke(a, new object[] { (node4, node5), m });
+            caterpillarComponentPerNode.Clear(counter);
+            foreach (KeyValuePair<TreeNode, int> kv in caterpillars)
+            {
+                caterpillarComponentPerNode.Add(kv.Key, kv.Value, counter);
+            }
+
+            a.ContractEdge((node4, node5), m);
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
@@ -535,10 +545,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
-            dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
+            CountedDictionary<TreeNode, int> caterpillarComponentPerNode = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            update.Invoke(a, new object[] { (node5, node9), m });
+            caterpillarComponentPerNode.Clear(counter);
+            foreach (KeyValuePair<TreeNode, int> kv in caterpillars)
+            {
+                caterpillarComponentPerNode.Add(kv.Key, kv.Value, counter);
+            }
+
+            a.ContractEdge((node5, node9), m);
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
@@ -612,10 +627,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
-            dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
+            CountedDictionary<TreeNode, int> caterpillarComponentPerNode = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            update.Invoke(a, new object[] { (node5, node23), m });
+            caterpillarComponentPerNode.Clear(counter);
+            foreach (KeyValuePair<TreeNode, int> kv in caterpillars)
+            {
+                caterpillarComponentPerNode.Add(kv.Key, kv.Value, counter);
+            }
+
+            a.ContractEdge((node5, node23), m);
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
@@ -687,10 +707,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
-            dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
+            CountedDictionary<TreeNode, int> caterpillarComponentPerNode = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            update.Invoke(a, new object[] { (node0, node1), m });
+            caterpillarComponentPerNode.Clear(counter);
+            foreach (KeyValuePair<TreeNode, int> kv in caterpillars)
+            {
+                caterpillarComponentPerNode.Add(kv.Key, kv.Value, counter);
+            }
+
+            a.ContractEdge((node0, node1), m);
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
@@ -763,10 +788,15 @@ namespace TESTS_MulticutInTrees.Algorithms
             PerformanceMeasurements m = new PerformanceMeasurements("bn");
 
             PropertyInfo dict = typeof(GuoNiedermeierKernelisation).GetProperty("CaterpillarComponentPerNode", BindingFlags.NonPublic | BindingFlags.Instance);
-            dict.GetSetMethod(true).Invoke(a, new object[] { new CountedDictionary<TreeNode, int>(caterpillars, counter) });
+            CountedDictionary<TreeNode, int> caterpillarComponentPerNode = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 
-            MethodInfo update = typeof(GuoNiedermeierKernelisation).GetMethod("ContractEdge", BindingFlags.NonPublic | BindingFlags.Instance);
-            update.Invoke(a, new object[] { (node0, node1), m });
+            caterpillarComponentPerNode.Clear(counter);
+            foreach (KeyValuePair<TreeNode, int> kv in caterpillars)
+            {
+                caterpillarComponentPerNode.Add(kv.Key, kv.Value, counter);
+            }
+
+            a.ContractEdge((node0, node1), m);
 
             CountedDictionary<TreeNode, int> resultDict = (CountedDictionary<TreeNode, int>)dict.GetGetMethod(true).Invoke(a, new object[] { });
 

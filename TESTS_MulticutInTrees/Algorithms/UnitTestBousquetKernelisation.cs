@@ -127,6 +127,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
 
+            /* If this test fails, check the expected numbers using this code.
             Tree<TreeNode> treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), counter);
             MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
@@ -136,6 +137,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(counter), result.Item1.NumberOfNodes(counter));
             Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
+            */
+
+            Assert.AreEqual(311, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(5, result.Item2.Count);
+            Assert.AreEqual(389, result.Item3.Count);
         }
 
         [TestMethod]
@@ -156,6 +162,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
 
+            /* If this test fails, check the expected numbers using this code.
             Tree<TreeNode> treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), counter);
             MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
@@ -165,6 +172,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(counter), result.Item1.NumberOfNodes(counter));
             Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
+            */
+
+            Assert.AreEqual(593, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(19, result.Item2.Count);
+            Assert.AreEqual(762, result.Item3.Count);
         }
 
         [TestMethod]
@@ -185,6 +197,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
 
+            /* If this test fails, check the expected numbers using this code.
             Tree<TreeNode> treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), counter);
             MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
@@ -194,6 +207,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(counter), result.Item1.NumberOfNodes(counter));
             Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
+            */
+
+            Assert.AreEqual(103, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(14, result.Item2.Count);
+            Assert.AreEqual(63, result.Item3.Count);
         }
     }
 }

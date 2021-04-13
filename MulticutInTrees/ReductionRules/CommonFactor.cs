@@ -186,6 +186,7 @@ namespace MulticutInTrees.ReductionRules
             return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
 
+        // todo: remove from RR, move this code to own method.
         /// <inheritdoc/>
         protected override void Preprocess()
         {
