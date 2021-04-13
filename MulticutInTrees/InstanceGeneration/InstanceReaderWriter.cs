@@ -134,57 +134,88 @@ namespace MulticutInTrees.InstanceGeneration
                     throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line a single integer, representing the ID of the root of the tree.");
                 }
 
-                // Reading edges, skip comment line
-                line = sr.ReadLine();
-                while (line.StartsWith("//"))
-                {
-                    line = sr.ReadLine();
-                }
-               
-                for (int i = 0; i < numberOfNodes - 1; i++)
-                {
-                    string[] edge = line.Split();
-
-                    if (edge.Length != 2 || !int.TryParse(edge[0], out int endpoint1) || !int.TryParse(edge[1], out int endpoint2))
-                    {
-                        throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line with two integers, separated by a space, representing the IDs of the endpoints of an edge.");
-                    }
-
-                    edges.Add((endpoint1, endpoint2));
-                    line = sr.ReadLine();
-                    while (line.StartsWith("//"))
-                    {
-                        line = sr.ReadLine();
-                    }
-                }
-
-                // Reading demand pairs
-                for (int i = 0; i < numberOfDPs; i++)
-                {
-                    string[] dp = line.Split();
-
-                    if (dp.Length != 2 || !int.TryParse(dp[0], out int endpoint1) || !int.TryParse(dp[1], out int endpoint2))
-                    {
-                        throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line with two integers, separated by a space, representing the IDs of the endpoints of a demand pair.");
-                    }
-
-                    dps.Add((endpoint1, endpoint2));
-
-                    if (i != numberOfDPs - 1)
-                    {
-                        line = sr.ReadLine();
-                        while (line.StartsWith("//"))
-                        {
-                            line = sr.ReadLine();
-                        }
-                    }
-                }
+                edges = ReadEdges(ref line, sr, numberOfNodes);
+                dps = ReadDemandPairs(ref line, sr, numberOfDPs);
             }
 
             Tree<TreeNode> tree = Utils.CreateTreeWithEdges(numberOfNodes, root, edges);
             CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, dps);
 
             return (tree, demandPairs, optimalK);
+        }
+
+        /// <summary>
+        /// Read the edges from the instance file.
+        /// </summary>
+        /// <param name="line">A single line in the file.</param>
+        /// <param name="sr">The <see cref="StreamReader"/> we use.</param>
+        /// <param name="numberOfNodes">The number of nodes in the instance.</param>
+        /// <returns>A <see cref="List{T}"/> with tuples of two <see cref="int"/>s that are the IDs of the endpoints of an edge.</returns>
+        private static List<(int, int)> ReadEdges(ref string line, StreamReader sr, int numberOfNodes)
+        {
+            List<(int, int)> edges = new List<(int, int)>();
+
+            // Reading edges, skip comment line
+            line = sr.ReadLine();
+            while (line.StartsWith("//"))
+            {
+                line = sr.ReadLine();
+            }
+
+            for (int i = 0; i < numberOfNodes - 1; i++)
+            {
+                string[] edge = line.Split();
+
+                if (edge.Length != 2 || !int.TryParse(edge[0], out int endpoint1) || !int.TryParse(edge[1], out int endpoint2))
+                {
+                    throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line with two integers, separated by a space, representing the IDs of the endpoints of an edge.");
+                }
+
+                edges.Add((endpoint1, endpoint2));
+                line = sr.ReadLine();
+                while (line.StartsWith("//"))
+                {
+                    line = sr.ReadLine();
+                }
+            }
+
+            return edges;
+        }
+
+        /// <summary>
+        /// Read the <see cref="DemandPair"/>s from the instance file.
+        /// </summary>
+        /// <param name="line">A single line in the file.</param>
+        /// <param name="sr">The <see cref="StreamReader"/> we use.</param>
+        /// <param name="numberOfDPs">The number of <see cref="DemandPair"/>s in the instance.</param>
+        /// <returns>A <see cref="List{T}"/> with tuples of two <see cref="int"/>s that are the IDs of the endpoints of a <see cref="DemandPair"/>.</returns>
+        private static List<(int, int)> ReadDemandPairs(ref string line, StreamReader sr, int numberOfDPs)
+        {
+            List<(int, int)> dps = new List<(int, int)>();
+
+            // Reading demand pairs
+            for (int i = 0; i < numberOfDPs; i++)
+            {
+                string[] dp = line.Split();
+
+                if (dp.Length != 2 || !int.TryParse(dp[0], out int endpoint1) || !int.TryParse(dp[1], out int endpoint2))
+                {
+                    throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line with two integers, separated by a space, representing the IDs of the endpoints of a demand pair.");
+                }
+
+                dps.Add((endpoint1, endpoint2));
+
+                if (i != numberOfDPs - 1)
+                {
+                    line = sr.ReadLine();
+                    while (line.StartsWith("//"))
+                    {
+                        line = sr.ReadLine();
+                    }
+                }
+            }
+
+            return dps;
         }
 
         /// <summary>

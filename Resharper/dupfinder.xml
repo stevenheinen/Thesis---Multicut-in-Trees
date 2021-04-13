@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>100600</CodebaseCost>
+    <CodebaseCost>100854</CodebaseCost>
     <TotalDuplicatesCost>4059</TotalDuplicatesCost>
     <TotalFragmentsCost>9033</TotalFragmentsCost>
   </Statistics>
@@ -225,8 +225,8 @@
     <Duplicate Cost="93">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\CommonFactor.cs</FileName>
-        <OffsetRange Start="13313" End="13530"></OffsetRange>
-        <LineRange Start="228" End="228"></LineRange>
+        <OffsetRange Start="13377" End="13594"></OffsetRange>
+        <LineRange Start="229" End="229"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\DisjointPaths.cs</FileName>
@@ -352,8 +352,8 @@
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\InstanceGeneration\InstanceReaderWriter.cs</FileName>
-        <OffsetRange Start="8667" End="8767"></OffsetRange>
-        <LineRange Start="166" End="166"></LineRange>
+        <OffsetRange Start="10339" End="10439"></OffsetRange>
+        <LineRange Start="201" End="201"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="75">
@@ -364,8 +364,8 @@
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\InstanceGeneration\InstanceReaderWriter.cs</FileName>
-        <OffsetRange Start="7800" End="7906"></OffsetRange>
-        <LineRange Start="148" End="148"></LineRange>
+        <OffsetRange Start="8785" End="8891"></OffsetRange>
+        <LineRange Start="169" End="169"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="72">
