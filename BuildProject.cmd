@@ -1,9 +1,9 @@
 echo Building...
 dotnet build "MulticutInTrees" -c=Debug
-timeout 8 /nobreak
+ping -n 5 127.0.0.1 >NUL
 dotnet build "MulticutInTrees" -c=VerboseDebug
-timeout 8 /nobreak
+ping -n 5 127.0.0.1 >NUL
 dotnet build "MulticutInTrees" -c=Release
-timeout 8 /nobreak
+ping -n 5 127.0.0.1 >NUL
 dotnet build "MulticutInTrees" -c=Experiment
-timeout 8 /nobreak
+ping -n 5 127.0.0.1 >NUL
