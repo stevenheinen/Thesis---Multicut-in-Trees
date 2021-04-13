@@ -39,6 +39,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3, 1);
             BousquetKernelisation g = new BousquetKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) solution = g.Run();
+
             Assert.IsTrue(solution.Item4.Solvable);
             Assert.AreEqual(0, solution.Item1.NumberOfEdges(counter));
             Assert.AreEqual(1, solution.Item2.Count);
@@ -95,7 +96,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsTrue(result.Item4.Solvable);
-            Assert.AreEqual(4, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(2, result.Item1.NumberOfNodes(counter));
             Assert.AreEqual(3, result.Item2.Count);
             Assert.AreEqual(0, result.Item3.Count);
 
@@ -111,10 +112,13 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestRandomLargerInstance1()
         {
-            Random random = new Random(273);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(1000, random);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(500, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, 273, tree, demandPairs, 500, 28);
+            int randomSeed = 273;
+            int nrNodes = 1000;
+            int nrDPs = 500;
+            int optimalK = 28;
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), counter);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -122,15 +126,34 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+
+            /* If this test fails, check the expected numbers using this code.
+            Tree<TreeNode> treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
+            CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), counter);
+            MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
+            BousquetKernelisation gnfptNaive = new BousquetKernelisation(instanceNaive);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.Run();
+
+            Assert.AreEqual(resultNaive.Item1.NumberOfNodes(counter), result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
+            Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
+            */
+
+            Assert.AreEqual(311, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(5, result.Item2.Count);
+            Assert.AreEqual(389, result.Item3.Count);
         }
 
         [TestMethod]
         public void TestRandomLargerInstance2()
         {
-            Random random = new Random(789456);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(3000, random);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(2000, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, 789456, tree, demandPairs, 2000, 54);
+            int randomSeed = 789456;
+            int nrNodes = 3000;
+            int nrDPs = 2000;
+            int optimalK = 54;
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), counter);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -138,15 +161,34 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+
+            /* If this test fails, check the expected numbers using this code.
+            Tree<TreeNode> treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
+            CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), counter);
+            MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
+            BousquetKernelisation gnfptNaive = new BousquetKernelisation(instanceNaive);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.Run();
+
+            Assert.AreEqual(resultNaive.Item1.NumberOfNodes(counter), result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
+            Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
+            */
+
+            Assert.AreEqual(593, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(19, result.Item2.Count);
+            Assert.AreEqual(762, result.Item3.Count);
         }
 
         [TestMethod]
         public void TestRandomLargerInstance3()
         {
-            Random random = new Random(8765);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(400, tree, random)), counter);
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, 8765, tree, demandPairs, 400, 24);
+            int randomSeed = 8765;
+            int nrNodes = 500;
+            int nrDPs = 400;
+            int optimalK = 24;
+            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), counter);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
             (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -154,6 +196,22 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+
+            /* If this test fails, check the expected numbers using this code.
+            Tree<TreeNode> treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
+            CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), counter);
+            MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
+            BousquetKernelisation gnfptNaive = new BousquetKernelisation(instanceNaive);
+            (Tree<TreeNode>, List<(TreeNode, TreeNode)>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.Run();
+
+            Assert.AreEqual(resultNaive.Item1.NumberOfNodes(counter), result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
+            Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
+            */
+
+            Assert.AreEqual(103, result.Item1.NumberOfNodes(counter));
+            Assert.AreEqual(14, result.Item2.Count);
+            Assert.AreEqual(63, result.Item3.Count);
         }
     }
 }

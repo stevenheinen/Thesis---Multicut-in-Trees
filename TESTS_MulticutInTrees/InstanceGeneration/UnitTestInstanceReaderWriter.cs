@@ -46,7 +46,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
             string expected1 = "instanceDir\\MulticutInstance_seed=5330_treeType=Caterpillar_dpType=Random_nrNodes=50_nrDPs=25.txt";
             Assert.AreEqual(expected1, fileName1);
 
-            CommandLineOptions options2 = new CommandLineOptions() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.CNFSAT, InstanceFilePath = "D:\\Downloads\\cnf.sat" , InputDemandPairsType = InputDemandPairsType.FromTreeInstance };
+            CommandLineOptions options2 = new CommandLineOptions() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.CNFSAT, InstanceFilePath = "D:\\Downloads\\cnf.sat", InputDemandPairsType = InputDemandPairsType.FromTreeInstance };
             string fileName2 = (string)method.Invoke(null, new object[] { 5330, options2 });
             string expected2 = "instanceDir\\MulticutInstance_seed=5330_treeType=CNFSAT_dpType=FromTreeInstance_treeFile=(D:\\Downloads\\cnf[dot]sat).txt";
             Assert.AreEqual(expected2, fileName2);

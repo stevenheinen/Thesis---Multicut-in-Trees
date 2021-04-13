@@ -96,25 +96,12 @@ namespace MulticutInTrees.Experiments
 #endif
             StringBuilder sb = new StringBuilder();
             sb.Append($"{experimentMessage} on the following instance: {options.Experiments} different experiments, each with {options.Repetitions} repetitions, random seed {randomSeed}, ");
-            if (options.MaxSolutionSize > 0)
-            {
-                sb.Append($"a maximum solution size of {options.MaxSolutionSize}, ");
-            }
-            else
-            {
-                sb.Append($"the optimal solution size, ");
-            }
+            sb.Append(options.MaxSolutionSize > 0 ? $"a maximum solution size of {options.MaxSolutionSize}, " : "the optimal solution size, ");
+
             if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar)
             {
                 sb.Append($"a {options.InputTreeType} tree with {options.NumberOfNodes} nodes, ");
-                if (options.InputDemandPairsType == InputDemandPairsType.Random)
-                {
-                    sb.Append($"and {options.NumberOfDemandPairs} randomly generated demand pairs.");
-                }
-                else
-                {
-                    sb.Append($"and {options.NumberOfDemandPairs} demand pairs generated using {options.DistanceDistribution} as distribution.");
-                }
+                sb.Append(options.InputDemandPairsType == InputDemandPairsType.Random ? $"and {options.NumberOfDemandPairs} randomly generated demand pairs." : $"and {options.NumberOfDemandPairs} demand pairs generated using {options.DistanceDistribution} as distribution.");
             }
             else
             {
@@ -224,7 +211,7 @@ namespace MulticutInTrees.Experiments
             }
 
             ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
-            
+
             return output;
         }
 
@@ -242,7 +229,7 @@ namespace MulticutInTrees.Experiments
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput($"Running Guo and Niedermeiers branching algorithm", randomSeed, options));
+                Console.WriteLine(FormatParseOutput("Running Guo and Niedermeiers branching algorithm", randomSeed, options));
             }
 
             MulticutInstance instance = new MulticutInstance(randomSeed, options);

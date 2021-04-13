@@ -42,13 +42,13 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Orders a tuple of <typeparamref name="N"/>s representing an edge in such a way that the <typeparamref name="N"/> with the smallest <see cref="INode{N}.ID"/> is the first element of the resulting tuple.
+        /// Orders a tuple of <typeparamref name="TNode"/>s representing an edge in such a way that the <typeparamref name="TNode"/> with the smallest <see cref="INode{N}.ID"/> is the first element of the resulting tuple.
         /// </summary>
-        /// <typeparam name="N">The type of nodes the edge is between. Implementation of <see cref="INode{N}"/>.</typeparam>
-        /// <param name="edge">The tuple of <typeparamref name="N"/>s representing the edge we want to order.</param>
-        /// <returns>A tuple with the same <typeparamref name="N"/>s as <paramref name="edge"/>, such that the <typeparamref name="N"/> with the smallest <see cref="INode{N}.ID"/> is the first element in the result.</returns>
+        /// <typeparam name="TNode">The type of nodes the edge is between. Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <param name="edge">The tuple of <typeparamref name="TNode"/>s representing the edge we want to order.</param>
+        /// <returns>A tuple with the same <typeparamref name="TNode"/>s as <paramref name="edge"/>, such that the <typeparamref name="TNode"/> with the smallest <see cref="INode{N}.ID"/> is the first element in the result.</returns>
         /// <exception cref="ArgumentNullException">Thrown whein either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        public static (N, N) OrderEdgeSmallToLarge<N>((N, N) edge) where N : INode<N>
+        public static (TNode, TNode) OrderEdgeSmallToLarge<TNode>((TNode, TNode) edge) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(edge.Item1, nameof(edge.Item1), "Trying to order an edge from smallest to largest, but the first endpoint of the edge is null!");
@@ -120,11 +120,11 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Checks whether a path is a simple path (i.e. does not contain cycles).
         /// </summary>
-        /// <typeparam name="N">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
-        /// <param name="path">An <see cref="IEnumerable{T}"/> of tuples of <typeparamref name="N"/>s that represent the edges on the path.</param>
+        /// <typeparam name="TNode">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="path">An <see cref="IEnumerable{T}"/> of tuples of <typeparamref name="TNode"/>s that represent the edges on the path.</param>
         /// <returns><see langword="true"/> if <paramref name="path"/> is a simple path, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
-        public static bool IsSimplePath<N>(IEnumerable<(N, N)> path) where N : INode<N>
+        public static bool IsSimplePath<TNode>(IEnumerable<(TNode, TNode)> path) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to see whether a path is a simple path, but the path is null!");
@@ -144,18 +144,18 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Transforms an <see cref="IEnumerable{T}"/> with <typeparamref name="N"/>s representing a path to a <see cref="List{T}"/> with tuples of two <typeparamref name="N"/>s representing the edges on the path.
+        /// Transforms an <see cref="IEnumerable{T}"/> with <typeparamref name="TNode"/>s representing a path to a <see cref="List{T}"/> with tuples of two <typeparamref name="TNode"/>s representing the edges on the path.
         /// </summary>
-        /// <typeparam name="N">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
-        /// <param name="path">An <see cref="IEnumerable{T}"/> with <typeparamref name="N"/>s we want to tranform to a <see cref="List{T}"/> with the edges on the path.</param>
-        /// <returns>A <see cref="IEnumerable{T}"/> with tuples of <typeparamref name="N"/>s representing the edges on <paramref name="path"/>.</returns>
+        /// <typeparam name="TNode">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <param name="path">An <see cref="IEnumerable{T}"/> with <typeparamref name="TNode"/>s we want to tranform to a <see cref="List{T}"/> with the edges on the path.</param>
+        /// <returns>A <see cref="IEnumerable{T}"/> with tuples of <typeparamref name="TNode"/>s representing the edges on <paramref name="path"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
-        public static List<(N, N)> NodePathToEdgePath<N>(IEnumerable<N> path) where N : INode<N>
+        public static List<(TNode, TNode)> NodePathToEdgePath<TNode>(IEnumerable<TNode> path) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to transform a node path to an edge path, but the path is null!");
 #endif
-            List<(N, N)> result = new List<(N, N)>();
+            List<(TNode, TNode)> result = new List<(TNode, TNode)>();
             for (int i = 0; i < path.Count() - 1; i++)
             {
                 result.Add((path.ElementAt(i), path.ElementAt(i + 1)));
@@ -180,7 +180,7 @@ namespace MulticutInTrees.Utilities
             NullCheck(condition, nameof(condition), "Trying to pick a random element form an IEnumerable that fits a condition, but the function with the condition is null!");
             NullCheck(random, nameof(random), "Trying to pick a random element form an IEnumerable that fits a condition, but the random number generator is null!");
 #endif
-            return list.Where(n => condition(n)).PickRandom(random);
+            return list.Where(condition).PickRandom(random);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace MulticutInTrees.Utilities
                 }
                 else
                 {
-                    answer = current; 
+                    answer = current;
                     maxValue = current - 1;
                 }
                 current = (minValue + maxValue + 1) / 2;
@@ -325,18 +325,23 @@ namespace MulticutInTrees.Utilities
         /// Create a <see cref="Tree{N}"/> with the given number of nodes and all edges in <paramref name="edges"/>.
         /// </summary>
         /// <param name="numberOfNodes">The required number of nodes in the <see cref="Tree{N}"/>.</param>
+        /// <param name="rootID">The ID of the root of the <see cref="Tree{N}"/>.</param>
         /// <param name="edges"><see cref="IEnumerable{T}"/> with tuples of <see cref="int"/>s that represent the identifiers of the endpoints of the edges.</param>
         /// <returns>A <see cref="Tree{N}"/> with <paramref name="numberOfNodes"/> nodes and an edge for each element in <paramref name="edges"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is negative or <paramref name="rootID"/> is negative or larger than or equal to <paramref name="numberOfNodes"/>.</exception>
         /// <exception cref="ArgumentException">Thrown when there are not <paramref name="numberOfNodes"/> - 1 edges, or when <paramref name="edges"/> contains an identifier that is negative, or equal to or larger than <paramref name="numberOfNodes"/>.</exception>
-        public static Tree<TreeNode> CreateTreeWithEdges(int numberOfNodes, IEnumerable<(int, int)> edges)
+        public static Tree<TreeNode> CreateTreeWithEdges(int numberOfNodes, int rootID, IEnumerable<(int, int)> edges)
         {
 #if !EXPERIMENT
             NullCheck(edges, nameof(edges), "Trying to create a tree with a given list of int tuples as edges, but the list with int tuples is null!");
             if (numberOfNodes < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numberOfNodes), $"Trying to create a tree with a given list of edges, but the number of nodes in the tree is negative ({numberOfNodes})!");
+            }
+            if (rootID < 0 || rootID >= numberOfNodes)
+            {
+                throw new ArgumentOutOfRangeException(nameof(rootID), $"Trying to create a tree with a given list of edges, but the ID of the root of the tree ({rootID}) is out of range compared to the number of nodes ({numberOfNodes})!");
             }
             if (edges.Count() != numberOfNodes - 1)
             {
@@ -364,10 +369,10 @@ namespace MulticutInTrees.Utilities
                 nodes[i] = new TreeNode(i);
             }
 
-            tree.AddRoot(nodes[0], mockCounter);
+            tree.AddRoot(nodes[rootID], mockCounter);
 
             Queue<TreeNode> queue = new Queue<TreeNode>();
-            queue.Enqueue(nodes[0]);
+            queue.Enqueue(nodes[rootID]);
 
             while (queue.Count > 0)
             {
@@ -383,7 +388,7 @@ namespace MulticutInTrees.Utilities
 
             tree.UpdateNodeTypes();
 
-           return tree;
+            return tree;
         }
 
         /// <summary>

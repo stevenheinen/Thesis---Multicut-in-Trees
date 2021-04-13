@@ -123,7 +123,7 @@ namespace MulticutInTrees.Algorithms
             {
                 Console.WriteLine($"Error in the MIP solver! {e}");
                 Console.WriteLine("Throwing the same error to stop the program.");
-                throw e;
+                throw;
             }
         }
     }

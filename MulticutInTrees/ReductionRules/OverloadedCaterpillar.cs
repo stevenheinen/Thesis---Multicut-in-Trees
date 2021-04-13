@@ -21,13 +21,13 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
         /// </summary>
-        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; set; }
+        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="TreeNode"/> is part of, or -1 if it is not part of any caterpillar component.
         /// </summary>
-        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; set; }
-        
+        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; }
+
         /// <summary>
         /// The maximum size the solution is allowed to have.
         /// </summary>
@@ -41,7 +41,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not impact performance.
         /// </summary>
-        private Counter MockCounter { get; set; }
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for <see cref="OverloadedCaterpillar"/>.
@@ -58,15 +58,15 @@ namespace MulticutInTrees.ReductionRules
         public OverloadedCaterpillar(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<TreeNode, CountedCollection<DemandPair>> demandPairsPerNode, CountedDictionary<TreeNode, int> caterpillarComponentPerNode, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the list with demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the dictionary with demand pairs per node is null!");
-            Utils.NullCheck(caterpillarComponentPerNode, nameof(caterpillarComponentPerNode), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the dictionary with the caterpillar component per node is null!");
-            Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to create an instance of the Overloaded Caterpillar reduction rule, but the list with the partial solution is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per node is null!");
+            Utils.NullCheck(caterpillarComponentPerNode, nameof(caterpillarComponentPerNode), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with the caterpillar component per node is null!");
+            Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with the partial solution is null!");
             if (maxSolutionSize < 0)
             {
-                throw new ArgumentOutOfRangeException("Trying to create an instance of the Overloaded Caterpillar reduction rule, but the maximum solution size parameter is smaller than zero!");
+                throw new ArgumentOutOfRangeException($"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum solution size parameter is smaller than zero!");
             }
 #endif
             DemandPairsPerNode = demandPairsPerNode;
@@ -74,67 +74,6 @@ namespace MulticutInTrees.ReductionRules
             PartialSolution = partialSolution;
             MaxSolutionSize = maxSolutionSize;
             MockCounter = new Counter();
-        }
-
-        /// <inheritdoc/>
-        protected override void Preprocess()
-        {
-            
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Overloaded Caterpillar reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying the Overloaded Caterpillar reduction rule after a demand path was changed...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
-            return TryRemoveDemandPairs(pairsToBeDeleted);
-        }
-
-        /// <inheritdoc/>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Overloaded Caterpillar reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
-#endif
-            return false;
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Overloaded Caterpillar reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying the Overloaded Caterpillar reduction rule after an edge was contracted...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
-            return TryRemoveDemandPairs(pairsToBeDeleted);
-        }
-
-        /// <inheritdoc/>
-        internal override bool RunFirstIteration()
-        {
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying the Overloaded Caterpillar reduction rule for the first time...");
-#endif
-            foreach (KeyValuePair<TreeNode, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
-            {
-                CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);
-            }
-
-            Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
-            return TryRemoveDemandPairs(pairsToBeDeleted);
         }
 
         /// <summary>
@@ -178,6 +117,58 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
             return result;
+        }
+
+        /// <inheritdoc/>
+        protected override void Preprocess()
+        {
+
+        }
+
+        /// <inheritdoc/>
+        internal override bool RunFirstIteration()
+        {
+#if VERBOSEDEBUG
+            Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
+#endif
+            foreach (KeyValuePair<TreeNode, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
+            {
+                CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);
+            }
+
+            Measurements.TimeSpentCheckingApplicability.Start();
+            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
+            return TryRemoveDemandPairs(pairsToBeDeleted);
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
+        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
+            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine($"Applying the {GetType().Name} reduction rule in a later iteration");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+
+            if (contractedEdges.Count(MockCounter) == 0 && changedDemandPairs.Count(MockCounter) == 0)
+            {
+                removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+                Measurements.TimeSpentCheckingApplicability.Stop();
+                return false;
+            }
+
+            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
+
+            contractedEdges.Clear(Measurements.TreeOperationsCounter);
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+
+            return TryRemoveDemandPairs(pairsToBeDeleted);
         }
     }
 }

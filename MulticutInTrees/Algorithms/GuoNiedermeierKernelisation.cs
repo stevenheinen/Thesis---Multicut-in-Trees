@@ -40,7 +40,6 @@ namespace MulticutInTrees.Algorithms
             Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
             Utilities.Utils.NullCheck(overwrittenAlgorithmType, nameof(overwrittenAlgorithmType), "Trying to create an instance of the Guo-Niedermeier FPT algorithm, but the AlgorithmType of the algorithm is null!");
 #endif
-            CreateReductionRules();
         }
 
         /// <inheritdoc cref="Algorithm.CreateReductionRules"/>

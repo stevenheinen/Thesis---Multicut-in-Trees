@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -34,10 +35,10 @@ namespace MulticutInTrees.ReductionRules
         public IdleEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the IdleEdge rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the IdleEdge rule, but the list of demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the IdleEdge rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), "Trying to create an instance of the IdleEdge rule, but the dictionary with demand paths per edge is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} rule, but the dictionary with demand paths per edge is null!");
 #endif
             DemandPairsPerEdge = demandPairsPerEdge;
         }
@@ -64,23 +65,15 @@ namespace MulticutInTrees.ReductionRules
             return false;
         }
 
-        /// <inheritdoc/>
-        protected override void Preprocess()
+        /// <summary>
+        /// Try to apply this <see cref="ReductionRule"/> on the edges in <paramref name="edgesToCheck"/>.
+        /// </summary>
+        /// <param name="edgesToCheck">The <see cref="IEnumerable{T}"/> with edges we want to check.</param>
+        /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
+        private bool TryApplyReductionRule(IEnumerable<(TreeNode, TreeNode)> edgesToCheck)
         {
-
-        }
-
-        /// <inheritdoc/>
-        internal override bool RunFirstIteration()
-        {
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Idle Edge rule for the first time...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            // In the first iteration, check all edges in the input tree.
-            List<(TreeNode, TreeNode)> edgesToBeContracted = new List<(TreeNode, TreeNode)>();
-            foreach ((TreeNode, TreeNode) edge in Tree.Edges(Measurements.TreeOperationsCounter))
+            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
+            foreach ((TreeNode, TreeNode) edge in edgesToCheck)
             {
                 if (CanEdgeBeContracted(edge))
                 {
@@ -94,87 +87,68 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
+        protected override void Preprocess()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to execute the IdleEdge rule after edges were contracted, but the IEnumerable with contracted edge information is null!");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            
-            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
-            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in contractedEdgeNodeTupleList.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                foreach (TreeNode neighbour in newNode.Neighbours(Measurements.TreeOperationsCounter))
-                {
-                    (TreeNode, TreeNode) edge = (newNode, neighbour);
-                    if (CanEdgeBeContracted(edge))
-                    {
-                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
-                    }
-                }
-            }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-
-            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
+        internal override bool RunFirstIteration()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to execute the IdleEdge rule after a demand pair was removed, but the list of removed demand pairs is null!");
-#endif
 #if VERBOSEDEBUG
-            Console.WriteLine("Applying Idle Edge rule after a demand path was removed...");
+            Console.WriteLine($"Applying {GetType().Name} rule for the first time");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            // Find all edges that were on the removed demand path, and check if they can be contracted.
-            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
+            // In the first iteration, check all edges in the input tree.
+            return TryApplyReductionRule(Tree.Edges(Measurements.TreeOperationsCounter).Select(Utils.OrderEdgeSmallToLarge));
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
+        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to execute the {GetType().Name} rule after edges were contracted, but the IEnumerable with contracted edge information is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to execute the {GetType().Name} rule after a demand pair was removed, but the list of removed demand pairs is null!");
+            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to execute the {GetType().Name} rule after a demand pair was changed, but the list of changed demand pairs is null!");
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+
+            HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
+
+            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            {
+                foreach (TreeNode neighbour in newNode.Neighbours(Measurements.TreeOperationsCounter))
+                {
+                    edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge((newNode, neighbour)));
+                }
+            }
+
             foreach (DemandPair demandPair in removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
                 {
-                    if (CanEdgeBeContracted(edge))
-                    {
-                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
-                    }
+                    edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
                 }
             }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-
-            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to execute the IdleEdge rule after a demand pair was changed, but the list of changed demand pairs is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Applying Idle Edge rule after a demand path was changed...");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
-            foreach ((CountedList<(TreeNode, TreeNode)>, DemandPair) tuple in changedEdgesPerDemandPairList.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in changedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
-                foreach ((TreeNode, TreeNode) edge in tuple.Item1.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+                foreach ((TreeNode, TreeNode) edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                 {
-                    if (CanEdgeBeContracted(edge))
-                    {
-                        edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
-                    }
+                    edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
                 }
             }
 
-            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
+            contractedEdges.Clear(Measurements.TreeOperationsCounter);
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+
+            return TryApplyReductionRule(edgesToBeChecked);
         }
     }
 }

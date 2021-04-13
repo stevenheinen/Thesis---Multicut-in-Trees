@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
@@ -16,8 +17,29 @@ namespace TESTS_MulticutInTrees.ReductionRules
     [TestClass]
     public class UnitTestUniqueDirection
     {
-        private readonly static Counter MockCounter = new Counter();
-        private readonly static PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestUniqueDirection));
+        private static readonly Counter MockCounter = new Counter();
+        private static readonly PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestUniqueDirection));
+
+        private (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) GetLaterIterationInformation(Algorithm algorithm)
+        {
+            PropertyInfo lastContractedEdgesProperty = typeof(Algorithm).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>> lastContractedEdges = (List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>>)lastContractedEdgesProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+
+            PropertyInfo lastRemovedDemandPairsProperty = typeof(Algorithm).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<CountedList<DemandPair>> lastRemovedDemandPairs = (List<CountedList<DemandPair>>)lastRemovedDemandPairsProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+
+            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(Algorithm).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>> lastChangedEdgesPerDemandPair = (List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>>)lastChangedEdgesPerDemandPairProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+
+            int index = GetIndexOfReductionRule(algorithm);
+
+            return (lastContractedEdges[index], lastRemovedDemandPairs[index], lastChangedEdgesPerDemandPair[index]);
+        }
+
+        private int GetIndexOfReductionRule(Algorithm algorithm)
+        {
+            return algorithm.ReductionRules.IndexOf(algorithm.ReductionRules.First(rr => rr.GetType() == typeof(UniqueDirection)));
+        }
 
         [TestMethod]
         public void TestConstructor()
@@ -27,7 +49,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = new CountedDictionary<TreeNode, CountedCollection<DemandPair>>();
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
             Assert.IsNotNull(uniqueDirection);
         }
 
@@ -39,15 +62,22 @@ namespace TESTS_MulticutInTrees.ReductionRules
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = new CountedDictionary<TreeNode, CountedCollection<DemandPair>>();
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(null, dps, algorithm, dpsPerNode));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, null, algorithm, dpsPerNode));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, null, dpsPerNode));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, null));
-            Assert.ThrowsException<ArgumentNullException>(() => uniqueDirection.AfterDemandPathChanged(null));
-            Assert.ThrowsException<ArgumentNullException>(() => uniqueDirection.AfterDemandPathRemove(null));
-            Assert.ThrowsException<ArgumentNullException>(() => uniqueDirection.AfterEdgeContraction(null));
+            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
+            CountedList<DemandPair> removedDemandPairs = new CountedList<DemandPair>();
+            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
+
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(null, dps, algorithm, dpsPerNode, dpsPerEdge));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, null, algorithm, dpsPerNode, dpsPerEdge));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, null, dpsPerNode, dpsPerEdge));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, null, dpsPerEdge));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, dpsPerNode, null));
+
+            Assert.ThrowsException<ArgumentNullException>(() => uniqueDirection.RunLaterIteration(null, removedDemandPairs, changedEdgesPerDemandPairList));
+            Assert.ThrowsException<ArgumentNullException>(() => uniqueDirection.RunLaterIteration(contractedEdgeNodeTupleList, null, changedEdgesPerDemandPairList));
+            Assert.ThrowsException<ArgumentNullException>(() => uniqueDirection.RunLaterIteration(contractedEdgeNodeTupleList, removedDemandPairs, null));
         }
 
         [TestMethod]
@@ -82,8 +112,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             Assert.IsFalse(uniqueDirection.RunFirstIteration());
         }
@@ -118,8 +149,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
             Assert.AreEqual(5, tree.NumberOfEdges(MockCounter));
@@ -152,11 +184,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(4, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(3, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
@@ -185,11 +218,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(2, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(1, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
@@ -211,8 +245,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
             Assert.AreEqual(1, tree.NumberOfEdges(MockCounter));
@@ -242,19 +277,20 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new DemandPair(node4, node5);
             DemandPair dp5 = new DemandPair(node3, node5);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
-            
+
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             algorithm.CutEdge((node0, node1), MockMeasurements);
 
-            CountedList<DemandPair> info = (CountedList<DemandPair>)typeof(BousquetKernelisation).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
 
-            Assert.IsTrue(uniqueDirection.AfterDemandPathRemove(info));
+            Assert.IsTrue(uniqueDirection.RunLaterIteration(info.Item1, info.Item2, info.Item3));
         }
 
         [TestMethod]
@@ -281,19 +317,20 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new DemandPair(node4, node5);
             DemandPair dp5 = new DemandPair(node3, node5);
             CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
-            
+
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             algorithm.CutEdge((node0, node1), MockMeasurements);
 
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> info = (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>)typeof(BousquetKernelisation).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
 
-            Assert.IsTrue(uniqueDirection.AfterEdgeContraction(info));
+            Assert.IsTrue(uniqueDirection.RunLaterIteration(info.Item1, info.Item2, info.Item3));
         }
 
         [TestMethod]
@@ -347,16 +384,17 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new BousquetKernelisation(instance);
 
             CountedDictionary<TreeNode, CountedCollection<DemandPair>> dpsPerNode = (CountedDictionary<TreeNode, CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerNode", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> dpsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(BousquetKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
 
             Assert.IsFalse(uniqueDirection.RunFirstIteration());
 
             algorithm.ChangeEndpointOfDemandPair(dp9, node0, node2, MockMeasurements);
 
-            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> info = (CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>)typeof(BousquetKernelisation).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
+            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
 
-            Assert.IsTrue(uniqueDirection.AfterDemandPathChanged(info));
+            Assert.IsTrue(uniqueDirection.RunLaterIteration(info.Item1, info.Item2, info.Item3));
         }
     }
 }

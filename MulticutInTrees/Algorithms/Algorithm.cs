@@ -23,26 +23,21 @@ namespace MulticutInTrees.Algorithms
         /// The <see cref="ReadOnlyCollection{T}"/> of reduction rules (of type <see cref="ReductionRule"/>) this <see cref="Algorithm"/> uses.
         /// </summary>
         public ReadOnlyCollection<ReductionRule> ReductionRules { get; protected set; }
-        
+
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge, represented by a tuple of two <see cref="TreeNode"/>s.
         /// </summary>
-        protected CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; set; }
+        protected CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; private set; }
 
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
         /// </summary>
-        protected CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; set; }
-        
+        protected CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; private set; }
+
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="TreeNode"/> is part of, or -1 if it is not part of any caterpillar component.
         /// </summary>
-        protected CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; set; }
-
-        /// <summary>
-        /// The <see cref="MulticutInstance"/> this <see cref="Algorithm"/> is trying to solve.
-        /// </summary>
-        protected MulticutInstance Instance { get; }
+        protected CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; }
 
         /// <summary>
         /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the input.
@@ -63,51 +58,41 @@ namespace MulticutInTrees.Algorithms
         /// The size the cutset is allowed to be.
         /// </summary>
         protected int K { get; }
-
+        
         /// <summary>
-        /// <see langword="true"/> if in the last iteration an edge was contracted, <see langword="false"/> otherwise.
+        /// The <see cref="MulticutInstance"/> this <see cref="Algorithm"/> is trying to solve.
         /// </summary>
-        protected bool LastIterationEdgeContraction { get; set; }
-
-        /// <summary>
-        /// <see langword="true"/> if in the last iteration a demand pair was removed, <see langword="false"/> otherwise.
-        /// </summary>
-        protected bool LastIterationDemandPairRemoval { get; set; }
-
-        /// <summary>
-        /// <see langword="true"/> if in the last iteration a demand pair was changed, <see langword="false"/> otherwise.
-        /// </summary>
-        protected bool LastIterationDemandPairChange { get; set; }
+        private MulticutInstance Instance { get; }
 
         /// <summary>
         /// A <see cref="CountedList{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
         /// </summary>
-        protected CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> LastContractedEdges { get; set; }
+        private List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>> LastContractedEdges { get; }
 
         /// <summary>
         /// A <see cref="CountedList{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
         /// </summary>
-        protected CountedList<DemandPair> LastRemovedDemandPairs { get; set; }
+        private List<CountedList<DemandPair>> LastRemovedDemandPairs { get; }
 
         /// <summary>
         /// A <see cref="CountedList{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
         /// </summary>
-        protected CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> LastChangedEdgesPerDemandPair { get; set; }
-
-        /// <summary>
-        /// <see cref="Counter"/> that can be used for operations that should <b>NOT</b> be counted for the performance of this <see cref="Algorithm"/>.
-        /// </summary>
-        protected Counter MockCounter { get; }
+        private List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>> LastChangedEdgesPerDemandPair { get; }
 
         /// <summary>
         /// <see cref="PerformanceMeasurements"/> that are used by the central parts an <see cref="Algorithm"/> does that has nothing to do with <see cref="ReductionRule"/>s, like preprocessing.
         /// </summary>
-        protected PerformanceMeasurements AlgorithmPerformanceMeasurements { get; }
+        private PerformanceMeasurements AlgorithmPerformanceMeasurements { get; }
+
+        /// <summary>
+        /// <see cref="Counter"/> that can be used for operations that should <b>NOT</b> be counted for the performance of this <see cref="Algorithm"/>.
+        /// </summary>
+        private Counter MockCounter { get; }
 
         /// <summary>
         /// The <see cref="AlgorithmType"/> of this <see cref="Algorithm"/>.
         /// </summary>
-        protected AlgorithmType AlgorithmType { get; }
+        private AlgorithmType AlgorithmType { get; }
 
         /// <summary>
         /// Constructor for an <see cref="Algorithm"/>.
@@ -130,14 +115,28 @@ namespace MulticutInTrees.Algorithms
             AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmType.ToString());
             CaterpillarComponentPerNode = new CountedDictionary<TreeNode, int>();
 
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
-            LastRemovedDemandPairs = new CountedList<DemandPair>();
-            LastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
-            
+            LastContractedEdges = new List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>>();
+            LastRemovedDemandPairs = new List<CountedList<DemandPair>>();
+            LastChangedEdgesPerDemandPair = new List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>>();
+
             FillDemandPathsPerEdge();
+            CreateReductionRules();
+            CreateReductionRuleUpdateInformation();
         }
 
-        // todo: check whether this results in smaller kernels. It is probably a lot slower. Smaller kernels? Yes. A lot slower? Not as much as expected, but it is slower.
+        /// <summary>
+        /// For each reduction rule, create data structures in <see cref="LastContractedEdges"/>, <see cref="LastRemovedDemandPairs"/> and <see cref="LastChangedEdgesPerDemandPair"/> to store update information.
+        /// </summary>
+        private void CreateReductionRuleUpdateInformation()
+        {
+            for (int i = 0; i < ReductionRules.Count; i++)
+            {
+                LastContractedEdges.Add(new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>());
+                LastRemovedDemandPairs.Add(new CountedList<DemandPair>());
+                LastChangedEdgesPerDemandPair.Add(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>());
+            }
+        }
+
         /// <summary>
         /// Runs the algorithm by using the <see cref="ReductionRule.RunFirstIteration"/> method exclusively. This means unnecessary parts of the graph are checked, but it results in smaller kernels. This part is still WIP. We would like to find a way to skip checking unnecessary parts, but still find the smallest kernel.
         /// </summary>
@@ -156,7 +155,7 @@ namespace MulticutInTrees.Algorithms
                 }
 
 #if VERBOSEDEBUG
-                Console.WriteLine($"Now applying rule {i + 1}.");
+                Console.WriteLine($"Now applying rule {i + 1} ({ReductionRules[i].GetType().Name}).");
 #endif
                 bool success = ReductionRules[i].RunFirstIteration();
                 if (success)
@@ -172,7 +171,7 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
                 else
                 {
-                    Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                    Console.WriteLine($"The application of rule {i + 1} ({ReductionRules[i].GetType().Name}) was not successful...");
                 }
 #endif
             }
@@ -204,18 +203,13 @@ namespace MulticutInTrees.Algorithms
                 }
 
 #if VERBOSEDEBUG
-                Console.WriteLine($"Now applying rule {i + 1}.");
-                Console.WriteLine($"In the last iteration we?");
-                Console.WriteLine($"Contracted an edge: {LastIterationEdgeContraction}");
-                Console.WriteLine($"Changed a dem path: {LastIterationDemandPairChange}");
-                Console.WriteLine($"Removed a dem path: {LastIterationDemandPairRemoval}");
+                Console.WriteLine($"Now applying rule {i + 1} ({ReductionRules[i].GetType().Name}).");
 #endif
                 // If we have not executed this rule before, execute it now.
                 if (!appliedReductionRule[i])
                 {
                     appliedReductionRule[i] = true;
-                    bool success = ReductionRules[i].RunFirstIteration();
-                    if (success)
+                    if (ReductionRules[i].RunFirstIteration())
                     {
                         if (ReductionRules[i].TrueMeansInfeasibleInstance)
                         {
@@ -228,32 +222,14 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
                     else
                     {
-                        Console.WriteLine($"The application of rule {i + 1} was not successful...");
+                        Console.WriteLine($"The application of rule {i + 1} ({ReductionRules[i].GetType().Name}) was not successful...");
                     }
 #endif
                     continue;
                 }
 
-                bool successfulAfterDemandPairChanged = false;
-                bool successfulAfterDemandPairRemoved = false;
-                bool successfulAfterEdgeContracted = false;
-
-                // We have already applied the i-th rule before. Try to apply it again, depending on what happened in the last iteration.
-                if (LastIterationDemandPairChange)
-                {
-                    successfulAfterDemandPairChanged = RunAfterDemandPairChanged(i);
-                }
-                if (LastIterationDemandPairRemoval)
-                {
-                    successfulAfterDemandPairRemoved = RunAfterDemandPairRemoved(i);
-                }
-                if (LastIterationEdgeContraction)
-                {
-                    successfulAfterEdgeContracted = RunAfterEdgeContraction(i);
-                }
-
                 // If we applied the rule successfully, go back to rule 0.
-                if (successfulAfterDemandPairChanged || successfulAfterDemandPairRemoved || successfulAfterEdgeContracted)
+                if (ReductionRules[i].RunLaterIteration(LastContractedEdges[i], LastRemovedDemandPairs[i], LastChangedEdgesPerDemandPair[i]))
                 {
                     if (ReductionRules[i].TrueMeansInfeasibleInstance)
                     {
@@ -262,6 +238,12 @@ namespace MulticutInTrees.Algorithms
 
                     i = -1;
                 }
+#if VERBOSEDEBUG
+                else
+                {
+                    Console.WriteLine($"The application of rule {i + 1} ({ReductionRules[i].GetType().Name}) was not successful...");
+                }
+#endif
             }
 
             returntrue:
@@ -280,7 +262,7 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="ArgumentNullException">Thrown when either item of <paramref name="edge"/>, or <paramref name="measurements"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="edge"/> is not part of the input.</exception>
         /// <exception cref="InvalidEdgeException">Thrown when <paramref name="edge"/> is a self-loop.</exception>
-        internal virtual TreeNode ContractEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
+        protected internal TreeNode ContractEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to contract an edge, but the first item of this edge is null!");
@@ -315,8 +297,11 @@ namespace MulticutInTrees.Algorithms
             UpdateDemandPairsStartingAtContractedEdge(usedEdge, child, newNode, pairsOnEdge, measurements);
             UpdateDemandPairsGoingThroughChild(child, newNode, measurements);
 
-            LastContractedEdges.Add((usedEdge, newNode, pairsOnEdge), measurements.TreeOperationsCounter);
-            LastIterationEdgeContraction = true;
+            for (int i = 0; i < ReductionRules.Count; i++)
+            {
+                LastContractedEdges[i].Add((usedEdge, newNode, pairsOnEdge), measurements.TreeOperationsCounter);
+            }
+
             measurements.NumberOfContractedEdgesCounter++;
 
             return newNode;
@@ -328,7 +313,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="demandPair">The <see cref="DemandPair"/> to be removed.</param>
         /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        internal virtual void RemoveDemandPair(DemandPair demandPair, PerformanceMeasurements measurements)
+        protected internal void RemoveDemandPair(DemandPair demandPair, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to remove a demand pair, but the demand pair is null!");
@@ -337,8 +322,10 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Removing demand pair {demandPair}.");
 #endif
-            LastRemovedDemandPairs.Add(demandPair, measurements.DemandPairsOperationsCounter);
-            LastIterationDemandPairRemoval = true;
+            for (int i = 0; i < ReductionRules.Count; i++)
+            {
+                LastRemovedDemandPairs[i].Add(demandPair, measurements.DemandPairsOperationsCounter);
+            }
             measurements.NumberOfRemovedDemandPairsCounter++;
 
             DemandPairsPerNode[demandPair.Node1, measurements.DemandPairsPerEdgeKeysCounter].Remove(demandPair, measurements.DemandPairsOperationsCounter);
@@ -370,7 +357,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="newEndpoint">The new endpoint of <paramref name="demandPair"/>.</param>
         /// <param name="measurements">The set of <see cref="PerformanceMeasurements"/> that should be used to count the operations needed during this modification.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="demandPair"/>, <paramref name="oldEndpoint"/>, <paramref name="newEndpoint"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        internal virtual void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint, PerformanceMeasurements measurements)
+        protected internal void ChangeEndpointOfDemandPair(DemandPair demandPair, TreeNode oldEndpoint, TreeNode newEndpoint, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(demandPair, nameof(demandPair), "Trying to change an endpoint of a demand pair, but the demand pair is null!");
@@ -401,8 +388,10 @@ namespace MulticutInTrees.Algorithms
             DemandPairsPerNode[oldEndpoint, measurements.DemandPairsPerEdgeKeysCounter].Remove(demandPair, measurements.DemandPairsOperationsCounter);
             DemandPairsPerNode[newEndpoint, measurements.DemandPairsPerEdgeKeysCounter].Add(demandPair, measurements.DemandPairsOperationsCounter);
 
-            LastChangedEdgesPerDemandPair.Add((oldEdges, demandPair), measurements.DemandPairsOperationsCounter);
-            LastIterationDemandPairChange = true;
+            for (int i = 0; i < ReductionRules.Count; i++)
+            {
+                LastChangedEdgesPerDemandPair[i].Add((oldEdges, demandPair), measurements.DemandPairsOperationsCounter);
+            }
             measurements.NumberOfChangedDemandPairsCounter++;
 
             foreach ((TreeNode, TreeNode) edge in oldEdges.GetCountedEnumerable(measurements.TreeOperationsCounter))
@@ -421,7 +410,7 @@ namespace MulticutInTrees.Algorithms
         /// <exception cref="ArgumentNullException">Thrown when either item of <paramref name="edge"/>, or <paramref name="measurements"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotInGraphException">Thrown when <paramref name="edge"/> is not part of the tree.</exception>
         /// <exception cref="InvalidEdgeException">Thrown when <paramref name="edge"/> is not a valid edge.</exception>
-        internal virtual TreeNode CutEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
+        protected internal TreeNode CutEdge((TreeNode, TreeNode) edge, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to cut an edge, but the first item of this edge is null!");
@@ -566,7 +555,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="demandPair">The <see cref="DemandPair"/> that should be removed from <paramref name="edge"/>.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used for this modification.</param>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="demandPair"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        protected void RemoveDemandPairFromEdge((TreeNode, TreeNode) edge, DemandPair demandPair, PerformanceMeasurements measurements)
+        private void RemoveDemandPairFromEdge((TreeNode, TreeNode) edge, DemandPair demandPair, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to remove a demand pair from an edge, but the first endpoint of the edge is null!");
@@ -592,7 +581,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
         /// <returns>A <see cref="CountedCollection{T}"/> with all the <see cref="DemandPair"/>s that pass through <paramref name="edge"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="newNode"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        protected CountedCollection<DemandPair> RemoveDemandPairsFromContractedEdge((TreeNode, TreeNode) edge, TreeNode newNode, PerformanceMeasurements measurements)
+        private CountedCollection<DemandPair> RemoveDemandPairsFromContractedEdge((TreeNode, TreeNode) edge, TreeNode newNode, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to remove all demand paths going through an edge, but the first endpoint of this edge is null!");
@@ -623,7 +612,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the contraction.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used for this modification.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="child"/>, <paramref name="newNode"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        protected void UpdateDemandPairsGoingThroughChild(TreeNode child, TreeNode newNode, PerformanceMeasurements measurements)
+        private void UpdateDemandPairsGoingThroughChild(TreeNode child, TreeNode newNode, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(child, nameof(child), "Trying to update the demand pairs going through the child of an edge that will be contracted, but the child is null!");
@@ -681,7 +670,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="pairsOnEdge">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s that go over <paramref name="edge"/>.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
         /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/>, <paramref name="pairsOnEdge"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        protected void UpdateDemandPairsStartingAtContractedEdge((TreeNode, TreeNode) edge, TreeNode child, TreeNode newNode, CountedCollection<DemandPair> pairsOnEdge, PerformanceMeasurements measurements)
+        private void UpdateDemandPairsStartingAtContractedEdge((TreeNode, TreeNode) edge, TreeNode child, TreeNode newNode, CountedCollection<DemandPair> pairsOnEdge, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the first endpoint of the edge that will be contracted is null!");
@@ -711,7 +700,7 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         /// <param name="contractedEdge">The edge that is contracted.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
-        protected void UpdateCaterpillarComponents((TreeNode, TreeNode) contractedEdge, PerformanceMeasurements measurements)
+        private void UpdateCaterpillarComponents((TreeNode, TreeNode) contractedEdge, PerformanceMeasurements measurements)
         {
             if (CaterpillarComponentPerNode.Count(MockCounter) == 0)
             {
@@ -865,93 +854,18 @@ namespace MulticutInTrees.Algorithms
         }
 
         /// <summary>
-        /// The part of <see cref="Run"/> that is executed for a <see cref="ReductionRule"/> after an edge was contracted in the last iteration.
-        /// </summary>
-        /// <param name="i">The index of the <see cref="ReductionRule"/> that needs to be executed.</param>
-        /// <returns>A <see cref="bool"/> whether the application of the <paramref name="i"/>th rule was successful.</returns>
-        private bool RunAfterEdgeContraction(int i)
-        {
-#if VERBOSEDEBUG
-            Console.WriteLine($"Applying rule {i + 1} after an edge was contracted.");
-#endif
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> oldLastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>(LastContractedEdges.GetCountedEnumerable(MockCounter), MockCounter);
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
-            LastIterationEdgeContraction = false;
-            bool successful = ReductionRules[i].AfterEdgeContraction(oldLastContractedEdges);
-            if (!successful)
-            {
-#if VERBOSEDEBUG
-                Console.WriteLine($"The application of rule {i + 1} was not successful...");
-#endif
-                LastIterationEdgeContraction = true;
-                LastContractedEdges = oldLastContractedEdges;
-            }
-            return successful;
-        }
-
-        /// <summary>
-        /// The part of <see cref="Run"/> that is executed for a <see cref="ReductionRule"/> after a <see cref="DemandPair"/> was removed in the last iteration.
-        /// </summary>
-        /// <param name="i">The index of the <see cref="ReductionRule"/> that needs to be executed.</param>
-        /// <returns>A <see cref="bool"/> whether the application of the <paramref name="i"/>th rule was successful.</returns>
-        private bool RunAfterDemandPairRemoved(int i)
-        {
-#if VERBOSEDEBUG
-            Console.WriteLine($"Applying rule {i + 1} after a demand pair was removed.");
-#endif
-            CountedList<DemandPair> oldLastRemovedDemandPairs = new CountedList<DemandPair>(LastRemovedDemandPairs.GetCountedEnumerable(MockCounter), MockCounter);
-            LastRemovedDemandPairs = new CountedList<DemandPair>();
-            LastIterationDemandPairRemoval = false;
-            bool successful = ReductionRules[i].AfterDemandPathRemove(oldLastRemovedDemandPairs);
-            if (!successful)
-            {
-#if VERBOSEDEBUG
-                Console.WriteLine($"The application of rule {i + 1} was not successful...");
-#endif
-                LastIterationDemandPairRemoval = true;
-                LastRemovedDemandPairs = oldLastRemovedDemandPairs;
-            }
-            return successful;
-        }
-
-        /// <summary>
-        /// The part of <see cref="Run"/> that is executed for a <see cref="ReductionRule"/> after a <see cref="DemandPair"/> changed in the last iteration.
-        /// </summary>
-        /// <param name="i">The index of the <see cref="ReductionRule"/> that needs to be executed.</param>
-        /// <returns>A <see cref="bool"/> whether the application of the <paramref name="i"/>th rule was successful.</returns>
-        private bool RunAfterDemandPairChanged(int i)
-        {
-#if VERBOSEDEBUG
-            Console.WriteLine($"Applying rule {i + 1} after a demand pair changed.");
-#endif
-            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> oldLastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>(LastChangedEdgesPerDemandPair.GetCountedEnumerable(MockCounter), MockCounter);
-            LastChangedEdgesPerDemandPair = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
-            LastIterationDemandPairChange = false;
-            bool successful = ReductionRules[i].AfterDemandPathChanged(oldLastChangedEdgesPerDemandPair);
-            if (!successful)
-            {
-#if VERBOSEDEBUG
-                Console.WriteLine($"The application of rule {i + 1} was not successful...");
-#endif
-                LastIterationDemandPairChange = true;
-                LastChangedEdgesPerDemandPair = oldLastChangedEdgesPerDemandPair;
-            }
-            return successful;
-        }
-
-        /// <summary>
         /// Update the <see cref="NodeType"/>s of the <see cref="TreeNode"/>s in the instance when an edge is contracted.
         /// </summary>
         /// <param name="contractedEdge">The tuple of two <see cref="TreeNode"/>s that represents the edge that is being contracted.</param>
         /// <param name="newNode">The <see cref="TreeNode"/> that is the result of the edge contraction.</param>
         /// <exception cref="ArgumentNullException">Thrown when either element of <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when the <see cref="TreeNode.Type"/> of either endpoint of <paramref name="contractedEdge"/> is <see cref="NodeType.Other"/>. In that case, please update the types of the nodes by calling <seealso cref="Tree{N}.UpdateNodeTypes()"/>.</exception>
-        protected void UpdateNodeTypesDuringEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
+        private void UpdateNodeTypesDuringEdgeContraction((TreeNode, TreeNode) contractedEdge, TreeNode newNode)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
-            Utilities.Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
-            Utilities.Utils.NullCheck(newNode, nameof(newNode), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
+            Utils.NullCheck(contractedEdge.Item1, nameof(contractedEdge.Item1), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the first endpoint of the edge is null!");
+            Utils.NullCheck(contractedEdge.Item2, nameof(contractedEdge.Item2), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the second endpoint of the edge is null!");
+            Utils.NullCheck(newNode, nameof(newNode), "Trying to update the nodetypes of the nodes that are the endpoints of an edge that is being contracted, but the node that is the result of the edge contraction is null!");
             if (contractedEdge.Item1.Type == NodeType.Other)
             {
                 throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Item1} is not known. Please make sure every node has a nodetype to start with!");
@@ -1071,7 +985,7 @@ namespace MulticutInTrees.Algorithms
                 leaf.Type = newType;
             }
         }
-        
+
         /// <summary>
         /// Fills <see cref="ReductionRules"/> with the <see cref="ReductionRule"/>s used by this algorithm.
         /// </summary>

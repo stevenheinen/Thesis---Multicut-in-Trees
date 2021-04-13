@@ -40,7 +40,6 @@ namespace MulticutInTrees.Algorithms
             Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the Bousquet et al. kernelisation algorithm, but the problem instance is null!");
             Utilities.Utils.NullCheck(overwrittenAlgorithmType, nameof(overwrittenAlgorithmType), "Trying to create an instance of the Bousquet et al. kernelisation algorithm, but the AlgorithmType of the algorithm is null!");
 #endif
-            CreateReductionRules();
         }
 
         /// <inheritdoc cref="Algorithm.CreateReductionRules"/>
@@ -50,11 +49,11 @@ namespace MulticutInTrees.Algorithms
 
             UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
-            
+
             DisjointPaths disjointPaths = new DisjointPaths(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
 
-            UniqueDirection uniqueDirection = new UniqueDirection(Tree, DemandPairs, this, DemandPairsPerNode);
+            UniqueDirection uniqueDirection = new UniqueDirection(Tree, DemandPairs, this, DemandPairsPerNode, DemandPairsPerEdge);
             reductionRules.Add(uniqueDirection);
 
             DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);

@@ -20,14 +20,14 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Compute the maximum flow in <paramref name="inputGraph"/> for multiple sources and sinks and unit capacities for each edge.
         /// </summary>
-        /// <typeparam name="G">The type of graph used.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> in which we want to compute the flow.</param>
-        /// <param name="sources">The <see cref="IEnumerable{T}"/> with source <typeparamref name="N"/>s. If there can depart multiple units of flow from an <typeparamref name="N"/>, add it that many times to <paramref name="sources"/>.</param>
-        /// <param name="sinks">The <see cref="IEnumerable{T}"/> with sink <typeparamref name="N"/>s. If there can arrive multiple units of flow to an <typeparamref name="N"/>, add it that many times to <paramref name="sinks"/>.</param>
-        /// <returns>The maximum flow in <paramref name="inputGraph"/> between all <typeparamref name="N"/>s in <paramref name="sources"/> and <paramref name="sinks"/>.</returns>
+        /// <typeparam name="TGraph">The type of graph used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> in which we want to compute the flow.</param>
+        /// <param name="sources">The <see cref="IEnumerable{T}"/> with source <typeparamref name="TNode"/>s. If there can depart multiple units of flow from an <typeparamref name="TNode"/>, add it that many times to <paramref name="sources"/>.</param>
+        /// <param name="sinks">The <see cref="IEnumerable{T}"/> with sink <typeparamref name="TNode"/>s. If there can arrive multiple units of flow to an <typeparamref name="TNode"/>, add it that many times to <paramref name="sinks"/>.</param>
+        /// <returns>The maximum flow in <paramref name="inputGraph"/> between all <typeparamref name="TNode"/>s in <paramref name="sources"/> and <paramref name="sinks"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="sinks"/> or <paramref name="sources"/> is <see langword="null"/>.</exception>
-        public static int MaxFlowMultipleSourcesSinksUnitCapacities<G, N>(G inputGraph, IEnumerable<N> sources, IEnumerable<N> sinks) where G : IGraph<N> where N : INode<N>
+        public static int MaxFlowMultipleSourcesSinksUnitCapacities<TGraph, TNode>(TGraph inputGraph, IEnumerable<TNode> sources, IEnumerable<TNode> sinks) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with unit capacities, but the input graph is null!");
@@ -35,9 +35,9 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(sinks, nameof(sinks), "Trying to compute multiple source, multiple sink flow with unit capacities, but the IEnumerable with sinks is null!");
 #endif            
             // Create a capacity dictionary with capacity 1 for each edge.
-            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
+            IEnumerable<(TNode, TNode)> edges = inputGraph.Edges(MockCounter);
             Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>();
-            foreach ((N, N) edge in edges)
+            foreach ((TNode, TNode) edge in edges)
             {
                 capacities.Add((edge.Item1.ID, edge.Item2.ID), 1);
                 capacities.Add((edge.Item2.ID, edge.Item1.ID), 1);
@@ -50,16 +50,16 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Compute the maximum flow in <paramref name="inputGraph"/> for multiple sources and sinks and arbitrary capacities for each edge.
         /// </summary>
-        /// <typeparam name="G">The type of graph used.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> in which we want to compute the flow.</param>
-        /// <param name="sources">The <see cref="IEnumerable{T}"/> with source <typeparamref name="N"/>s. If there can depart multiple units of flow from an <typeparamref name="N"/>, add it that many times to <paramref name="sources"/>.</param>
-        /// <param name="sinks">The <see cref="IEnumerable{T}"/> with sink <typeparamref name="N"/>s. If there can arrive multiple units of flow to an <typeparamref name="N"/>, add it that many times to <paramref name="sinks"/>.</param>
+        /// <typeparam name="TGraph">The type of graph used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> in which we want to compute the flow.</param>
+        /// <param name="sources">The <see cref="IEnumerable{T}"/> with source <typeparamref name="TNode"/>s. If there can depart multiple units of flow from an <typeparamref name="TNode"/>, add it that many times to <paramref name="sources"/>.</param>
+        /// <param name="sinks">The <see cref="IEnumerable{T}"/> with sink <typeparamref name="TNode"/>s. If there can arrive multiple units of flow to an <typeparamref name="TNode"/>, add it that many times to <paramref name="sinks"/>.</param>
         /// <param name="capacities">The <see cref="Dictionary{TKey, TValue}"/> with a tuple with <see cref="INode{N}.ID"/>s that define the edges, and an <see cref="int"/> that defines the capacity on this edge. Each capacity is directed.</param>
-        /// <returns>The maximum flow in <paramref name="inputGraph"/> between all <typeparamref name="N"/>s in <paramref name="sources"/> and <paramref name="sinks"/>.</returns>
+        /// <returns>The maximum flow in <paramref name="inputGraph"/> between all <typeparamref name="TNode"/>s in <paramref name="sources"/> and <paramref name="sinks"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="sinks"/> or <paramref name="sources"/> is <see langword="null"/>.</exception>
         /// <exception cref="KeyNotFoundException">Thrown when there is an edge in <paramref name="inputGraph"/> that does not have a capacity in <paramref name="capacities"/>.</exception>
-        public static int MaxFlowMultipleSourcesSinks<G, N>(G inputGraph, IEnumerable<N> sources, IEnumerable<N> sinks, Dictionary<(uint, uint), int> capacities) where G : IGraph<N> where N : INode<N>
+        public static int MaxFlowMultipleSourcesSinks<TGraph, TNode>(TGraph inputGraph, IEnumerable<TNode> sources, IEnumerable<TNode> sinks, Dictionary<(uint, uint), int> capacities) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute multiple source, multiple sink flow with capacities, but the input graph is null!");
@@ -74,8 +74,8 @@ namespace MulticutInTrees.Utilities
             }
 
             // Check if each edge has a capacity
-            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
-            foreach ((N, N) edge in edges)
+            IEnumerable<(TNode, TNode)> edges = inputGraph.Edges(MockCounter);
+            foreach ((TNode, TNode) edge in edges)
             {
                 (uint, uint) e1 = (edge.Item1.ID, edge.Item2.ID);
                 (uint, uint) e2 = (edge.Item2.ID, edge.Item1.ID);
@@ -86,15 +86,15 @@ namespace MulticutInTrees.Utilities
             }
 
             Graph<Node> internalGraph = new Graph<Node>((IGraph<Node>)inputGraph, MockCounter);
-            HashSet<N> startPoints = new HashSet<N>(sources);
-            HashSet<N> endPoints = new HashSet<N>(sinks);
+            HashSet<TNode> startPoints = new HashSet<TNode>(sources);
+            HashSet<TNode> endPoints = new HashSet<TNode>(sinks);
             Dictionary<uint, int> startOccurrences = new Dictionary<uint, int>(startPoints.Select(i => new KeyValuePair<uint, int>(i.ID, 0)));
             Dictionary<uint, int> endOccurrences = new Dictionary<uint, int>(endPoints.Select(i => new KeyValuePair<uint, int>(i.ID, 0)));
-            foreach (N s in sources)
+            foreach (TNode s in sources)
             {
                 startOccurrences[s.ID]++;
             }
-            foreach (N t in sinks)
+            foreach (TNode t in sinks)
             {
                 endOccurrences[t.ID]++;
             }
@@ -132,14 +132,14 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Compute the maximum flow in <paramref name="inputGraph"/> with a single source and sink and unit capacities for each edge.
         /// </summary>
-        /// <typeparam name="G">The type of graph used.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> in which we want to compute the flow.</param>
-        /// <param name="source">The <typeparamref name="N"/> that is the source of the flow.</param>
-        /// <param name="sink">The <typeparamref name="N"/> that is the sink of the flow.</param>
+        /// <typeparam name="TGraph">The type of graph used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> in which we want to compute the flow.</param>
+        /// <param name="source">The <typeparamref name="TNode"/> that is the source of the flow.</param>
+        /// <param name="sink">The <typeparamref name="TNode"/> that is the sink of the flow.</param>
         /// <returns>The maximum flow in <paramref name="inputGraph"/> between <paramref name="source"/> and <paramref name="sink"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="sink"/> or <paramref name="source"/> is <see langword="null"/>.</exception>
-        public static int MaxFlowUnitCapacities<G, N>(G inputGraph, N source, N sink) where G : IGraph<N> where N : INode<N>
+        public static int MaxFlowUnitCapacities<TGraph, TNode>(TGraph inputGraph, TNode source, TNode sink) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute single source, single sink flow with unit capacities, but the input graph is null!");
@@ -147,9 +147,9 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(sink, nameof(sink), "Trying to compute single source, single sink flow with unit capacities, but the sink node is null!");
 #endif
             // Create a capacity dictionary with capacity 1 for each edge.
-            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
+            IEnumerable<(TNode, TNode)> edges = inputGraph.Edges(MockCounter);
             Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>();
-            foreach ((N, N) edge in edges)
+            foreach ((TNode, TNode) edge in edges)
             {
                 capacities.Add((edge.Item1.ID, edge.Item2.ID), 1);
                 capacities.Add((edge.Item2.ID, edge.Item1.ID), 1);
@@ -162,16 +162,16 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Compute the maximum flow in <paramref name="inputGraph"/> with a single source and sink and arbitrary capacities for each edge.
         /// </summary>
-        /// <typeparam name="G">The type of graph used.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> in which we want to compute the flow.</param>
-        /// <param name="source">The <typeparamref name="N"/> that is the source of the flow.</param>
-        /// <param name="sink">The <typeparamref name="N"/> that is the sink of the flow.</param>
+        /// <typeparam name="TGraph">The type of graph used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> in which we want to compute the flow.</param>
+        /// <param name="source">The <typeparamref name="TNode"/> that is the source of the flow.</param>
+        /// <param name="sink">The <typeparamref name="TNode"/> that is the sink of the flow.</param>
         /// <param name="capacities">The <see cref="Dictionary{TKey, TValue}"/> with a tuple with <see cref="INode{N}.ID"/>s that define the edges, and an <see cref="int"/> that defines the capacity on this edge. Each capacity is directed.</param>
         /// <returns>The maximum flow in <paramref name="inputGraph"/> between <paramref name="source"/> and <paramref name="sink"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="sink"/> or <paramref name="source"/> is <see langword="null"/>.</exception>
         /// <exception cref="KeyNotFoundException">Thrown when there is an edge in <paramref name="inputGraph"/> that does not have a capacity in <paramref name="capacities"/>.</exception>
-        public static int MaxFlow<G, N>(G inputGraph, N source, N sink, Dictionary<(uint, uint), int> capacities) where G : IGraph<N> where N : INode<N>
+        public static int MaxFlow<TGraph, TNode>(TGraph inputGraph, TNode source, TNode sink, Dictionary<(uint, uint), int> capacities) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to compute single source, single sink flow with capacities, but the input graph is null!");
@@ -186,8 +186,8 @@ namespace MulticutInTrees.Utilities
             }
 
             // Check if each edge has a capacity
-            IEnumerable<(N, N)> edges = inputGraph.Edges(MockCounter);
-            foreach ((N, N) edge in edges)
+            IEnumerable<(TNode, TNode)> edges = inputGraph.Edges(MockCounter);
+            foreach ((TNode, TNode) edge in edges)
             {
                 (uint, uint) e1 = (edge.Item1.ID, edge.Item2.ID);
                 (uint, uint) e2 = (edge.Item2.ID, edge.Item1.ID);
@@ -200,7 +200,7 @@ namespace MulticutInTrees.Utilities
             // Initialise the flow
             int maximumFlow = 0;
             Dictionary<(uint, uint), int> flow = new Dictionary<(uint, uint), int>();
-            foreach ((N, N) edge in edges)
+            foreach ((TNode, TNode) edge in edges)
             {
                 flow.Add((edge.Item1.ID, edge.Item2.ID), 0);
                 flow.Add((edge.Item2.ID, edge.Item1.ID), 0);
@@ -223,17 +223,17 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Find the level of each <typeparamref name="N"/> in <typeparamref name="G"/>.
+        /// Find the level of each <typeparamref name="TNode"/> in <typeparamref name="TGraph"/>.
         /// </summary>
-        /// <typeparam name="G">The type of graph used.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> in which we are computing the flow.</param>
+        /// <typeparam name="TGraph">The type of graph used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> in which we are computing the flow.</param>
         /// <param name="source">The origin of the flow.</param>
         /// <param name="flow">The <see cref="Dictionary{TKey, TValue}"/> with the current flow per edge.</param>
         /// <param name="capacities">The <see cref="Dictionary{TKey, TValue}"/> with the capacity for each edge.</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the level for each <typeparamref name="N"/> from <paramref name="source"/>. The level is equal to -1 if no flow can be sent through this <typeparamref name="N"/>.</returns>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the level for each <typeparamref name="TNode"/> from <paramref name="source"/>. The level is equal to -1 if no flow can be sent through this <typeparamref name="TNode"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="source"/>, <paramref name="flow"/> or <paramref name="capacities"/> is <see langword="null"/>.</exception>
-        private static Dictionary<uint, int> FindLevels<G, N>(G inputGraph, N source, Dictionary<(uint, uint), int> flow, Dictionary<(uint, uint), int> capacities) where G : IGraph<N> where N : INode<N>
+        private static Dictionary<uint, int> FindLevels<TGraph, TNode>(TGraph inputGraph, TNode source, Dictionary<(uint, uint), int> flow, Dictionary<(uint, uint), int> capacities) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to send flow, but the input graph is null!");
@@ -243,19 +243,19 @@ namespace MulticutInTrees.Utilities
 #endif
             // Initialise each level to -1.
             Dictionary<uint, int> levels = new Dictionary<uint, int>();
-            foreach (N node in inputGraph.Nodes(MockCounter))
+            foreach (TNode node in inputGraph.Nodes(MockCounter))
             {
                 levels.Add(node.ID, -1);
             }
 
             levels[source.ID] = 0;
-            Queue<N> queue = new Queue<N>();
+            Queue<TNode> queue = new Queue<TNode>();
             queue.Enqueue(source);
 
             while (queue.Count > 0)
             {
-                N node = queue.Dequeue();
-                foreach (N child in node.Neighbours(MockCounter))
+                TNode node = queue.Dequeue();
+                foreach (TNode child in node.Neighbours(MockCounter))
                 {
                     // Update the level of this child if it does not have a level yet and we can send flow over the edge from the current node to this child.
                     if (levels[child.ID] < 0 && flow[(node.ID, child.ID)] < capacities[(node.ID, child.ID)])
@@ -272,10 +272,10 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Send as much flow as possible from <paramref name="node"/> to <paramref name="sink"/>.
         /// </summary>
-        /// <typeparam name="G">The type of graph used.</typeparam>
-        /// <typeparam name="N">The type of nodes in the graph.</typeparam>
-        /// <param name="inputGraph">The <typeparamref name="G"/> in which we are computing the flow.</param>
-        /// <param name="node">The current <typeparamref name="N"/>.</param>
+        /// <typeparam name="TGraph">The type of graph used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="inputGraph">The <typeparamref name="TGraph"/> in which we are computing the flow.</param>
+        /// <param name="node">The current <typeparamref name="TNode"/>.</param>
         /// <param name="sink">The sink of the flow.</param>
         /// <param name="currentFlow">The current flow as found thus far.</param>
         /// <param name="flow">The <see cref="Dictionary{TKey, TValue}"/> with the current flow per edge.</param>
@@ -283,7 +283,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="levels">The <see cref="Dictionary{TKey, TValue}"/> with the level of each node.</param>
         /// <returns>The maximum extra flow we can send from <paramref name="node"/> to <paramref name="sink"/> considering current flow and edge capacities.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputGraph"/>, <paramref name="node"/>, <paramref name="sink"/>, <paramref name="flow"/>, <paramref name="capacities"/> or <paramref name="levels"/> is <see langword="null"/>.</exception>
-        private static int SendFlow<G, N>(G inputGraph, N node, N sink, int currentFlow, Dictionary<(uint, uint), int> flow, Dictionary<(uint, uint), int> capacities, Dictionary<uint, int> levels) where G : IGraph<N> where N : INode<N>
+        private static int SendFlow<TGraph, TNode>(TGraph inputGraph, TNode node, TNode sink, int currentFlow, Dictionary<(uint, uint), int> flow, Dictionary<(uint, uint), int> capacities, Dictionary<uint, int> levels) where TGraph : IGraph<TNode> where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(inputGraph, nameof(inputGraph), "Trying to send flow, but the input graph is null!");
@@ -299,7 +299,7 @@ namespace MulticutInTrees.Utilities
                 return currentFlow;
             }
 
-            foreach (N child in node.Neighbours(MockCounter))
+            foreach (TNode child in node.Neighbours(MockCounter))
             {
                 if (levels[child.ID] == levels[node.ID] + 1 && flow[(node.ID, child.ID)] < capacities[(node.ID, child.ID)])
                 {

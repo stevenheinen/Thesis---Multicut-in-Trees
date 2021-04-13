@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -40,71 +41,17 @@ namespace MulticutInTrees.ReductionRules
         public DisjointPaths(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm, true)
         {
 #if !Experiment
-            Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Disjoint Paths reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create an instance of the Disjoint Paths reduction rule, but the list of demand pairs is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), "Trying to create an instance of the Disjoint Paths reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(partialSolution, nameof(partialSolution), "Trying to create an instance of the Disjoint Paths reduction rule, but the list with the partial solution is null!");
+            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
+            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list of demand pairs is null!");
+            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with the partial solution is null!");
             if (maxSolutionSize < 0)
             {
-                throw new ArgumentOutOfRangeException("Trying to create an instance of the Disjoint Paths reduction rule, but the maximum solution size parameter is smaller than zero!");
+                throw new ArgumentOutOfRangeException($"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum solution size parameter is smaller than zero!");
             }
 #endif
             PartialSolution = partialSolution;
             MaxSolutionSize = maxSolutionSize;
-        }
-
-        /// <inheritdoc/>
-        protected override void Preprocess()
-        {
-            
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="changedEdgesPerDemandPairList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathChanged(CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(changedEdgesPerDemandPairList, nameof(changedEdgesPerDemandPairList), "Trying to apply the Disjoint Paths reduction rule after a demand path was changed, but the list with information about changed demand paths is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Disjoint Paths rule after a demand path was changed.");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            return DisjointPathsGreaterThanK();
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="removedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool AfterDemandPathRemove(CountedList<DemandPair> removedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), "Trying to apply the Disjoint Paths reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
-#endif
-            return false;
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdgeNodeTupleList"/> is <see langword="null"/>.</exception>
-        internal override bool AfterEdgeContraction(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdgeNodeTupleList, nameof(contractedEdgeNodeTupleList), "Trying to apply the Disjoint Paths reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
-#endif
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Disjoint Paths rule after an edge was contracted.");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            return DisjointPathsGreaterThanK();
-        }
-
-        /// <inheritdoc/>
-        internal override bool RunFirstIteration()
-        {
-#if VERBOSEDEBUG
-            Console.WriteLine("Executing Disjoint Paths rule for the first time.");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-            return DisjointPathsGreaterThanK();
         }
 
         /// <summary>
@@ -113,24 +60,47 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if the current number of edge-disjoint demand pairs in the instance is larger than the amount of edges that can still be added to the solution, <see langword="false"/> otherwise.</returns>
         private bool DisjointPathsGreaterThanK()
         {
-            List<(TreeNode, TreeNode)> commodities = DemandPairToCommodity();
+            IEnumerable<(TreeNode, TreeNode)> commodities = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(dp => (dp.Node1, dp.Node2));
             int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(Tree, commodities, Measurements);
             Measurements.TimeSpentCheckingApplicability.Stop();
-            return flow > (MaxSolutionSize - PartialSolution.Count);
+            return flow > MaxSolutionSize - PartialSolution.Count;
         }
 
-        /// <summary>
-        /// Transforms <see cref="ReductionRule.DemandPairs"/> into a list of pairs of endpoints that can be used as commodities for the disjoint-path algorithm.
-        /// </summary>
-        /// <returns>A <see cref="List{T}"/> with, for each <see cref="DemandPair"/> in the instance, a tuple of two <see cref="TreeNode"/>s that are the endpoints of that <see cref="DemandPair"/>.</returns>
-        private List<(TreeNode, TreeNode)> DemandPairToCommodity()
+        /// <inheritdoc/>
+        protected override void Preprocess()
         {
-            List<(TreeNode, TreeNode)> result = new List<(TreeNode, TreeNode)>();
-            foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                result.Add((demandPair.Node1, demandPair.Node2));
-            }
-            return result;
+
+        }
+
+        /// <inheritdoc/>
+        internal override bool RunFirstIteration()
+        {
+#if VERBOSEDEBUG
+            Console.WriteLine($"Executing {GetType().Name} rule for the first time");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+            return DisjointPathsGreaterThanK();
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
+        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
+            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
+            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was changed, but the list with information about changed demand paths is null!");
+#endif
+#if VERBOSEDEBUG
+            Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+
+            contractedEdges.Clear(Measurements.TreeOperationsCounter);
+            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+
+            return DisjointPathsGreaterThanK();
         }
     }
 }

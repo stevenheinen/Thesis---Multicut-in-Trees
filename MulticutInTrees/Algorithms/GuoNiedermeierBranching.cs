@@ -183,7 +183,7 @@ namespace MulticutInTrees.Algorithms
                             tempSolvedDemandPairs2.Add(solvedDemandPair);
                         }
                         (bool solved2, int size2) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs2, tempSolution2, findSmallest, cancellationToken);
-                        
+
                         if (!solved1 && !solved2)
                         {
                             return (false, Instance.K + 1);

@@ -52,7 +52,7 @@ namespace MulticutInTrees.Experiments
         /// The remaining number of nodes in the kernel.
         /// </summary>
         public int RemainingNodes { get; }
-        
+
         /// <summary>
         /// The remaining number of <see cref="DemandPair"/>s in the kernel.
         /// </summary>
@@ -98,7 +98,7 @@ namespace MulticutInTrees.Experiments
         public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int seed, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
         {
 #if !EXPERIMENT
-            Utilities.Utils.NullCheck(algorithmOperations, nameof(algorithmOperations), "Trying to creat an experiment output, but the performance measures of the algorithm is null!"); 
+            Utilities.Utils.NullCheck(algorithmOperations, nameof(algorithmOperations), "Trying to creat an experiment output, but the performance measures of the algorithm is null!");
             Utilities.Utils.NullCheck(reductionRulesOperations, nameof(reductionRulesOperations), "Trying to creat an experiment output, but the list with performance measures of the reduction rules is null!");
 #endif
             Nodes = nodes;

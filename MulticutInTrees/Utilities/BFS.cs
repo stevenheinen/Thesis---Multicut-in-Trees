@@ -14,16 +14,16 @@ namespace MulticutInTrees.Utilities
     public static class BFS
     {
         /// <summary>
-        /// Find the shortest path from an <typeparamref name="N"/> to any <typeparamref name="N"/> in <paramref name="targetSet"/>.
+        /// Find the shortest path from an <typeparamref name="TNode"/> to any <typeparamref name="TNode"/> in <paramref name="targetSet"/>.
         /// </summary>
-        /// <typeparam name="N">Implementation of <see cref="INode{N}"/>.</typeparam>
-        /// <param name="startNode">The <typeparamref name="N"/> to start with.</param>
-        /// <param name="targetSet">The <see cref="HashSet{T}"/> of <typeparamref name="N"/>s that need to be found.</param>
+        /// <typeparam name="TNode">Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <param name="startNode">The <typeparamref name="TNode"/> to start with.</param>
+        /// <param name="targetSet">The <see cref="HashSet{T}"/> of <typeparamref name="TNode"/>s that need to be found.</param>
         /// <param name="treeCounter">The <see cref="Counter"/> for graph operations that should count this BFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the BFS.</param>
-        /// <returns>A <see cref="List{T}"/> with the shortest path from <paramref name="startNode"/> to any <typeparamref name="N"/> in <paramref name="targetSet"/>.</returns>
+        /// <returns>A <see cref="List{T}"/> with the shortest path from <paramref name="startNode"/> to any <typeparamref name="TNode"/> in <paramref name="targetSet"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/>, <paramref name="targetSet"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
-        public static List<N> FindShortestPath<N>(N startNode, HashSet<N> targetSet, Counter treeCounter, HashSet<N> seen = null) where N : INode<N>
+        public static List<TNode> FindShortestPath<TNode>(TNode startNode, HashSet<TNode> targetSet, Counter treeCounter, HashSet<TNode> seen = null) where TNode : INode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find the shortest path to a set, but the start node is null!");
@@ -39,13 +39,13 @@ namespace MulticutInTrees.Utilities
             }
 #endif
             Counter mockCounter = new Counter();
-            seen ??= new HashSet<N>();
-            Queue<N> queue = new Queue<N>();
+            seen ??= new HashSet<TNode>();
+            Queue<TNode> queue = new Queue<TNode>();
             queue.Enqueue(startNode);
             seen.Add(startNode);
 
             // Keep track of which node pushed which node onto the stack to test for cycles.
-            Dictionary<N, N> pushingNode = new Dictionary<N, N>
+            Dictionary<TNode, TNode> pushingNode = new Dictionary<TNode, TNode>
             {
                 [startNode] = startNode
             };
@@ -53,10 +53,10 @@ namespace MulticutInTrees.Utilities
             while (queue.Count > 0)
             {
                 _ = treeCounter++;
-                N node = queue.Dequeue();
+                TNode node = queue.Dequeue();
 
                 // Potentially push this node's neighbours onto the stack.
-                foreach (N neighbour in node.Neighbours(mockCounter))
+                foreach (TNode neighbour in node.Neighbours(mockCounter))
                 {
                     if (seen.Contains(neighbour))
                     {
@@ -65,7 +65,7 @@ namespace MulticutInTrees.Utilities
 
                     if (targetSet.Contains(neighbour))
                     {
-                        List<N> path = new List<N>
+                        List<TNode> path = new List<TNode>
                         {
                             neighbour
                         };

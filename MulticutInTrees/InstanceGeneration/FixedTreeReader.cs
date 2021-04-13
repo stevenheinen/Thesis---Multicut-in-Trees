@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
 
@@ -23,6 +23,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <returns>A <see cref="Tree{N}"/> as read from <paramref name="filePath"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="filePath"/> is <see langword="null"/>.</exception>
         /// <exception cref="FileNotFoundException">Thrown when <paramref name="filePath"/> is not a valid file.</exception>
+        /// <exception cref="BadFileFormatException">Thrown when a line in the file cannot be parsed to a number.</exception>
         public static Tree<TreeNode> ReadTree(string filePath)
         {
 #if !EXPERIMENT
@@ -32,23 +33,31 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new FileNotFoundException($"Trying to read a tree from the file {filePath}, but the file does not exist!");
             }
 #endif
-            Counter mockCounter = new Counter();
-
             int numberOfNodes;
             List<(int, int)> edges = new List<(int, int)>();
 
             using (StreamReader sr = new StreamReader(filePath))
             {
-                numberOfNodes = int.Parse(sr.ReadLine());
+                string line = sr.ReadLine();
+                if (!int.TryParse(line, out numberOfNodes))
+                {
+                    throw new BadFileFormatException($"Reading a file with a fixed tree. The first line ({line}) could not be parsed to an integer! Expected a single number that represents the number of nodes.");
+                }
 
                 for (int i = 0; i < numberOfNodes - 1; i++)
                 {
-                    string[] edge = sr.ReadLine().Split();
-                    edges.Add((int.Parse(edge[0]), int.Parse(edge[1])));
+                    line = sr.ReadLine();
+                    string[] edge = line.Split();
+                    if (edge.Length != 2 || !int.TryParse(edge[0], out int endpoint1) || !int.TryParse(edge[1], out int endpoint2))
+                    {
+                        throw new BadFileFormatException($"Reading a file with a fixed tree. Could not parse line ({line}) to an edge. Expected a line with two numbers and a space between them.");
+                    }
+
+                    edges.Add((endpoint1, endpoint2));
                 }
             }
 
-            return Utils.CreateTreeWithEdges(numberOfNodes, edges);
+            return Utils.CreateTreeWithEdges(numberOfNodes, 0, edges);
         }
     }
 }

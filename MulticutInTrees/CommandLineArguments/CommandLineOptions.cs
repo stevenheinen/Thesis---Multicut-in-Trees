@@ -22,7 +22,7 @@ namespace MulticutInTrees.CommandLineArguments
         /// </summary>
         [Option("experiments", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment.")]
         public int Experiments { get; set; }
-        
+
         /// <summary>
         /// The number of repetitions to run per experiment.
         /// </summary>

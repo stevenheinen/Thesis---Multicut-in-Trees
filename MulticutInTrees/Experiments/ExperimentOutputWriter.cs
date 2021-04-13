@@ -118,10 +118,10 @@ namespace MulticutInTrees.Experiments
             writer.WriteField(output.Solvable);
             writer.WriteField(output.RemainingNodes);
             writer.WriteField(output.RemainingDPs);
-            writer.WriteField(output.AlgorithmOperations.TreeOperationsCounter);
-            writer.WriteField(output.AlgorithmOperations.DemandPairsOperationsCounter);
-            writer.WriteField(output.AlgorithmOperations.DemandPairsPerEdgeKeysCounter);
-            writer.WriteField(output.AlgorithmOperations.DemandPairsPerEdgeValuesCounter);
+            writer.WriteField(output.AlgorithmOperations.TreeOperationsCounter.Value);
+            writer.WriteField(output.AlgorithmOperations.DemandPairsOperationsCounter.Value);
+            writer.WriteField(output.AlgorithmOperations.DemandPairsPerEdgeKeysCounter.Value);
+            writer.WriteField(output.AlgorithmOperations.DemandPairsPerEdgeValuesCounter.Value);
             writer.WriteField(output.AlgorithmOperations.TimeSpentCheckingApplicability.ElapsedTicks);
             writer.WriteField(output.AlgorithmOperations.TimeSpentModifyingInstance.ElapsedTicks);
             writer.WriteField(output.AlgorithmOperations.TimeSpentCheckingApplicability.Elapsed.ToString(@"hh\:mm\:ss\.fffffff"));
@@ -130,13 +130,13 @@ namespace MulticutInTrees.Experiments
             foreach (PerformanceMeasurements reductionRuleMeasurements in output.ReductionRulesOperations)
             {
                 writer.WriteField(reductionRuleMeasurements.Owner);
-                writer.WriteField(reductionRuleMeasurements.NumberOfContractedEdgesCounter);
-                writer.WriteField(reductionRuleMeasurements.NumberOfRemovedDemandPairsCounter);
-                writer.WriteField(reductionRuleMeasurements.NumberOfChangedDemandPairsCounter);
-                writer.WriteField(reductionRuleMeasurements.TreeOperationsCounter);
-                writer.WriteField(reductionRuleMeasurements.DemandPairsOperationsCounter);
-                writer.WriteField(reductionRuleMeasurements.DemandPairsPerEdgeKeysCounter);
-                writer.WriteField(reductionRuleMeasurements.DemandPairsPerEdgeValuesCounter);
+                writer.WriteField(reductionRuleMeasurements.NumberOfContractedEdgesCounter.Value);
+                writer.WriteField(reductionRuleMeasurements.NumberOfRemovedDemandPairsCounter.Value);
+                writer.WriteField(reductionRuleMeasurements.NumberOfChangedDemandPairsCounter.Value);
+                writer.WriteField(reductionRuleMeasurements.TreeOperationsCounter.Value);
+                writer.WriteField(reductionRuleMeasurements.DemandPairsOperationsCounter.Value);
+                writer.WriteField(reductionRuleMeasurements.DemandPairsPerEdgeKeysCounter.Value);
+                writer.WriteField(reductionRuleMeasurements.DemandPairsPerEdgeValuesCounter.Value);
                 writer.WriteField(reductionRuleMeasurements.TimeSpentCheckingApplicability.ElapsedTicks);
                 writer.WriteField(reductionRuleMeasurements.TimeSpentModifyingInstance.ElapsedTicks);
                 writer.WriteField(reductionRuleMeasurements.TimeSpentCheckingApplicability.Elapsed.ToString(@"hh\:mm\:ss\.fffffff"));

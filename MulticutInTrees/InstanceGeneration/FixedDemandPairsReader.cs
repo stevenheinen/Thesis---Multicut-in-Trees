@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using MulticutInTrees.CountedDatastructures;
+using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
@@ -25,6 +26,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s as read from <paramref name="filePath"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="filePath"/> is <see langword="null"/>.</exception>
         /// <exception cref="FileNotFoundException">Thrown when <paramref name="filePath"/> is not a valid file.</exception>
+        /// <exception cref="BadFileFormatException">Thrown when a line in the file cannot be parsed to a number.</exception>
         public static CountedList<DemandPair> ReadDemandPairs(Tree<TreeNode> tree, string filePath)
         {
 #if !EXPERIMENT
@@ -35,19 +37,26 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new FileNotFoundException($"Trying to read demand pairs from the file {filePath}, but the file does not exist!");
             }
 #endif
-            Counter mockCounter = new Counter();
-
-            int numberOfDPs;
             List<(int, int)> dps = new List<(int, int)>();
 
             using (StreamReader sr = new StreamReader(filePath))
             {
-                numberOfDPs = int.Parse(sr.ReadLine());
+                string line = sr.ReadLine();
+                if (!int.TryParse(line, out int numberOfDPs))
+                {
+                    throw new BadFileFormatException($"Reading a file with fixed demand pairs. The first line ({line}) could not be parsed to an integer! Expected a single number that represents the number of demand pairs.");
+                }
 
                 for (int i = 0; i < numberOfDPs; i++)
                 {
-                    string[] dp = sr.ReadLine().Split();
-                    dps.Add((int.Parse(dp[0]), int.Parse(dp[1])));
+                    line = sr.ReadLine();
+                    string[] dp = line.Split();
+                    if (dp.Length != 2 || !int.TryParse(dp[0], out int endpoint1) || !int.TryParse(dp[1], out int endpoint2))
+                    {
+                        throw new BadFileFormatException($"Reading a file with fixed demand pairs. Could not parse line ({line}) to a demand pair. Expected a line with two numbers and a space between them.");
+                    }
+
+                    dps.Add((endpoint1, endpoint2));
                 }
             }
 

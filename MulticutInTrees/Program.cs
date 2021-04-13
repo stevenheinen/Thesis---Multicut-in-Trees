@@ -21,10 +21,8 @@ namespace MulticutInTrees
             // For debug purposes only. Should not be included in the final version of the program.
             if (args.Length == 0)
             {
-                string[] split;
+                string[] split = "--seed=0 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=40 --maxSolutionSize=0 -v".Split();
 
-                split = "--seed=0 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=40 --maxSolutionSize=0 -v".Split();
-                
                 args = new string[split.Length + 2];
                 split.CopyTo(args, 0);
                 args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
