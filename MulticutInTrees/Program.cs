@@ -16,12 +16,21 @@ namespace MulticutInTrees
         /// <param name="args">Array with command line arguments.</param>
         public static void Main(string[] args)
         {
+            // todo: Use edge object instead of tuples, like everywhere.
+            // todo: Check whether later iteration of Idle Edge is correct after using edge objects.
+            // todo: Further implement Common Factor.
+         
+            
             Console.WriteLine("Hello World!");
 
+#if VERBOSEDEBUG
+            Console.BufferHeight = short.MaxValue - 1;
+#endif
             // For debug purposes only. Should not be included in the final version of the program.
             if (args.Length == 0)
             {
-                string[] split = "--seed=0 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=40 --maxSolutionSize=0 -v".Split();
+                //string[] split = "--seed=0 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=40 --maxSolutionSize=0 -v".Split();
+                string[] split = "--seed=2 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
 
                 args = new string[split.Length + 2];
                 split.CopyTo(args, 0);

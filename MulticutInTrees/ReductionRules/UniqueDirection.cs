@@ -29,11 +29,6 @@ namespace MulticutInTrees.ReductionRules
         private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
-        /// <see cref="Counter"/> that can be used for operations that should not influence the performance.
-        /// </summary>
-        private Counter MockCounter { get; }
-
-        /// <summary>
         /// Constructor for the <see cref="DominatedPath"/> reduction rule.
         /// </summary>
         /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
@@ -269,37 +264,25 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        protected override void Preprocess()
+        internal override bool RunLaterIteration()
         {
-
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} rule after an edge was contracted, but the IEnumerable of contracted edges is null!");
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} rule after a demand path was removed, but the IEnumerable of removed demand paths is null!");
-            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} rule after a demand path was changed, but the IEnumerable of removed demand paths is null!");
-#endif
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
             HashSet<TreeNode> nodesToCheck = new HashSet<TreeNode>();
 
-            foreach (((TreeNode, TreeNode) _, TreeNode node, CountedCollection<DemandPair> _) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach (((TreeNode, TreeNode) _, TreeNode node, CountedCollection<DemandPair> _) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 nodesToCheck.Add(node);
             }
 
-            foreach (DemandPair dp in removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach (DemandPair dp in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 nodesToCheck.Add(dp.Node1);
                 nodesToCheck.Add(dp.Node2);
             }
 
-            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in changedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 foreach ((TreeNode n1, TreeNode n2) in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                 {
@@ -308,9 +291,9 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            contractedEdges.Clear(Measurements.TreeOperationsCounter);
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
+            LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return TryApplyReductionRule(nodesToCheck);
         }
@@ -321,6 +304,7 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule for the first time");
 #endif
+            HasRun = true;
             Measurements.TimeSpentCheckingApplicability.Start();
             return TryApplyReductionRule(Tree.Nodes(Measurements.TreeOperationsCounter));
         }

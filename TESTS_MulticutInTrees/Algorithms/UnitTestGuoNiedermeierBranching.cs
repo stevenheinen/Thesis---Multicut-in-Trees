@@ -60,10 +60,10 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
             tree.AddChild(node4, node10, counter);
 
-            DemandPair dp1 = new DemandPair(node1, node5);
-            DemandPair dp2 = new DemandPair(node7, node8);
-            DemandPair dp3 = new DemandPair(node4, node10);
-            DemandPair dp4 = new DemandPair(node6, node3);
+            DemandPair dp1 = new DemandPair(1, node1, node5);
+            DemandPair dp2 = new DemandPair(2, node7, node8);
+            DemandPair dp3 = new DemandPair(3, node4, node10);
+            DemandPair dp4 = new DemandPair(4, node6, node3);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, counter);
 
             int k = 3;
@@ -97,9 +97,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
             tree.AddChild(node4, node10, counter);
 
-            DemandPair dp1 = new DemandPair(node1, node6);
-            DemandPair dp2 = new DemandPair(node4, node5);
-            DemandPair dp3 = new DemandPair(node8, node10);
+            DemandPair dp1 = new DemandPair(1, node1, node6);
+            DemandPair dp2 = new DemandPair(2, node4, node5);
+            DemandPair dp3 = new DemandPair(3, node8, node10);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 2;
@@ -133,9 +133,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3, node4, node5, node6 }, counter);
             tree.AddChildren(node1, new List<TreeNode>() { node7, node8, node9, node10, node11 }, counter);
 
-            DemandPair dp1 = new DemandPair(node2, node11);
-            DemandPair dp2 = new DemandPair(node4, node9);
-            DemandPair dp3 = new DemandPair(node2, node8);
+            DemandPair dp1 = new DemandPair(1, node2, node11);
+            DemandPair dp2 = new DemandPair(2, node4, node9);
+            DemandPair dp3 = new DemandPair(3, node2, node8);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
 
             int k = 1;
@@ -180,11 +180,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddChild(node7, node15, counter);
             tree.AddChildren(node10, new List<TreeNode>() { node16, node17 }, counter);
 
-            DemandPair dp1 = new DemandPair(node1, node13);
-            DemandPair dp2 = new DemandPair(node4, node5);
-            DemandPair dp3 = new DemandPair(node7, node15);
-            DemandPair dp4 = new DemandPair(node8, node10);
-            DemandPair dp5 = new DemandPair(node11, node17);
+            DemandPair dp1 = new DemandPair(1, node1, node13);
+            DemandPair dp2 = new DemandPair(2, node4, node5);
+            DemandPair dp3 = new DemandPair(3, node7, node15);
+            DemandPair dp4 = new DemandPair(4, node8, node10);
+            DemandPair dp5 = new DemandPair(5, node11, node17);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 3;
@@ -211,11 +211,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             tree.AddRoot(node1, counter);
             tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4, node5, node6 }, counter);
 
-            DemandPair dp1 = new DemandPair(node1, node2);
-            DemandPair dp2 = new DemandPair(node3, node1);
-            DemandPair dp3 = new DemandPair(node1, node4);
-            DemandPair dp4 = new DemandPair(node1, node5);
-            DemandPair dp5 = new DemandPair(node1, node6);
+            DemandPair dp1 = new DemandPair(1, node1, node2);
+            DemandPair dp2 = new DemandPair(2, node3, node1);
+            DemandPair dp3 = new DemandPair(3, node1, node4);
+            DemandPair dp4 = new DemandPair(4, node1, node5);
+            DemandPair dp5 = new DemandPair(5, node1, node6);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
 
             int k = 4;

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
@@ -11,6 +10,7 @@ using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
+using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.ReductionRules
 {
@@ -20,25 +20,20 @@ namespace TESTS_MulticutInTrees.ReductionRules
         private static readonly Counter MockCounter = new Counter();
         private static readonly PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestDisjointPaths));
 
-        private (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) GetLaterIterationInformation(Algorithm algorithm)
+        private DisjointPaths GetReductionRuleInAlgorithm(Algorithm algorithm)
         {
-            PropertyInfo lastContractedEdgesProperty = typeof(Algorithm).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>> lastContractedEdges = (List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>>)lastContractedEdgesProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+            MethodInfo runPropertySet = typeof(ReductionRule).GetProperty("HasRun", BindingFlags.Public | BindingFlags.Instance).GetSetMethod(true);
+            foreach (ReductionRule rr in algorithm.ReductionRules)
+            {
+                runPropertySet.Invoke(rr, new object[] { true });
 
-            PropertyInfo lastRemovedDemandPairsProperty = typeof(Algorithm).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<CountedList<DemandPair>> lastRemovedDemandPairs = (List<CountedList<DemandPair>>)lastRemovedDemandPairsProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+                if (rr.GetType() == typeof(DisjointPaths))
+                {
+                    return (DisjointPaths)rr;
+                }
+            }
 
-            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(Algorithm).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>> lastChangedEdgesPerDemandPair = (List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>>)lastChangedEdgesPerDemandPairProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
-
-            int index = GetIndexOfReductionRule(algorithm);
-
-            return (lastContractedEdges[index], lastRemovedDemandPairs[index], lastChangedEdgesPerDemandPair[index]);
-        }
-
-        private int GetIndexOfReductionRule(Algorithm algorithm)
-        {
-            return algorithm.ReductionRules.IndexOf(algorithm.ReductionRules.First(rr => rr.GetType() == typeof(DisjointPaths)));
+            throw new Exception($"Could not find a Reduction Rule of type {typeof(DisjointPaths)} in this algorithm. It has Reduction Rules: {algorithm.ReductionRules.Print()}.");
         }
 
         [TestMethod]
@@ -65,21 +60,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
             List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
-            CountedList<DemandPair> removedDemandPairs = new CountedList<DemandPair>();
-            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
-
             Assert.ThrowsException<ArgumentNullException>(() => { DisjointPaths disjointPaths = new DisjointPaths(null, demandPairs, algorithm, partialSolution, maxSize); });
             Assert.ThrowsException<ArgumentNullException>(() => { DisjointPaths disjointPaths = new DisjointPaths(tree, null, algorithm, partialSolution, maxSize); });
             Assert.ThrowsException<ArgumentNullException>(() => { DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, null, partialSolution, maxSize); });
             Assert.ThrowsException<ArgumentNullException>(() => { DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, null, maxSize); });
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => { DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, -1); });
-
-            DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, maxSize);
-
-            Assert.ThrowsException<ArgumentNullException>(() => disjointPaths.RunLaterIteration(null, removedDemandPairs, changedEdgesPerDemandPairList));
-            Assert.ThrowsException<ArgumentNullException>(() => disjointPaths.RunLaterIteration(contractedEdgeNodeTupleList, null, changedEdgesPerDemandPairList));
-            Assert.ThrowsException<ArgumentNullException>(() => disjointPaths.RunLaterIteration(contractedEdgeNodeTupleList, removedDemandPairs, null));
         }
 
         [TestMethod]
@@ -104,9 +89,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedList<DemandPair> demandPairs1 = new CountedList<DemandPair>();
             CountedList<DemandPair> demandPairs2 = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(node0, node2);
-            DemandPair dp2 = new DemandPair(node0, node5);
-            DemandPair dp3 = new DemandPair(node4, node6);
+            DemandPair dp1 = new DemandPair(1, node0, node2);
+            DemandPair dp2 = new DemandPair(2, node0, node5);
+            DemandPair dp3 = new DemandPair(3, node4, node6);
 
             demandPairs1.Add(dp1, MockCounter);
             demandPairs1.Add(dp2, MockCounter);
@@ -149,9 +134,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(node0, node2);
-            DemandPair dp2 = new DemandPair(node0, node5);
-            DemandPair dp3 = new DemandPair(node0, node6);
+            DemandPair dp1 = new DemandPair(1, node0, node2);
+            DemandPair dp2 = new DemandPair(2, node0, node5);
+            DemandPair dp3 = new DemandPair(3, node0, node6);
 
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
@@ -160,17 +145,14 @@ namespace TESTS_MulticutInTrees.ReductionRules
             int maxSize = 2;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
-            List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
-            DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, maxSize);
+            DisjointPaths disjointPaths = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsFalse(disjointPaths.RunFirstIteration());
 
             algorithm.ChangeEndpointOfDemandPair(dp3, node0, node4, MockMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsTrue(disjointPaths.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsTrue(disjointPaths.RunLaterIteration());
         }
 
         [TestMethod]
@@ -194,9 +176,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(node0, node2);
-            DemandPair dp2 = new DemandPair(node0, node5);
-            DemandPair dp3 = new DemandPair(node0, node6);
+            DemandPair dp1 = new DemandPair(1, node0, node2);
+            DemandPair dp2 = new DemandPair(2, node0, node5);
+            DemandPair dp3 = new DemandPair(3, node0, node6);
 
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
@@ -205,15 +187,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
             int maxSize = 2;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
-            List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
-            DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, maxSize);
+            DisjointPaths disjointPaths = GetReductionRuleInAlgorithm(algorithm);
 
             algorithm.RemoveDemandPair(dp3, MockMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsFalse(disjointPaths.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsFalse(disjointPaths.RunLaterIteration());
         }
 
         [TestMethod]
@@ -235,8 +214,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(node0, node4);
-            DemandPair dp2 = new DemandPair(node1, node5);
+            DemandPair dp1 = new DemandPair(1, node0, node4);
+            DemandPair dp2 = new DemandPair(2, node1, node5);
 
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
@@ -244,17 +223,14 @@ namespace TESTS_MulticutInTrees.ReductionRules
             int maxSize = 1;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 1);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
-            List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
 
-            DisjointPaths disjointPaths = new DisjointPaths(tree, demandPairs, algorithm, partialSolution, maxSize);
+            DisjointPaths disjointPaths = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsFalse(disjointPaths.RunFirstIteration());
 
             algorithm.ContractEdge((node2, node3), MockMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsTrue(disjointPaths.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsTrue(disjointPaths.RunLaterIteration());
         }
     }
 }

@@ -34,7 +34,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp = new DemandPair(node0, node3);
+            DemandPair dp = new DemandPair(0, node0, node3);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, counter), 3, 1);
             ImprovedGuoNiedermeierKernelisation g = new ImprovedGuoNiedermeierKernelisation(instance);
@@ -81,11 +81,11 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair1 = new DemandPair(node1, node13);
-            DemandPair demandPair2 = new DemandPair(node4, node5);
-            DemandPair demandPair3 = new DemandPair(node7, node15);
-            DemandPair demandPair4 = new DemandPair(node8, node10);
-            DemandPair demandPair5 = new DemandPair(node11, node17);
+            DemandPair demandPair1 = new DemandPair(1, node1, node13);
+            DemandPair demandPair2 = new DemandPair(2, node4, node5);
+            DemandPair demandPair3 = new DemandPair(3, node7, node15);
+            DemandPair demandPair4 = new DemandPair(4, node8, node10);
+            DemandPair demandPair5 = new DemandPair(5, node11, node17);
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, counter);
 

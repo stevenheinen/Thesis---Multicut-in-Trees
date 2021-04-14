@@ -420,6 +420,7 @@ namespace MulticutInTrees.Utilities
             Counter mockCounter = new Counter();
             CountedList<DemandPair> result = new CountedList<DemandPair>();
 
+            uint id = 0;
             foreach ((int, int) dp in endpoints)
             {
                 TreeNode node1 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item1);
@@ -434,7 +435,8 @@ namespace MulticutInTrees.Utilities
                     throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (it is {dp.Item2}, but is does not exist in the tree)!", nameof(endpoints));
                 }
 #endif
-                result.Add(new DemandPair(node1, node2), mockCounter);
+                result.Add(new DemandPair(id, node1, node2), mockCounter);
+                id++;
             }
 
             return result;

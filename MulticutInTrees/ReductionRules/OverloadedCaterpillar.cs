@@ -39,11 +39,6 @@ namespace MulticutInTrees.ReductionRules
         private List<(TreeNode, TreeNode)> PartialSolution { get; }
 
         /// <summary>
-        /// <see cref="Counter"/> that can be used for operations that should not impact performance.
-        /// </summary>
-        private Counter MockCounter { get; }
-
-        /// <summary>
         /// Constructor for <see cref="OverloadedCaterpillar"/>.
         /// </summary>
         /// <param name="tree">The input <see cref="Tree{N}"/>.</param>
@@ -120,17 +115,12 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        protected override void Preprocess()
-        {
-
-        }
-
-        /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
 #endif
+            HasRun = true;
             foreach (KeyValuePair<TreeNode, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
             {
                 CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);
@@ -142,31 +132,25 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        internal override bool RunLaterIteration()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the IEnumerable with contracted edges is null!");
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was removed, but the IEnumerable with removed demand paths is null!");
-            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was changed, but the IEnumerable with changed demand paths is null!");
-#endif
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying the {GetType().Name} reduction rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            if (contractedEdges.Count(MockCounter) == 0 && changedDemandPairs.Count(MockCounter) == 0)
+            if (LastContractedEdges.Count(MockCounter) == 0 && LastChangedDemandPairs.Count(MockCounter) == 0)
             {
-                removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+                LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
                 Measurements.TimeSpentCheckingApplicability.Stop();
                 return false;
             }
 
             CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
 
-            contractedEdges.Clear(Measurements.TreeOperationsCounter);
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
+            LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return TryRemoveDemandPairs(pairsToBeDeleted);
         }

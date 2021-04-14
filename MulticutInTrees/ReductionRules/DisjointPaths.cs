@@ -67,38 +67,27 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        protected override void Preprocess()
-        {
-
-        }
-
-        /// <inheritdoc/>
         internal override bool RunFirstIteration()
         {
 #if VERBOSEDEBUG
             Console.WriteLine($"Executing {GetType().Name} rule for the first time");
 #endif
+            HasRun = true;
             Measurements.TimeSpentCheckingApplicability.Start();
             return DisjointPathsGreaterThanK();
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        internal override bool RunLaterIteration()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was removed, but the list with information about removeds demand paths is null!");
-            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand path was changed, but the list with information about changed demand paths is null!");
-#endif
 #if VERBOSEDEBUG
             Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            contractedEdges.Clear(Measurements.TreeOperationsCounter);
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
+            LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return DisjointPathsGreaterThanK();
         }

@@ -65,21 +65,6 @@ namespace MulticutInTrees.Algorithms
         private MulticutInstance Instance { get; }
 
         /// <summary>
-        /// A <see cref="CountedList{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
-        /// </summary>
-        private List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>> LastContractedEdges { get; }
-
-        /// <summary>
-        /// A <see cref="CountedList{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
-        /// </summary>
-        private List<CountedList<DemandPair>> LastRemovedDemandPairs { get; }
-
-        /// <summary>
-        /// A <see cref="CountedList{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
-        /// </summary>
-        private List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>> LastChangedEdgesPerDemandPair { get; }
-
-        /// <summary>
         /// <see cref="PerformanceMeasurements"/> that are used by the central parts an <see cref="Algorithm"/> does that has nothing to do with <see cref="ReductionRule"/>s, like preprocessing.
         /// </summary>
         private PerformanceMeasurements AlgorithmPerformanceMeasurements { get; }
@@ -115,26 +100,8 @@ namespace MulticutInTrees.Algorithms
             AlgorithmPerformanceMeasurements = new PerformanceMeasurements(algorithmType.ToString());
             CaterpillarComponentPerNode = new CountedDictionary<TreeNode, int>();
 
-            LastContractedEdges = new List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>>();
-            LastRemovedDemandPairs = new List<CountedList<DemandPair>>();
-            LastChangedEdgesPerDemandPair = new List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>>();
-
             FillDemandPathsPerEdge();
             CreateReductionRules();
-            CreateReductionRuleUpdateInformation();
-        }
-
-        /// <summary>
-        /// For each reduction rule, create data structures in <see cref="LastContractedEdges"/>, <see cref="LastRemovedDemandPairs"/> and <see cref="LastChangedEdgesPerDemandPair"/> to store update information.
-        /// </summary>
-        private void CreateReductionRuleUpdateInformation()
-        {
-            for (int i = 0; i < ReductionRules.Count; i++)
-            {
-                LastContractedEdges.Add(new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>());
-                LastRemovedDemandPairs.Add(new CountedList<DemandPair>());
-                LastChangedEdgesPerDemandPair.Add(new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>());
-            }
         }
 
         /// <summary>
@@ -229,7 +196,7 @@ namespace MulticutInTrees.Algorithms
                 }
 
                 // If we applied the rule successfully, go back to rule 0.
-                if (ReductionRules[i].RunLaterIteration(LastContractedEdges[i], LastRemovedDemandPairs[i], LastChangedEdgesPerDemandPair[i]))
+                if (ReductionRules[i].RunLaterIteration())
                 {
                     if (ReductionRules[i].TrueMeansInfeasibleInstance)
                     {
@@ -297,9 +264,15 @@ namespace MulticutInTrees.Algorithms
             UpdateDemandPairsStartingAtContractedEdge(usedEdge, child, newNode, pairsOnEdge, measurements);
             UpdateDemandPairsGoingThroughChild(child, newNode, measurements);
 
+            // Tell the reduction rules what information in the input has been modified.
             for (int i = 0; i < ReductionRules.Count; i++)
             {
-                LastContractedEdges[i].Add((usedEdge, newNode, pairsOnEdge), measurements.TreeOperationsCounter);
+                // If this reduction rule has not run yet, do not update its information. The following ones will also not have run.
+                if (!ReductionRules[i].HasRun)
+                {
+                    break;
+                }
+                ReductionRules[i].LastContractedEdges.Add((usedEdge, newNode, pairsOnEdge), measurements.TreeOperationsCounter);
             }
 
             measurements.NumberOfContractedEdgesCounter++;
@@ -322,9 +295,15 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Removing demand pair {demandPair}.");
 #endif
+            // Tell the reduction rules what information in the input has been modified.
             for (int i = 0; i < ReductionRules.Count; i++)
             {
-                LastRemovedDemandPairs[i].Add(demandPair, measurements.DemandPairsOperationsCounter);
+                // If this reduction rule has not run yet, do not update its information. The following ones will also not have run.
+                if (!ReductionRules[i].HasRun)
+                {
+                    break;
+                }
+                ReductionRules[i].LastRemovedDemandPairs.Add(demandPair, measurements.DemandPairsOperationsCounter);
             }
             measurements.NumberOfRemovedDemandPairsCounter++;
 
@@ -388,9 +367,15 @@ namespace MulticutInTrees.Algorithms
             DemandPairsPerNode[oldEndpoint, measurements.DemandPairsPerEdgeKeysCounter].Remove(demandPair, measurements.DemandPairsOperationsCounter);
             DemandPairsPerNode[newEndpoint, measurements.DemandPairsPerEdgeKeysCounter].Add(demandPair, measurements.DemandPairsOperationsCounter);
 
+            // Tell the reduction rules what information in the input has been modified.
             for (int i = 0; i < ReductionRules.Count; i++)
             {
-                LastChangedEdgesPerDemandPair[i].Add((oldEdges, demandPair), measurements.DemandPairsOperationsCounter);
+                // If this reduction rule has not run yet, do not update its information. The following ones will also not have run.
+                if (!ReductionRules[i].HasRun)
+                {
+                    break;
+                }
+                ReductionRules[i].LastChangedDemandPairs.Add((oldEdges, demandPair), measurements.DemandPairsOperationsCounter);
             }
             measurements.NumberOfChangedDemandPairsCounter++;
 

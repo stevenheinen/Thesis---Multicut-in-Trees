@@ -36,7 +36,7 @@ namespace MulticutInTrees.InstanceGeneration
             Counter counter = new Counter();
 
             List<DemandPair> demandPairs = new List<DemandPair>();
-            for (int i = 0; i < numberOfDemandPairs; i++)
+            for (uint i = 0; i < numberOfDemandPairs; i++)
             {
                 // Pick a random index for the first endpoint
                 int index1 = random.Next(tree.NumberOfNodes(counter));
@@ -55,7 +55,7 @@ namespace MulticutInTrees.InstanceGeneration
 
                 TreeNode endpoint1 = tree.Nodes(counter).ElementAt(index1);
                 TreeNode endpoint2 = tree.Nodes(counter).ElementAt(index2);
-                demandPairs.Add(new DemandPair(endpoint1, endpoint2));
+                demandPairs.Add(new DemandPair(i, endpoint1, endpoint2));
             }
             return demandPairs;
         }

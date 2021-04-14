@@ -26,7 +26,7 @@ namespace TESTS_MulticutInTrees.Utilities
             tree.AddRoot(node0, counter);
             tree.AddChild(node0, node1, counter);
 
-            DemandPair dp = new DemandPair(node0, node1);
+            DemandPair dp = new DemandPair(0, node0, node1);
             Assert.IsNotNull(dp);
 
             Assert.AreEqual(node0, dp.Node1);
@@ -46,10 +46,10 @@ namespace TESTS_MulticutInTrees.Utilities
             tree.AddRoot(node0, counter);
             tree.AddChild(node0, node1, counter);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(node0, null); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(null, node0); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(1, node0, null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(2, null, node0); });
 
-            DemandPair dp = new DemandPair(node0, node1);
+            DemandPair dp = new DemandPair(0, node0, node1);
 
             Assert.ThrowsException<ArgumentNullException>(() => dp.OnEdgeContracted((null, node0), node0, counter));
             Assert.ThrowsException<ArgumentNullException>(() => dp.OnEdgeContracted((node0, null), node0, counter));
@@ -98,7 +98,7 @@ namespace TESTS_MulticutInTrees.Utilities
             tree.AddChild(node1, node2, counter);
             tree.AddChild(node2, node3, counter);
 
-            DemandPair dp = new DemandPair(node0, node3);
+            DemandPair dp = new DemandPair(0, node0, node3);
 
             Assert.ThrowsException<NotOnDemandPathException>(() => dp.ChangeEndpoint(node2, node1, counter));
 
@@ -127,29 +127,29 @@ namespace TESTS_MulticutInTrees.Utilities
             tree.AddChild(node1, node2, counter);
             tree.AddChild(node2, node3, counter);
 
-            DemandPair dp = new DemandPair(node1, node2);
+            DemandPair dp = new DemandPair(0, node1, node2);
 
             Assert.ThrowsException<ZeroLengthDemandPathException>(() => dp.OnEdgeContracted((node2, node1), node1, counter));
             Assert.ThrowsException<ZeroLengthDemandPathException>(() => dp.OnEdgeContracted((node1, node2), node1, counter));
 
-            dp = new DemandPair(node0, node3);
+            dp = new DemandPair(1, node0, node3);
             dp.OnEdgeContracted((node2, node1), node1, counter);
             Assert.AreEqual(2, dp.LengthOfPath(counter));
 
             dp.OnEdgeContracted((node0, node1), node1, counter);
             Assert.AreEqual(node1, dp.Node1);
 
-            dp = new DemandPair(node0, node3);
+            dp = new DemandPair(2, node0, node3);
             dp.OnEdgeContracted((node3, node2), node2, counter);
             Assert.AreEqual(node2, dp.Node2);
 
-            dp = new DemandPair(node0, node2);
+            dp = new DemandPair(3, node0, node2);
             Assert.ThrowsException<NotOnDemandPathException>(() => dp.OnEdgeContracted((node2, node3), node2, counter));
 
-            dp = new DemandPair(node0, node2);
+            dp = new DemandPair(4, node0, node2);
             Assert.ThrowsException<NotOnDemandPathException>(() => dp.OnEdgeContracted((node3, node2), node3, counter));
 
-            dp = new DemandPair(node0, node1);
+            dp = new DemandPair(5, node0, node1);
             MethodInfo updateEdgesOnPathAfterEdgeContraction = typeof(DemandPair).GetMethod("UpdateEdgesOnPathAfterEdgeContraction", BindingFlags.NonPublic | BindingFlags.Instance);
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() => { updateEdgesOnPathAfterEdgeContraction.Invoke(dp, new object[] { new ValueTuple<TreeNode, TreeNode>(node3, node2), node3, counter }); });
             Assert.IsInstanceOfType(t.InnerException, typeof(NotOnDemandPathException));

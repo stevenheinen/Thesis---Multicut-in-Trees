@@ -19,6 +19,11 @@ namespace MulticutInTrees.MulticutProblem
         private CountedCollection<(TreeNode, TreeNode)> Path { get; }
 
         /// <summary>
+        /// The unique identifier of this <see cref="DemandPair"/>.
+        /// </summary>
+        public uint ID { get; }
+
+        /// <summary>
         /// The first endpoint of this <see cref="DemandPair"/>.
         /// </summary>
         public TreeNode Node1 { get; private set; }
@@ -36,16 +41,18 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// Constructor for a <see cref="DemandPair"/>.
         /// </summary>
+        /// <param name="id">The unique identifier of this <see cref="DemandPair"/>.</param>
         /// <param name="node1">The first endpoint of this <see cref="DemandPair"/>.</param>
         /// <param name="node2">The second endpoint of this <see cref="DemandPair"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="node1"/> or <paramref name="node2"/> is <see langword="null"/>.</exception>
-        public DemandPair(TreeNode node1, TreeNode node2)
+        public DemandPair(uint id, TreeNode node1, TreeNode node2)
         {
 #if !EXPERIMENT
             Utils.NullCheck(node1, nameof(node1), "Trying to create a DemandPair, but the first endpoint of this demandpair is null!");
             Utils.NullCheck(node2, nameof(node2), "Trying to create a DemandPair, but the second endpoint of this demandpair is null!");
 #endif
             MockCounter = new Counter();
+            ID = id;
             Node1 = node1;
             Node2 = node2;
             Path = new CountedCollection<(TreeNode, TreeNode)>(Utils.NodePathToEdgePath(DFS.FindPathBetween(node1, node2, MockCounter)), MockCounter);
@@ -57,7 +64,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <returns>The <see cref="string"/> representation of this <see cref="DemandPair"/>.</returns>
         public override string ToString()
         {
-            return $"Demand pair ({Node1}, {Node2})";
+            return $"Demand pair {ID} ({Node1}, {Node2})";
         }
 
         /// <summary>

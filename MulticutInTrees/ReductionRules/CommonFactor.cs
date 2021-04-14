@@ -28,12 +28,6 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         private CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>> DemandPairIntersections { get; }
 
-        // todo; give each demand pair its own id
-        /// <summary>
-        /// <see cref="Dictionary{TKey, TValue}"/> with a unique identifier per <see cref="DemandPair"/>.
-        /// </summary>
-        private Dictionary<DemandPair, int> DemandPairIDs { get; }
-
         /// <summary>
         /// The maximum size the solution is allowed to have.
         /// </summary>
@@ -43,12 +37,6 @@ namespace MulticutInTrees.ReductionRules
         /// The part of the solution that has been found thus far.
         /// </summary>
         private List<(TreeNode, TreeNode)> PartialSolution { get; }
-
-        // todo: give RR itself the mockcounter
-        /// <summary>
-        /// <see cref="Counter"/> that can be used for operations that should not influence the performance of this <see cref="ReductionRule"/>.
-        /// </summary>
-        private Counter MockCounter { get; }
 
         /// <summary>
         /// Constructor for <see cref="CommonFactor"/>.
@@ -73,23 +61,10 @@ namespace MulticutInTrees.ReductionRules
             }
 #endif
             MockCounter = new Counter();
-            DemandPairIDs = new Dictionary<DemandPair, int>();
             PartialSolution = partialSolution;
             MaxSolutionSize = maxSolutionSize;
             IntersectingDemandPairs = new CountedDictionary<DemandPair, CountedCollection<DemandPair>>();
             DemandPairIntersections = new CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>>();
-            FillDemandPairIDs();
-        }
-
-        /// <summary>
-        /// Fills <see cref="DemandPairIDs"/> with the unique identifier for each <see cref="DemandPair"/>.
-        /// </summary>
-        private void FillDemandPairIDs()
-        {
-            for (int i = 0; i < DemandPairs.Count(MockCounter); i++)
-            {
-                DemandPairIDs[DemandPairs[i, MockCounter]] = i;
-            }
         }
 
         /// <summary>
@@ -144,14 +119,14 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <summary>
-        /// Uses <see cref="DemandPairIDs"/> to sort <paramref name="dp1"/> and <paramref name="dp2"/> in order to be used as key for <see cref="DemandPairIntersections"/>.
+        /// Uses <see cref="DemandPair.ID"/> to sort <paramref name="dp1"/> and <paramref name="dp2"/> in order to be used as key for <see cref="DemandPairIntersections"/>.
         /// </summary>
         /// <param name="dp1">The first <see cref="DemandPair"/>.</param>
         /// <param name="dp2">The second <see cref="DemandPair"/>.</param>
         /// <returns>A tuple with <paramref name="dp1"/> and <paramref name="dp2"/> sorted on their unique ID to be used as key for <see cref="DemandPairIntersections"/>.</returns>
         private (DemandPair, DemandPair) GetIntersectionKey(DemandPair dp1, DemandPair dp2)
         {
-            return DemandPairIDs[dp1] < DemandPairIDs[dp2] ? (dp1, dp2) : (dp2, dp1);
+            return dp1.ID < dp2.ID ? (dp1, dp2) : (dp2, dp1);
         }
 
         /// <summary>
@@ -186,9 +161,10 @@ namespace MulticutInTrees.ReductionRules
             return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
         }
 
-        // todo: remove from RR, move this code to own method.
-        /// <inheritdoc/>
-        protected override void Preprocess()
+        /// <summary>
+        /// Computes the intersections of every two <see cref="DemandPair"/>s and saves information in <see cref="IntersectingDemandPairs"/> and <see cref="DemandPairIntersections"/>.
+        /// </summary>
+        private void FindInitialIntersections()
         {
             int numberOfDPs = DemandPairs.Count(MockCounter);
             for (int i = 0; i < numberOfDPs - 1; i++)
@@ -225,20 +201,18 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        internal override bool RunLaterIteration()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to apply the {GetType().Name} reduction rule after an edge was contracted, but the list with information about contracted edges is null!");
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand pair was removed, but the list with information about removed demand pairs is null!");
-            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to apply the {GetType().Name} reduction rule after a demand pair was changed, but the list with information about changed demand pairs is null!");
-#endif
 #if VERBOSEDEBUG
             Console.WriteLine($"Executing {GetType().Name} rule in a later iterations");
 #endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+
             // TODO: WIP!! INTERSECTIONS STILL NEED TO BE UPDATED
             // TODO: WIP!! ALSO JUST THE IMPLEMENTATION
 
+
+            Measurements.TimeSpentCheckingApplicability.Stop();
             throw new NotImplementedException();
         }
 
@@ -248,6 +222,8 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine($"Executing {GetType().Name} rule for the first time");
 #endif
+            HasRun = true;
+            FindInitialIntersections();
             Measurements.TimeSpentCheckingApplicability.Start();
             return CheckApplicability(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }

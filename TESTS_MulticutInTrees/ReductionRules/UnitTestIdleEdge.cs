@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
@@ -11,6 +10,7 @@ using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
+using MulticutInTrees.Utilities;
 
 namespace TESTS_MulticutInTrees.ReductionRules
 {
@@ -20,25 +20,20 @@ namespace TESTS_MulticutInTrees.ReductionRules
         private static readonly PerformanceMeasurements MockPerformanceMeasurements = new PerformanceMeasurements(nameof(UnitTestIdleEdge));
         private static readonly Counter counter = new Counter();
 
-        private (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) GetLaterIterationInformation(Algorithm algorithm)
+        private IdleEdge GetReductionRuleInAlgorithm(Algorithm algorithm)
         {
-            PropertyInfo lastContractedEdgesProperty = typeof(Algorithm).GetProperty("LastContractedEdges", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>> lastContractedEdges = (List<CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>>)lastContractedEdgesProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+            MethodInfo runPropertySet = typeof(ReductionRule).GetProperty("HasRun", BindingFlags.Public | BindingFlags.Instance).GetSetMethod(true);
+            foreach (ReductionRule rr in algorithm.ReductionRules)
+            {
+                runPropertySet.Invoke(rr, new object[] { true });
 
-            PropertyInfo lastRemovedDemandPairsProperty = typeof(Algorithm).GetProperty("LastRemovedDemandPairs", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<CountedList<DemandPair>> lastRemovedDemandPairs = (List<CountedList<DemandPair>>)lastRemovedDemandPairsProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
+                if (rr.GetType() == typeof(IdleEdge))
+                {
+                    return (IdleEdge)rr;
+                }
+            }
 
-            PropertyInfo lastChangedEdgesPerDemandPairProperty = typeof(Algorithm).GetProperty("LastChangedEdgesPerDemandPair", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>> lastChangedEdgesPerDemandPair = (List<CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>>)lastChangedEdgesPerDemandPairProperty.GetGetMethod(true).Invoke(algorithm, new object[] { });
-
-            int index = GetIndexOfReductionRule(algorithm);
-
-            return (lastContractedEdges[index], lastRemovedDemandPairs[index], lastChangedEdgesPerDemandPair[index]);
-        }
-
-        private int GetIndexOfReductionRule(Algorithm algorithm)
-        {
-            return algorithm.ReductionRules.IndexOf(algorithm.ReductionRules.First(rr => rr.GetType() == typeof(IdleEdge)));
+            throw new Exception($"Could not find a Reduction Rule of type {typeof(IdleEdge)} in this algorithm. It has Reduction Rules: {algorithm.ReductionRules.Print()}.");
         }
 
         [TestMethod]
@@ -58,7 +53,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair = new DemandPair(node2, node4);
+            DemandPair demandPair = new DemandPair(0, node2, node4);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
@@ -90,7 +85,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair = new DemandPair(node2, node4);
+            DemandPair demandPair = new DemandPair(0, node2, node4);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
             CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>(new Dictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>()
@@ -100,28 +95,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {(node1, node4), new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, counter) }
             }, counter);
 
-            Random random = new Random(674648);
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
-
-            CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdgeNodeTupleList = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
-            CountedList<DemandPair> removedDemandPairs = new CountedList<DemandPair>();
-            CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedEdgesPerDemandPairList = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
 
             Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(null, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, null, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, null, demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new IdleEdge(tree, demandPairs, new GuoNiedermeierKernelisation(instance), null); });
-
-            Assert.ThrowsException<ArgumentNullException>(() => idleEdge.RunLaterIteration(null, removedDemandPairs, changedEdgesPerDemandPairList));
-            Assert.ThrowsException<ArgumentNullException>(() => idleEdge.RunLaterIteration(contractedEdgeNodeTupleList, null, changedEdgesPerDemandPairList));
-            Assert.ThrowsException<ArgumentNullException>(() => idleEdge.RunLaterIteration(contractedEdgeNodeTupleList, removedDemandPairs, null));
-
-            MethodInfo method = typeof(IdleEdge).GetMethod("CanEdgeBeContracted", BindingFlags.NonPublic | BindingFlags.Instance);
-            TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() => { method.Invoke(idleEdge, new object[] { new ValueTuple<TreeNode, TreeNode>(null, node1) }); });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
-            t = Assert.ThrowsException<TargetInvocationException>(() => { method.Invoke(idleEdge, new object[] { new ValueTuple<TreeNode, TreeNode>(node0, null) }); });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
         }
 
         [TestMethod]
@@ -141,18 +120,15 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair = new DemandPair(node2, node4);
+            DemandPair demandPair = new DemandPair(0, node2, node4);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, algorithm, demandPairsPerEdge);
+            IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
             algorithm.ContractEdge((node1, node3), MockPerformanceMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsFalse(idleEdge.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsFalse(idleEdge.RunLaterIteration());
         }
 
         [TestMethod]
@@ -172,22 +148,19 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair1 = new DemandPair(node2, node4);
-            DemandPair demandPair2 = new DemandPair(node0, node1);
-            DemandPair demandPair3 = new DemandPair(node1, node3);
+            DemandPair demandPair1 = new DemandPair(1, node2, node4);
+            DemandPair demandPair2 = new DemandPair(2, node0, node1);
+            DemandPair demandPair3 = new DemandPair(3, node1, node3);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, algorithm, demandPairsPerEdge);
+            IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 
             algorithm.RemoveDemandPair(demandPair3, MockPerformanceMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsTrue(idleEdge.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsTrue(idleEdge.RunLaterIteration());
         }
 
         [TestMethod]
@@ -207,22 +180,19 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair1 = new DemandPair(node2, node4);
-            DemandPair demandPair2 = new DemandPair(node0, node1);
-            DemandPair demandPair3 = new DemandPair(node1, node3);
+            DemandPair demandPair1 = new DemandPair(1, node2, node4);
+            DemandPair demandPair2 = new DemandPair(2, node0, node1);
+            DemandPair demandPair3 = new DemandPair(3, node1, node3);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3 }, counter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, algorithm, demandPairsPerEdge);
+            IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 
             algorithm.RemoveDemandPair(demandPair2, MockPerformanceMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsFalse(idleEdge.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsFalse(idleEdge.RunLaterIteration());
         }
 
         [TestMethod]
@@ -242,21 +212,17 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair1 = new DemandPair(node3, node0);
-            DemandPair demandPair2 = new DemandPair(node2, node4);
+            DemandPair demandPair1 = new DemandPair(1, node3, node0);
+            DemandPair demandPair2 = new DemandPair(2, node2, node4);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2 }, counter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
-
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, algorithm, demandPairsPerEdge);
+            IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 
             algorithm.ChangeEndpointOfDemandPair(demandPair1, node3, node1, MockPerformanceMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsTrue(idleEdge.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsTrue(idleEdge.RunLaterIteration());
         }
 
         [TestMethod]
@@ -276,21 +242,18 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             tree.UpdateNodeTypes();
 
-            DemandPair demandPair1 = new DemandPair(node3, node0);
-            DemandPair demandPair2 = new DemandPair(node2, node4);
+            DemandPair demandPair1 = new DemandPair(1, node3, node0);
+            DemandPair demandPair2 = new DemandPair(2, node2, node4);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2 }, counter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
 
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, algorithm, demandPairsPerEdge);
+            IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 
             algorithm.ChangeEndpointOfDemandPair(demandPair1, node0, node1, MockPerformanceMeasurements);
 
-            (CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>, CountedList<DemandPair>, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>) info = GetLaterIterationInformation(algorithm);
-
-            Assert.IsFalse(idleEdge.RunLaterIteration(info.Item1, info.Item2, info.Item3));
+            Assert.IsFalse(idleEdge.RunLaterIteration());
         }
 
         [TestMethod]
@@ -302,13 +265,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddRoot(node0, counter);
             tree.AddChild(node0, node1, counter);
             tree.UpdateNodeTypes();
-            DemandPair demandPair = new DemandPair(node0, node1);
+            DemandPair demandPair = new DemandPair(0, node0, node1);
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair }, counter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = (CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>)typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(algorithm, new object[] { });
-            IdleEdge idleEdge = new IdleEdge(tree, demandPairs, algorithm, demandPairsPerEdge);
+            IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsFalse(idleEdge.RunFirstIteration());
         }

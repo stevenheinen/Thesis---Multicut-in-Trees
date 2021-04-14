@@ -34,11 +34,6 @@ namespace MulticutInTrees.ReductionRules
         private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
-        /// <see cref="Counter"/> that can be used for things that should not impact performance.
-        /// </summary>
-        private Counter MockCounter { get; }
-
-        /// <summary>
         /// Constructor for the <see cref="OverloadedEdge"/> reduction rule.
         /// </summary>
         /// <param name="tree">The input tree.</param>
@@ -122,20 +117,8 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        protected override void Preprocess()
+        internal override bool RunLaterIteration()
         {
-
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to execute the {GetType().Name} rule after an edge was contracted, but the list with contracted edges is null!");
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to execute the {GetType().Name} rule after a demand pair was removed, but the list with removed demand pairs is null!");
-            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to execute the {GetType().Name} rule after a demand pair was changed, but the list with changed demand pairs is null!");
-#endif
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
@@ -143,7 +126,7 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<DemandPair> demandPairsToCheck = new HashSet<DemandPair>();
 
-            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
@@ -151,7 +134,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            foreach ((CountedList<(TreeNode, TreeNode)> _, DemandPair demandPair) in changedDemandPairs.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach ((CountedList<(TreeNode, TreeNode)> _, DemandPair demandPair) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 if (demandPair.LengthOfPath(Measurements.DemandPairsOperationsCounter) != 2)
                 {
@@ -174,9 +157,9 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            contractedEdges.Clear(Measurements.TreeOperationsCounter);
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
+            LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return TryApplyReductionRule(demandPairsToCheck);
         }
@@ -187,6 +170,7 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule for the first time");
 #endif
+            HasRun = true;
             Measurements.TimeSpentCheckingApplicability.Start();
             return TryApplyReductionRule(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }

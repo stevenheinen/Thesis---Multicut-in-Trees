@@ -81,15 +81,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-
             return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
-        }
-
-        /// <inheritdoc/>
-        protected override void Preprocess()
-        {
-
         }
 
         /// <inheritdoc/>
@@ -98,6 +90,7 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule for the first time");
 #endif
+            HasRun = true;
             Measurements.TimeSpentCheckingApplicability.Start();
 
             // In the first iteration, check all edges in the input tree.
@@ -105,14 +98,8 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdges"/>, <paramref name="removedDemandPairs"/> or <paramref name="changedDemandPairs"/> is <see langword="null"/>.</exception>
-        internal override bool RunLaterIteration(CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> contractedEdges, CountedList<DemandPair> removedDemandPairs, CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> changedDemandPairs)
+        internal override bool RunLaterIteration()
         {
-#if !EXPERIMENT
-            Utils.NullCheck(contractedEdges, nameof(contractedEdges), $"Trying to execute the {GetType().Name} rule after edges were contracted, but the IEnumerable with contracted edge information is null!");
-            Utils.NullCheck(removedDemandPairs, nameof(removedDemandPairs), $"Trying to execute the {GetType().Name} rule after a demand pair was removed, but the list of removed demand pairs is null!");
-            Utils.NullCheck(changedDemandPairs, nameof(changedDemandPairs), $"Trying to execute the {GetType().Name} rule after a demand pair was changed, but the list of changed demand pairs is null!");
-#endif
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
@@ -120,15 +107,31 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
 
+            /* todo: should not be used. Check what happens in the following case when using Edge objects instead of tuples.
+            
+            Er is een DP, die is verwijderd uit de graaf. In een latere iteratie van de Idle Edge rule kijken we naar de edges die op dat DP liggen.
+            Stel dat dit pad A,B,C,D is. Nadat dat DP verwijderd is, is een edge tussen C en E gecontract, met als resultaat node E. Dit betekent dus dat we voor dat DP in de Idle Edge rule A,B,E,D zouden willen bekijken, maar het pad is niet geüpdate, omdat het DP al verwijderd is. Daarom bekijken we nog steeds A,B,C,D. We vinden dus een edge die gecontract kan worden niet...
+            Is dit op te lossen door een edge object te gebruiken ipv tuples?
+
+            Instance:
+            string[] split = "--seed=2 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
+
+            Difference between 68 nodes (not looking at contracted edges) and 67 nodes (looking at contracted edges).
             foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 foreach (TreeNode neighbour in newNode.Neighbours(Measurements.TreeOperationsCounter))
                 {
+                    if ((newNode.ID == 320 && neighbour.ID == 1792) || (newNode.ID == 1792 && neighbour.ID == 320))
+                    {
+
+                    }
+
                     edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge((newNode, neighbour)));
                 }
             }
+            */
 
-            foreach (DemandPair demandPair in removedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach (DemandPair demandPair in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
                 {
@@ -136,7 +139,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in changedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 foreach ((TreeNode, TreeNode) edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                 {
@@ -144,9 +147,9 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            contractedEdges.Clear(Measurements.TreeOperationsCounter);
-            removedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-            changedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
+            LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
 
             return TryApplyReductionRule(edgesToBeChecked);
         }
