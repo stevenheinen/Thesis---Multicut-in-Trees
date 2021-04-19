@@ -5,5 +5,8 @@ namespace MulticutInTrees.Utilities
     /// <summary>
     /// This namespace contains several utility algorithms used throughout the project.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc 
+    {
+
+    }
 }

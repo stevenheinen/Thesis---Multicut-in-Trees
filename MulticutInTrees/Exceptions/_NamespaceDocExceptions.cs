@@ -5,5 +5,8 @@ namespace MulticutInTrees.Exceptions
     /// <summary>
     /// This namespace contains custom exceptions used throughout the project.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc 
+    {
+
+    }
 }

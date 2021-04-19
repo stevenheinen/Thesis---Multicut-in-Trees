@@ -10,21 +10,21 @@ using MulticutInTrees.Utilities;
 namespace MulticutInTrees.InstanceGeneration
 {
     /// <summary>
-    /// Class for reading a <see cref="Tree{N}"/> from a file.
+    /// Class for reading a <see cref="AbstractGraph{TEdge, TNode}"/> from a file.
     /// </summary>
     public static class FixedTreeReader
     {
         /// <summary>
-        /// Reads a <see cref="Tree{N}"/> that is saved in the file on <paramref name="filePath"/>.
+        /// Reads a <see cref="AbstractGraph{TEdge, TNode}"/> that is saved in the file on <paramref name="filePath"/>.
         /// <br/>
         /// The file should contain a line with the number of nodes in the tree, and then a line for each edge, with the IDs of the endpoints separated by a space, and nothing else.
         /// </summary>
-        /// <param name="filePath">The path of the file where the <see cref="Tree{N}"/> is stored.</param>
-        /// <returns>A <see cref="Tree{N}"/> as read from <paramref name="filePath"/>.</returns>
+        /// <param name="filePath">The path of the file where the <see cref="AbstractGraph{TEdge, TNode}"/> is stored.</param>
+        /// <returns>A <see cref="Graph"/> as read from <paramref name="filePath"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="filePath"/> is <see langword="null"/>.</exception>
         /// <exception cref="FileNotFoundException">Thrown when <paramref name="filePath"/> is not a valid file.</exception>
         /// <exception cref="BadFileFormatException">Thrown when a line in the file cannot be parsed to a number.</exception>
-        public static Tree<TreeNode> ReadTree(string filePath)
+        public static Graph ReadTree(string filePath)
         {
 #if !EXPERIMENT
             Utils.NullCheck(filePath, nameof(filePath), "Trying to read a tree from a file, but the path to the file is null!");
@@ -57,7 +57,7 @@ namespace MulticutInTrees.InstanceGeneration
                 }
             }
 
-            return Utils.CreateTreeWithEdges(numberOfNodes, 0, edges);
+            return Utils.CreateGraphWithEdges(numberOfNodes, edges);
         }
     }
 }

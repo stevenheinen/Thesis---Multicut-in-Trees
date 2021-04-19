@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
@@ -16,12 +15,12 @@ namespace TESTS_MulticutInTrees.Algorithms
     [TestClass]
     public class UnitTestGuoNiedermeierBranching
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
 
@@ -32,7 +31,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestNullArgument()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
 
@@ -42,35 +41,45 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCase1()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
-            TreeNode node7 = new TreeNode(7);
-            TreeNode node8 = new TreeNode(8);
-            TreeNode node9 = new TreeNode(9);
-            TreeNode node10 = new TreeNode(10);
+            Graph tree = new Graph();
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
+            Node node7 = new Node(7);
+            Node node8 = new Node(8);
+            Node node9 = new Node(9);
+            Node node10 = new Node(10);
 
-            tree.AddRoot(node1, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
-            tree.AddChild(node4, node10, counter);
+            tree.AddNodes(new List<Node>() { node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
-            DemandPair dp1 = new DemandPair(1, node1, node5);
-            DemandPair dp2 = new DemandPair(2, node7, node8);
-            DemandPair dp3 = new DemandPair(3, node4, node10);
-            DemandPair dp4 = new DemandPair(4, node6, node3);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, counter);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge26 = new Edge<Node>(node2, node6);
+            Edge<Node> edge37 = new Edge<Node>(node3, node7);
+            Edge<Node> edge38 = new Edge<Node>(node3, node8);
+            Edge<Node> edge39 = new Edge<Node>(node3, node9);
+            Edge<Node> edge410 = new Edge<Node>(node4, node10);
+
+            tree.AddEdges(new List<Edge<Node>>() { edge12, edge13, edge14, edge25, edge26, edge37, edge38, edge39, edge410 }, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(1, node1, node5, tree);
+            DemandPair dp2 = new DemandPair(2, node7, node8, tree);
+            DemandPair dp3 = new DemandPair(3, node4, node10, tree);
+            DemandPair dp4 = new DemandPair(4, node6, node3, tree);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
 
             int k = 3;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 3);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(3, solution.Item1.Count);
@@ -79,34 +88,44 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCase2()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
-            TreeNode node7 = new TreeNode(7);
-            TreeNode node8 = new TreeNode(8);
-            TreeNode node9 = new TreeNode(9);
-            TreeNode node10 = new TreeNode(10);
+            Graph tree = new Graph();
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
+            Node node7 = new Node(7);
+            Node node8 = new Node(8);
+            Node node9 = new Node(9);
+            Node node10 = new Node(10);
 
-            tree.AddRoot(node1, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
-            tree.AddChild(node4, node10, counter);
+            tree.AddNodes(new List<Node>() { node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
-            DemandPair dp1 = new DemandPair(1, node1, node6);
-            DemandPair dp2 = new DemandPair(2, node4, node5);
-            DemandPair dp3 = new DemandPair(3, node8, node10);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge26 = new Edge<Node>(node2, node6);
+            Edge<Node> edge37 = new Edge<Node>(node3, node7);
+            Edge<Node> edge38 = new Edge<Node>(node3, node8);
+            Edge<Node> edge39 = new Edge<Node>(node3, node9);
+            Edge<Node> edge410 = new Edge<Node>(node4, node10);
+
+            tree.AddEdges(new List<Edge<Node>>() { edge12, edge13, edge14, edge25, edge26, edge37, edge38, edge39, edge410 }, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(1, node1, node6, tree);
+            DemandPair dp2 = new DemandPair(2, node4, node5, tree);
+            DemandPair dp3 = new DemandPair(3, node8, node10, tree);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             int k = 2;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 2);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(2, solution.Item1.Count);
@@ -115,34 +134,48 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCase3()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
-            TreeNode node7 = new TreeNode(7);
-            TreeNode node8 = new TreeNode(8);
-            TreeNode node9 = new TreeNode(9);
-            TreeNode node10 = new TreeNode(10);
-            TreeNode node11 = new TreeNode(11);
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
+            Node node7 = new Node(7);
+            Node node8 = new Node(8);
+            Node node9 = new Node(9);
+            Node node10 = new Node(10);
+            Node node11 = new Node(11);
 
-            tree.AddRoot(node0, counter);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3, node4, node5, node6 }, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node7, node8, node9, node10, node11 }, counter);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11 }, MockCounter);
 
-            DemandPair dp1 = new DemandPair(1, node2, node11);
-            DemandPair dp2 = new DemandPair(2, node4, node9);
-            DemandPair dp3 = new DemandPair(3, node2, node8);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, counter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge04 = new Edge<Node>(node0, node4);
+            Edge<Node> edge05 = new Edge<Node>(node0, node5);
+            Edge<Node> edge06 = new Edge<Node>(node0, node6);
+            Edge<Node> edge17 = new Edge<Node>(node1, node7);
+            Edge<Node> edge18 = new Edge<Node>(node1, node8);
+            Edge<Node> edge19 = new Edge<Node>(node1, node9);
+            Edge<Node> edge110 = new Edge<Node>(node1, node10);
+            Edge<Node> edge111 = new Edge<Node>(node1, node11);
+
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge04, edge05, edge06, edge17, edge18, edge19, edge110, edge111 }, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(1, node2, node11, tree);
+            DemandPair dp2 = new DemandPair(2, node4, node9, tree);
+            DemandPair dp3 = new DemandPair(3, node2, node8, tree);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             int k = 1;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 1);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(1, solution.Item1.Count);
@@ -151,47 +184,60 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCase4()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
-            TreeNode node7 = new TreeNode(7);
-            TreeNode node8 = new TreeNode(8);
-            TreeNode node9 = new TreeNode(9);
-            TreeNode node10 = new TreeNode(10);
-            TreeNode node11 = new TreeNode(11);
-            TreeNode node12 = new TreeNode(12);
-            TreeNode node13 = new TreeNode(13);
-            TreeNode node14 = new TreeNode(14);
-            TreeNode node15 = new TreeNode(15);
-            TreeNode node16 = new TreeNode(16);
-            TreeNode node17 = new TreeNode(17);
+            Graph tree = new Graph();
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
+            Node node7 = new Node(7);
+            Node node8 = new Node(8);
+            Node node9 = new Node(9);
+            Node node10 = new Node(10);
+            Node node11 = new Node(11);
+            Node node12 = new Node(12);
+            Node node13 = new Node(13);
+            Node node14 = new Node(14);
+            Node node15 = new Node(15);
+            Node node16 = new Node(16);
+            Node node17 = new Node(17);
 
-            tree.AddRoot(node1, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4 }, counter);
-            tree.AddChildren(node2, new List<TreeNode>() { node5, node6 }, counter);
-            tree.AddChildren(node3, new List<TreeNode>() { node7, node8, node9 }, counter);
-            tree.AddChild(node4, node10, counter);
-            tree.AddChildren(node5, new List<TreeNode>() { node11, node12 }, counter);
-            tree.AddChildren(node6, new List<TreeNode>() { node13, node14 }, counter);
-            tree.AddChild(node7, node15, counter);
-            tree.AddChildren(node10, new List<TreeNode>() { node16, node17 }, counter);
+            tree.AddNodes(new List<Node>() { node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15, node16, node17 }, MockCounter);
 
-            DemandPair dp1 = new DemandPair(1, node1, node13);
-            DemandPair dp2 = new DemandPair(2, node4, node5);
-            DemandPair dp3 = new DemandPair(3, node7, node15);
-            DemandPair dp4 = new DemandPair(4, node8, node10);
-            DemandPair dp5 = new DemandPair(5, node11, node17);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge26 = new Edge<Node>(node2, node6);
+            Edge<Node> edge37 = new Edge<Node>(node3, node7);
+            Edge<Node> edge38 = new Edge<Node>(node3, node8);
+            Edge<Node> edge39 = new Edge<Node>(node3, node9);
+            Edge<Node> edge410 = new Edge<Node>(node4, node10);
+            Edge<Node> edge511 = new Edge<Node>(node5, node11);
+            Edge<Node> edge512 = new Edge<Node>(node5, node12);
+            Edge<Node> edge613 = new Edge<Node>(node6, node13);
+            Edge<Node> edge614 = new Edge<Node>(node6, node14);
+            Edge<Node> edge715 = new Edge<Node>(node7, node15);
+            Edge<Node> edge1016 = new Edge<Node>(node10, node16);
+            Edge<Node> edge1017 = new Edge<Node>(node10, node17);
+
+            tree.AddEdges(new List<Edge<Node>>() { edge12, edge13, edge14, edge25, edge26, edge37, edge38, edge39, edge410, edge511, edge512, edge613, edge614, edge715, edge1016, edge1017 }, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(1, node1, node13, tree);
+            DemandPair dp2 = new DemandPair(2, node4, node5, tree);
+            DemandPair dp3 = new DemandPair(3, node7, node15, tree);
+            DemandPair dp4 = new DemandPair(4, node8, node10, tree);
+            DemandPair dp5 = new DemandPair(5, node11, node17, tree);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
             int k = 3;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 3);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(3, solution.Item1.Count);
@@ -200,29 +246,38 @@ namespace TESTS_MulticutInTrees.Algorithms
         [TestMethod]
         public void TestCase5()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
+            Graph tree = new Graph();
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
 
-            tree.AddRoot(node1, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node2, node3, node4, node5, node6 }, counter);
+            tree.AddNodes(new List<Node>() { node1, node2, node3, node4, node5, node6 }, MockCounter);
 
-            DemandPair dp1 = new DemandPair(1, node1, node2);
-            DemandPair dp2 = new DemandPair(2, node3, node1);
-            DemandPair dp3 = new DemandPair(3, node1, node4);
-            DemandPair dp4 = new DemandPair(4, node1, node5);
-            DemandPair dp5 = new DemandPair(5, node1, node6);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, counter);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge16 = new Edge<Node>(node1, node6);
+
+            tree.AddEdges(new List<Edge<Node>>() { edge12, edge13, edge14, edge15, edge16 }, MockCounter);
+
+            tree.UpdateNodeTypes();
+
+            DemandPair dp1 = new DemandPair(1, node1, node2, tree);
+            DemandPair dp2 = new DemandPair(2, node3, node1, tree);
+            DemandPair dp3 = new DemandPair(3, node1, node4, tree);
+            DemandPair dp4 = new DemandPair(4, node1, node5, tree);
+            DemandPair dp5 = new DemandPair(5, node1, node6, tree);
+            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
             int k = 4;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 4);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
-            (List<(TreeNode, TreeNode)>, ExperimentOutput) solution = gnb.Run(true, CancellationToken.None);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
 
             Assert.IsFalse(solution.Item2.Solvable);
         }

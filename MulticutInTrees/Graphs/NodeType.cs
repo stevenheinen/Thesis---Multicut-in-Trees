@@ -3,7 +3,7 @@
 namespace MulticutInTrees.Graphs
 {
     /// <summary>
-    /// The type of an <see cref="INode{N}"/>.
+    /// The type of a <see cref="Node"/>.
     /// </summary>
     public enum NodeType
     {
@@ -32,7 +32,7 @@ namespace MulticutInTrees.Graphs
         /// </summary>
         L3,
         /// <summary>
-        /// The <see cref="NodeType"/> of this <see cref="INode{N}"/> is not yet defined. This should not occur in non-trivial graphs.
+        /// The <see cref="NodeType"/> of this <see cref="Node"/> is not yet defined. This should not occur in non-trivial graphs.
         /// </summary>
         Other
     };

@@ -28,13 +28,13 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
             Random random = new Random(13758613);
             int numberOfNodes = 3841;
 
-            Tree<TreeNode> caterpillar = CaterpillarGenerator.CreateCaterpillar(numberOfNodes, random);
+            Graph caterpillar = CaterpillarGenerator.CreateCaterpillar(numberOfNodes, random);
 
             Assert.AreEqual(numberOfNodes, caterpillar.NumberOfNodes(MockCounter));
 
             int i1Nodes = 0;
 
-            foreach (TreeNode node in caterpillar.Nodes(MockCounter))
+            foreach (Node node in caterpillar.Nodes(MockCounter))
             {
                 if (node.Type == NodeType.I1)
                 {

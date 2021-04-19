@@ -15,12 +15,12 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestEdmondsMatching
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         [TestMethod]
         public void TestArgumentNull()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
             List<(Node, Node)> list = new List<(Node, Node)>();
             List<Node> list2 = new List<Node>();
             HashSet<Node> hashset = new HashSet<Node>();
@@ -31,18 +31,18 @@ namespace TESTS_MulticutInTrees.Utilities
             Node nullnode = null;
             (Node, Node) edge = (node, node);
 
-            Assert.ThrowsException<ArgumentNullException>(() => EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(null));
-            Assert.ThrowsException<ArgumentNullException>(() => EdmondsMatching.HasMatchingOfAtLeast<Graph<Node>, Node>(null, 2));
+            Assert.ThrowsException<ArgumentNullException>(() => EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(null));
+            Assert.ThrowsException<ArgumentNullException>(() => EdmondsMatching.HasMatchingOfAtLeast<Graph, Edge<Node>, Node>(null, 2));
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("RecursiveFindMaximumMatching", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { graph, null }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null, list }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             method = typeof(EdmondsMatching).GetMethod("RecursiveHasMatchingOfAtLeast", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { graph, 2, null }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null, 6, list }));
@@ -56,12 +56,12 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             method = typeof(EdmondsMatching).GetMethod("FindGreedyMaximalMatching", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             method = typeof(EdmondsMatching).GetMethod("FindAugmentingPath", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { graph, null }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null, list }));
@@ -114,7 +114,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             method = typeof(EdmondsMatching).GetMethod("FindAndContractBlossom", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null, list, list }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { graph, null, list }));
@@ -123,7 +123,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             method = typeof(EdmondsMatching).GetMethod("ExpandPath", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null, list, list2, node, list }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { graph, null, list2, node, list }));
@@ -145,7 +145,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomInMiddle", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { null, list, list2, node, list }));
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
             t = Assert.ThrowsException<TargetInvocationException>(() => method.Invoke(null, new object[] { graph, null, list2, node, list }));
@@ -168,7 +168,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCase1()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -193,28 +193,28 @@ namespace TESTS_MulticutInTrees.Utilities
                 node8
             };
 
-            List<(Node, Node)> edges = new List<(Node, Node)>()
+            List<Edge<Node>> edges = new List<Edge<Node>>()
             {
-                (node0, node1),
-                (node0, node3),
-                (node1, node2),
-                (node1, node3),
-                (node1, node4),
-                (node2, node5),
-                (node3, node4),
-                (node3, node6),
-                (node3, node7),
-                (node4, node5),
-                (node4, node7),
-                (node4, node8),
-                (node6, node7),
-                (node7, node8)
+                new Edge<Node>(node0, node1),
+                new Edge<Node>(node0, node3),
+                new Edge<Node>(node1, node2),
+                new Edge<Node>(node1, node3),
+                new Edge<Node>(node1, node4),
+                new Edge<Node>(node2, node5),
+                new Edge<Node>(node3, node4),
+                new Edge<Node>(node3, node6),
+                new Edge<Node>(node3, node7),
+                new Edge<Node>(node4, node5),
+                new Edge<Node>(node4, node7),
+                new Edge<Node>(node4, node8),
+                new Edge<Node>(node6, node7),
+                new Edge<Node>(node7, node8)
             };
 
-            graph.AddNodes(nodes, counter);
-            graph.AddEdges(edges, counter);
+            graph.AddNodes(nodes, MockCounter);
+            graph.AddEdges(edges, MockCounter);
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
 
             Assert.AreEqual(4, matching.Count);
         }
@@ -222,7 +222,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCase2()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -261,33 +261,33 @@ namespace TESTS_MulticutInTrees.Utilities
                 node15
             };
 
-            List<(Node, Node)> edges = new List<(Node, Node)>()
+            List<Edge<Node>> edges = new List<Edge<Node>>()
             {
-                (node0, node1),
-                (node0, node13),
-                (node1, node4),
-                (node1, node15),
-                (node2, node13),
-                (node2, node3),
-                (node2, node6),
-                (node3, node4),
-                (node3, node5),
-                (node4, node5),
-                (node6, node7),
-                (node7, node8),
-                (node7, node14),
-                (node8, node11),
-                (node8, node12),
-                (node9, node14),
-                (node9, node10),
-                (node10, node12),
-                (node11, node12)
+                new Edge<Node>(node0, node1),
+                new Edge<Node>(node0, node13),
+                new Edge<Node>(node1, node4),
+                new Edge<Node>(node1, node15),
+                new Edge<Node>(node2, node13),
+                new Edge<Node>(node2, node3),
+                new Edge<Node>(node2, node6),
+                new Edge<Node>(node3, node4),
+                new Edge<Node>(node3, node5),
+                new Edge<Node>(node4, node5),
+                new Edge<Node>(node6, node7),
+                new Edge<Node>(node7, node8),
+                new Edge<Node>(node7, node14),
+                new Edge<Node>(node8, node11),
+                new Edge<Node>(node8, node12),
+                new Edge<Node>(node9, node14),
+                new Edge<Node>(node9, node10),
+                new Edge<Node>(node10, node12),
+                new Edge<Node>(node11, node12)
             };
 
-            graph.AddNodes(nodes, counter);
-            graph.AddEdges(edges, counter);
+            graph.AddNodes(nodes, MockCounter);
+            graph.AddEdges(edges, MockCounter);
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
 
             Assert.AreEqual(8, matching.Count);
         }
@@ -295,7 +295,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCase3()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -338,44 +338,44 @@ namespace TESTS_MulticutInTrees.Utilities
                 node17
             };
 
-            List<(Node, Node)> edges = new List<(Node, Node)>()
+            List<Edge<Node>> edges = new List<Edge<Node>>()
             {
-                (node0, node1),
-                (node0, node7),
-                (node1, node4),
-                (node2, node3),
-                (node2, node5),
-                (node2, node6),
-                (node3, node6),
-                (node4, node7),
-                (node4, node8),
-                (node5, node6),
-                (node5, node12),
-                (node5, node13),
-                (node6, node13),
-                (node7, node8),
-                (node7, node10),
-                (node8, node9),
-                (node8, node10),
-                (node9, node12),
-                (node9, node13),
-                (node10, node11),
-                (node11, node14),
-                (node11, node15),
-                (node12, node13),
-                (node12, node16),
-                (node12, node17),
-                (node13, node16),
-                (node13, node17),
-                (node14, node15),
-                (node15, node16),
-                (node16, node17)
+                new Edge<Node>(node0, node1),
+                new Edge<Node>(node0, node7),
+                new Edge<Node>(node1, node4),
+                new Edge<Node>(node2, node3),
+                new Edge<Node>(node2, node5),
+                new Edge<Node>(node2, node6),
+                new Edge<Node>(node3, node6),
+                new Edge<Node>(node4, node7),
+                new Edge<Node>(node4, node8),
+                new Edge<Node>(node5, node6),
+                new Edge<Node>(node5, node12),
+                new Edge<Node>(node5, node13),
+                new Edge<Node>(node6, node13),
+                new Edge<Node>(node7, node8),
+                new Edge<Node>(node7, node10),
+                new Edge<Node>(node8, node9),
+                new Edge<Node>(node8, node10),
+                new Edge<Node>(node9, node12),
+                new Edge<Node>(node9, node13),
+                new Edge<Node>(node10, node11),
+                new Edge<Node>(node11, node14),
+                new Edge<Node>(node11, node15),
+                new Edge<Node>(node12, node13),
+                new Edge<Node>(node12, node16),
+                new Edge<Node>(node12, node17),
+                new Edge<Node>(node13, node16),
+                new Edge<Node>(node13, node17),
+                new Edge<Node>(node14, node15),
+                new Edge<Node>(node15, node16),
+                new Edge<Node>(node16, node17)
             };
 
-            graph.AddNodes(nodes, counter);
-            graph.AddEdges(edges, counter);
+            graph.AddNodes(nodes, MockCounter);
+            graph.AddEdges(edges, MockCounter);
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
 
             Assert.AreEqual(9, matching.Count);
         }
@@ -384,27 +384,27 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestCase4()
         {
             Random random = new Random(685450);
-            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.3, random);
+            Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.3, random);
 
-            int startEdges = graph.NumberOfEdges(counter);
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
-
+            int startEdges = graph.NumberOfEdges(MockCounter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0], counter);
+                    Edge<Node> edge = new Edge<Node>(components[i][0], components[j][0]);
+                    graph.AddEdge(edge, MockCounter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             if (components.Count != 1)
             {
                 throw new Exception();
             }
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
             Assert.AreEqual(250, matching.Count);
 
             HashSet<(Node, Node)> hashedMatching = new HashSet<(Node, Node)>(matching);
@@ -412,131 +412,136 @@ namespace TESTS_MulticutInTrees.Utilities
 
             HashSet<Node> matchedNodes = new HashSet<Node>();
 
-            foreach ((Node, Node) edge in matching)
+            Dictionary<(Node, Node), Edge<Node>> nodeTupleToEdge = (Dictionary<(Node, Node), Edge<Node>>)typeof(Graph).GetProperty("NodeTupleToEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(graph, new object[] { });
+            foreach ((Node, Node) edge in matching.Select(Utils.OrderEdgeSmallToLarge))
             {
-                Assert.IsTrue(graph.HasEdge(edge, counter));
+                Assert.IsTrue(graph.HasEdge(nodeTupleToEdge[edge], MockCounter));
 
                 matchedNodes.Add(edge.Item1);
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
-            Assert.AreEqual(graph.NumberOfNodes(counter), matchedNodes.Count);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(MockCounter));
+            Assert.AreEqual(graph.NumberOfNodes(MockCounter), matchedNodes.Count);
         }
 
         [TestMethod]
         public void TestCase5()
         {
             Random random = new Random(9874);
-            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.8, random);
+            Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.8, random);
 
-            int startEdges = graph.NumberOfEdges(counter);
+            int startEdges = graph.NumberOfEdges(MockCounter);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
-
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0], counter);
+                    Edge<Node> edge = new Edge<Node>(components[i][0], components[j][0]);
+                    graph.AddEdge(edge, MockCounter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             if (components.Count != 1)
             {
                 throw new Exception();
             }
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
             Assert.AreEqual(250, matching.Count);
 
             HashSet<(Node, Node)> hashedMatching = new HashSet<(Node, Node)>(matching);
             Assert.AreEqual(matching.Count, hashedMatching.Count);
 
             HashSet<Node> matchedNodes = new HashSet<Node>();
-            foreach ((Node, Node) edge in matching)
+
+            Dictionary<(Node, Node), Edge<Node>> nodeTupleToEdge = (Dictionary<(Node, Node), Edge<Node>>)typeof(Graph).GetProperty("NodeTupleToEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(graph, new object[] { });
+            foreach ((Node, Node) edge in matching.Select(Utils.OrderEdgeSmallToLarge))
             {
-                Assert.IsTrue(graph.HasEdge(edge, counter));
+                Assert.IsTrue(graph.HasEdge(nodeTupleToEdge[edge], MockCounter));
 
                 matchedNodes.Add(edge.Item1);
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
-            Assert.AreEqual(graph.NumberOfNodes(counter), matchedNodes.Count);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(MockCounter));
+            Assert.AreEqual(graph.NumberOfNodes(MockCounter), matchedNodes.Count);
         }
 
         [TestMethod]
         public void TestCase6()
         {
             Random random = new Random(3);
-            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(501, 0.05, random);
+            Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(501, 0.05, random);
 
-            int startEdges = graph.NumberOfEdges(counter);
+            int startEdges = graph.NumberOfEdges(MockCounter);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
-
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0], counter);
+                    Edge<Node> edge = new Edge<Node>(components[i][0], components[j][0]);
+                    graph.AddEdge(edge, MockCounter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             if (components.Count != 1)
             {
                 throw new Exception();
             }
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
             Assert.AreEqual(250, matching.Count);
 
             HashSet<(Node, Node)> hashedMatching = new HashSet<(Node, Node)>(matching);
             Assert.AreEqual(matching.Count, hashedMatching.Count);
 
             HashSet<Node> matchedNodes = new HashSet<Node>();
-            foreach ((Node, Node) edge in matching)
+
+            Dictionary<(Node, Node), Edge<Node>> nodeTupleToEdge = (Dictionary<(Node, Node), Edge<Node>>)typeof(Graph).GetProperty("NodeTupleToEdge", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true).Invoke(graph, new object[] { });
+            foreach ((Node, Node) edge in matching.Select(Utils.OrderEdgeSmallToLarge))
             {
-                Assert.IsTrue(graph.HasEdge(edge, counter));
+                Assert.IsTrue(graph.HasEdge(nodeTupleToEdge[edge], MockCounter));
 
                 matchedNodes.Add(edge.Item1);
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
-            Assert.AreEqual(graph.NumberOfNodes(counter) - 1, matchedNodes.Count);
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(MockCounter));
+            Assert.AreEqual(graph.NumberOfNodes(MockCounter) - 1, matchedNodes.Count);
         }
 
         [TestMethod]
         public void TestStarGraph()
         {
             int nrNodes = 100;
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             for (uint i = 0; i < nrNodes; i++)
             {
-                graph.AddNode(new Node(i), counter);
+                graph.AddNode(new Node(i), MockCounter);
             }
 
             bool first = true;
-            foreach (Node node in graph.Nodes(counter))
+            foreach (Node node in graph.Nodes(MockCounter))
             {
                 if (first)
                 {
                     first = false;
                     continue;
                 }
-                graph.AddEdge(graph.Nodes(counter).First(), node, counter);
+                graph.AddEdge(new Edge<Node>(graph.Nodes(MockCounter).First(), node), MockCounter);
             }
 
-            int startEdges = graph.NumberOfEdges(counter);
+            int startEdges = graph.NumberOfEdges(MockCounter);
 
-            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph<Node>, Node>(graph);
+            List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph);
             Assert.AreEqual(1, matching.Count);
 
             HashSet<(Node, Node)> hashedMatching = new HashSet<(Node, Node)>(matching);
@@ -549,7 +554,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 matchedNodes.Add(edge.Item2);
             }
 
-            Assert.AreEqual(startEdges, graph.NumberOfEdges(counter));
+            Assert.AreEqual(startEdges, graph.NumberOfEdges(MockCounter));
             Assert.AreEqual(2, matchedNodes.Count);
         }
 
@@ -557,57 +562,57 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestMatchingOfSizeTrue()
         {
             Random random = new Random(243);
-            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.2, random);
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.2, random);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0], counter);
+                    graph.AddEdge(new Edge<Node>(components[i][0], components[j][0]), MockCounter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             if (components.Count != 1)
             {
                 throw new Exception();
             }
 
-            Assert.IsTrue(EdmondsMatching.HasMatchingOfAtLeast<Graph<Node>, Node>(graph, 150));
+            Assert.IsTrue(EdmondsMatching.HasMatchingOfAtLeast<Graph, Edge<Node>, Node>(graph, 150));
         }
 
         [TestMethod]
         public void TestMatchingOfSizeFalse()
         {
             Random random = new Random(9846);
-            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.1, random);
+            Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(500, 0.1, random);
 
-            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            List<List<Node>> components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             for (int i = 0; i < components.Count - 1; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
                 {
-                    graph.AddEdge(components[i][0], components[j][0], counter);
+                    graph.AddEdge(new Edge<Node>(components[i][0], components[j][0]), MockCounter);
                 }
             }
 
-            components = DFS.FindAllConnectedComponents(graph.Nodes(counter), counter);
+            components = DFS.FindAllConnectedComponents(graph.Nodes(MockCounter), MockCounter);
 
             if (components.Count != 1)
             {
                 throw new Exception();
             }
 
-            Assert.IsFalse(EdmondsMatching.HasMatchingOfAtLeast<Graph<Node>, Node>(graph, 300));
+            Assert.IsFalse(EdmondsMatching.HasMatchingOfAtLeast<Graph, Edge<Node>, Node>(graph, 300));
         }
 
         [TestMethod]
         public void TestBlossomOnPath1()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -625,31 +630,31 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node13 = new Node(13);
             Node node14 = new Node(14);
             Node node15 = new Node(15);
-
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node2, node3, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node9, counter);
-            graph.AddEdge(node5, node6, counter);
-            graph.AddEdge(node6, node7, counter);
-            graph.AddEdge(node7, node8, counter);
-            graph.AddEdge(node8, node12, counter);
-            graph.AddEdge(node8, node13, counter);
-            graph.AddEdge(node9, node10, counter);
-            graph.AddEdge(node10, node11, counter);
-            graph.AddEdge(node11, node12, counter);
-            graph.AddEdge(node13, node14, counter);
-            graph.AddEdge(node15, node14, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge49 = new Edge<Node>(node4, node9);
+            Edge<Node> edge56 = new Edge<Node>(node5, node6);
+            Edge<Node> edge67 = new Edge<Node>(node6, node7);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            Edge<Node> edge812 = new Edge<Node>(node8, node12);
+            Edge<Node> edge813 = new Edge<Node>(node8, node13);
+            Edge<Node> edge910 = new Edge<Node>(node9, node10);
+            Edge<Node> edge1011 = new Edge<Node>(node10, node11);
+            Edge<Node> edge1112 = new Edge<Node>(node11, node12);
+            Edge<Node> edge1314 = new Edge<Node>(node13, node14);
+            Edge<Node> edge1514 = new Edge<Node>(node15, node14);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge45, edge49, edge56, edge67, edge78, edge812, edge813, edge910, edge1011, edge1112, edge1314, edge1514 }, MockCounter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node13), (node13, node14), (node14, node15) };
             List<Node> blossom = new List<Node>() { node4, node5, node6, node7, node8, node9, node10, node11, node12 };
             List<(Node, Node)> matching = new List<(Node, Node)>() { (node1, node2), (node3, node4), (node5, node6), (node7, node8), (node9, node10), (node11, node12), (node13, node14) };
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomInMiddle", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { graph, contractedPath, blossom, node4, matching });
 
             List<(Node, Node)> expectedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5), (node5, node6), (node6, node7), (node7, node8), (node8, node13), (node13, node14), (node14, node15) };
@@ -660,7 +665,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestBlossomOnPath2()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -678,31 +683,31 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node13 = new Node(13);
             Node node14 = new Node(14);
             Node node15 = new Node(15);
-
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node2, node3, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node8, counter);
-            graph.AddEdge(node5, node6, counter);
-            graph.AddEdge(node6, node7, counter);
-            graph.AddEdge(node7, node12, counter);
-            graph.AddEdge(node7, node13, counter);
-            graph.AddEdge(node8, node9, counter);
-            graph.AddEdge(node9, node10, counter);
-            graph.AddEdge(node10, node11, counter);
-            graph.AddEdge(node11, node12, counter);
-            graph.AddEdge(node13, node14, counter);
-            graph.AddEdge(node14, node15, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge48 = new Edge<Node>(node4, node8);
+            Edge<Node> edge56 = new Edge<Node>(node5, node6);
+            Edge<Node> edge67 = new Edge<Node>(node6, node7);
+            Edge<Node> edge712 = new Edge<Node>(node7, node12);
+            Edge<Node> edge713 = new Edge<Node>(node7, node13);
+            Edge<Node> edge89 = new Edge<Node>(node8, node9);
+            Edge<Node> edge910 = new Edge<Node>(node9, node10);
+            Edge<Node> edge1011 = new Edge<Node>(node10, node11);
+            Edge<Node> edge1112 = new Edge<Node>(node11, node12);
+            Edge<Node> edge1314 = new Edge<Node>(node13, node14);
+            Edge<Node> edge1415 = new Edge<Node>(node14, node15);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge45, edge48, edge56, edge67, edge712, edge713, edge89, edge910, edge1011, edge1112, edge1314, edge1415 }, MockCounter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node13), (node13, node14), (node14, node15) };
             List<Node> blossom = new List<Node>() { node4, node5, node6, node7, node8, node9, node10, node11, node12 };
             List<(Node, Node)> matching = new List<(Node, Node)>() { (node1, node2), (node3, node4), (node5, node6), (node7, node12), (node8, node9), (node10, node11), (node13, node14) };
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomInMiddle", BindingFlags.NonPublic | BindingFlags.Static);
-            method = method.MakeGenericMethod(new Type[2] { typeof(Graph<Node>), typeof(Node) });
+            method = method.MakeGenericMethod(new Type[] { typeof(Graph), typeof(Edge<Node>), typeof(Node) });
             List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { graph, contractedPath, blossom, node4, matching });
 
             List<(Node, Node)> expectedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node8), (node8, node9), (node9, node10), (node10, node11), (node11, node12), (node12, node7), (node7, node13), (node13, node14), (node14, node15) };
@@ -713,7 +718,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestBlossomAtEndOfPath1()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -729,22 +734,22 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node11 = new Node(11);
             Node node12 = new Node(12);
             Node node13 = new Node(13);
-
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node2, node3, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node5, node6, counter);
-            graph.AddEdge(node5, node13, counter);
-            graph.AddEdge(node6, node7, counter);
-            graph.AddEdge(node7, node8, counter);
-            graph.AddEdge(node8, node9, counter);
-            graph.AddEdge(node9, node10, counter);
-            graph.AddEdge(node10, node11, counter);
-            graph.AddEdge(node11, node12, counter);
-            graph.AddEdge(node12, node13, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge56 = new Edge<Node>(node5, node6);
+            Edge<Node> edge513 = new Edge<Node>(node5, node13);
+            Edge<Node> edge67 = new Edge<Node>(node6, node7);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            Edge<Node> edge89 = new Edge<Node>(node8, node9);
+            Edge<Node> edge910 = new Edge<Node>(node9, node10);
+            Edge<Node> edge1011 = new Edge<Node>(node10, node11);
+            Edge<Node> edge1112 = new Edge<Node>(node11, node12);
+            Edge<Node> edge1213 = new Edge<Node>(node12, node13);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge45, edge56, edge513, edge67, edge78, edge89, edge910, edge1011, edge1112, edge1213 }, MockCounter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5) };
             List<Node> blossom = new List<Node>() { node5, node6, node7, node8, node9, node10, node11, node12, node13 };
@@ -762,7 +767,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestBlossomAtEndOfPath2()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -778,22 +783,22 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node11 = new Node(11);
             Node node12 = new Node(12);
             Node node13 = new Node(13);
-
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node2, node3, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node5, node6, counter);
-            graph.AddEdge(node5, node13, counter);
-            graph.AddEdge(node6, node7, counter);
-            graph.AddEdge(node7, node8, counter);
-            graph.AddEdge(node8, node9, counter);
-            graph.AddEdge(node9, node10, counter);
-            graph.AddEdge(node10, node11, counter);
-            graph.AddEdge(node11, node12, counter);
-            graph.AddEdge(node12, node13, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge56 = new Edge<Node>(node5, node6);
+            Edge<Node> edge513 = new Edge<Node>(node5, node13);
+            Edge<Node> edge67 = new Edge<Node>(node6, node7);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            Edge<Node> edge89 = new Edge<Node>(node8, node9);
+            Edge<Node> edge910 = new Edge<Node>(node9, node10);
+            Edge<Node> edge1011 = new Edge<Node>(node10, node11);
+            Edge<Node> edge1112 = new Edge<Node>(node11, node12);
+            Edge<Node> edge1213 = new Edge<Node>(node12, node13);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge45, edge56, edge513, edge67, edge78, edge89, edge910, edge1011, edge1112, edge1213 }, MockCounter);
 
             List<(Node, Node)> contractedPath = new List<(Node, Node)>() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5) };
             List<Node> blossom = new List<Node>() { node5, node6, node7, node8, node9, node10, node11, node12, node13 };

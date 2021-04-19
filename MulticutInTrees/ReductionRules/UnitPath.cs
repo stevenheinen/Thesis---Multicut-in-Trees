@@ -21,11 +21,11 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Constructor for the <see cref="UnitPath"/> rule.
         /// </summary>
-        /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="UnitPath"/> rule is part of.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
-        public UnitPath(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm) : base(tree, demandPairs, algorithm)
+        public UnitPath(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} rule, but the input tree is null!");
@@ -55,16 +55,16 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
         private bool TryApplyReductionRule(IEnumerable<DemandPair> demandPairsToCheck)
         {
-            HashSet<(TreeNode, TreeNode)> edgesToBeCut = new HashSet<(TreeNode, TreeNode)>();
+            HashSet<Edge<Node>> edgesToBeCut = new HashSet<Edge<Node>>();
             foreach (DemandPair dp in demandPairsToCheck)
             {
                 if (DemandPathHasLengthOne(dp))
                 {
-                    edgesToBeCut.Add(Utils.OrderEdgeSmallToLarge(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First()));
+                    edgesToBeCut.Add(dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First());
                 }
             }
 
-            return TryCutEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeCut, Measurements.TreeOperationsCounter));
+            return TryCutEdges(new CountedList<Edge<Node>>(edgesToBeCut, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -77,7 +77,7 @@ namespace MulticutInTrees.ReductionRules
 
             HashSet<DemandPair> demandPairsToCheck = new HashSet<DemandPair>();
 
-            foreach (((TreeNode, TreeNode) _, TreeNode _, CountedCollection<DemandPair> demandPairs) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach ((Edge<Node> _, Node _, CountedCollection<DemandPair> demandPairs) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
@@ -85,7 +85,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            foreach ((CountedList<(TreeNode, TreeNode)> _, DemandPair demandPair) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach ((CountedList<Edge<Node>> _, DemandPair demandPair) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 demandPairsToCheck.Add(demandPair);
             }

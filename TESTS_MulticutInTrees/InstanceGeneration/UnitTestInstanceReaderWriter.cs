@@ -19,7 +19,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         {
             int seed = 243;
             CommandLineOptions options = new CommandLineOptions();
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             List<DemandPair> demandPairs = new List<DemandPair>();
             int k = 1;
 

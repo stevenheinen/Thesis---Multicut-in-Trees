@@ -43,7 +43,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// The input <see cref="Tree"/>.
         /// </summary>
-        public Tree<TreeNode> Tree { get; }
+        public Graph Tree { get; }
 
         /// <summary>
         /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.
@@ -66,14 +66,15 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="treeType">The <see cref="InputTreeType"/> used to generate the tree in the instance.</param>
         /// <param name="dpType">The <see cref="InputDemandPairsType"/> used to generate the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
-        /// <param name="tree">The <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The tree of in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
         /// <param name="optimalK">The minimum possible size the cutset can be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than zero.</exception>
-        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int randomSeed, Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int k, int optimalK)
+        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int randomSeed, Graph tree, CountedList<DemandPair> demandPairs, int k, int optimalK)
         {
+            Counter mockCounter = new Counter();
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a multicut instance, but the tree is null!");
             Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");
@@ -81,8 +82,11 @@ namespace MulticutInTrees.MulticutProblem
             {
                 throw new ArgumentOutOfRangeException(nameof(k), "Trying to create a multicut instance, but the maximum amount of edges that can be removed is smaller than zero!");
             }
+            if (!tree.IsTree(mockCounter))
+            {
+                throw new ArgumentException("Trying to create a multicut instance, but the provided graph is not a tree!");
+            }
 #endif
-            Counter mockCounter = new Counter();
             NumberOfNodes = tree.NumberOfNodes(mockCounter);
             NumberOfDemandPairs = demandPairs.Count(mockCounter);
             TreeType = treeType;
@@ -108,7 +112,7 @@ namespace MulticutInTrees.MulticutProblem
             Counter mockCounter = new Counter();
 
             // Try to read the instance from the files
-            (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(randomSeed, options);
+            (Graph tree, CountedList<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(randomSeed, options);
 
             if (tree is null)
             {
@@ -138,7 +142,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> given to the program.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
+        private (Graph tree, CountedList<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(options, nameof(options), "Trying to create a multicut instance, but the commandline options are null!");
@@ -150,7 +154,7 @@ namespace MulticutInTrees.MulticutProblem
 
             Random treeRandom = new Random(randomSeed);
             Random demandPairRandom = new Random(randomSeed);
-            Tree<TreeNode> tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
+            Graph tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
             Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
             CountedList<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
 
@@ -168,16 +172,16 @@ namespace MulticutInTrees.MulticutProblem
         }
 
         /// <summary>
-        /// Create a <see cref="Tree{T}"/> using the method given in <paramref name="inputTreeType"/>.
+        /// Create a <see cref="Graph"/> using the method given in <paramref name="inputTreeType"/>.
         /// </summary>
         /// <param name="inputTreeType">The <see cref="InputTreeType"/> that says which method to use to create the tree.</param>
         /// <param name="random">The <see cref="Random"/> to be used for random number generation. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfNodes">The number of nodes in the resulting <see cref="Tree{T}"/>. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file with the CNF-SAT / Vertex Cover instance to generate the <see cref="Tree{N}"/> from. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <returns>A <see cref="Tree{N}"/> that is generated according to <paramref name="inputTreeType"/>.</returns>
+        /// <param name="numberOfNodes">The number of nodes in the resulting <see cref="AbstractGraph{TEdge, TNode}"/>. Not required for all <see cref="InputTreeType"/>s.</param>
+        /// <param name="filePath">The path to the file with the CNF-SAT / Vertex Cover instance to generate the <see cref="AbstractGraph{TEdge, TNode}"/> from. Not required for all <see cref="InputTreeType"/>s.</param>
+        /// <returns>A <see cref="Graph"/> that is generated according to <paramref name="inputTreeType"/>.</returns>
         /// <exception cref="ArgumentException">Thrown when <paramref name="inputTreeType"/> is its default value: <see cref="InputTreeType.None"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="inputTreeType"/> is not supported as tree generation type.</exception>
-        private Tree<TreeNode> CreateInputTree(InputTreeType inputTreeType, Random random, int numberOfNodes, string filePath)
+        private Graph CreateInputTree(InputTreeType inputTreeType, Random random, int numberOfNodes, string filePath)
         {
 #if !EXPERIMENT
             if (inputTreeType == InputTreeType.None)
@@ -200,7 +204,7 @@ namespace MulticutInTrees.MulticutProblem
         /// Create a <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s using the method given in <see cref="InputTreeType"/>.
         /// </summary>
         /// <param name="random">The <see cref="Random"/> to be used for random number generation.</param>
-        /// <param name="inputTree">The <see cref="Tree{N}"/> in which to generate the <see cref="DemandPair"/>s.</param>
+        /// <param name="inputTree">The <see cref="Graph"/> in which to generate the <see cref="DemandPair"/>s.</param>
         /// <param name="inputDemandPairsType">The <see cref="InputDemandPairsType"/> that says which method to use to create the <see cref="DemandPair"/>s.</param>
         /// <param name="numberOfDemandPairs">The required number of <see cref="DemandPair"/>s.</param>
         /// <param name="distanceProbability">A <see cref="Dictionary{TKey, TValue}"/> from a lower and upperbound on a distance to the probability of choosing that distance for the length of a <see cref="DemandPair"/>. Not required for all <see cref="InputTreeType"/>s.</param>
@@ -208,7 +212,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s that were generated according to the method given by <paramref name="inputDemandPairsType"/>.</returns>
         /// <exception cref="ArgumentException">Thrown when <paramref name="inputDemandPairsType"/> is its default value: <see cref="InputDemandPairsType.None"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="inputDemandPairsType"/> is not supported as demand pair generation type.</exception>
-        private CountedList<DemandPair> CreateInputDemandPairs(Random random, Tree<TreeNode> inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
+        private CountedList<DemandPair> CreateInputDemandPairs(Random random, Graph inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
         {
 #if !EXPERIMENT
             if (inputDemandPairsType == InputDemandPairsType.None)

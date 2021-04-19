@@ -14,9 +14,9 @@ namespace MulticutInTrees.ReductionRules
     public abstract class ReductionRule
     {
         /// <summary>
-        /// The input <see cref="Tree{N}"/>.
+        /// The input <see cref="AbstractGraph{TEdge, TNode}"/>.
         /// </summary>
-        protected Tree<TreeNode> Tree { get; }
+        protected Graph Tree { get; }
 
         /// <summary>
         /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.
@@ -41,7 +41,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// A <see cref="CountedList{T}"/> of all edges that were removed in the last iteration, their contracted nodes, and the <see cref="DemandPair"/>s on the contracted edge.
         /// </summary>
-        public CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)> LastContractedEdges { get; }
+        public CountedList<(Edge<Node>, Node, CountedCollection<DemandPair>)> LastContractedEdges { get; }
 
         /// <summary>
         /// A <see cref="CountedList{T}"/> of all <see cref="DemandPair"/>s that were removed in the last iteration.
@@ -51,7 +51,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// A <see cref="CountedList{T}"/> of tuples of changed edges for a <see cref="DemandPair"/> and the <see cref="DemandPair"/> itself.
         /// </summary>
-        public CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)> LastChangedDemandPairs { get; }
+        public CountedList<(CountedList<Edge<Node>>, DemandPair)> LastChangedDemandPairs { get; }
 
         /// <summary>
         /// Keeps track of whether this <see cref="ReductionRule"/> has run at least once.
@@ -66,12 +66,12 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Constructor for a <see cref="ReductionRule"/>.
         /// </summary>
-        /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The input <see cref="Graph"/> (tree) in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
         /// <param name="trueMeansInfeasibleInstance">If a <see cref="ReductionRule"/> returns <see langword="true"/> when it is checked for applicability, and this value is also <see langword="true"/>, we have an instance that cannot be solved. When a <see cref="ReductionRule"/> cannot determine that an instance is infeasible, pass <see langword="false"/> to this constructor.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
-        protected ReductionRule(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, bool trueMeansInfeasibleInstance = false)
+        protected ReductionRule(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, bool trueMeansInfeasibleInstance = false)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");
@@ -84,9 +84,9 @@ namespace MulticutInTrees.ReductionRules
             Algorithm = algorithm;
             Measurements = new PerformanceMeasurements(GetType().Name);
             TrueMeansInfeasibleInstance = trueMeansInfeasibleInstance;
-            LastContractedEdges = new CountedList<((TreeNode, TreeNode), TreeNode, CountedCollection<DemandPair>)>();
+            LastContractedEdges = new CountedList<(Edge<Node>, Node, CountedCollection<DemandPair>)>();
             LastRemovedDemandPairs = new CountedList<DemandPair>();
-            LastChangedDemandPairs = new CountedList<(CountedList<(TreeNode, TreeNode)>, DemandPair)>();
+            LastChangedDemandPairs = new CountedList<(CountedList<Edge<Node>>, DemandPair)>();
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeCut">The <see cref="CountedList{T}"/> with all edges to be cut.</param>
         /// <returns><see langword="true"/> if <paramref name="edgesToBeCut"/> has any elements, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeCut"/> is <see langword="null"/>.</exception>
-        protected bool TryCutEdges(CountedList<(TreeNode, TreeNode)> edgesToBeCut)
+        protected bool TryCutEdges(CountedList<Edge<Node>> edgesToBeCut)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(edgesToBeCut, nameof(edgesToBeCut), "Trying to cut edges, but the Hashset with edges is null!");
@@ -143,7 +143,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted">The <see cref="CountedList{T}"/> with all edges to be contracted.</param>
         /// <returns><see langword="true"/> if <paramref name="edgesToBeContracted"/> has any elements, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edgesToBeContracted"/> is <see langword="null"/>.</exception>
-        protected bool TryContractEdges(CountedList<(TreeNode, TreeNode)> edgesToBeContracted)
+        protected bool TryContractEdges(CountedList<Edge<Node>> edgesToBeContracted)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(edgesToBeContracted, nameof(edgesToBeContracted), "Trying to contract edges, but the List with edges is null!");

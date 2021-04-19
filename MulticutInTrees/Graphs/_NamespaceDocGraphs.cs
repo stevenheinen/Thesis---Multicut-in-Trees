@@ -5,5 +5,8 @@ namespace MulticutInTrees.Graphs
     /// <summary>
     /// This part of the project contains all used graphs and nodes.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc 
+    {
+
+    }
 }

@@ -26,19 +26,19 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// The part of the solution that has been found thus far.
         /// </summary>
-        private List<(TreeNode, TreeNode)> PartialSolution { get; }
+        private List<Edge<Node>> PartialSolution { get; }
 
         /// <summary>
         /// Constructor for the <see cref="DisjointPaths"/> reduction rule.
         /// </summary>
-        /// <param name="tree">The input tree.</param>
+        /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public DisjointPaths(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm, true)
+        public DisjointPaths(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm, true)
         {
 #if !Experiment
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
@@ -60,8 +60,8 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if the current number of edge-disjoint demand pairs in the instance is larger than the amount of edges that can still be added to the solution, <see langword="false"/> otherwise.</returns>
         private bool DisjointPathsGreaterThanK()
         {
-            IEnumerable<(TreeNode, TreeNode)> commodities = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(dp => (dp.Node1, dp.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(Tree, commodities, Measurements);
+            IEnumerable<(Node, Node)> commodities = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Select(dp => (dp.Node1, dp.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(Tree, commodities, Measurements);
             Measurements.TimeSpentCheckingApplicability.Stop();
             return flow > MaxSolutionSize - PartialSolution.Count;
         }

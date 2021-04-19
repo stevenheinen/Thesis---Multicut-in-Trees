@@ -22,7 +22,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestInternalConstructor()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
@@ -43,10 +43,6 @@ namespace TESTS_MulticutInTrees.MulticutProblem
                 // Write the header with number of nodes, number of dps and optimal k
                 sw.WriteLine("// [Number of nodes] [Number of demand pairs] [Optimal K]");
                 sw.WriteLine("7 3 2");
-
-                // Write the root of the tree
-                sw.WriteLine("// ID of the root of the tree");
-                sw.WriteLine("0");
 
                 // Write all edges in the tree
                 sw.WriteLine("// Edges, denoted by: [ID of endpoint 1] [ID of endpoint 2]");
@@ -102,7 +98,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestNullParameter()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
 
@@ -133,7 +129,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestParseLengthDistibutionDictionary()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> dps = new CountedList<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
             MethodInfo method = typeof(MulticutInstance).GetMethod("ParseLengthDistributionDictionary", BindingFlags.NonPublic | BindingFlags.Instance);

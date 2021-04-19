@@ -13,14 +13,14 @@ namespace MulticutInTrees.InstanceGeneration
     public static class TreeFromPruferSequence
     {
         /// <summary>
-        /// Generates a random <see cref="Tree{N}"/> with <paramref name="numberOfNodes"/> <see cref="TreeNode"/>s using a random Prüfer sequence.
+        /// Generates a random <see cref="AbstractGraph{TEdge, TNode}"/> with <paramref name="numberOfNodes"/> <see cref="Node"/>s using a random Prüfer sequence.
         /// </summary>
         /// <param name="numberOfNodes">The required number of nodes in the resulting tree. Should be at least 3.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
-        /// <returns>A <see cref="Tree{N}"/> with <see cref="TreeNode"/>s that is randomly generated using a Prüfer sequence.</returns>
+        /// <returns>A <see cref="Graph"/> that is randomly generated using a Prüfer sequence.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="random"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is less than three.</exception>
-        public static Tree<TreeNode> GenerateTree(int numberOfNodes, Random random)
+        public static Graph GenerateTree(int numberOfNodes, Random random)
         {
 #if !EXPERIMENT
             Utils.NullCheck(random, nameof(random), "Trying to generate a random tree from a Prüfer sequence, but the random is null!");
@@ -31,7 +31,15 @@ namespace MulticutInTrees.InstanceGeneration
 #endif
             List<(int, int)> edges = GenerateEdgesInTree(numberOfNodes, random);
 
-            return Utils.CreateTreeWithEdges(numberOfNodes, 0, edges);
+            Graph graph = Utils.CreateGraphWithEdges(numberOfNodes, edges);
+
+#if !EXPERIMENT
+            if (!graph.IsTree(new CountedDatastructures.Counter()))
+            {
+                throw new Exception("Graph is not a tree!");
+            }
+#endif
+            return graph;
         }
 
         /// <summary>

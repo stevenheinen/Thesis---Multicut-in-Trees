@@ -92,15 +92,15 @@ namespace TESTS_MulticutInTrees.Utilities
         {
             Random random = new Random(6543);
 
-            TreeNode t0 = new TreeNode(0);
-            TreeNode t1 = new TreeNode(1);
-            TreeNode t2 = new TreeNode(2);
-            TreeNode t3 = new TreeNode(3);
-            TreeNode t4 = new TreeNode(4);
-            TreeNode t5 = new TreeNode(5);
-            TreeNode t6 = new TreeNode(6);
+            RootedTreeNode t0 = new RootedTreeNode(0);
+            RootedTreeNode t1 = new RootedTreeNode(1);
+            RootedTreeNode t2 = new RootedTreeNode(2);
+            RootedTreeNode t3 = new RootedTreeNode(3);
+            RootedTreeNode t4 = new RootedTreeNode(4);
+            RootedTreeNode t5 = new RootedTreeNode(5);
+            RootedTreeNode t6 = new RootedTreeNode(6);
 
-            List<TreeNode> nodes = new List<TreeNode>() { t0, t1, t2, t3, t4, t5, t6 };
+            List<RootedTreeNode> nodes = new List<RootedTreeNode>() { t0, t1, t2, t3, t4, t5, t6 };
             nodes.Shuffle(random);
             Assert.IsNotNull(nodes);
         }

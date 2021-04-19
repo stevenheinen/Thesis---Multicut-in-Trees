@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CommandLineArguments;
 using MulticutInTrees.CountedDatastructures;
@@ -236,7 +235,7 @@ namespace MulticutInTrees.Experiments
             GuoNiedermeierBranching gnBranching = new GuoNiedermeierBranching(instance);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            (List<(TreeNode, TreeNode)> solution, ExperimentOutput experimentOutput) = gnBranching.Run(false, CancellationToken.None);
+            (List<Edge<Node>> solution, ExperimentOutput experimentOutput) = gnBranching.Run(false);
             stopwatch.Stop();
 
             if (options.Verbose)
@@ -274,7 +273,7 @@ namespace MulticutInTrees.Experiments
             Algorithm algorithm = CreateAlgorithmInstance(options.AlgorithmType, instance);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            (Tree<TreeNode> tree, List<(TreeNode, TreeNode)> partialSolution, List<DemandPair> finalDemandPairs, ExperimentOutput experimentOutput) = algorithm.Run();
+            (Graph tree, List<Edge<Node>> partialSolution, List<DemandPair> finalDemandPairs, ExperimentOutput experimentOutput) = algorithm.Run();
             stopwatch.Stop();
 
             if (options.Verbose)
@@ -285,7 +284,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine($"Partial solution size:            {partialSolution.Count}");
                 Console.WriteLine($"Remaining tree:                   {tree}");
                 Console.WriteLine($"Remaining number of demand pairs: {finalDemandPairs.Count}");
-                Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, finalDemandPairs.Select(dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
+                Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, finalDemandPairs.Select(dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
                 Console.WriteLine($"Time required (ticks):            {stopwatch.ElapsedTicks}");
                 Console.WriteLine($"Entire partial solution:          {partialSolution.Print()}");
                 Console.WriteLine($"Remaining edges:                  {tree.Edges(new Counter()).Print()}");

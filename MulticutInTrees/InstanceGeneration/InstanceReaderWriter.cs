@@ -28,12 +28,12 @@ namespace MulticutInTrees.InstanceGeneration
         /// </summary>
         /// <param name="randomSeed">The seed used for random number generation.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
-        /// <param name="tree">The <see cref="Tree{N}"/> to be written.</param>
+        /// <param name="tree">The <see cref="Graph"/> to be written.</param>
         /// <param name="demandPairs">The <see cref="DemandPair"/>s to be written.</param>
         /// <param name="optimalK">The optimal K value for the current instance.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/>, <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="UnauthorizedAccessException">Thrown when the file to write to cannot be opened.</exception>
-        public static void WriteInstance(int randomSeed, CommandLineOptions options, Tree<TreeNode> tree, List<DemandPair> demandPairs, int optimalK)
+        public static void WriteInstance(int randomSeed, CommandLineOptions options, Graph tree, List<DemandPair> demandPairs, int optimalK)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to write an instance to a file, but the command line options are null!");
@@ -52,15 +52,11 @@ namespace MulticutInTrees.InstanceGeneration
                 sw.WriteLine("// [Number of nodes] [Number of demand pairs] [Optimal K]");
                 sw.WriteLine($"{numberOfNodes} {numberOfDPs} {optimalK}");
 
-                // Write the root of the tree
-                sw.WriteLine("// ID of the root of the tree");
-                sw.WriteLine($"{tree.GetRoot(MockCounter).ID}");
-
                 // Write all edges in the tree
                 sw.WriteLine("// Edges, denoted by: [ID of endpoint 1] [ID of endpoint 2]");
-                foreach ((TreeNode, TreeNode) edge in tree.Edges(MockCounter))
+                foreach (Edge<Node> edge in tree.Edges(MockCounter))
                 {
-                    sw.WriteLine($"{edge.Item1.ID} {edge.Item2.ID}");
+                    sw.WriteLine($"{edge.Endpoint1.ID} {edge.Endpoint2.ID}");
                 }
 
                 // Write the endpoints of all dps in the tree
@@ -83,10 +79,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// </summary>
         /// <param name="randomSeed">The seed used for random number generation.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
-        /// <returns>If the file with this instance exists: a tuple with the <see cref="Tree{N}"/>, a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s and the optimal K value. Otherwise, a tuple with <see langword="null"/>, <see langword="null"/> and -1.</returns>
+        /// <returns>If the file with this instance exists: a tuple with the <see cref="Graph"/>, a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s and the optimal K value. Otherwise, a tuple with <see langword="null"/>, <see langword="null"/> and -1.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
         /// <exception cref="BadFileFormatException">Thrown when one of the lines in the file we are reading is not in the correct format.</exception>
-        public static (Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, int optimalK) ReadInstance(int randomSeed, CommandLineOptions options)
+        public static (Graph tree, CountedList<DemandPair> demandPairs, int optimalK) ReadInstance(int randomSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to read an instance from a file, but the command line options are null!");
@@ -102,7 +98,6 @@ namespace MulticutInTrees.InstanceGeneration
             int optimalK;
             int numberOfNodes;
 
-            int root;
             List<(int, int)> edges = new List<(int, int)>();
             List<(int, int)> dps = new List<(int, int)>();
 
@@ -123,22 +118,11 @@ namespace MulticutInTrees.InstanceGeneration
                     throw new BadFileFormatException($"Trying to read an instance from a file. The second line ({line}) is not in the correct format. Expected line with three integers, separated by a space. The first one should represent the number of nodes, the second one the number of demand pairs, and the final one the optimal K value.");
                 }
 
-                line = sr.ReadLine();
-                while (line.StartsWith("//"))
-                {
-                    line = sr.ReadLine();
-                }
-
-                if (!int.TryParse(line, out root))
-                {
-                    throw new BadFileFormatException($"Trying to read an instance from a file. The line ({line}) is not in the correct format. Expected line a single integer, representing the ID of the root of the tree.");
-                }
-
                 edges = ReadEdges(ref line, sr, numberOfNodes);
                 dps = ReadDemandPairs(ref line, sr, numberOfDPs);
             }
 
-            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(numberOfNodes, root, edges);
+            Graph tree = Utils.CreateGraphWithEdges(numberOfNodes, edges);
             CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, dps);
 
             return (tree, demandPairs, optimalK);

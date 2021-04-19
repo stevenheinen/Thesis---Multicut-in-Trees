@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -19,20 +18,19 @@ namespace MulticutInTrees.ReductionRules
     public class IdleEdge : ReductionRule
     {
         /// <summary>
-        /// A <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.
-        /// The value is all the <see cref="DemandPair"/>s whose path passes through the key.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge.
         /// </summary>
-        private CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
+        private CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
         /// Constructor for <see cref="IdleEdge"/>.
         /// </summary>
-        /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
-        /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.</param>
+        /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with <see cref="Edge{TNode}"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public IdleEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm)
+        public IdleEdge(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} rule, but the input tree is null!");
@@ -46,19 +44,16 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Checks whether an edge can be contracted. This is the case when no demand pairs use this edge.
         /// </summary>
-        /// <param name="edge">The tuple of two <see cref="TreeNode"/>s for which we want to know if it can be contracted.</param>
+        /// <param name="edge">The <see cref="Edge{TNode}"/> for which we want to know if it can be contracted.</param>
         /// <returns><see langword="true"/> if we can contract <paramref name="edge"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either <see cref="TreeNode"/> of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        private bool CanEdgeBeContracted((TreeNode, TreeNode) edge)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edge"/> is <see langword="null"/>.</exception>
+        private bool CanEdgeBeContracted(Edge<Node> edge)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(edge.Item1, nameof(edge.Item1), "Trying to see if an edge can be contracted, but the first endpoint of the edge is null!");
-            Utils.NullCheck(edge.Item2, nameof(edge.Item2), "Trying to see if an edge can be contracted, but the second endpoint of the edge is null!");
+            Utils.NullCheck(edge, nameof(edge), "Trying to see if an edge can be contracted, but the edge is null!");
 #endif
-            (TreeNode, TreeNode) usedEdge = Utils.OrderEdgeSmallToLarge(edge);
-
             // If this edge is not in the dictionary with demand paths per edge, or it is, but there are no demand paths going through this edge, we can contract this edge.
-            if (Tree.HasNode(edge.Item1, Measurements.TreeOperationsCounter) && Tree.HasNode(edge.Item2, Measurements.TreeOperationsCounter) && Tree.HasEdge(edge, Measurements.TreeOperationsCounter) && (!DemandPairsPerEdge.ContainsKey(usedEdge, Measurements.DemandPairsPerEdgeKeysCounter) || DemandPairsPerEdge[usedEdge, Measurements.DemandPairsPerEdgeKeysCounter].Count(Measurements.DemandPairsPerEdgeValuesCounter) == 0))
+            if (Tree.HasNode(edge.Endpoint1, Measurements.TreeOperationsCounter) && Tree.HasNode(edge.Endpoint2, Measurements.TreeOperationsCounter) && Tree.HasEdge(edge, Measurements.TreeOperationsCounter) && (!DemandPairsPerEdge.ContainsKey(edge, Measurements.DemandPairsPerEdgeKeysCounter) || DemandPairsPerEdge[edge, Measurements.DemandPairsPerEdgeKeysCounter].Count(Measurements.DemandPairsPerEdgeValuesCounter) == 0))
             {
                 return true;
             }
@@ -70,18 +65,18 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         /// <param name="edgesToCheck">The <see cref="IEnumerable{T}"/> with edges we want to check.</param>
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
-        private bool TryApplyReductionRule(IEnumerable<(TreeNode, TreeNode)> edgesToCheck)
+        private bool TryApplyReductionRule(IEnumerable<Edge<Node>> edgesToCheck)
         {
-            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
-            foreach ((TreeNode, TreeNode) edge in edgesToCheck)
+            HashSet<Edge<Node>> edgesToBeContracted = new HashSet<Edge<Node>>();
+            foreach (Edge<Node> edge in edgesToCheck)
             {
                 if (CanEdgeBeContracted(edge))
                 {
-                    edgesToBeContracted.Add(Utils.OrderEdgeSmallToLarge(edge));
+                    edgesToBeContracted.Add(edge);
                 }
             }
 
-            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
+            return TryContractEdges(new CountedList<Edge<Node>>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -94,7 +89,7 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Start();
 
             // In the first iteration, check all edges in the input tree.
-            return TryApplyReductionRule(Tree.Edges(Measurements.TreeOperationsCounter).Select(Utils.OrderEdgeSmallToLarge));
+            return TryApplyReductionRule(Tree.Edges(Measurements.TreeOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -105,45 +100,21 @@ namespace MulticutInTrees.ReductionRules
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            HashSet<(TreeNode, TreeNode)> edgesToBeChecked = new HashSet<(TreeNode, TreeNode)>();
-
-            /* todo: should not be used. Check what happens in the following case when using Edge objects instead of tuples.
-            
-            Er is een DP, die is verwijderd uit de graaf. In een latere iteratie van de Idle Edge rule kijken we naar de edges die op dat DP liggen.
-            Stel dat dit pad A,B,C,D is. Nadat dat DP verwijderd is, is een edge tussen C en E gecontract, met als resultaat node E. Dit betekent dus dat we voor dat DP in de Idle Edge rule A,B,E,D zouden willen bekijken, maar het pad is niet geüpdate, omdat het DP al verwijderd is. Daarom bekijken we nog steeds A,B,C,D. We vinden dus een edge die gecontract kan worden niet...
-            Is dit op te lossen door een edge object te gebruiken ipv tuples?
-
-            Instance:
-            string[] split = "--seed=2 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
-
-            Difference between 68 nodes (not looking at contracted edges) and 67 nodes (looking at contracted edges).
-            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in contractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                foreach (TreeNode neighbour in newNode.Neighbours(Measurements.TreeOperationsCounter))
-                {
-                    if ((newNode.ID == 320 && neighbour.ID == 1792) || (newNode.ID == 1792 && neighbour.ID == 320))
-                    {
-
-                    }
-
-                    edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge((newNode, neighbour)));
-                }
-            }
-            */
+            HashSet<Edge<Node>> edgesToBeChecked = new HashSet<Edge<Node>>();
 
             foreach (DemandPair demandPair in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
-                foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
+                foreach (Edge<Node> edge in demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
                 {
-                    edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
+                    edgesToBeChecked.Add(edge);
                 }
             }
 
-            foreach ((CountedList<(TreeNode, TreeNode)> edges, DemandPair _) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            foreach ((CountedList<Edge<Node>> edges, DemandPair _) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
-                foreach ((TreeNode, TreeNode) edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+                foreach (Edge<Node> edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                 {
-                    edgesToBeChecked.Add(Utils.OrderEdgeSmallToLarge(edge));
+                    edgesToBeChecked.Add(edge);
                 }
             }
 

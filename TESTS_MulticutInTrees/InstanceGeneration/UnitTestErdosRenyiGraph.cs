@@ -18,10 +18,10 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         {
             Random random = new Random(0);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(10, 0.5, null); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(-54, 0.5, random); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(10, -0.5, random); });
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => { Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(10, 1.0001, random); });
+            Assert.ThrowsException<ArgumentNullException>(() => ErdosRenyiGraph.CreateErdosRenyiGraph(10, 0.5, null));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => ErdosRenyiGraph.CreateErdosRenyiGraph(-54, 0.5, random));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => ErdosRenyiGraph.CreateErdosRenyiGraph(10, -0.5, random));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => ErdosRenyiGraph.CreateErdosRenyiGraph(10, 1.0001, random));
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
             Random random = new Random(654685432);
             int numberOfNodes = 1000;
             double chance = 0.5;
-            Graph<Node> graph = ErdosRenyiGraph.CreateErdosRenyiGraph(numberOfNodes, chance, random);
+            Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(numberOfNodes, chance, random);
             Assert.IsNotNull(graph);
             Assert.AreEqual(numberOfNodes, graph.NumberOfNodes(counter));
         }

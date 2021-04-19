@@ -39,13 +39,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestConstructor()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             int maxSize = 10;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
-            List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
+            List<Edge<Node>> partialSolution = new List<Edge<Node>>();
+            CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<Edge<Node>, CountedCollection<DemandPair>>();
 
             OverloadedEdge overloadedEdge = new OverloadedEdge(tree, demandPairs, algorithm, partialSolution, maxSize, demandPairsPerEdge);
 
@@ -55,13 +55,13 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestNullParameter()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
             int maxSize = 10;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
-            List<(TreeNode, TreeNode)> partialSolution = new List<(TreeNode, TreeNode)>();
-            CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>>();
+            List<Edge<Node>> partialSolution = new List<Edge<Node>>();
+            CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<Edge<Node>, CountedCollection<DemandPair>>();
 
             Assert.ThrowsException<ArgumentNullException>(() => { OverloadedEdge oe = new OverloadedEdge(null, demandPairs, algorithm, partialSolution, maxSize, demandPairsPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { OverloadedEdge oe = new OverloadedEdge(tree, null, algorithm, partialSolution, maxSize, demandPairsPerEdge); });
@@ -74,23 +74,24 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestFirstIteration()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            tree.AddRoot(node0, MockCounter);
-            tree.AddChild(node0, node1, MockCounter);
-            tree.AddChild(node1, node2, MockCounter);
-            tree.AddChild(node1, node3, MockCounter);
-            tree.AddChild(node1, node4, MockCounter);
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14 }, MockCounter);
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(1, node0, node2);
-            DemandPair dp2 = new DemandPair(2, node0, node3);
-            DemandPair dp3 = new DemandPair(3, node0, node4);
+            DemandPair dp1 = new DemandPair(1, node0, node2, tree);
+            DemandPair dp2 = new DemandPair(2, node0, node3, tree);
+            DemandPair dp3 = new DemandPair(3, node0, node4, tree);
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
             demandPairs.Add(dp3, MockCounter);
@@ -107,23 +108,24 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterDemandPathChanged1()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            tree.AddRoot(node0, MockCounter);
-            tree.AddChild(node0, node1, MockCounter);
-            tree.AddChild(node1, node2, MockCounter);
-            tree.AddChild(node1, node3, MockCounter);
-            tree.AddChild(node1, node4, MockCounter);
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14 }, MockCounter);
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(1, node0, node2);
-            DemandPair dp2 = new DemandPair(2, node0, node3);
-            DemandPair dp3 = new DemandPair(3, node0, node4);
+            DemandPair dp1 = new DemandPair(1, node0, node2, tree);
+            DemandPair dp2 = new DemandPair(2, node0, node3, tree);
+            DemandPair dp3 = new DemandPair(3, node0, node4, tree);
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
             demandPairs.Add(dp3, MockCounter);
@@ -140,25 +142,26 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterDemandPathChanged2()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            tree.AddRoot(node0, MockCounter);
-            tree.AddChild(node0, node1, MockCounter);
-            tree.AddChild(node1, node2, MockCounter);
-            tree.AddChild(node1, node3, MockCounter);
-            tree.AddChild(node1, node4, MockCounter);
-            tree.AddChild(node4, node5, MockCounter);
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14, edge45 }, MockCounter);
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(1, node0, node2);
-            DemandPair dp2 = new DemandPair(2, node0, node3);
-            DemandPair dp3 = new DemandPair(3, node0, node5);
+            DemandPair dp1 = new DemandPair(1, node0, node2, tree);
+            DemandPair dp2 = new DemandPair(2, node0, node3, tree);
+            DemandPair dp3 = new DemandPair(3, node0, node5, tree);
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
             demandPairs.Add(dp3, MockCounter);
@@ -179,25 +182,26 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterDemandPairRemoved()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            tree.AddRoot(node0, MockCounter);
-            tree.AddChild(node0, node5, MockCounter);
-            tree.AddChild(node0, node1, MockCounter);
-            tree.AddChild(node1, node2, MockCounter);
-            tree.AddChild(node1, node3, MockCounter);
-            tree.AddChild(node1, node4, MockCounter);
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge05 = new Edge<Node>(node0, node5);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14, edge05 }, MockCounter);
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(1, node5, node2);
-            DemandPair dp2 = new DemandPair(2, node5, node3);
-            DemandPair dp3 = new DemandPair(3, node5, node1);
+            DemandPair dp1 = new DemandPair(1, node5, node2, tree);
+            DemandPair dp2 = new DemandPair(2, node5, node3, tree);
+            DemandPair dp3 = new DemandPair(3, node5, node1, tree);
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
             demandPairs.Add(dp3, MockCounter);
@@ -216,25 +220,26 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterEdgeContracted()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            tree.AddRoot(node0, MockCounter);
-            tree.AddChild(node0, node5, MockCounter);
-            tree.AddChild(node0, node1, MockCounter);
-            tree.AddChild(node1, node2, MockCounter);
-            tree.AddChild(node1, node3, MockCounter);
-            tree.AddChild(node1, node4, MockCounter);
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            Edge<Node> edge05 = new Edge<Node>(node0, node5);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14, edge05 }, MockCounter);
             tree.UpdateNodeTypes();
 
             CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
-            DemandPair dp1 = new DemandPair(1, node5, node2);
-            DemandPair dp2 = new DemandPair(2, node5, node3);
-            DemandPair dp3 = new DemandPair(3, node5, node1);
+            DemandPair dp1 = new DemandPair(1, node5, node2, tree);
+            DemandPair dp2 = new DemandPair(2, node5, node3, tree);
+            DemandPair dp3 = new DemandPair(3, node5, node1, tree);
             demandPairs.Add(dp1, MockCounter);
             demandPairs.Add(dp2, MockCounter);
             demandPairs.Add(dp3, MockCounter);
@@ -247,7 +252,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             Assert.IsFalse(overloadedEdge.RunFirstIteration());
 
-            algorithm.ContractEdge((node0, node1), MockMeasurements);
+            algorithm.ContractEdge(edge01, MockMeasurements);
 
             Assert.IsTrue(overloadedEdge.RunLaterIteration());
         }

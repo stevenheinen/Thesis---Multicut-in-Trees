@@ -19,12 +19,12 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// Constructor for <see cref="ImprovedDominatedEdge"/>.
         /// </summary>
-        /// <param name="tree">The input <see cref="Tree{N}"/> of <see cref="TreeNode"/>s in the instance.</param>
+        /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="IdleEdge"/> is part of.</param>
-        /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with edges represented by tuples of <see cref="TreeNode"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.</param>
+        /// <param name="demandPairsPerEdge">The <see cref="CountedDictionary{TKey, TValue}"/> with <see cref="Edge{TNode}"/>s as key and a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s as value.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public ImprovedDominatedEdge(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<(TreeNode, TreeNode), CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, demandPairsPerEdge)
+        public ImprovedDominatedEdge(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm, demandPairsPerEdge)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
@@ -41,11 +41,11 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted">The <see cref="HashSet{T}"/> containing all edges that will be contracted.</param>
         /// <param name="comparedEdge">The <see cref="Dictionary{TKey, TValue}"/> with per contracted edge the edge it was compared to that led to the contraction.</param>
         /// <returns><see langword="true"/> if we are able to contract <paramref name="edge"/> when looking at its direct neighbours, <see langword="false"/> otherwise.</returns>
-        private bool CompareEdgeToNeighbours((TreeNode, TreeNode) edge, HashSet<(TreeNode, TreeNode)> edgesToBeContracted, Dictionary<(TreeNode, TreeNode), (TreeNode, TreeNode)> comparedEdge)
+        private bool CompareEdgeToNeighbours(Edge<Node> edge, HashSet<Edge<Node>> edgesToBeContracted, Dictionary<Edge<Node>, Edge<Node>> comparedEdge)
         {
-            foreach ((TreeNode, TreeNode) neighbour in NeighbouringEdges(edge))
+            foreach (Edge<Node> neighbour in NeighbouringEdges(edge))
             {
-                (TreeNode, TreeNode) compareEdge = neighbour;
+                Edge<Node> compareEdge = neighbour;
                 if (edgesToBeContracted.Contains(neighbour))
                 {
                     if (comparedEdge[neighbour] == edge)
@@ -71,10 +71,10 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         /// <param name="edge">The edge for which we want to determine its neighbours.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> with all edges that are a neighbour of <paramref name="edge"/>.</returns>
-        private IEnumerable<(TreeNode, TreeNode)> NeighbouringEdges((TreeNode, TreeNode) edge)
+        private IEnumerable<Edge<Node>> NeighbouringEdges(Edge<Node> edge)
         {
-            IEnumerable<(TreeNode, TreeNode)> part1 = edge.Item1.Neighbours(Measurements.TreeOperationsCounter).Where(n => n != edge.Item2).Select(n => Utils.OrderEdgeSmallToLarge((edge.Item1, n)));
-            IEnumerable<(TreeNode, TreeNode)> part2 = edge.Item2.Neighbours(Measurements.TreeOperationsCounter).Where(n => n != edge.Item1).Select(n => Utils.OrderEdgeSmallToLarge((edge.Item2, n)));
+            IEnumerable<Edge<Node>> part1 = Tree.GetNeighbouringEdges(edge.Endpoint1, Measurements.TreeOperationsCounter).Where(e => e != edge);
+            IEnumerable<Edge<Node>> part2 = Tree.GetNeighbouringEdges(edge.Endpoint2, Measurements.TreeOperationsCounter).Where(e => e != edge);
             return part1.Concat(part2);
         }
 
@@ -83,14 +83,14 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         /// <param name="edgesToCheck">The <see cref="IEnumerable{T}"/> with edges we want to check.</param>
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
-        protected override bool TryApplyReductionRule(IEnumerable<(TreeNode, TreeNode)> edgesToCheck)
+        protected override bool TryApplyReductionRule(IEnumerable<Edge<Node>> edgesToCheck)
         {
-            Dictionary<(TreeNode, TreeNode), (TreeNode, TreeNode)> comparedEdge = new Dictionary<(TreeNode, TreeNode), (TreeNode, TreeNode)>();
-            HashSet<(TreeNode, TreeNode)> edgesToBeContracted = new HashSet<(TreeNode, TreeNode)>();
+            Dictionary<Edge<Node>, Edge<Node>> comparedEdge = new Dictionary<Edge<Node>, Edge<Node>>();
+            HashSet<Edge<Node>> edgesToBeContracted = new HashSet<Edge<Node>>();
 
-            foreach ((TreeNode, TreeNode) edge in edgesToCheck)
+            foreach (Edge<Node> edge in edgesToCheck)
             {
-                if (edgesToBeContracted.Contains(edge) || !Tree.HasNode(edge.Item1, Measurements.TreeOperationsCounter) || !Tree.HasNode(edge.Item2, Measurements.TreeOperationsCounter) || !Tree.HasEdge(edge, Measurements.TreeOperationsCounter))
+                if (edgesToBeContracted.Contains(edge) || !Tree.HasNode(edge.Endpoint1, Measurements.TreeOperationsCounter) || !Tree.HasNode(edge.Endpoint2, Measurements.TreeOperationsCounter) || !Tree.HasEdge(edge, Measurements.TreeOperationsCounter))
                 {
                     continue;
                 }
@@ -102,8 +102,8 @@ namespace MulticutInTrees.ReductionRules
                 }
 
                 // We have not contracted this edge yet, so we will look at all the edges (that are not yet contracted) on the shortest demand path through this edge and compare this edge to those.
-                IEnumerable<(TreeNode, TreeNode)> demandPairEdges = FindEdgesOnShortestDemandPathThroughEdge(edge).Where(e => e != edge && !edgesToBeContracted.Contains(e));
-                foreach ((TreeNode, TreeNode) otherEdge in demandPairEdges)
+                IEnumerable<Edge<Node>> demandPairEdges = FindEdgesOnShortestDemandPathThroughEdge(edge).Where(e => e != edge && !edgesToBeContracted.Contains(e));
+                foreach (Edge<Node> otherEdge in demandPairEdges)
                 {
                     if (AllDemandPairsPassThroughAnotherEdge(edge, otherEdge))
                     {
@@ -114,7 +114,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
-            return TryContractEdges(new CountedList<(TreeNode, TreeNode)>(edgesToBeContracted, Measurements.TreeOperationsCounter));
+            return TryContractEdges(new CountedList<Edge<Node>>(edgesToBeContracted, Measurements.TreeOperationsCounter));
         }
     }
 }

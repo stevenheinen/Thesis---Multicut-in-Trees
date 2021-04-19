@@ -24,7 +24,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <param name="numberOfNodes">The required number of nodes in the caterpillar.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns>A randomly generated caterpillar with <paramref name="numberOfNodes"/> nodes.</returns>
-        public static Tree<TreeNode> CreateCaterpillar(int numberOfNodes, Random random)
+        public static Graph CreateCaterpillar(int numberOfNodes, Random random)
         {
 #if !EXPERIMENT
             Utils.NullCheck(random, nameof(random), "Trying to create a random caterpillar, but the random is null!");
@@ -42,36 +42,44 @@ namespace MulticutInTrees.InstanceGeneration
             uint nodeNumber = 0;
 
             // Create the left and right I1-nodes.
-            TreeNode leftI1 = new TreeNode(nodeNumber++);
-            TreeNode rightI1 = new TreeNode(nodeNumber++);
+            Node leftI1 = new Node(nodeNumber++);
+            Node rightI1 = new Node(nodeNumber++);
 
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
 
-            tree.AddRoot(leftI1, MockCounter);
+            tree.AddNode(leftI1, MockCounter);
 
             // List of internal nodes for the leaves to attach to.
-            List<TreeNode> internalNodes = new List<TreeNode>() { leftI1, rightI1 };
+            List<Node> internalNodes = new List<Node>() { leftI1, rightI1 };
 
             // Create all I2-nodes
-            TreeNode last = leftI1;
+            Node last = leftI1;
             for (uint i = 0; i < numberOfInternalNodes; i++)
             {
-                TreeNode next = new TreeNode(nodeNumber++);
+                Node next = new Node(nodeNumber++);
                 internalNodes.Add(next);
-                tree.AddChild(last, next, MockCounter);
+                tree.AddNode(next, MockCounter);
+                tree.AddEdge(new Edge<Node>(last, next), MockCounter);
                 last = next;
             }
-            tree.AddChild(last, rightI1, MockCounter);
+            tree.AddNode(rightI1, MockCounter);
+            tree.AddEdge(new Edge<Node>(last, rightI1), MockCounter);
 
             // Give both I1-nodes a child.
-            tree.AddChild(leftI1, new TreeNode(nodeNumber++), MockCounter);
-            tree.AddChild(rightI1, new TreeNode(nodeNumber++), MockCounter);
+            Node leftChild = new Node(nodeNumber++);
+            tree.AddNode(leftChild, MockCounter);
+            tree.AddEdge(new Edge<Node>(leftI1, leftChild), MockCounter);
+
+            Node rightChild = new Node(nodeNumber++);
+            tree.AddNode(rightChild, MockCounter);
+            tree.AddEdge(new Edge<Node>(rightI1, rightChild), MockCounter);
 
             // Attach the required number of leaves uniform randomly to an internal node.
             for (uint i = 0; i < numberOfLeaves; i++)
             {
-                TreeNode leaf = new TreeNode(nodeNumber++);
-                tree.AddChild(internalNodes.PickRandom(random), leaf, MockCounter);
+                Node leaf = new Node(nodeNumber++);
+                tree.AddNode(leaf, MockCounter);
+                tree.AddEdge(new Edge<Node>(internalNodes.PickRandom(random), leaf), MockCounter);
             }
 
             tree.UpdateNodeTypes();

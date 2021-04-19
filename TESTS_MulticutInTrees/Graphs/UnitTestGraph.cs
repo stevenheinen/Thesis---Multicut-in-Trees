@@ -12,62 +12,22 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestGraph
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         [TestMethod]
         public void TestConstructor()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Assert.IsNotNull(graph);
-            Assert.IsNotNull(graph.Edges(counter));
-            Assert.IsNotNull(graph.Nodes(counter));
-        }
-
-        [TestMethod]
-        public void TestConstructorFromOtherGraph()
-        {
-            Graph<Node> otherGraph = new Graph<Node>();
-
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
-            Node node9 = new Node(9);
-
-            otherGraph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            otherGraph.AddEdge(node0, node1, counter);
-            otherGraph.AddEdge(node0, node2, counter);
-            otherGraph.AddEdge(node0, node3, counter);
-            otherGraph.AddEdge(node1, node2, counter);
-            otherGraph.AddEdge(node1, node5, counter);
-            otherGraph.AddEdge(node2, node5, counter);
-            otherGraph.AddEdge(node3, node4, counter);
-            otherGraph.AddEdge(node4, node5, counter);
-            otherGraph.AddEdge(node4, node6, counter);
-            otherGraph.AddEdge(node5, node7, counter);
-            otherGraph.AddEdge(node5, node9, counter);
-            otherGraph.AddEdge(node6, node8, counter);
-            otherGraph.AddEdge(node7, node8, counter);
-
-            Graph<Node> graph = new Graph<Node>(otherGraph, counter);
-
-            Assert.IsNotNull(graph);
-            Assert.AreEqual(otherGraph.NumberOfNodes(counter), graph.NumberOfNodes(counter));
-            Assert.AreEqual(otherGraph.NumberOfEdges(counter), graph.NumberOfEdges(counter));
-            Assert.IsTrue(graph.HasNode(node3, counter));
-            Assert.IsTrue(graph.HasEdge((node8, node6), counter));
+            Assert.IsNotNull(graph.Edges(MockCounter));
+            Assert.IsNotNull(graph.Nodes(MockCounter));
         }
 
         [TestMethod]
         public void TestHasNode()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
@@ -75,23 +35,25 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node4 = new Node(4);
             Node node6 = new Node(6);
             Node node9 = new Node(9);
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node3, node4, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge34 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.HasNode(node2, counter));
-            Assert.IsTrue(graph.HasNode(node4, counter));
-            Assert.IsFalse(graph.HasNode(node6, counter));
-            Assert.IsFalse(graph.HasNode(node9, counter));
+            Assert.IsTrue(graph.HasNode(node2, MockCounter));
+            Assert.IsTrue(graph.HasNode(node4, MockCounter));
+            Assert.IsFalse(graph.HasNode(node6, MockCounter));
+            Assert.IsFalse(graph.HasNode(node9, MockCounter));
         }
 
         [TestMethod]
         public void TestHasEdge()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
@@ -99,65 +61,38 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node4 = new Node(4);
             Node node6 = new Node(6);
             Node node9 = new Node(9);
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node3, node4, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge34 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.HasEdge(node0, node2, counter));
-            Assert.IsTrue(graph.HasEdge(node4, node3, counter));
-            Assert.IsFalse(graph.HasEdge(node0, node4, counter));
+            Assert.IsTrue(graph.HasEdge(edge02, MockCounter));
+            Assert.IsTrue(graph.HasEdge(edge34, MockCounter));
+
+            Edge<Node> edge04 = new Edge<Node>(node0, node4);
+            Assert.IsFalse(graph.HasEdge(edge04, MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.HasEdge(node1, node9, counter);
+                Edge<Node> edge19 = new Edge<Node>(node1, node9);
+                graph.HasEdge(edge19, MockCounter);
             });
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.HasEdge(node6, node0, counter);
-            });
-        }
-
-        [TestMethod]
-        public void TestHasEdgeTuple()
-        {
-            Graph<Node> graph = new Graph<Node>();
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node6 = new Node(6);
-            Node node9 = new Node(9);
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node3, node4, counter);
-
-            Assert.IsTrue(graph.HasEdge((node0, node2), counter));
-            Assert.IsTrue(graph.HasEdge((node4, node3), counter));
-            Assert.IsFalse(graph.HasEdge((node0, node4), counter));
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.HasEdge((node1, node9), counter);
-            });
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.HasEdge((node6, node0), counter);
+                Edge<Node> edge60 = new Edge<Node>(node6, node0);
+                graph.HasEdge(edge60, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestToString()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -170,80 +105,82 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node6, counter);
-            graph.AddEdge(node5, node7, counter);
-            graph.AddEdge(node5, node9, counter);
-            graph.AddEdge(node6, node8, counter);
-            graph.AddEdge(node7, node8, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge46 = new Edge<Node>(node4, node6);
+            Edge<Node> edge57 = new Edge<Node>(node5, node7);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge15, edge25, edge34, edge45, edge46, edge57, edge59, edge68, edge78 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.AreEqual("Graph with 10 nodes and 13 edges.", graph.ToString());
+            Assert.AreEqual("Graph with 10 nodes and 13 edges", graph.ToString());
         }
 
         [TestMethod]
         public void TestAddNode()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
 
-            Assert.IsFalse(graph.HasNode(node0, counter));
-            Assert.IsFalse(graph.HasNode(node1, counter));
+            Assert.IsFalse(graph.HasNode(node0, MockCounter));
+            Assert.IsFalse(graph.HasNode(node1, MockCounter));
 
-            graph.AddNode(node0, counter);
+            graph.AddNode(node0, MockCounter);
 
-            Assert.IsTrue(graph.HasNode(node0, counter));
-            Assert.IsFalse(graph.HasNode(node1, counter));
+            Assert.IsTrue(graph.HasNode(node0, MockCounter));
+            Assert.IsFalse(graph.HasNode(node1, MockCounter));
 
-            graph.AddNode(node1, counter);
+            graph.AddNode(node1, MockCounter);
 
-            Assert.IsTrue(graph.HasNode(node0, counter));
-            Assert.IsTrue(graph.HasNode(node1, counter));
+            Assert.IsTrue(graph.HasNode(node0, MockCounter));
+            Assert.IsTrue(graph.HasNode(node1, MockCounter));
 
             Assert.ThrowsException<AlreadyInGraphException>(() =>
             {
-                graph.AddNode(node1, counter);
+                graph.AddNode(node1, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestAddNodes()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
 
-            Assert.IsFalse(graph.HasNode(node0, counter));
-            Assert.IsFalse(graph.HasNode(node1, counter));
-            Assert.IsFalse(graph.HasNode(node2, counter));
+            Assert.IsFalse(graph.HasNode(node0, MockCounter));
+            Assert.IsFalse(graph.HasNode(node1, MockCounter));
+            Assert.IsFalse(graph.HasNode(node2, MockCounter));
 
-            graph.AddNodes(new List<Node>() { node0, node1 }, counter);
+            graph.AddNodes(new List<Node>() { node0, node1 }, MockCounter);
 
-            Assert.IsTrue(graph.HasNode(node0, counter));
-            Assert.IsTrue(graph.HasNode(node1, counter));
-            Assert.IsFalse(graph.HasNode(node2, counter));
+            Assert.IsTrue(graph.HasNode(node0, MockCounter));
+            Assert.IsTrue(graph.HasNode(node1, MockCounter));
+            Assert.IsFalse(graph.HasNode(node2, MockCounter));
 
             Assert.ThrowsException<AlreadyInGraphException>(() =>
             {
-                graph.AddNodes(new List<Node>() { node2, node1 }, counter);
+                graph.AddNodes(new List<Node>() { node2, node1 }, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestAddEdge()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -256,56 +193,61 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
 
-            Assert.IsFalse(graph.HasEdge(node0, node1, counter));
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Assert.IsFalse(graph.HasEdge(edge01, MockCounter));
 
-            graph.AddEdge(node0, node1, counter);
+            graph.AddEdge(edge01, MockCounter);
 
-            Assert.IsTrue(graph.HasEdge(node1, node0, counter));
+            Assert.IsTrue(graph.HasEdge(edge01, MockCounter));
 
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            graph.AddEdges(new List<Edge<Node>>() { edge02, edge03, edge12, edge15, edge25, edge34, edge45 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(node2.HasNeighbour(node1, counter));
+            Assert.IsTrue(node2.HasNeighbour(node1, MockCounter));
 
             Assert.ThrowsException<AlreadyInGraphException>(() =>
             {
-                graph.AddEdge(node2, node0, counter);
+                graph.AddEdge(edge02, MockCounter);
             });
 
             Assert.ThrowsException<AlreadyInGraphException>(() =>
             {
-                graph.AddEdge(node1, node5, counter);
+                graph.AddEdge(edge15, MockCounter);
             });
 
             Assert.ThrowsException<AlreadyInGraphException>(() =>
             {
-                graph.RemoveEdge(node2, node0, counter);
-                graph.AddEdge(node2, node0, counter, true);
-                graph.AddEdge(node2, node0, counter, true);
+                graph.RemoveEdge(edge02, MockCounter);
+                graph.AddEdge(edge02, MockCounter);
+                graph.AddEdge(edge02, MockCounter);
             });
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.AddEdge(node6, node3, counter);
+                Edge<Node> edge36 = new Edge<Node>(node3, node6);
+                graph.AddEdge(edge36, MockCounter);
             });
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.AddEdge(node2, node8, counter);
+                Edge<Node> edge82 = new Edge<Node>(node8, node2);
+                graph.AddEdge(edge82, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestAddEdges()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -318,33 +260,46 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
 
-            Assert.IsFalse(graph.HasEdge(node0, node1, counter));
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Assert.IsFalse(graph.HasEdge(edge01, MockCounter));
 
-            graph.AddEdges(new List<(Node, Node)>() { (node0, node1) }, counter);
+            graph.AddEdges(new List<Edge<Node>>() { edge01 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.HasEdge(node1, node0, counter));
+            Assert.IsTrue(graph.HasEdge(edge01, MockCounter));
 
-            graph.AddEdges(new List<(Node, Node)>() { (node0, node2), (node0, node3), (node1, node2), (node1, node5), (node2, node5), (node3, node4), (node4, node5) }, counter);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
 
-            Assert.IsTrue(node2.HasNeighbour(node1, counter));
+            graph.AddEdges(new List<Edge<Node>>() { edge02, edge03, edge12, edge15, edge25, edge34, edge45 }, MockCounter);
+            graph.UpdateNodeTypes();
+
+            Assert.IsTrue(node2.HasNeighbour(node1, MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.AddEdges(new List<(Node, Node)>() { (node6, node3) }, counter);
+                Edge<Node> edge63 = new Edge<Node>(node6, node3);
+                graph.AddEdges(new List<Edge<Node>>() { edge63 }, MockCounter);
             });
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.AddEdges(new List<(Node, Node)>() { (node2, node8) }, counter);
+                Edge<Node> edge28 = new Edge<Node>(node2, node8);
+                graph.AddEdges(new List<Edge<Node>>() { edge28 }, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestRemoveNode()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -357,42 +312,44 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node6, counter);
-            graph.AddEdge(node5, node7, counter);
-            graph.AddEdge(node5, node9, counter);
-            graph.AddEdge(node6, node8, counter);
-            graph.AddEdge(node7, node8, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge46 = new Edge<Node>(node4, node6);
+            Edge<Node> edge57 = new Edge<Node>(node5, node7);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge15, edge25, edge34, edge45, edge46, edge57, edge59, edge68, edge78 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            graph.RemoveNode(node4, counter);
-            Assert.AreEqual(0, node4.Degree(counter));
+            graph.RemoveNode(node4, MockCounter);
+            Assert.AreEqual(0, node4.Degree(MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.HasEdge(node3, node4, counter);
+                graph.HasEdge(edge34, MockCounter);
             });
 
-            Assert.AreEqual(9, graph.NumberOfNodes(counter));
-            Assert.IsFalse(node5.HasNeighbour(node4, counter));
+            Assert.AreEqual(9, graph.NumberOfNodes(MockCounter));
+            Assert.IsFalse(node5.HasNeighbour(node4, MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveNode(node4, counter);
+                graph.RemoveNode(node4, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestRemoveNodes()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -405,42 +362,44 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node6, counter);
-            graph.AddEdge(node5, node7, counter);
-            graph.AddEdge(node5, node9, counter);
-            graph.AddEdge(node6, node8, counter);
-            graph.AddEdge(node7, node8, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge46 = new Edge<Node>(node4, node6);
+            Edge<Node> edge57 = new Edge<Node>(node5, node7);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge15, edge25, edge34, edge45, edge46, edge57, edge59, edge68, edge78 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            graph.RemoveNodes(new List<Node>() { node0, node4, node8 }, counter);
-            Assert.AreEqual(0, node4.Degree(counter));
+            graph.RemoveNodes(new List<Node>() { node0, node4, node8 }, MockCounter);
+            Assert.AreEqual(0, node4.Degree(MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.HasEdge(node3, node4, counter);
+                graph.HasEdge(edge34, MockCounter);
             });
 
-            Assert.AreEqual(7, graph.NumberOfNodes(counter));
-            Assert.IsFalse(node5.HasNeighbour(node4, counter));
+            Assert.AreEqual(7, graph.NumberOfNodes(MockCounter));
+            Assert.IsFalse(node5.HasNeighbour(node4, MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveNodes(new List<Node>() { node2, node8 }, counter);
+                graph.RemoveNodes(new List<Node>() { node2, node8 }, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestRemoveAllEdgesOfNode()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -453,38 +412,40 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node6, counter);
-            graph.AddEdge(node5, node7, counter);
-            graph.AddEdge(node5, node9, counter);
-            graph.AddEdge(node6, node8, counter);
-            graph.AddEdge(node7, node8, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge46 = new Edge<Node>(node4, node6);
+            Edge<Node> edge57 = new Edge<Node>(node5, node7);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge15, edge25, edge34, edge45, edge46, edge57, edge59, edge68, edge78 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            graph.RemoveAllEdgesOfNode(node4, counter);
-            Assert.AreEqual(0, node4.Degree(counter));
-            Assert.IsFalse(graph.HasEdge(node3, node4, counter));
-            Assert.AreEqual(10, graph.NumberOfNodes(counter));
-            Assert.IsFalse(node5.HasNeighbour(node4, counter));
+            graph.RemoveAllEdgesOfNode(node4, MockCounter);
+            Assert.AreEqual(0, node4.Degree(MockCounter));
+            Assert.IsFalse(graph.HasEdge(edge34, MockCounter));
+            Assert.AreEqual(10, graph.NumberOfNodes(MockCounter));
+            Assert.IsFalse(node5.HasNeighbour(node4, MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveNode(node2, counter);
-                graph.RemoveAllEdgesOfNode(node2, counter);
+                graph.RemoveNode(node2, MockCounter);
+                graph.RemoveAllEdgesOfNode(node2, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestRemoveEdge()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -497,60 +458,52 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node6, counter);
-            graph.AddEdge(node5, node7, counter);
-            graph.AddEdge(node5, node9, counter);
-            graph.AddEdge(node6, node8, counter);
-            graph.AddEdge(node7, node8, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge46 = new Edge<Node>(node4, node6);
+            Edge<Node> edge57 = new Edge<Node>(node5, node7);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge15, edge25, edge34, edge45, edge46, edge57, edge59, edge68, edge78 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.HasEdge(node5, node7, counter));
-            graph.RemoveEdge(node5, node7, counter);
-            Assert.IsFalse(graph.HasEdge(node5, node7, counter));
-            Assert.IsFalse(node7.HasNeighbour(node5, counter));
+            Assert.IsTrue(graph.HasEdge(edge57, MockCounter));
+            graph.RemoveEdge(edge57, MockCounter);
+            Assert.IsFalse(graph.HasEdge(edge57, MockCounter));
+            Assert.IsFalse(node7.HasNeighbour(node5, MockCounter));
 
-            graph.AddEdge(node5, node7, counter, true);
-            graph.RemoveEdge(node5, node7, counter, true);
+            graph.AddEdge(edge57, MockCounter);
+            graph.RemoveEdge(edge57, MockCounter);
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveEdge(node5, node7, counter, true);
+                graph.RemoveEdge(edge57, MockCounter);
+            });
+
+            graph.RemoveNode(node3, MockCounter);
+
+            Assert.ThrowsException<NotInGraphException>(() =>
+            {
+                graph.RemoveEdge(edge34, MockCounter);
             });
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveEdge(node7, node5, counter);
-            });
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.RemoveEdge(node5, node7, counter);
-            });
-
-            graph.RemoveNode(node3, counter);
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.RemoveEdge(node3, node4, counter);
-            });
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.RemoveEdge(node0, node3, counter);
+                graph.RemoveEdge(edge03, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestRemoveEdges()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -563,141 +516,151 @@ namespace TESTS_MulticutInTrees.Graphs
             Node node8 = new Node(8);
             Node node9 = new Node(9);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, counter);
-            graph.AddEdge(node0, node1, counter);
-            graph.AddEdge(node0, node2, counter);
-            graph.AddEdge(node0, node3, counter);
-            graph.AddEdge(node1, node2, counter);
-            graph.AddEdge(node1, node5, counter);
-            graph.AddEdge(node2, node5, counter);
-            graph.AddEdge(node3, node4, counter);
-            graph.AddEdge(node4, node5, counter);
-            graph.AddEdge(node4, node6, counter);
-            graph.AddEdge(node5, node7, counter);
-            graph.AddEdge(node5, node9, counter);
-            graph.AddEdge(node6, node8, counter);
-            graph.AddEdge(node7, node8, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge03 = new Edge<Node>(node0, node3);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge15 = new Edge<Node>(node1, node5);
+            Edge<Node> edge25 = new Edge<Node>(node2, node5);
+            Edge<Node> edge34 = new Edge<Node>(node3, node4);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge46 = new Edge<Node>(node4, node6);
+            Edge<Node> edge57 = new Edge<Node>(node5, node7);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge12, edge15, edge25, edge34, edge45, edge46, edge57, edge59, edge68, edge78 }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.HasEdge(node5, node7, counter));
-            graph.RemoveEdges(new List<(Node, Node)>() { (node5, node7), (node0, node1) }, counter);
-            Assert.IsFalse(graph.HasEdge(node5, node7, counter));
-            Assert.IsFalse(node7.HasNeighbour(node5, counter));
-            Assert.IsFalse(node0.HasNeighbour(node1, counter));
-            Assert.IsTrue(node0.HasNeighbour(node2, counter));
+            Assert.IsTrue(graph.HasEdge(edge57, MockCounter));
+            graph.RemoveEdges(new List<Edge<Node>>() { edge57, edge01 }, MockCounter);
+            Assert.IsFalse(graph.HasEdge(edge57, MockCounter));
+            Assert.IsFalse(node7.HasNeighbour(node5, MockCounter));
+            Assert.IsFalse(node0.HasNeighbour(node1, MockCounter));
+            Assert.IsTrue(node0.HasNeighbour(node2, MockCounter));
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveEdges(new List<(Node, Node)>() { (node7, node5) }, counter);
+                graph.RemoveEdges(new List<Edge<Node>>() { edge57 }, MockCounter);
+            });
+
+            graph.RemoveNode(node3, MockCounter);
+
+            Assert.ThrowsException<NotInGraphException>(() =>
+            {
+                graph.RemoveEdges(new List<Edge<Node>>() { edge34 }, MockCounter);
             });
 
             Assert.ThrowsException<NotInGraphException>(() =>
             {
-                graph.RemoveEdges(new List<(Node, Node)>() { (node5, node7) }, counter);
-            });
-
-            graph.RemoveNode(node3, counter);
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.RemoveEdges(new List<(Node, Node)>() { (node3, node4) }, counter);
-            });
-
-            Assert.ThrowsException<NotInGraphException>(() =>
-            {
-                graph.RemoveEdges(new List<(Node, Node)>() { (node0, node3) }, counter);
+                graph.RemoveEdges(new List<Edge<Node>>() { edge03 }, MockCounter);
             });
         }
 
         [TestMethod]
         public void TestArgumentNull()
         {
-            Graph<Node> g = new Graph<Node>();
+            Graph g = new Graph();
             Node n = new Node(0);
-            List<(Node, Node)> elist = new List<(Node, Node)>();
+            List<Edge<Node>> elist = new List<Edge<Node>>();
             List<Node> nlist = new List<Node>();
+            Node n1 = new Node(1);
+            Node n2 = new Node(2);
+            Edge<Node> edge = new Edge<Node>(n1, n2);
 
-            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdge(n, null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdge(null, n, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdge(n, n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdges(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdge(null, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdge(edge, null));
+            Assert.ThrowsException<ArgumentNullException>(() => g.AddEdges(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.AddEdges(elist, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.AddNode(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.AddNode(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.AddNode(n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.AddNodes(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.AddNodes(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.AddNodes(nlist, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.HasEdge(n, null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => g.HasEdge(null, n, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => g.HasEdge(n, n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.HasNode(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.HasEdge(null, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.HasEdge(edge, null));
+            Assert.ThrowsException<ArgumentNullException>(() => g.HasNode(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.HasNode(n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveAllEdgesOfNode(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveAllEdgesOfNode(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.RemoveAllEdgesOfNode(n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdge(null, n, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdge(n, null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdge(n, n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdges(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdge(null, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdge(edge, null));
+            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdges(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.RemoveEdges(elist, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNode(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNode(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNode(n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNodes(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNodes(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => g.RemoveNodes(nlist, null));
         }
 
         [TestMethod]
         public void TestAcyclic()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
-            graph.AddEdges(new List<(Node, Node)>()
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
+
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge30 = new Edge<Node>(node3, node0);
+
+            graph.AddEdges(new List<Edge<Node>>()
             {
-                (node0, node1),
-                (node1, node2),
-                (node2, node3),
-                (node3, node0)
-            }, counter);
+                edge01,
+                edge12,
+                edge23,
+                edge30
+            }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsFalse(graph.IsAcyclic(counter));
+            Assert.IsFalse(graph.IsAcyclic(MockCounter));
 
-            graph.RemoveEdge(node0, node3, counter);
+            graph.RemoveEdge(edge30, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.IsAcyclic(counter));
+            Assert.IsTrue(graph.IsAcyclic(MockCounter));
 
-            graph.RemoveNode(node1, counter);
-            graph.RemoveNode(node2, counter);
-            graph.RemoveNode(node3, counter);
+            graph.RemoveNode(node1, MockCounter);
+            graph.RemoveNode(node2, MockCounter);
+            graph.RemoveNode(node3, MockCounter);
 
-            Assert.IsTrue(graph.IsAcyclic(counter));
+            Assert.IsTrue(graph.IsAcyclic(MockCounter));
         }
 
         [TestMethod]
         public void TestConnected()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
             Node node3 = new Node(3);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
-            graph.AddEdges(new List<(Node, Node)>()
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+
+            graph.AddEdges(new List<Edge<Node>>()
             {
-                (node0, node1),
-                (node1, node2),
-                (node2, node3),
-            }, counter);
+                edge01,
+                edge12,
+                edge23
+            }, MockCounter);
+            graph.UpdateNodeTypes();
 
-            Assert.IsTrue(graph.IsConnected(counter));
+            Assert.IsTrue(graph.IsConnected(MockCounter));
 
-            graph.RemoveNode(node1, counter);
+            graph.RemoveNode(node1, MockCounter);
 
-            Assert.IsFalse(graph.IsConnected(counter));
+            Assert.IsFalse(graph.IsConnected(MockCounter));
         }
     }
 }

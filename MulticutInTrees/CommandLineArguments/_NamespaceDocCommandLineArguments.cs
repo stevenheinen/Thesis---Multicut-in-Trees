@@ -5,5 +5,8 @@ namespace MulticutInTrees.CommandLineArguments
     /// <summary>
     /// This part of the project contains the command line options and a parser for these options.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc
+    {
+
+    }
 }

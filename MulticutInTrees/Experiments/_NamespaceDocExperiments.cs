@@ -5,5 +5,8 @@ namespace MulticutInTrees.Experiments
     /// <summary>
     /// This part of the project contains all methods used for running experiments.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc 
+    { 
+
+    }
 }

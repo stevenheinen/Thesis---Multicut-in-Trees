@@ -26,7 +26,7 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// <see cref="CountedDictionary{TKey, TValue}"/> with the edges that are the intersection between two <see cref="DemandPair"/>s.
         /// </summary>
-        private CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>> DemandPairIntersections { get; }
+        private CountedDictionary<(DemandPair, DemandPair), CountedCollection<Edge<Node>>> DemandPairIntersections { get; }
 
         /// <summary>
         /// The maximum size the solution is allowed to have.
@@ -36,19 +36,19 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// The part of the solution that has been found thus far.
         /// </summary>
-        private List<(TreeNode, TreeNode)> PartialSolution { get; }
+        private List<Edge<Node>> PartialSolution { get; }
 
         /// <summary>
         /// Constructor for <see cref="CommonFactor"/>.
         /// </summary>
-        /// <param name="tree">The input tree.</param>
+        /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>"
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public CommonFactor(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
+        public CommonFactor(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the tree is null!");
@@ -64,7 +64,7 @@ namespace MulticutInTrees.ReductionRules
             PartialSolution = partialSolution;
             MaxSolutionSize = maxSolutionSize;
             IntersectingDemandPairs = new CountedDictionary<DemandPair, CountedCollection<DemandPair>>();
-            DemandPairIntersections = new CountedDictionary<(DemandPair, DemandPair), CountedCollection<(TreeNode, TreeNode)>>();
+            DemandPairIntersections = new CountedDictionary<(DemandPair, DemandPair), CountedCollection<Edge<Node>>>();
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> can be applied on <paramref name="p0"/>, <see langword="false"/> otherwise.</returns>
         private bool CheckApplicabilitySinglePair(DemandPair p0, CountedCollection<DemandPair> intersectingPairs, int intersectingPairCount, int k)
         {
-            IEnumerable<(TreeNode, TreeNode)> p0Path = p0.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(Utils.OrderEdgeSmallToLarge);
+            IEnumerable<Edge<Node>> p0Path = p0.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
             int subsetFailCount = 0;
             HashSet<(DemandPair, DemandPair)> checkedPairs = new HashSet<(DemandPair, DemandPair)>();
             foreach (DemandPair pi in intersectingPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
@@ -98,7 +98,7 @@ namespace MulticutInTrees.ReductionRules
                     checkedPairs.Add(key);
 
                     // If key is not in the dictionary, pi and pj do not intersect, and since the empty set is a subset of every set, this is a correct case.
-                    if (!DemandPairIntersections.TryGetValue(key, out CountedCollection<(TreeNode, TreeNode)> intersection, Measurements.DemandPairsOperationsCounter))
+                    if (!DemandPairIntersections.TryGetValue(key, out CountedCollection<Edge<Node>> intersection, Measurements.DemandPairsOperationsCounter))
                     {
                         continue;
                     }
@@ -170,12 +170,12 @@ namespace MulticutInTrees.ReductionRules
             for (int i = 0; i < numberOfDPs - 1; i++)
             {
                 DemandPair dp1 = DemandPairs[i, Measurements.DemandPairsOperationsCounter];
-                IEnumerable<(TreeNode, TreeNode)> path1 = dp1.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(Utils.OrderEdgeSmallToLarge);
+                IEnumerable<Edge<Node>> path1 = dp1.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
                 for (int j = i + 1; j < numberOfDPs; j++)
                 {
                     DemandPair dp2 = DemandPairs[j, Measurements.DemandPairsOperationsCounter];
-                    IEnumerable<(TreeNode, TreeNode)> path2 = dp2.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Select(Utils.OrderEdgeSmallToLarge);
-                    IEnumerable<(TreeNode, TreeNode)> intersection = path1.Intersect(path2);
+                    IEnumerable<Edge<Node>> path2 = dp2.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
+                    IEnumerable<Edge<Node>> intersection = path1.Intersect(path2);
 
                     if (!intersection.Any())
                     {
@@ -194,8 +194,7 @@ namespace MulticutInTrees.ReductionRules
                     }
                     IntersectingDemandPairs[dp2, Measurements.DemandPairsOperationsCounter].Add(dp1, Measurements.DemandPairsOperationsCounter);
 
-                    CountedCollection<(TreeNode, TreeNode)> intersectionCollection = new CountedCollection<(TreeNode, TreeNode)>(intersection, MockCounter);
-                    DemandPairIntersections[GetIntersectionKey(dp1, dp2), MockCounter] = intersectionCollection;
+                    DemandPairIntersections[GetIntersectionKey(dp1, dp2), MockCounter] = new CountedCollection<Edge<Node>>(intersection, MockCounter);
                 }
             }
         }

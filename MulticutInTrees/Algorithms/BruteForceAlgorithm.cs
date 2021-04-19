@@ -49,16 +49,16 @@ namespace MulticutInTrees.Algorithms
         public bool Run()
         {
             // Find all subsets of size K.
-            IEnumerable<IEnumerable<(TreeNode, TreeNode)>> subsets = Instance.Tree.Edges(MockCounter).AllSubsetsOfSize(Instance.K);
+            IEnumerable<IEnumerable<Edge<Node>>> subsets = Instance.Tree.Edges(MockCounter).AllSubsetsOfSize(Instance.K);
 
             // For each subset, check if it would separate all demand pairs.
-            foreach (IEnumerable<(TreeNode, TreeNode)> subset in subsets)
+            foreach (IEnumerable<Edge<Node>> subset in subsets)
             {
                 bool correctsubset = true;
                 foreach (DemandPair dp in Instance.DemandPairs.GetCountedEnumerable(MockCounter))
                 {
                     bool separated = false;
-                    foreach ((TreeNode, TreeNode) edge in subset)
+                    foreach (Edge<Node> edge in subset)
                     {
                         if (dp.EdgeIsPartOfPath(edge, MockCounter))
                         {

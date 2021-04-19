@@ -21,13 +21,13 @@ namespace MulticutInTrees.InstanceGeneration
         /// <br/>
         /// The file should contain a line with the number of <see cref="DemandPair"/>s, and then a line for each <see cref="DemandPair"/>, with the IDs of the endpoints separated by a space, and nothing else.
         /// </summary>
-        /// <param name="tree">The <see cref="Tree{N}"/> in which to create the <see cref="DemandPair"/>s.</param>
+        /// <param name="tree">The <see cref="Graph"/> in which to create the <see cref="DemandPair"/>s.</param>
         /// <param name="filePath">The path of the file where the list is stored.</param>
         /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s as read from <paramref name="filePath"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="filePath"/> is <see langword="null"/>.</exception>
         /// <exception cref="FileNotFoundException">Thrown when <paramref name="filePath"/> is not a valid file.</exception>
         /// <exception cref="BadFileFormatException">Thrown when a line in the file cannot be parsed to a number.</exception>
-        public static CountedList<DemandPair> ReadDemandPairs(Tree<TreeNode> tree, string filePath)
+        public static CountedList<DemandPair> ReadDemandPairs(Graph tree, string filePath)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to read demand pairs from a file, but the tree in which these demand pairs exist is null!");

@@ -42,23 +42,35 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Orders a tuple of <typeparamref name="TNode"/>s representing an edge in such a way that the <typeparamref name="TNode"/> with the smallest <see cref="INode{N}.ID"/> is the first element of the resulting tuple.
+        /// Orders a tuple of <typeparamref name="TNode"/>s representing an edge in such a way that the <typeparamref name="TNode"/> with the smallest <see cref="AbstractNode{TNode}.ID"/> is the first element of the resulting tuple.
         /// </summary>
-        /// <typeparam name="TNode">The type of nodes the edge is between. Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of nodes the edge is between.</typeparam>
         /// <param name="edge">The tuple of <typeparamref name="TNode"/>s representing the edge we want to order.</param>
-        /// <returns>A tuple with the same <typeparamref name="TNode"/>s as <paramref name="edge"/>, such that the <typeparamref name="TNode"/> with the smallest <see cref="INode{N}.ID"/> is the first element in the result.</returns>
+        /// <returns>A tuple with the same <typeparamref name="TNode"/>s as <paramref name="edge"/>, such that the <typeparamref name="TNode"/> with the smallest <see cref="AbstractNode{TNode}.ID"/> is the first element in the result.</returns>
         /// <exception cref="ArgumentNullException">Thrown whein either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
-        public static (TNode, TNode) OrderEdgeSmallToLarge<TNode>((TNode, TNode) edge) where TNode : INode<TNode>
+        public static (TNode, TNode) OrderEdgeSmallToLarge<TNode>((TNode, TNode) edge) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(edge.Item1, nameof(edge.Item1), "Trying to order an edge from smallest to largest, but the first endpoint of the edge is null!");
             NullCheck(edge.Item2, nameof(edge.Item2), "Trying to order an edge from smallest to largest, but the second endpoint of the edge is null!");
 #endif
-            if (edge.Item2.ID < edge.Item1.ID)
-            {
-                return (edge.Item2, edge.Item1);
-            }
-            return edge;
+            return edge.Item1.ID < edge.Item2.ID ? edge : (edge.Item2, edge.Item1);
+        }
+
+        /// <summary>
+        /// Orders a <typeparamref name="TEdge"/> in such a way that the <typeparamref name="TNode"/> with the smallest <see cref="AbstractNode{TNode}.ID"/> is the first element of the resulting tuple.
+        /// </summary>
+        /// <typeparam name="TEdge">The type of edge.</typeparam>
+        /// <typeparam name="TNode">The type of nodes the edge is between.</typeparam>
+        /// <param name="edge">The tuple of <typeparamref name="TNode"/>s representing the edge we want to order.</param>
+        /// <returns>A tuple with the same <typeparamref name="TNode"/>s as <paramref name="edge"/>, such that the <typeparamref name="TNode"/> with the smallest <see cref="AbstractNode{TNode}.ID"/> is the first element in the result.</returns>
+        /// <exception cref="ArgumentNullException">Thrown whein either endpoint of <paramref name="edge"/> is <see langword="null"/>.</exception>
+        public static (TNode, TNode) OrderEdgeSmallToLarge<TEdge, TNode>(TEdge edge) where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        {
+#if !EXPERIMENT
+            NullCheck(edge, nameof(edge), "Trying to order an edge from smallest to largest, but the edge is null!");
+#endif
+            return edge.Endpoint1.ID < edge.Endpoint2.ID ? (edge.Endpoint1, edge.Endpoint2) : (edge.Endpoint2, edge.Endpoint1);
         }
 
         /// <summary>
@@ -120,11 +132,11 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Checks whether a path is a simple path (i.e. does not contain cycles).
         /// </summary>
-        /// <typeparam name="TNode">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of nodes on the path.</typeparam>
         /// <param name="path">An <see cref="IEnumerable{T}"/> of tuples of <typeparamref name="TNode"/>s that represent the edges on the path.</param>
         /// <returns><see langword="true"/> if <paramref name="path"/> is a simple path, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
-        public static bool IsSimplePath<TNode>(IEnumerable<(TNode, TNode)> path) where TNode : INode<TNode>
+        public static bool IsSimplePath<TNode>(IEnumerable<(TNode, TNode)> path) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to see whether a path is a simple path, but the path is null!");
@@ -146,11 +158,11 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Transforms an <see cref="IEnumerable{T}"/> with <typeparamref name="TNode"/>s representing a path to a <see cref="List{T}"/> with tuples of two <typeparamref name="TNode"/>s representing the edges on the path.
         /// </summary>
-        /// <typeparam name="TNode">The type of nodes on the path. Implements <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of nodes on the path.</typeparam>
         /// <param name="path">An <see cref="IEnumerable{T}"/> with <typeparamref name="TNode"/>s we want to tranform to a <see cref="List{T}"/> with the edges on the path.</param>
         /// <returns>A <see cref="IEnumerable{T}"/> with tuples of <typeparamref name="TNode"/>s representing the edges on <paramref name="path"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
-        public static List<(TNode, TNode)> NodePathToEdgePath<TNode>(IEnumerable<TNode> path) where TNode : INode<TNode>
+        public static List<(TNode, TNode)> NodePathToEdgePath<TNode>(IEnumerable<TNode> path) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to transform a node path to an edge path, but the path is null!");
@@ -158,7 +170,9 @@ namespace MulticutInTrees.Utilities
             List<(TNode, TNode)> result = new List<(TNode, TNode)>();
             for (int i = 0; i < path.Count() - 1; i++)
             {
-                result.Add((path.ElementAt(i), path.ElementAt(i + 1)));
+                TNode endpoint1 = path.ElementAt(i);
+                TNode endpoint2 = path.ElementAt(i + 1);
+                result.Add((endpoint1, endpoint2));
             }
 
             return result;
@@ -322,26 +336,93 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
-        /// Create a <see cref="Tree{N}"/> with the given number of nodes and all edges in <paramref name="edges"/>.
+        /// Create a <see cref="RootedTree"/> from <paramref name="graph"/>.
         /// </summary>
-        /// <param name="numberOfNodes">The required number of nodes in the <see cref="Tree{N}"/>.</param>
-        /// <param name="rootID">The ID of the root of the <see cref="Tree{N}"/>.</param>
+        /// <typeparam name="TGraph">The type of graph to create the rooted tree from.</typeparam>
+        /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="graph">The <typeparamref name="TGraph"/> to create the <see cref="RootedTree"/> from.</param>
+        /// <returns>A <see cref="RootedTree"/> created from <paramref name="graph"/>, and a <see cref="Dictionary{TKey, TValue}"/> from the original <typeparamref name="TNode"/>s in <paramref name="graph"/> to the newly created <see cref="RootedTreeNode"/>s in the tree.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="graph"/> is not a tree.</exception>
+        public static (RootedTree, Dictionary<TNode, RootedTreeNode>) CreateRootedTreeFromGraph<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        {
+            Counter mockCounter = new Counter();
+#if !EXPERIMENT
+            NullCheck(graph, nameof(graph), "Trying to create a rooted tree from a graph, but the provided graph is null!");
+            if (!graph.IsTree(mockCounter))
+            {
+                throw new ArgumentException("Trying to create a rooted tree from a graph, but the provided graph is not a tree!", nameof(graph));
+            }
+#endif
+            RootedTree tree = new RootedTree();
+
+            Dictionary<TNode, RootedTreeNode> nodeToTreeNode = new Dictionary<TNode, RootedTreeNode>();
+            foreach (TNode node in graph.Nodes(mockCounter))
+            {
+                RootedTreeNode newNode = new RootedTreeNode(node.ID);
+                nodeToTreeNode[node] = newNode;
+                tree.AddNode(newNode, mockCounter);
+            }
+
+            if (graph.NumberOfEdges(mockCounter) == 0)
+            {
+                return (tree, nodeToTreeNode);
+            }
+
+            IEnumerable<TEdge> edges = graph.Edges(mockCounter);
+            TEdge firstGraphEdge = edges.First();
+            edges = edges.Skip(1);
+            RootedTreeNode node1 = nodeToTreeNode[firstGraphEdge.Endpoint1];
+            RootedTreeNode node2 = nodeToTreeNode[firstGraphEdge.Endpoint2];
+            Edge<RootedTreeNode> firstEdge = new Edge<RootedTreeNode>(node1, node2);
+            tree.AddEdge(firstEdge, mockCounter);
+
+            Queue<RootedTreeNode> queue = new Queue<RootedTreeNode>();
+            queue.Enqueue(node1);
+            queue.Enqueue(node2);
+
+            while (queue.Count > 0)
+            {
+                RootedTreeNode node = queue.Dequeue();
+                IEnumerable<RootedTreeNode> children = edges.Where(n => n.Endpoint1.ID == node.ID || n.Endpoint2.ID == node.ID).Select(n => n.Endpoint1.ID == node.ID ? n.Endpoint2 : n.Endpoint1).Select(n => nodeToTreeNode[n]);
+                edges = edges.Where(n => n.Endpoint1.ID != node.ID && n.Endpoint2.ID != node.ID).ToList();
+                
+                foreach (RootedTreeNode child in children)
+                {
+                    Edge<RootedTreeNode> edge = new Edge<RootedTreeNode>(node, child);
+                    tree.AddEdge(edge, mockCounter);
+                    queue.Enqueue(child);
+                }
+            }
+
+            tree.UpdateNodeTypes();
+
+#if !EXPERIMENT
+            if (!tree.IsValid())
+            {
+                throw new Exception("The conversion from a graph to a rooted tree went wrong!");
+            }
+#endif
+            return (tree, nodeToTreeNode);
+        }
+
+        /// <summary>
+        /// Create a <see cref="AbstractGraph{TEdge, TNode}"/> with the given number of nodes and all edges in <paramref name="edges"/>.
+        /// </summary>
+        /// <param name="numberOfNodes">The required number of nodes in the <see cref="AbstractGraph{TEdge, TNode}"/>.</param>
         /// <param name="edges"><see cref="IEnumerable{T}"/> with tuples of <see cref="int"/>s that represent the identifiers of the endpoints of the edges.</param>
-        /// <returns>A <see cref="Tree{N}"/> with <paramref name="numberOfNodes"/> nodes and an edge for each element in <paramref name="edges"/>.</returns>
+        /// <returns>A <see cref="AbstractGraph{TEdge, TNode}"/> with <paramref name="numberOfNodes"/> nodes and an edge for each element in <paramref name="edges"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="edges"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is negative or <paramref name="rootID"/> is negative or larger than or equal to <paramref name="numberOfNodes"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> is negative.</exception>
         /// <exception cref="ArgumentException">Thrown when there are not <paramref name="numberOfNodes"/> - 1 edges, or when <paramref name="edges"/> contains an identifier that is negative, or equal to or larger than <paramref name="numberOfNodes"/>.</exception>
-        public static Tree<TreeNode> CreateTreeWithEdges(int numberOfNodes, int rootID, IEnumerable<(int, int)> edges)
+        public static Graph CreateGraphWithEdges(int numberOfNodes, IEnumerable<(int, int)> edges)
         {
 #if !EXPERIMENT
             NullCheck(edges, nameof(edges), "Trying to create a tree with a given list of int tuples as edges, but the list with int tuples is null!");
             if (numberOfNodes < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numberOfNodes), $"Trying to create a tree with a given list of edges, but the number of nodes in the tree is negative ({numberOfNodes})!");
-            }
-            if (rootID < 0 || rootID >= numberOfNodes)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rootID), $"Trying to create a tree with a given list of edges, but the ID of the root of the tree ({rootID}) is out of range compared to the number of nodes ({numberOfNodes})!");
             }
             if (edges.Count() != numberOfNodes - 1)
             {
@@ -361,45 +442,51 @@ namespace MulticutInTrees.Utilities
 #endif
             Counter mockCounter = new Counter();
 
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph graph = new Graph();
 
-            TreeNode[] nodes = new TreeNode[numberOfNodes];
+            Node[] nodes = new Node[numberOfNodes];
             for (uint i = 0; i < numberOfNodes; i++)
             {
-                nodes[i] = new TreeNode(i);
+                Node node = new Node(i);
+                nodes[i] = node;
             }
 
-            tree.AddRoot(nodes[rootID], mockCounter);
+            graph.AddNode(nodes[0], mockCounter);
 
-            Queue<TreeNode> queue = new Queue<TreeNode>();
-            queue.Enqueue(nodes[rootID]);
+            Queue<Node> queue = new Queue<Node>();
+            queue.Enqueue(nodes[0]);
 
             while (queue.Count > 0)
             {
-                TreeNode node = queue.Dequeue();
-                IEnumerable<TreeNode> children = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]);
+                Node node = queue.Dequeue();
+                IEnumerable<Node> neighbours = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]);
                 edges = edges.Where(n => n.Item1 != node.ID && n.Item2 != node.ID).ToList();
-                tree.AddChildren(node, children, mockCounter);
-                foreach (TreeNode child in children)
+                foreach (Node neighbour in neighbours)
                 {
-                    queue.Enqueue(child);
+                    if (!graph.HasNode(neighbour, mockCounter))
+                    {
+                        graph.AddNode(neighbour, mockCounter);
+                    }
+                    Edge<Node> edge = new Edge<Node>(node, neighbour);
+                    graph.AddEdge(edge, mockCounter);
+                    queue.Enqueue(neighbour);
                 }
             }
 
-            tree.UpdateNodeTypes();
+            graph.UpdateNodeTypes();
 
-            return tree;
+            return graph;
         }
 
         /// <summary>
         /// Create a set of <see cref="DemandPair"/>s in <paramref name="tree"/> with endpoints identified by the <see cref="int"/> tuples in <paramref name="endpoints"/>.
         /// </summary>
-        /// <param name="tree">The <see cref="Tree{N}"/> in which to create the <see cref="DemandPair"/>s.</param>
-        /// <param name="endpoints">The <see cref="IEnumerable{T}"/> with <see cref="int"/> tuples that represent the IDs of the <see cref="TreeNode"/>s that are the endpoints of that <see cref="DemandPair"/>.</param>
+        /// <param name="tree">The <see cref="AbstractGraph{TEdge, TNode}"/> in which to create the <see cref="DemandPair"/>s.</param>
+        /// <param name="endpoints">The <see cref="IEnumerable{T}"/> with <see cref="int"/> tuples that represent the IDs of the <see cref="Node"/>s that are the endpoints of that <see cref="DemandPair"/>.</param>
         /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="endpoints"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">Thrown when a tuple in <paramref name="endpoints"/> has a value that is not the ID of a <see cref="TreeNode"/> in <paramref name="tree"/>.</exception>
-        public static CountedList<DemandPair> CreateDemandPairs(Tree<TreeNode> tree, IEnumerable<(int, int)> endpoints)
+        /// <exception cref="ArgumentException">Thrown when a tuple in <paramref name="endpoints"/> has a value that is not the ID of a <see cref="Node"/> in <paramref name="tree"/>.</exception>
+        public static CountedList<DemandPair> CreateDemandPairs(Graph tree, IEnumerable<(int, int)> endpoints)
         {
 #if !EXPERIMENT
             NullCheck(tree, nameof(tree), "Trying to create demand pairs given a list with int endpoints, but the tree is null!");
@@ -423,19 +510,19 @@ namespace MulticutInTrees.Utilities
             uint id = 0;
             foreach ((int, int) dp in endpoints)
             {
-                TreeNode node1 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item1);
-                TreeNode node2 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item2);
+                Node node1 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item1);
+                Node node2 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item2);
 #if !EXPERIMENT
-                if (node1 == default(TreeNode))
+                if (node1 is null)
                 {
                     throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (it is {dp.Item1}, but is does not exist in the tree)!", nameof(endpoints));
                 }
-                if (node2 == default(TreeNode))
+                if (node2 is null)
                 {
                     throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (it is {dp.Item2}, but is does not exist in the tree)!", nameof(endpoints));
                 }
 #endif
-                result.Add(new DemandPair(id, node1, node2), mockCounter);
+                result.Add(new DemandPair(id, node1, node2, tree), mockCounter);
                 id++;
             }
 

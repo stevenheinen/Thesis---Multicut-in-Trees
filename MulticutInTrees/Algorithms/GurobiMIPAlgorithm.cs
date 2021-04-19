@@ -18,9 +18,9 @@ namespace MulticutInTrees.Algorithms
     public class GurobiMIPAlgorithm
     {
         /// <summary>
-        /// The <see cref="Tree{T}"/> in the instance.
+        /// The <see cref="Graph"/> in the instance.
         /// </summary>
-        private Tree<TreeNode> Tree { get; }
+        private Graph Tree { get; }
 
         /// <summary>
         /// The <see cref="DemandPair"/>s in the instance.
@@ -33,12 +33,12 @@ namespace MulticutInTrees.Algorithms
         private Counter MockCounter { get; }
 
         /// <summary>
-        /// Constructor for the <see cref="GurobiMIPAlgorithm"/> directly from a <see cref="Tree{N}"/> and <see cref="DemandPair"/>s instead of a <see cref="MulticutInstance"/>.
+        /// Constructor for the <see cref="GurobiMIPAlgorithm"/> directly from a <see cref="AbstractGraph{TEdge, TNode}"/> and <see cref="DemandPair"/>s instead of a <see cref="MulticutInstance"/>.
         /// </summary>
-        /// <param name="tree">The <see cref="Tree{N}"/> to run the algorithm on.</param>
+        /// <param name="tree">The tree to run the algorithm on.</param>
         /// <param name="demandPairs">The <see cref="DemandPair"/>s in the instance.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
-        internal GurobiMIPAlgorithm(Tree<TreeNode> tree, List<DemandPair> demandPairs)
+        internal GurobiMIPAlgorithm(Graph tree, List<DemandPair> demandPairs)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Gurobi MIP algorithm, but the tree in the instance is null!");
@@ -89,7 +89,7 @@ namespace MulticutInTrees.Algorithms
                 GRBModel model = new GRBModel(env);
 
                 int nrEdges = Tree.NumberOfEdges(MockCounter);
-                string[] edgeNames = Tree.Edges(MockCounter).Select(e => Utils.OrderEdgeSmallToLarge(e).ToString()).ToArray();
+                string[] edgeNames = Tree.Edges(MockCounter).Select(e => e.ToString()).ToArray();
 
                 Dictionary<string, GRBVar> edgeNameToVariable = new Dictionary<string, GRBVar>();
 
@@ -108,9 +108,9 @@ namespace MulticutInTrees.Algorithms
                 foreach (DemandPair demandPair in DemandPairs)
                 {
                     GRBLinExpr pathValue = 0.0;
-                    foreach ((TreeNode, TreeNode) edge in demandPair.EdgesOnDemandPath(MockCounter))
+                    foreach (Edge<Node> edge in demandPair.EdgesOnDemandPath(MockCounter))
                     {
-                        pathValue.AddTerm(1.0, edgeNameToVariable[Utils.OrderEdgeSmallToLarge(edge).ToString()]);
+                        pathValue.AddTerm(1.0, edgeNameToVariable[edge.ToString()]);
                     }
                     model.AddConstr(pathValue >= 1, demandPair.ToString());
                 }

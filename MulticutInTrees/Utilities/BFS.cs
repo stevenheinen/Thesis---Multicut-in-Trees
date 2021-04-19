@@ -16,14 +16,14 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// Find the shortest path from an <typeparamref name="TNode"/> to any <typeparamref name="TNode"/> in <paramref name="targetSet"/>.
         /// </summary>
-        /// <typeparam name="TNode">Implementation of <see cref="INode{N}"/>.</typeparam>
+        /// <typeparam name="TNode">The type of node we are using.</typeparam>
         /// <param name="startNode">The <typeparamref name="TNode"/> to start with.</param>
         /// <param name="targetSet">The <see cref="HashSet{T}"/> of <typeparamref name="TNode"/>s that need to be found.</param>
         /// <param name="treeCounter">The <see cref="Counter"/> for graph operations that should count this BFS.</param>
         /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the BFS.</param>
         /// <returns>A <see cref="List{T}"/> with the shortest path from <paramref name="startNode"/> to any <typeparamref name="TNode"/> in <paramref name="targetSet"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/>, <paramref name="targetSet"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
-        public static List<TNode> FindShortestPath<TNode>(TNode startNode, HashSet<TNode> targetSet, Counter treeCounter, HashSet<TNode> seen = null) where TNode : INode<TNode>
+        public static List<TNode> FindShortestPath<TNode>(TNode startNode, HashSet<TNode> targetSet, Counter treeCounter, HashSet<TNode> seen = null) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(startNode, nameof(startNode), "Trying to find the shortest path to a set, but the start node is null!");

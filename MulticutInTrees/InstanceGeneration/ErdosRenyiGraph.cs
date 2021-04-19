@@ -19,10 +19,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// <param name="numberOfNodes">The number of nodes that should be in the graph. Should be zero or greater.</param>
         /// <param name="chancePerEdge">The chance for each possible edge to exist in the graph. There will be roughly <paramref name="numberOfNodes"/> * <paramref name="numberOfNodes"/> * <paramref name="chancePerEdge"/> edges. Should be zero or greater.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
-        /// <returns>A randomly generated <see cref="Graph{N}"/> with <paramref name="numberOfNodes"/> <see cref="Node"/>s according to the Erdos-Renyi model.</returns>
+        /// <returns>A randomly generated <see cref="Graph"/> with <paramref name="numberOfNodes"/> <see cref="Node"/>s according to the Erdos-Renyi model.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="random"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfNodes"/> or <paramref name="chancePerEdge"/> is negative.</exception>
-        public static Graph<Node> CreateErdosRenyiGraph(int numberOfNodes, double chancePerEdge, Random random)
+        public static Graph CreateErdosRenyiGraph(int numberOfNodes, double chancePerEdge, Random random)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(random, nameof(random), "Trying to create an Erdos-Renyi graph, but the random is null!");
@@ -39,7 +39,7 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new ArgumentOutOfRangeException(nameof(chancePerEdge), "Trying to create an Erdos-Renyi graph with a change of larger than 1 per possible edge!");
             }
 #endif
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
 
             for (uint i = 0; i < numberOfNodes; i++)
             {
@@ -56,7 +56,8 @@ namespace MulticutInTrees.InstanceGeneration
                     }
                     if (random.NextDouble() < chancePerEdge)
                     {
-                        graph.AddEdge(node1, node2, MockCounter);
+                        Edge<Node> edge = new Edge<Node>(node1, node2);
+                        graph.AddEdge(edge, MockCounter);
                     }
                 }
             }

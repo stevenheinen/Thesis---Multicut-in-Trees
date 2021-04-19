@@ -5,5 +5,8 @@ namespace MulticutInTrees.CountedDatastructures
     /// <summary>
     /// This part of the project contains all the data structures that count the oparations that are used on them, as well as a counter for these operations.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc
+    {
+
+    }
 }

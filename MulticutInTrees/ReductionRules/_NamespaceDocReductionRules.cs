@@ -5,5 +5,8 @@ namespace MulticutInTrees.ReductionRules
     /// <summary>
     /// This part of the project contains the reduction rules used for kernelisation algorithms.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc 
+    {
+
+    }
 }

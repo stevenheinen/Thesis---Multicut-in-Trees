@@ -10,7 +10,8 @@
     <DefaultDocumentationFolder>Documentation</DefaultDocumentationFolder>
     <DefaultDocumentationInvalidCharReplacement>_</DefaultDocumentationInvalidCharReplacement>
     <DefaultDocumentationWikiLinks>true</DefaultDocumentationWikiLinks>
-    <DefaultDocumentationFileNameMode>Name</DefaultDocumentationFileNameMode>
+    <DefaultDocumentationFileNameMode>Md5</DefaultDocumentationFileNameMode>
+    <DefaultDocumentationNestedTypeVisibility>Everywhere</DefaultDocumentationNestedTypeVisibility>
     <DefaultDocumentationHome>home</DefaultDocumentationHome>
     <Configurations>Debug;Release;VerboseDebug;Experiment</Configurations>
   </PropertyGroup>
@@ -18,7 +19,7 @@
   <Choose>
     <When Condition="'$(BuildingForLiveUnitTesting)' == 'true'">
       <ItemGroup>
-        <PackageReference Include="DefaultDocumentation" Version="0.6.14">
+        <PackageReference Include="DefaultDocumentation" Version="0.6.15">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -39,8 +40,14 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="CsvHelper" Version="26.1.0" />
-    <PackageReference Include="Microsoft.CodeCoverage" Version="16.9.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <!--
+    <PackageReference Include="DefaultDocumentation" Version="0.6.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    -->
+    <PackageReference Include="Microsoft.CodeCoverage" Version="16.9.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
@@ -58,8 +65,15 @@
     </Reference>
   </ItemGroup>
 
+  <!--
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildingForLiveUnitTesting)' != 'true'">
+    <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
+  </Target>
+  -->
+  <!--
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
   </Target>
+  -->
 
 </Project>

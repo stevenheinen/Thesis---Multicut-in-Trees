@@ -18,9 +18,9 @@ namespace MulticutInTrees.ReductionRules
     public class OverloadedL3Leaves : ReductionRule
     {
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="Node"/>.
         /// </summary>
-        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
+        private CountedDictionary<Node, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
 
         /// <summary>
         /// The maximum size the solution is allowed to have.
@@ -30,20 +30,20 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// The part of the solution that has been found thus far.
         /// </summary>
-        private List<(TreeNode, TreeNode)> PartialSolution { get; }
+        private List<Edge<Node>> PartialSolution { get; }
 
         /// <summary>
         /// Constructor for <see cref="OverloadedL3Leaves"/>.
         /// </summary>
-        /// <param name="tree">The input <see cref="Tree{N}"/>.</param>
+        /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
-        /// <param name="demandPairsPerNode"><see cref="CountedDictionary{TKey, TValue}"/> with for each <see cref="TreeNode"/> all <see cref="DemandPair"/>s that start at that <see cref="TreeNode"/>.</param>
+        /// <param name="demandPairsPerNode"><see cref="CountedDictionary{TKey, TValue}"/> with for each <see cref="Node"/> all <see cref="DemandPair"/>s that start at that <see cref="Node"/>.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="demandPairsPerNode"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public OverloadedL3Leaves(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<TreeNode, CountedCollection<DemandPair>> demandPairsPerNode, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
+        public OverloadedL3Leaves(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
@@ -67,7 +67,7 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         /// <param name="overloadedLeaves"><see cref="CountedList{T}"/> with the parent, overloaded <see cref="DemandPair"/>s and the other endpoint of the <see cref="DemandPair"/>s.</param>
         /// <returns><see langword="true"/> if any modification to the instance were made, <see langword="false"/> otherwise.</returns>
-        private bool HandleOverloadedL3Leaves(CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> overloadedLeaves)
+        private bool HandleOverloadedL3Leaves(CountedList<(Node, CountedList<DemandPair>, Node)> overloadedLeaves)
         {
             if (overloadedLeaves.Count(MockCounter) == 0)
             {
@@ -75,13 +75,13 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            List<(DemandPair, TreeNode, TreeNode)> dpsToBeChanged = new List<(DemandPair, TreeNode, TreeNode)>();
+            List<(DemandPair, Node, Node)> dpsToBeChanged = new List<(DemandPair, Node, Node)>();
             List<DemandPair> dpsToBeRemoved = new List<DemandPair>();
 
-            foreach ((TreeNode parent, CountedList<DemandPair> affectedDemandPairs, TreeNode otherNode) in overloadedLeaves.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach ((Node parent, CountedList<DemandPair> affectedDemandPairs, Node otherNode) in overloadedLeaves.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 DemandPair changedDemandPair = affectedDemandPairs[0, Measurements.DemandPairsOperationsCounter];
-                TreeNode leaf = changedDemandPair.Node1 == otherNode ? changedDemandPair.Node2 : changedDemandPair.Node1;
+                Node leaf = changedDemandPair.Node1 == otherNode ? changedDemandPair.Node2 : changedDemandPair.Node1;
                 dpsToBeChanged.Add((changedDemandPair, leaf, parent));
                 dpsToBeRemoved.AddRange(affectedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Skip(1));
             }
@@ -89,7 +89,7 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Stop();
             Measurements.TimeSpentModifyingInstance.Start();
             Algorithm.RemoveDemandPairs(new CountedList<DemandPair>(dpsToBeRemoved, Measurements.DemandPairsOperationsCounter), Measurements);
-            Algorithm.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, TreeNode, TreeNode)>(dpsToBeChanged, Measurements.DemandPairsOperationsCounter), Measurements);
+            Algorithm.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, Node, Node)>(dpsToBeChanged, Measurements.DemandPairsOperationsCounter), Measurements);
             Measurements.TimeSpentModifyingInstance.Stop();
             return true;
         }
@@ -98,33 +98,33 @@ namespace MulticutInTrees.ReductionRules
         /// Determines the groups of L3-Leaves on which this reduction rule is applicable.
         /// </summary>
         /// <returns>A <see cref="CountedList{T}"/> with the parent, overloaded <see cref="DemandPair"/>s and the other endpoint of the <see cref="DemandPair"/>s.</returns>
-        private CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> FindOverloadedL3Leaves()
+        private CountedList<(Node, CountedList<DemandPair>, Node)> FindOverloadedL3Leaves()
         {
             int k = MaxSolutionSize - PartialSolution.Count;
-            CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> result = new CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)>();
-            foreach (TreeNode node in Tree.Nodes(Measurements.TreeOperationsCounter))
+            CountedList<(Node, CountedList<DemandPair>, Node)> result = new CountedList<(Node, CountedList<DemandPair>, Node)>();
+            foreach (Node node in Tree.Nodes(Measurements.TreeOperationsCounter))
             {
                 DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> demandPairsAtNode, Measurements.DemandPairsPerEdgeKeysCounter);
                 if (demandPairsAtNode is null || demandPairsAtNode.Count(Measurements.DemandPairsOperationsCounter) <= k)
                 {
                     continue;
                 }
-                CountedDictionary<TreeNode, CountedList<DemandPair>> i3NodeToDemandPairsInChildren = new CountedDictionary<TreeNode, CountedList<DemandPair>>();
+                CountedDictionary<Node, CountedList<DemandPair>> i3NodeToDemandPairsInChildren = new CountedDictionary<Node, CountedList<DemandPair>>();
                 foreach (DemandPair demandPair in demandPairsAtNode.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
-                    TreeNode otherEndpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;
+                    Node otherEndpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;
                     if (otherEndpoint.Type != NodeType.L3)
                     {
                         continue;
                     }
-                    TreeNode parent = otherEndpoint.GetParent(Measurements.TreeOperationsCounter) ?? otherEndpoint.Children(Measurements.TreeOperationsCounter).First();
+                    Node parent = otherEndpoint.Neighbours(Measurements.TreeOperationsCounter).First();
                     if (!i3NodeToDemandPairsInChildren.ContainsKey(parent, MockCounter))
                     {
                         i3NodeToDemandPairsInChildren[parent, MockCounter] = new CountedList<DemandPair>();
                     }
                     i3NodeToDemandPairsInChildren[parent, Measurements.TreeOperationsCounter].Add(demandPair, Measurements.DemandPairsOperationsCounter);
                 }
-                foreach (KeyValuePair<TreeNode, CountedList<DemandPair>> kv in i3NodeToDemandPairsInChildren.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+                foreach (KeyValuePair<Node, CountedList<DemandPair>> kv in i3NodeToDemandPairsInChildren.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                 {
                     if (kv.Value.Count(Measurements.DemandPairsOperationsCounter) <= k)
                     {
@@ -153,7 +153,7 @@ namespace MulticutInTrees.ReductionRules
             }
 
             bool containsI3OrL3Node = false;
-            foreach (((TreeNode, TreeNode) _, TreeNode newNode, CountedCollection<DemandPair> _) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            foreach ((Edge<Node> _, Node newNode, CountedCollection<DemandPair> _) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 if (newNode.Type == NodeType.I3 || newNode.Type == NodeType.L3)
                 {
@@ -169,7 +169,7 @@ namespace MulticutInTrees.ReductionRules
                 Measurements.TimeSpentCheckingApplicability.Stop();
                 return false;
             }
-            CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> overloadedLeaves = FindOverloadedL3Leaves();
+            CountedList<(Node, CountedList<DemandPair>, Node)> overloadedLeaves = FindOverloadedL3Leaves();
             LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
             LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
@@ -184,7 +184,7 @@ namespace MulticutInTrees.ReductionRules
 #endif
             HasRun = true;
             Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<(TreeNode, CountedList<DemandPair>, TreeNode)> overloadedLeaves = FindOverloadedL3Leaves();
+            CountedList<(Node, CountedList<DemandPair>, Node)> overloadedLeaves = FindOverloadedL3Leaves();
             return HandleOverloadedL3Leaves(overloadedLeaves);
         }
     }

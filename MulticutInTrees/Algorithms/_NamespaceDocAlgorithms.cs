@@ -5,5 +5,8 @@ namespace MulticutInTrees.Algorithms
     /// <summary>
     /// This part of the project contains all used algorithms to solve Multicut in Trees.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc 
+    {
+
+    }
 }

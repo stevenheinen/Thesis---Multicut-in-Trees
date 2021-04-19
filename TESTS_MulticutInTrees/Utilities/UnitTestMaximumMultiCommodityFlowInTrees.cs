@@ -15,33 +15,41 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestMaximumMultiCommodityFlowInTrees
     {
-        private static readonly Counter counter = new Counter();
-        private static readonly PerformanceMeasurements measurements = new PerformanceMeasurements(nameof(UnitTestMaximumMultiCommodityFlowInTrees));
+        private static readonly Counter MockCounter = new Counter();
+        private static readonly PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestMaximumMultiCommodityFlowInTrees));
 
         [TestMethod]
         public void TestCase1()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
-            TreeNode node7 = new TreeNode(7);
-            TreeNode node8 = new TreeNode(8);
-            TreeNode node9 = new TreeNode(9);
-            TreeNode node10 = new TreeNode(10);
-            TreeNode node11 = new TreeNode(11);
-            tree.AddRoot(node0, counter);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2, node3 }, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node4, node5, node6 }, counter);
-            tree.AddChildren(node2, new List<TreeNode>() { node7, node8 }, counter);
-            tree.AddChildren(node3, new List<TreeNode>() { node9, node10, node11 }, counter);
-            List<(TreeNode, TreeNode)> commodities = new List<(TreeNode, TreeNode)>() { (node5, node4), (node5, node6), (node6, node0), (node0, node7), (node9, node8), (node10, node11), (node3, node11) };
+            RootedTree tree = new RootedTree();
+            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node3 = new RootedTreeNode(3);
+            RootedTreeNode node4 = new RootedTreeNode(4);
+            RootedTreeNode node5 = new RootedTreeNode(5);
+            RootedTreeNode node6 = new RootedTreeNode(6);
+            RootedTreeNode node7 = new RootedTreeNode(7);
+            RootedTreeNode node8 = new RootedTreeNode(8);
+            RootedTreeNode node9 = new RootedTreeNode(9);
+            RootedTreeNode node10 = new RootedTreeNode(10);
+            RootedTreeNode node11 = new RootedTreeNode(11);
+            tree.AddNodes(new List<RootedTreeNode>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11 }, MockCounter);
+            Edge<RootedTreeNode> edge01 = new Edge<RootedTreeNode>(node0, node1);
+            Edge<RootedTreeNode> edge02 = new Edge<RootedTreeNode>(node0, node2);
+            Edge<RootedTreeNode> edge03 = new Edge<RootedTreeNode>(node0, node3);
+            Edge<RootedTreeNode> edge14 = new Edge<RootedTreeNode>(node1, node4);
+            Edge<RootedTreeNode> edge15 = new Edge<RootedTreeNode>(node1, node5);
+            Edge<RootedTreeNode> edge16 = new Edge<RootedTreeNode>(node1, node6);
+            Edge<RootedTreeNode> edge27 = new Edge<RootedTreeNode>(node2, node7);
+            Edge<RootedTreeNode> edge28 = new Edge<RootedTreeNode>(node2, node8);
+            Edge<RootedTreeNode> edge39 = new Edge<RootedTreeNode>(node3, node9);
+            Edge<RootedTreeNode> edge310 = new Edge<RootedTreeNode>(node3, node10);
+            Edge<RootedTreeNode> edge311 = new Edge<RootedTreeNode>(node3, node11);
+            tree.AddEdges(new List<Edge<RootedTreeNode>>() { edge01, edge02, edge03, edge14, edge15, edge16, edge27, edge28, edge39, edge310, edge311 }, MockCounter);
+            List<(RootedTreeNode, RootedTreeNode)> commodities = new List<(RootedTreeNode, RootedTreeNode)>() { (node5, node4), (node5, node6), (node6, node0), (node0, node7), (node9, node8), (node10, node11), (node3, node11) };
 
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowTree(tree, commodities, MockMeasurements);
             Assert.AreEqual(4, flow);
         }
 
@@ -49,10 +57,10 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestCase2()
         {
             Random random = new Random(80);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(50, random);
+            Graph tree = TreeFromPruferSequence.GenerateTree(50, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(10, tree, random);
-            IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
+            IEnumerable<(Node, Node)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, commodities, MockMeasurements);
             Assert.AreEqual(3, flow);
         }
 
@@ -60,10 +68,10 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestCase3()
         {
             Random random = new Random(481087);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(100, random);
+            Graph tree = TreeFromPruferSequence.GenerateTree(100, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(90, tree, random);
-            IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
+            IEnumerable<(Node, Node)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, commodities, MockMeasurements);
             Assert.AreEqual(10, flow);
         }
 
@@ -71,10 +79,10 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestCase4()
         {
             Random random = new Random(45054);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(500, random);
+            Graph tree = TreeFromPruferSequence.GenerateTree(500, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(250, tree, random);
-            IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
+            IEnumerable<(Node, Node)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, commodities, MockMeasurements);
             Assert.AreEqual(16, flow);
         }
 
@@ -82,10 +90,10 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestCase5()
         {
             Random random = new Random(4878378);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(2000, random);
+            Graph tree = TreeFromPruferSequence.GenerateTree(2000, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(1000, tree, random);
-            IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
+            IEnumerable<(Node, Node)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, commodities, MockMeasurements);
             Assert.AreEqual(36, flow);
         }
 
@@ -93,10 +101,10 @@ namespace TESTS_MulticutInTrees.Utilities
         public void TestCase6()
         {
             Random random = new Random(9345745);
-            Tree<TreeNode> tree = TreeFromPruferSequence.GenerateTree(5000, random);
+            Graph tree = TreeFromPruferSequence.GenerateTree(5000, random);
             List<DemandPair> demandPairs = RandomDemandPairs.GenerateRandomDemandPairs(4000, tree, random);
-            IEnumerable<(TreeNode, TreeNode)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
-            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlow(tree, commodities, measurements);
+            IEnumerable<(Node, Node)> commodities = demandPairs.Select(n => (n.Node1, n.Node2));
+            int flow = MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, commodities, MockMeasurements);
             Assert.AreEqual(76, flow);
         }
     }

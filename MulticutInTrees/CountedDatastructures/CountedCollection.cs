@@ -232,18 +232,49 @@ namespace MulticutInTrees.CountedDatastructures
         /// </summary>
         /// <param name="predicate"><see cref="Func{T, TResult}"/> that is used to determine which elements to remove.</param>
         /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/>s that were removed.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
-        public void RemoveFromStartWhile(Func<T, bool> predicate, Counter counter)
+        public IEnumerable<T> RemoveFromStartWhile(Func<T, bool> predicate, Counter counter)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(predicate, nameof(predicate), "Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
             Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the start of a CountedCollection, but the Counter is null!");
 #endif
+            List<T> result = new List<T>();
             while (predicate(LinkedList.First.Value))
             {
                 counter++;
+                result.Add(LinkedList.First.Value);
                 Remove(LinkedList.First.Value, counter);
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Remove <paramref name="count"/> elements from the start of this collection.
+        /// </summary>
+        /// <param name="count">The number of elements to remove.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/>s that were removed.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="count"/> is negative.</exception>
+        public IEnumerable<T> RemoveFromStart(int count, Counter counter)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the start of a CountedCollection, but the Counter is null!");
+            if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), "Trying to remove elements from the start of a CountedCollection, but the amount of elements to remove is negative!");
+            }
+#endif
+            List<T> result = new List<T>();
+            for (int i = 0; i < count; i++)
+            {
+                counter++;
+                result.Add(LinkedList.First.Value);
+                Remove(LinkedList.First.Value, counter);
+            }
+            return result;
         }
 
         /// <summary>
@@ -251,18 +282,49 @@ namespace MulticutInTrees.CountedDatastructures
         /// </summary>
         /// <param name="predicate"><see cref="Func{T, TResult}"/> that is used to determine which elements to remove.</param>
         /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/>s that were removed.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
-        public void RemoveFromEndWhile(Func<T, bool> predicate, Counter counter)
+        public IEnumerable<T> RemoveFromEndWhile(Func<T, bool> predicate, Counter counter)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(predicate, nameof(predicate), "Trying to remove elements from the end of a CountedCollection, but the predicate is null!");
             Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from end start of a CountedCollection, but the Counter is null!");
 #endif
+            List<T> result = new List<T>();
             while (predicate(LinkedList.Last.Value))
             {
                 counter++;
+                result.Add(LinkedList.Last.Value);
                 Remove(LinkedList.Last.Value, counter);
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Remove <paramref name="count"/> elements from the end of this collection.
+        /// </summary>
+        /// <param name="count">The number of elements to remove.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/>s that were removed.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="counter"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="count"/> is negative.</exception>
+        public IEnumerable<T> RemoveFromEnd(int count, Counter counter)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the end of a CountedCollection, but the Counter is null!");
+            if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), "Trying to remove elements from the end of a CountedCollection, but the amount of elements to remove is negative!");
+            }
+#endif
+            List<T> result = new List<T>();
+            for (int i = 0; i < count; i++)
+            {
+                counter++;
+                result.Add(LinkedList.Last.Value);
+                Remove(LinkedList.Last.Value, counter);
+            }
+            return result;
         }
 
         /// <summary>

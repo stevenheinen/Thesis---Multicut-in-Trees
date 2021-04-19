@@ -37,9 +37,9 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentNullException>(() => Utils.BinarySearchGetLastTrue(0, 10, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.BinarySearchGetFirstTrue(0, 10, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.AllSubsetsOfSize<int>(null, 3));
-            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateTreeWithEdges(10, 1, null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateGraphWithEdges(10, null));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(null, new List<(int, int)>()));
-            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(new Tree<TreeNode>(), null));
+            Assert.ThrowsException<ArgumentNullException>(() => Utils.CreateDemandPairs(new Graph(), null));
         }
 
         [TestMethod]
@@ -180,28 +180,49 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCreateTreeWithEdges()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(-1, 1, new List<(int, int)>()));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(5, -2, new List<(int, int)>()));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(5, 5, new List<(int, int)>()));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateTreeWithEdges(5, 500, new List<(int, int)>()));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 1, new List<(int, int)>() { (1, 0), (4, 3), (2, 0) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 4, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3), (2, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 3, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 2, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 0, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateTreeWithEdges(5, 4, new List<(int, int)>() { (5, 0), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Utils.CreateGraphWithEdges(-1, new List<(int, int)>()));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3), (2, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));
+            Assert.ThrowsException<ArgumentException>(() => Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (5, 0), (4, 3), (-5, 0), (1, 3) }));
 
-            Tree<TreeNode> test = Utils.CreateTreeWithEdges(5, 1, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            Graph test = Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
             Assert.IsNotNull(test);
             Assert.AreEqual(5, test.NumberOfNodes(MockCounter));
             Assert.AreEqual(4, test.NumberOfEdges(MockCounter));
-            Assert.AreEqual(2, test.Height(MockCounter));
+        }
+
+        [TestMethod]
+        public void TestCreateRootedTreeFromGraph()
+        {
+            Assert.ThrowsException<ArgumentException>(() => 
+            {
+                Graph g = Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0) });
+                Utils.CreateRootedTreeFromGraph<Graph, Edge<Node>, Node>(g);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => 
+            {
+                Graph g = Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (0, 3), (2, 0), (2, 1) });
+                Utils.CreateRootedTreeFromGraph<Graph, Edge<Node>, Node>(g);
+            });
+
+            Graph graph = Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            (RootedTree tree, Dictionary<Node, RootedTreeNode> dict) = Utils.CreateRootedTreeFromGraph<Graph, Edge<Node>, Node>(graph);
+            Assert.IsNotNull(tree);
+            Assert.IsNotNull(dict);
+            Assert.AreEqual(5, tree.NumberOfNodes(MockCounter));
+            Assert.AreEqual(4, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(3, tree.Height(MockCounter));
+            Assert.AreEqual(5, dict.Count);
         }
 
         [TestMethod]
         public void TestCreateDemandPairs()
         {
-            Tree<TreeNode> tree = Utils.CreateTreeWithEdges(5, 1, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
+            Graph tree = Utils.CreateGraphWithEdges(5, new List<(int, int)>() { (1, 0), (4, 3), (2, 0), (1, 3) });
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (4, -1), (2, 0), (1, 3) }));
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (4, 3), (-5, 0), (1, 3) }));
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 5), (4, 3), (-5, 0), (1, 3) }));

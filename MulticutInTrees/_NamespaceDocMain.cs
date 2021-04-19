@@ -5,5 +5,8 @@ namespace MulticutInTrees
     /// <summary>
     /// The main namespace of the project. This project implements multiple FPT algorithms to solve the <c>Multicut in Trees</c> problem.
     /// </summary>
-    internal static class NamespaceDoc { }
+    internal static class NamespaceDoc
+    {
+
+    }
 }

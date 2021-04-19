@@ -14,7 +14,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         [TestMethod]
         public void TestNullParameter()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            Graph tree = new Graph();
             string filepath = "test.txt";
             Assert.ThrowsException<ArgumentNullException>(() => FixedDemandPairsReader.ReadDemandPairs(null, filepath));
             Assert.ThrowsException<ArgumentNullException>(() => FixedDemandPairsReader.ReadDemandPairs(tree, null));

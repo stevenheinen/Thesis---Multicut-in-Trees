@@ -18,12 +18,12 @@ namespace MulticutInTrees.InstanceGeneration
         /// Generate a <see cref="List{T}"/> of <paramref name="numberOfDemandPairs"/> random <see cref="DemandPair"/>s in <paramref name="tree"/>.
         /// </summary>
         /// <param name="numberOfDemandPairs">The required number of <see cref="DemandPair"/>s.</param>
-        /// <param name="tree">The <see cref="Tree{N}"/> in which to generate the <see cref="DemandPair"/>s.</param>
+        /// <param name="tree">The <see cref="Graph"/> in which to generate the <see cref="DemandPair"/>s.</param>
         /// <param name="random">The <see cref="Random"/> used for random number generation.</param>
         /// <returns>A <see cref="List{T}"/> of <paramref name="numberOfDemandPairs"/> random <see cref="DemandPair"/>s in <paramref name="tree"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="random"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="numberOfDemandPairs"/> is negative.</exception>
-        public static List<DemandPair> GenerateRandomDemandPairs(int numberOfDemandPairs, Tree<TreeNode> tree, Random random)
+        public static List<DemandPair> GenerateRandomDemandPairs(int numberOfDemandPairs, Graph tree, Random random)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to generate random demand pairs in a tree, but the tree is null!");
@@ -53,9 +53,9 @@ namespace MulticutInTrees.InstanceGeneration
                     index2++;
                 }
 
-                TreeNode endpoint1 = tree.Nodes(counter).ElementAt(index1);
-                TreeNode endpoint2 = tree.Nodes(counter).ElementAt(index2);
-                demandPairs.Add(new DemandPair(i, endpoint1, endpoint2));
+                Node endpoint1 = tree.Nodes(counter).ElementAt(index1);
+                Node endpoint2 = tree.Nodes(counter).ElementAt(index2);
+                demandPairs.Add(new DemandPair(i, endpoint1, endpoint2, tree));
             }
             return demandPairs;
         }

@@ -19,14 +19,14 @@ namespace MulticutInTrees.ReductionRules
     public class OverloadedCaterpillar : ReductionRule
     {
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="TreeNode"/>.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="Node"/>.
         /// </summary>
-        private CountedDictionary<TreeNode, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
+        private CountedDictionary<Node, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
 
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="TreeNode"/> is part of, or -1 if it is not part of any caterpillar component.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component each <see cref="Node"/> is part of, or -1 if it is not part of any caterpillar component.
         /// </summary>
-        private CountedDictionary<TreeNode, int> CaterpillarComponentPerNode { get; }
+        private CountedDictionary<Node, int> CaterpillarComponentPerNode { get; }
 
         /// <summary>
         /// The maximum size the solution is allowed to have.
@@ -36,21 +36,21 @@ namespace MulticutInTrees.ReductionRules
         /// <summary>
         /// The part of the solution that has been found thus far.
         /// </summary>
-        private List<(TreeNode, TreeNode)> PartialSolution { get; }
+        private List<Edge<Node>> PartialSolution { get; }
 
         /// <summary>
         /// Constructor for <see cref="OverloadedCaterpillar"/>.
         /// </summary>
-        /// <param name="tree">The input <see cref="Tree{N}"/>.</param>
+        /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
-        /// <param name="demandPairsPerNode"><see cref="CountedDictionary{TKey, TValue}"/> with for each <see cref="TreeNode"/> all <see cref="DemandPair"/>s that start at that <see cref="TreeNode"/>.</param>
+        /// <param name="demandPairsPerNode"><see cref="CountedDictionary{TKey, TValue}"/> with for each <see cref="Node"/> all <see cref="DemandPair"/>s that start at that <see cref="Node"/>.</param>
         /// <param name="caterpillarComponentPerNode"><see cref="CountedDictionary{TKey, TValue}"/> with the identifier of the caterpillar component per node.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="demandPairsPerNode"/>, <paramref name="caterpillarComponentPerNode"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public OverloadedCaterpillar(Tree<TreeNode> tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<TreeNode, CountedCollection<DemandPair>> demandPairsPerNode, CountedDictionary<TreeNode, int> caterpillarComponentPerNode, List<(TreeNode, TreeNode)> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
+        public OverloadedCaterpillar(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode, CountedDictionary<Node, int> caterpillarComponentPerNode, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
@@ -79,7 +79,7 @@ namespace MulticutInTrees.ReductionRules
         {
             int k = MaxSolutionSize - PartialSolution.Count;
             CountedList<DemandPair> result = new CountedList<DemandPair>();
-            foreach (TreeNode node in DemandPairsPerNode.GetKeys(Measurements.DemandPairsPerEdgeKeysCounter))
+            foreach (Node node in DemandPairsPerNode.GetKeys(Measurements.DemandPairsPerEdgeKeysCounter))
             {
                 CountedCollection<DemandPair> demandPairs = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter];
                 if (demandPairs.Count(Measurements.DemandPairsOperationsCounter) <= k)
@@ -90,7 +90,7 @@ namespace MulticutInTrees.ReductionRules
                 CountedDictionary<int, CountedList<DemandPair>> pairsPerComponent = new CountedDictionary<int, CountedList<DemandPair>>();
                 foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                 {
-                    TreeNode endpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;
+                    Node endpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;
                     int otherComponent = CaterpillarComponentPerNode[endpoint, Measurements.TreeOperationsCounter];
                     if (otherComponent == -1 || otherComponent == caterpillarComponent)
                     {
@@ -121,7 +121,7 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
 #endif
             HasRun = true;
-            foreach (KeyValuePair<TreeNode, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
+            foreach (KeyValuePair<Node, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
             {
                 CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);
             }

@@ -18,7 +18,7 @@ namespace MulticutInTrees.MulticutProblem
         public string Owner { get; }
 
         /// <summary>
-        /// <see cref="Counter"/> for the number of operations on the <see cref="Graphs.Tree{N}"/> in the instance.
+        /// <see cref="Counter"/> for the number of operations on the <see cref="Graphs.AbstractGraph{TEdge, TNode}"/> in the instance.
         /// </summary>
         public Counter TreeOperationsCounter { get; set; }
 

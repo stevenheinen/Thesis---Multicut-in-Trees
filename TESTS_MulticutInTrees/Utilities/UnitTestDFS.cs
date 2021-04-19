@@ -13,27 +13,26 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestDFS
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter MockCounter = new Counter();
 
         [TestMethod]
         public void TestFindConnectedComponent()
         {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
 
-            node5.AddChild(node6, counter);
+            node5.AddNeighbour(node6, MockCounter);
+            node0.AddNeighbour(node1, MockCounter);
+            node1.AddNeighbour(node2, MockCounter);
+            node1.AddNeighbour(node3, MockCounter);
+            node2.AddNeighbour(node4, MockCounter);
 
-            node0.AddChild(node1, counter);
-            node1.AddChild(node2, counter);
-            node1.AddChild(node3, counter);
-            node2.AddChild(node4, counter);
-
-            List<TreeNode> connectedComponent = DFS.FindConnectedComponent(node1, counter);
+            List<Node> connectedComponent = DFS.FindConnectedComponent(node1, MockCounter);
 
             Assert.IsTrue(connectedComponent.Contains(node0));
             Assert.IsTrue(connectedComponent.Contains(node1));
@@ -50,29 +49,28 @@ namespace TESTS_MulticutInTrees.Utilities
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                DFS.FindConnectedComponent(default(TreeNode), counter);
+                DFS.FindConnectedComponent(default(RootedTreeNode), MockCounter);
             });
         }
 
         [TestMethod]
         public void FindConnectedComponentSkip()
         {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
+            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node3 = new RootedTreeNode(3);
+            RootedTreeNode node4 = new RootedTreeNode(4);
+            RootedTreeNode node5 = new RootedTreeNode(5);
+            RootedTreeNode node6 = new RootedTreeNode(6);
 
-            node5.AddChild(node6, counter);
+            node5.AddNeighbour(node6, MockCounter);
+            node0.AddNeighbour(node1, MockCounter);
+            node1.AddNeighbour(node2, MockCounter);
+            node1.AddNeighbour(node3, MockCounter);
+            node2.AddNeighbour(node4, MockCounter);
 
-            node0.AddChild(node1, counter);
-            node1.AddChild(node2, counter);
-            node1.AddChild(node3, counter);
-            node2.AddChild(node4, counter);
-
-            List<TreeNode> connectedComponent = DFS.FindConnectedComponent(node1, counter, new HashSet<TreeNode>() { node2 });
+            List<RootedTreeNode> connectedComponent = DFS.FindConnectedComponent(node1, MockCounter, new HashSet<RootedTreeNode>() { node2 });
 
             Assert.IsTrue(connectedComponent.Contains(node0));
             Assert.IsTrue(connectedComponent.Contains(node1));
@@ -89,9 +87,9 @@ namespace TESTS_MulticutInTrees.Utilities
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                TreeNode node0 = new TreeNode(0);
-                TreeNode node1 = new TreeNode(1);
-                DFS.FindConnectedComponent(default, counter, new HashSet<TreeNode>() { node0, node1 });
+                RootedTreeNode node0 = new RootedTreeNode(0);
+                RootedTreeNode node1 = new RootedTreeNode(1);
+                DFS.FindConnectedComponent(default, MockCounter, new HashSet<RootedTreeNode>() { node0, node1 });
             });
         }
 
@@ -99,27 +97,26 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFindAllConnectedComponents()
         {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
+            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node3 = new RootedTreeNode(3);
+            RootedTreeNode node4 = new RootedTreeNode(4);
+            RootedTreeNode node5 = new RootedTreeNode(5);
+            RootedTreeNode node6 = new RootedTreeNode(6);
 
-            node5.AddChild(node6, counter);
+            node5.AddNeighbour(node6, MockCounter);
+            node0.AddNeighbour(node1, MockCounter);
+            node1.AddNeighbour(node2, MockCounter);
+            node1.AddNeighbour(node3, MockCounter);
+            node2.AddNeighbour(node4, MockCounter);
 
-            node0.AddChild(node1, counter);
-            node1.AddChild(node2, counter);
-            node1.AddChild(node3, counter);
-            node2.AddChild(node4, counter);
+            List<RootedTreeNode> nodes = new List<RootedTreeNode>() { node0, node1, node2, node3, node4, node5, node6 };
 
-            List<TreeNode> nodes = new List<TreeNode>() { node0, node1, node2, node3, node4, node5, node6 };
-
-            List<List<TreeNode>> allConnectedComponents = DFS.FindAllConnectedComponents(nodes, counter);
+            List<List<RootedTreeNode>> allConnectedComponents = DFS.FindAllConnectedComponents(nodes, MockCounter);
             Assert.AreEqual(allConnectedComponents.Count, 2);
 
-            foreach (List<TreeNode> component in allConnectedComponents)
+            foreach (List<RootedTreeNode> component in allConnectedComponents)
             {
                 if (component.Count == 5)
                 {
@@ -153,100 +150,81 @@ namespace TESTS_MulticutInTrees.Utilities
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                List<TreeNode> nodes = null;
-                DFS.FindAllConnectedComponents(nodes, counter);
+                List<RootedTreeNode> nodes = null;
+                DFS.FindAllConnectedComponents(nodes, MockCounter);
             });
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                List<TreeNode> nodes = null;
-                TreeNode node0 = new TreeNode(0);
-                TreeNode node1 = new TreeNode(1);
-                DFS.FindAllConnectedComponents(nodes, counter, new HashSet<TreeNode>() { node0, node1 });
+                List<RootedTreeNode> nodes = null;
+                RootedTreeNode node0 = new RootedTreeNode(0);
+                RootedTreeNode node1 = new RootedTreeNode(1);
+                DFS.FindAllConnectedComponents(nodes, MockCounter, new HashSet<RootedTreeNode>() { node0, node1 });
             });
         }
 
         [TestMethod]
         public void TestFindConnectedNodes()
         {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
+            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node3 = new RootedTreeNode(3);
+            RootedTreeNode node4 = new RootedTreeNode(4);
+            RootedTreeNode node5 = new RootedTreeNode(5);
+            RootedTreeNode node6 = new RootedTreeNode(6);
 
-            node5.AddChild(node6, counter);
+            node5.AddNeighbour(node6, MockCounter);
+            node0.AddNeighbour(node1, MockCounter);
+            node1.AddNeighbour(node2, MockCounter);
+            node1.AddNeighbour(node3, MockCounter);
+            node2.AddNeighbour(node4, MockCounter);
 
-            node0.AddChild(node1, counter);
-            node1.AddChild(node2, counter);
-            node1.AddChild(node3, counter);
-            node2.AddChild(node4, counter);
-
-            Assert.IsFalse(DFS.AreConnected(node0, node6, counter));
-            Assert.IsTrue(DFS.AreConnected(node4, node3, counter));
-            Assert.IsTrue(DFS.AreConnected(node2, node0, counter));
+            Assert.IsFalse(DFS.AreConnected(node0, node6, MockCounter));
+            Assert.IsTrue(DFS.AreConnected(node4, node3, MockCounter));
+            Assert.IsTrue(DFS.AreConnected(node2, node0, MockCounter));
         }
 
         [TestMethod]
         public void TestFindConnectedNodesNull()
         {
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            HashSet<TreeNode> skip = new HashSet<TreeNode>() { node2 };
+            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node2 = new RootedTreeNode(2);
+            HashSet<RootedTreeNode> skip = new HashSet<RootedTreeNode>() { node2 };
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                DFS.AreConnected(default, node1, counter);
-            });
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                DFS.AreConnected(default, node1, counter, skip);
+                DFS.AreConnected(default, node1, MockCounter);
             });
 
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                DFS.AreConnected(node0, default, counter);
+                DFS.AreConnected(default, node1, MockCounter, skip);
+            });
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                DFS.AreConnected(node0, default, MockCounter);
             });
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                DFS.AreConnected(node0, default, counter, skip);
+                DFS.AreConnected(node0, default, MockCounter, skip);
             });
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                DFS.AreConnected<TreeNode>(default, default, counter);
+                DFS.AreConnected<RootedTreeNode>(default, default, MockCounter);
             });
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                DFS.AreConnected(default, default, counter, skip);
+                DFS.AreConnected(default, default, MockCounter, skip);
             });
         }
 
         [TestMethod]
-        public void TestNullFindEdges()
+        public void TestPathBetween()
         {
-            ArgumentNullException a = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                DFS.FindAllEdgesGraph<Graph<Node>, Node>(null, counter);
-            });
-            Assert.AreEqual(a.ParamName, "graph");
-
-            ArgumentNullException b = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                DFS.FindAllEdgesGraph<Graph<Node>, Node>(default, counter);
-            });
-            Assert.AreEqual(b.ParamName, "graph");
-        }
-
-        [TestMethod]
-        public void TestFindAllEdgesGraph()
-        {
-            Graph<Node> graph = new Graph<Node>();
-
-            Assert.AreEqual(0, DFS.FindAllEdgesGraph<Graph<Node>, Node>(graph, counter).Count);
+            Graph tree = new Graph();
 
             Node node0 = new Node(0);
             Node node1 = new Node(1);
@@ -254,91 +232,15 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node3 = new Node(3);
             Node node4 = new Node(4);
 
-            List<(Node, Node)> edges = new List<(Node, Node)>()
-            {
-                (node0, node1),
-                (node0, node2),
-                (node1, node2),
-                (node1, node3),
-                (node2, node4),
-                (node3, node4)
-            };
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge14 = new Edge<Node>(node1, node4);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14 }, MockCounter);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4 }, counter);
-            graph.AddEdges(edges, counter);
-
-            List<(Node, Node)> foundEdges = DFS.FindAllEdgesGraph<Graph<Node>, Node>(graph, counter);
-
-            foreach ((Node, Node) edge in foundEdges)
-            {
-                (Node, Node) edge2 = (edge.Item2, edge.Item1);
-                Assert.IsTrue(edges.Contains(edge) || edges.Contains(edge2));
-            }
-
-            foreach ((Node, Node) edge in edges)
-            {
-                (Node, Node) edge2 = (edge.Item2, edge.Item1);
-                Assert.IsTrue(foundEdges.Contains(edge) || foundEdges.Contains(edge2));
-            }
-        }
-
-        [TestMethod]
-        public void TestFindAllEdgesTree()
-        {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-
-            Assert.AreEqual(0, DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(tree, counter).Count);
-
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-
-            List<(TreeNode, TreeNode)> edges = new List<(TreeNode, TreeNode)>()
-            {
-                (node0, node1),
-                (node0, node2),
-                (node1, node3),
-                (node1, node4)
-            };
-
-            tree.AddRoot(node0, counter);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
-
-            List<(TreeNode, TreeNode)> foundEdges = DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(tree, counter);
-
-            foreach ((TreeNode, TreeNode) edge in foundEdges)
-            {
-                (TreeNode, TreeNode) edge2 = (edge.Item2, edge.Item1);
-                Assert.IsTrue(edges.Contains(edge) || edges.Contains(edge2));
-            }
-
-            foreach ((TreeNode, TreeNode) edge in edges)
-            {
-                (TreeNode, TreeNode) edge2 = (edge.Item2, edge.Item1);
-                Assert.IsTrue(foundEdges.Contains(edge) || foundEdges.Contains(edge2));
-            }
-        }
-
-        [TestMethod]
-        public void TestPathBetween()
-        {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-
-            tree.AddRoot(node0, counter);
-            tree.AddChildren(node0, new List<TreeNode>() { node1, node2 }, counter);
-            tree.AddChildren(node1, new List<TreeNode>() { node3, node4 }, counter);
-
-            List<TreeNode> path = DFS.FindPathBetween(node2, node4, counter);
-            CollectionAssert.AreEqual(new List<TreeNode>() { node2, node0, node1, node4 }, path);
+            List<Node> path = DFS.FindPathBetween(node2, node4, MockCounter);
+            CollectionAssert.AreEqual(new List<Node>() { node2, node0, node1, node4 }, path);
         }
 
         [TestMethod]
@@ -348,93 +250,89 @@ namespace TESTS_MulticutInTrees.Utilities
             Node n2 = new Node(1);
             List<Node> list = new List<Node>();
             HashSet<(Node, Node)> hashSet = new HashSet<(Node, Node)>();
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            Graph<Node> graph = new Graph<Node>();
+            RootedTree tree = new RootedTree();
+            Graph graph = new Graph();
 
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(null, n, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(n, null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(null, n, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(n, null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.AreConnected(n, n2, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllConnectedComponents<Node>(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllConnectedComponents<Node>(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllConnectedComponents(list, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesGraph<Graph<Node>, Node>(null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesGraph<Graph<Node>, Node>(graph, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindAllEdgesTree<Tree<TreeNode>, TreeNode>(tree, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindConnectedComponent<Node>(null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindConnectedComponent<Node>(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindConnectedComponent(n, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicGraph<Graph<Node>, Node>(null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(n, null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(null, n, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclic<Graph, Edge<Node>, Node>(null, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclic<Graph, Edge<Node>, Node>(graph, null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclic<RootedTree, Edge<RootedTreeNode>, RootedTreeNode>(null, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.IsAcyclic<RootedTree, Edge<RootedTreeNode>, RootedTreeNode>(tree, null));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(n, null, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(null, n, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FindPathBetween(n, n2, null));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(null, hashSet, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(list, null, counter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(null, hashSet, MockCounter));
+            Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(list, null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => DFS.FreeNodes(list, hashSet, null));
         }
 
         [TestMethod]
         public void TestAcyclicGraph()
         {
-            Graph<Node> graph = new Graph<Node>();
-
+            Graph graph = new Graph();
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
             Node node3 = new Node(3);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge30 = new Edge<Node>(node3, node0);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge30 }, MockCounter);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, counter);
-            graph.AddEdges(new List<(Node, Node)>()
-            {
-                (node0, node1),
-                (node1, node2),
-                (node2, node3),
-                (node3, node0)
-            }, counter);
+            Assert.IsFalse(DFS.IsAcyclic<Graph, Edge<Node>, Node>(graph, MockCounter));
 
-            Assert.IsFalse(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, counter));
+            graph.RemoveEdge(edge30, MockCounter);
 
-            graph.RemoveEdge(node0, node3, counter);
+            Assert.IsTrue(DFS.IsAcyclic<Graph, Edge<Node>, Node>(graph, MockCounter));
 
-            Assert.IsTrue(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, counter));
+            graph.RemoveNode(node1, MockCounter);
+            graph.RemoveNode(node2, MockCounter);
+            graph.RemoveNode(node3, MockCounter);
 
-            graph.RemoveNode(node1, counter);
-            graph.RemoveNode(node2, counter);
-            graph.RemoveNode(node3, counter);
-
-            Assert.IsTrue(DFS.IsAcyclicGraph<Graph<Node>, Node>(graph, counter));
+            Assert.IsTrue(DFS.IsAcyclic<Graph, Edge<Node>, Node>(graph, MockCounter));
         }
 
         [TestMethod]
         public void TestAcyclicTree()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
+            RootedTree tree = new RootedTree();
 
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
+            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node2 = new RootedTreeNode(2);
 
-            Assert.ThrowsException<NoRootException>(() => DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree, counter));
+            Assert.IsTrue(DFS.IsAcyclic<RootedTree, Edge<RootedTreeNode>, RootedTreeNode>(tree, MockCounter));
 
-            tree.AddRoot(node0, counter);
+            tree.AddNode(node0, MockCounter);
 
-            Assert.IsTrue(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree, counter));
+            Assert.IsTrue(DFS.IsAcyclic<RootedTree, Edge<RootedTreeNode>, RootedTreeNode>(tree, MockCounter));
 
-            tree.AddChild(node0, node1, counter);
-            tree.AddChild(node0, node2, counter);
+            tree.AddNode(node1, MockCounter);
+            tree.AddNode(node2, MockCounter);
+            Edge<RootedTreeNode> edge01 = new Edge<RootedTreeNode>(node0, node1);
+            Edge<RootedTreeNode> edge02 = new Edge<RootedTreeNode>(node0, node2);
+            tree.AddEdge(edge01, MockCounter);
+            tree.AddEdge(edge02, MockCounter);
 
-            Assert.IsTrue(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree, counter));
+            Assert.IsTrue(DFS.IsAcyclic<RootedTree, Edge<RootedTreeNode>, RootedTreeNode>(tree, MockCounter));
+            
+            node1.AddNeighbour(node2, MockCounter);
 
-            node1.AddChild(node2, counter);
-
-            Assert.IsFalse(DFS.IsAcyclicTree<Tree<TreeNode>, TreeNode>(tree, counter));
+            Assert.IsFalse(DFS.IsAcyclic<RootedTree, Edge<RootedTreeNode>, RootedTreeNode>(tree, MockCounter));
         }
 
         [TestMethod]
         public void TestFreeNodes()
         {
-            Graph<Node> graph = new Graph<Node>();
+            Graph graph = new Graph();
             Node node0 = new Node(0);
             Node node1 = new Node(1);
             Node node2 = new Node(2);
@@ -443,21 +341,20 @@ namespace TESTS_MulticutInTrees.Utilities
             Node node5 = new Node(5);
             Node node6 = new Node(6);
 
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6 }, counter);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6 }, MockCounter);
 
-            graph.AddEdges(new List<(Node, Node)>()
-            {
-                (node0, node1),
-                (node0, node2),
-                (node1, node2),
-                (node1, node3),
-                (node1, node6),
-                (node2, node3),
-                (node2, node4),
-                (node3, node5),
-                (node4, node5),
-                (node5, node6)
-            }, counter);
+            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge02 = new Edge<Node>(node0, node2);
+            Edge<Node> edge12 = new Edge<Node>(node1, node2);
+            Edge<Node> edge13 = new Edge<Node>(node1, node3);
+            Edge<Node> edge16 = new Edge<Node>(node1, node6);
+            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge24 = new Edge<Node>(node2, node4);
+            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge45 = new Edge<Node>(node4, node5);
+            Edge<Node> edge56 = new Edge<Node>(node5, node6);
+
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge12, edge13, edge16, edge23, edge24, edge35, edge45, edge56 }, MockCounter);
 
             HashSet<(Node, Node)> matching = new HashSet<(Node, Node)>()
             {
@@ -468,7 +365,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             List<Node> unmatchedNodes = new List<Node>() { node4 };
 
-            List<Node> freeNodes = DFS.FreeNodes(unmatchedNodes, matching, counter);
+            List<Node> freeNodes = DFS.FreeNodes(unmatchedNodes, matching, MockCounter);
             Console.WriteLine(freeNodes.Print());
             Assert.AreEqual(3, freeNodes.Count);
             Assert.IsTrue(freeNodes.Contains(node0));
@@ -483,57 +380,56 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestCaterpillarComponents()
         {
-            Tree<TreeNode> tree = new Tree<TreeNode>();
-            TreeNode node0 = new TreeNode(0);
-            TreeNode node1 = new TreeNode(1);
-            TreeNode node2 = new TreeNode(2);
-            TreeNode node3 = new TreeNode(3);
-            TreeNode node4 = new TreeNode(4);
-            TreeNode node5 = new TreeNode(5);
-            TreeNode node6 = new TreeNode(6);
-            TreeNode node7 = new TreeNode(7);
-            TreeNode node8 = new TreeNode(8);
-            TreeNode node9 = new TreeNode(9);
-            TreeNode node10 = new TreeNode(10);
-            TreeNode node11 = new TreeNode(11);
-            TreeNode node12 = new TreeNode(12);
-            TreeNode node13 = new TreeNode(13);
-            TreeNode node14 = new TreeNode(14);
-            TreeNode node15 = new TreeNode(15);
-            TreeNode node16 = new TreeNode(16);
-            TreeNode node17 = new TreeNode(17);
-            TreeNode node18 = new TreeNode(18);
-            TreeNode node19 = new TreeNode(19);
-            TreeNode node20 = new TreeNode(20);
-            TreeNode node21 = new TreeNode(21);
-            TreeNode node22 = new TreeNode(22);
-
-            tree.AddRoot(node5, counter);
-            tree.AddChild(node5, node4, counter);
-            tree.AddChild(node4, node3, counter);
-            tree.AddChild(node4, node14, counter);
-            tree.AddChild(node3, node2, counter);
-            tree.AddChild(node3, node12, counter);
-            tree.AddChild(node3, node13, counter);
-            tree.AddChild(node2, node1, counter);
-            tree.AddChild(node1, node0, counter);
-            tree.AddChild(node1, node11, counter);
-            tree.AddChild(node5, node6, counter);
-            tree.AddChild(node5, node9, counter);
-            tree.AddChild(node5, node15, counter);
-            tree.AddChild(node6, node7, counter);
-            tree.AddChild(node7, node8, counter);
-            tree.AddChild(node7, node16, counter);
-            tree.AddChild(node7, node17, counter);
-            tree.AddChild(node7, node18, counter);
-            tree.AddChild(node8, node19, counter);
-            tree.AddChild(node8, node20, counter);
-            tree.AddChild(node9, node10, counter);
-            tree.AddChild(node9, node21, counter);
-            tree.AddChild(node10, node22, counter);
-
+            Graph tree = new Graph();
+            Node node0 = new Node(0);
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+            Node node5 = new Node(5);
+            Node node6 = new Node(6);
+            Node node7 = new Node(7);
+            Node node8 = new Node(8);
+            Node node9 = new Node(9);
+            Node node10 = new Node(10);
+            Node node11 = new Node(11);
+            Node node12 = new Node(12);
+            Node node13 = new Node(13);
+            Node node14 = new Node(14);
+            Node node15 = new Node(15);
+            Node node16 = new Node(16);
+            Node node17 = new Node(17);
+            Node node18 = new Node(18);
+            Node node19 = new Node(19);
+            Node node20 = new Node(20);
+            Node node21 = new Node(21);
+            Node node22 = new Node(22);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15, node16, node17, node18, node19, node20, node21, node22 }, MockCounter);
+            Edge<Node> edge54 = new Edge<Node>(node5, node4);
+            Edge<Node> edge43 = new Edge<Node>(node4, node3);
+            Edge<Node> edge414 = new Edge<Node>(node4, node14);
+            Edge<Node> edge32 = new Edge<Node>(node3, node2);
+            Edge<Node> edge312 = new Edge<Node>(node3, node12);
+            Edge<Node> edge313 = new Edge<Node>(node3, node13);
+            Edge<Node> edge21 = new Edge<Node>(node2, node1);
+            Edge<Node> edge10 = new Edge<Node>(node1, node0);
+            Edge<Node> edge111 = new Edge<Node>(node1, node11);
+            Edge<Node> edge56 = new Edge<Node>(node5, node6);
+            Edge<Node> edge59 = new Edge<Node>(node5, node9);
+            Edge<Node> edge515 = new Edge<Node>(node5, node15);
+            Edge<Node> edge67 = new Edge<Node>(node6, node7);
+            Edge<Node> edge78 = new Edge<Node>(node7, node8);
+            Edge<Node> edge716 = new Edge<Node>(node7, node16);
+            Edge<Node> edge717 = new Edge<Node>(node7, node17);
+            Edge<Node> edge718 = new Edge<Node>(node7, node18);
+            Edge<Node> edge819 = new Edge<Node>(node8, node19);
+            Edge<Node> edge820 = new Edge<Node>(node8, node20);
+            Edge<Node> edge910 = new Edge<Node>(node9, node10);
+            Edge<Node> edge921 = new Edge<Node>(node9, node21);
+            Edge<Node> edge1022 = new Edge<Node>(node10, node22);
+            tree.AddEdges(new List<Edge<Node>>() { edge54, edge43, edge414, edge32, edge312, edge313, edge21, edge10, edge111, edge56, edge59, edge515, edge67, edge78, edge716, edge717, edge718, edge819, edge820, edge910, edge921, edge1022 }, MockCounter);
             tree.UpdateNodeTypes();
-            Dictionary<TreeNode, int> caterpillars = DFS.DetermineCaterpillarComponents(tree.Nodes(counter), counter);
+            Dictionary<Node, int> caterpillars = DFS.DetermineCaterpillarComponents(tree.Nodes(MockCounter), MockCounter);
 
             Assert.AreEqual(-1, caterpillars[node0]);
             Assert.AreEqual(-1, caterpillars[node1]);
