@@ -16,8 +16,6 @@ namespace MulticutInTrees
         /// <param name="args">Array with command line arguments.</param>
         public static void Main(string[] args)
         {
-            // todo: Change CountedList of DPs in input to CountedCollection
-            // todo: Check whether later iteration of Idle Edge is correct after using edge objects.
             // todo: Further implement Common Factor.
          
             Console.WriteLine("Hello World!");

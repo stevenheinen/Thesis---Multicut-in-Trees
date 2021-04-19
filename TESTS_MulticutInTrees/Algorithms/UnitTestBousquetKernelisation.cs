@@ -39,7 +39,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             DemandPair dp = new DemandPair(0, node0, node3, tree);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedList<DemandPair>(new List<DemandPair>() { dp }, MockCounter), 3, 1);
+            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(new List<DemandPair>() { dp }, MockCounter), 3, 1);
             BousquetKernelisation g = new BousquetKernelisation(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) solution = g.Run();
 
@@ -102,7 +102,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair demandPair4 = new DemandPair(4, node8, node10, tree);
             DemandPair demandPair5 = new DemandPair(5, node11, node17, tree);
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 3, 3);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
@@ -131,7 +131,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             int nrDPs = 500;
             int optimalK = 28;
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
             MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
@@ -166,7 +166,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             int nrDPs = 2000;
             int optimalK = 54;
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
             MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
@@ -201,7 +201,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             int nrDPs = 400;
             int optimalK = 24;
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
             MulticutInstance instance = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
             BousquetKernelisation gnfpt = new BousquetKernelisation(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();

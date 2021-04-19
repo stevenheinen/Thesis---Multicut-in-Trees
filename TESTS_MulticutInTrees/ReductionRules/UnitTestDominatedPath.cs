@@ -40,7 +40,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestConstructor()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> dps = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 10, 10);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<Edge<Node>, CountedCollection<DemandPair>>();
@@ -53,7 +53,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestNullParameter()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> dps = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 10, 10);
             GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
             CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge = new CountedDictionary<Edge<Node>, CountedCollection<DemandPair>>();
@@ -88,7 +88,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new DemandPair(4, node1, node3, tree);
             DemandPair dp5 = new DemandPair(5, node3, node1, tree);
 
-            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 10, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
 
@@ -118,7 +118,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node5, node4, tree);
-            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -154,7 +154,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node5, node4, tree);
             DemandPair dp3 = new DemandPair(3, node4, node6, tree);
-            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -186,7 +186,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node3, node4, tree);
             DemandPair dp3 = new DemandPair(3, node1, node3, tree);
-            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -222,7 +222,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node5, node4, tree);
             DemandPair dp3 = new DemandPair(3, node4, node6, tree);
-            CountedList<DemandPair> dps = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);

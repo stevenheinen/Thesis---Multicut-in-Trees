@@ -19,9 +19,9 @@ namespace MulticutInTrees.Algorithms
     public class GuoNiedermeierBranching
     {
         /// <summary>
-        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the input.
+        /// The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the input.
         /// </summary>
-        private CountedList<DemandPair> DemandPairs { get; }
+        private CountedCollection<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The <see cref="MulticutInstance"/> this <see cref="Algorithm"/> runs on.

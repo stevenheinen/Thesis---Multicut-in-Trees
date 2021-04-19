@@ -46,9 +46,9 @@ namespace MulticutInTrees.MulticutProblem
         public Graph Tree { get; }
 
         /// <summary>
-        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.
+        /// The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.
         /// </summary>
-        public CountedList<DemandPair> DemandPairs { get; }
+        public CountedCollection<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The maximum size the cutset is allowed to be.
@@ -67,12 +67,12 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="dpType">The <see cref="InputDemandPairsType"/> used to generate the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
         /// <param name="tree">The tree of in the instance.</param>
-        /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="demandPairs">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
         /// <param name="optimalK">The minimum possible size the cutset can be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than zero.</exception>
-        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int randomSeed, Graph tree, CountedList<DemandPair> demandPairs, int k, int optimalK)
+        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int randomSeed, Graph tree, CountedCollection<DemandPair> demandPairs, int k, int optimalK)
         {
             Counter mockCounter = new Counter();
 #if !EXPERIMENT
@@ -112,7 +112,7 @@ namespace MulticutInTrees.MulticutProblem
             Counter mockCounter = new Counter();
 
             // Try to read the instance from the files
-            (Graph tree, CountedList<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(randomSeed, options);
+            (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(randomSeed, options);
 
             if (tree is null)
             {
@@ -141,8 +141,9 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> given to the program.</param>
+        /// <returns>A tuple with a <see cref="Graph"/>, a <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s and the optimal K parameter value.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private (Graph tree, CountedList<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
+        private (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(options, nameof(options), "Trying to create a multicut instance, but the commandline options are null!");
@@ -156,12 +157,12 @@ namespace MulticutInTrees.MulticutProblem
             Random demandPairRandom = new Random(randomSeed);
             Graph tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
             Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
-            CountedList<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
+            CountedCollection<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
 
-            GurobiMIPAlgorithm algorithm = new GurobiMIPAlgorithm(tree, demandPairs.GetInternalList());
+            GurobiMIPAlgorithm algorithm = new GurobiMIPAlgorithm(tree, demandPairs.GetLinkedList());
             int optimalK = algorithm.Run(options.Verbose);
 
-            InstanceReaderWriter.WriteInstance(randomSeed, options, tree, demandPairs.GetInternalList(), optimalK);
+            InstanceReaderWriter.WriteInstance(randomSeed, options, tree, demandPairs.GetLinkedList(), optimalK);
 
             if (options.Verbose)
             {
@@ -201,7 +202,7 @@ namespace MulticutInTrees.MulticutProblem
         }
 
         /// <summary>
-        /// Create a <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s using the method given in <see cref="InputTreeType"/>.
+        /// Create a <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s using the method given in <see cref="InputTreeType"/>.
         /// </summary>
         /// <param name="random">The <see cref="Random"/> to be used for random number generation.</param>
         /// <param name="inputTree">The <see cref="Graph"/> in which to generate the <see cref="DemandPair"/>s.</param>
@@ -209,10 +210,10 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="numberOfDemandPairs">The required number of <see cref="DemandPair"/>s.</param>
         /// <param name="distanceProbability">A <see cref="Dictionary{TKey, TValue}"/> from a lower and upperbound on a distance to the probability of choosing that distance for the length of a <see cref="DemandPair"/>. Not required for all <see cref="InputTreeType"/>s.</param>
         /// <param name="filePath">The path to the file with the endpoints of the the <see cref="DemandPair"/>s. Only required for the <see cref="InputDemandPairsType.Fixed"/> type.</param>
-        /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s that were generated according to the method given by <paramref name="inputDemandPairsType"/>.</returns>
+        /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s that were generated according to the method given by <paramref name="inputDemandPairsType"/>.</returns>
         /// <exception cref="ArgumentException">Thrown when <paramref name="inputDemandPairsType"/> is its default value: <see cref="InputDemandPairsType.None"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="inputDemandPairsType"/> is not supported as demand pair generation type.</exception>
-        private CountedList<DemandPair> CreateInputDemandPairs(Random random, Graph inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
+        private CountedCollection<DemandPair> CreateInputDemandPairs(Random random, Graph inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
         {
 #if !EXPERIMENT
             if (inputDemandPairsType == InputDemandPairsType.None)
@@ -224,7 +225,7 @@ namespace MulticutInTrees.MulticutProblem
             {
                 InputDemandPairsType.Fixed => FixedDemandPairsReader.ReadDemandPairs(inputTree, filePath),
                 InputDemandPairsType.LengthDistribution => throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!"),
-                InputDemandPairsType.Random => new CountedList<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(numberOfDemandPairs, inputTree, random), new Counter()),
+                InputDemandPairsType.Random => new CountedCollection<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(numberOfDemandPairs, inputTree, random), new Counter()),
                 _ => throw new NotSupportedException($"The input demand pair type {inputDemandPairsType} is not supported!")
             };
         }

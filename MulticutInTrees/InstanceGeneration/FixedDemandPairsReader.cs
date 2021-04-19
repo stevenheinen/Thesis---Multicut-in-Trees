@@ -27,7 +27,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="filePath"/> is <see langword="null"/>.</exception>
         /// <exception cref="FileNotFoundException">Thrown when <paramref name="filePath"/> is not a valid file.</exception>
         /// <exception cref="BadFileFormatException">Thrown when a line in the file cannot be parsed to a number.</exception>
-        public static CountedList<DemandPair> ReadDemandPairs(Graph tree, string filePath)
+        public static CountedCollection<DemandPair> ReadDemandPairs(Graph tree, string filePath)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to read demand pairs from a file, but the tree in which these demand pairs exist is null!");

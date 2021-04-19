@@ -23,7 +23,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         public void TestInternalConstructor()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> dps = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>();
 
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
 
@@ -99,7 +99,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         public void TestNullParameter()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> dps = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
 
             Random random = new Random(12395);
@@ -130,7 +130,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         public void TestParseLengthDistibutionDictionary()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> dps = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> dps = new CountedCollection<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
             MethodInfo method = typeof(MulticutInstance).GetMethod("ParseLengthDistributionDictionary", BindingFlags.NonPublic | BindingFlags.Instance);
 

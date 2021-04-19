@@ -483,10 +483,10 @@ namespace MulticutInTrees.Utilities
         /// </summary>
         /// <param name="tree">The <see cref="AbstractGraph{TEdge, TNode}"/> in which to create the <see cref="DemandPair"/>s.</param>
         /// <param name="endpoints">The <see cref="IEnumerable{T}"/> with <see cref="int"/> tuples that represent the IDs of the <see cref="Node"/>s that are the endpoints of that <see cref="DemandPair"/>.</param>
-        /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s.</returns>
+        /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="endpoints"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">Thrown when a tuple in <paramref name="endpoints"/> has a value that is not the ID of a <see cref="Node"/> in <paramref name="tree"/>.</exception>
-        public static CountedList<DemandPair> CreateDemandPairs(Graph tree, IEnumerable<(int, int)> endpoints)
+        public static CountedCollection<DemandPair> CreateDemandPairs(Graph tree, IEnumerable<(int, int)> endpoints)
         {
 #if !EXPERIMENT
             NullCheck(tree, nameof(tree), "Trying to create demand pairs given a list with int endpoints, but the tree is null!");
@@ -505,7 +505,7 @@ namespace MulticutInTrees.Utilities
             }
 #endif
             Counter mockCounter = new Counter();
-            CountedList<DemandPair> result = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> result = new CountedCollection<DemandPair>();
 
             uint id = 0;
             foreach ((int, int) dp in endpoints)

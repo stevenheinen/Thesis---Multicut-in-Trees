@@ -21,7 +21,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         public void TestConstructor()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
 
             GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(instance);
@@ -32,7 +32,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         public void TestNullArgument()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
 
             Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierBranching gnb = new GuoNiedermeierBranching(null); });
@@ -73,7 +73,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp2 = new DemandPair(2, node7, node8, tree);
             DemandPair dp3 = new DemandPair(3, node4, node10, tree);
             DemandPair dp4 = new DemandPair(4, node6, node3, tree);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
 
             int k = 3;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 3);
@@ -119,7 +119,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(1, node1, node6, tree);
             DemandPair dp2 = new DemandPair(2, node4, node5, tree);
             DemandPair dp3 = new DemandPair(3, node8, node10, tree);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             int k = 2;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 2);
@@ -169,7 +169,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp1 = new DemandPair(1, node2, node11, tree);
             DemandPair dp2 = new DemandPair(2, node4, node9, tree);
             DemandPair dp3 = new DemandPair(3, node2, node8, tree);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             int k = 1;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 1);
@@ -231,7 +231,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(3, node7, node15, tree);
             DemandPair dp4 = new DemandPair(4, node8, node10, tree);
             DemandPair dp5 = new DemandPair(5, node11, node17, tree);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
             int k = 3;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 3);
@@ -271,7 +271,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new DemandPair(3, node1, node4, tree);
             DemandPair dp4 = new DemandPair(4, node1, node5, tree);
             DemandPair dp5 = new DemandPair(5, node1, node6, tree);
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
             int k = 4;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 4);

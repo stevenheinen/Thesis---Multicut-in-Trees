@@ -40,9 +40,9 @@ namespace MulticutInTrees.Algorithms
         protected CountedDictionary<Node, int> CaterpillarComponentPerNode { get; }
 
         /// <summary>
-        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the input.
+        /// The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the input.
         /// </summary>
-        protected CountedList<DemandPair> DemandPairs { get; }
+        protected CountedCollection<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The input <see cref="Graph"/>.
@@ -144,10 +144,10 @@ namespace MulticutInTrees.Algorithms
             }
 
             returntrue:
-            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
 
             returnfalse:
-            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>
@@ -214,10 +214,10 @@ namespace MulticutInTrees.Algorithms
             }
 
             returntrue:
-            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
 
             returnfalse:
-            return (Tree, PartialSolution, DemandPairs.GetInternalList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using MulticutInTrees.CommandLineArguments;
 using MulticutInTrees.CountedDatastructures;
@@ -33,7 +34,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <param name="optimalK">The optimal K value for the current instance.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/>, <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="UnauthorizedAccessException">Thrown when the file to write to cannot be opened.</exception>
-        public static void WriteInstance(int randomSeed, CommandLineOptions options, Graph tree, List<DemandPair> demandPairs, int optimalK)
+        public static void WriteInstance(int randomSeed, CommandLineOptions options, Graph tree, IEnumerable<DemandPair> demandPairs, int optimalK)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to write an instance to a file, but the command line options are null!");
@@ -41,7 +42,7 @@ namespace MulticutInTrees.InstanceGeneration
             Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to write an instance to a file, but the list of demand pairs is null!");
 #endif
             int numberOfNodes = tree.NumberOfNodes(MockCounter);
-            int numberOfDPs = demandPairs.Count;
+            int numberOfDPs = demandPairs.Count();
             string fileName = CreateFilePath(randomSeed, options);
 
             try
@@ -79,10 +80,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// </summary>
         /// <param name="randomSeed">The seed used for random number generation.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> for this experiment.</param>
-        /// <returns>If the file with this instance exists: a tuple with the <see cref="Graph"/>, a <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s and the optimal K value. Otherwise, a tuple with <see langword="null"/>, <see langword="null"/> and -1.</returns>
+        /// <returns>If the file with this instance exists: a tuple with the <see cref="Graph"/>, a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s and the optimal K value. Otherwise, a tuple with <see langword="null"/>, <see langword="null"/> and -1.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
         /// <exception cref="BadFileFormatException">Thrown when one of the lines in the file we are reading is not in the correct format.</exception>
-        public static (Graph tree, CountedList<DemandPair> demandPairs, int optimalK) ReadInstance(int randomSeed, CommandLineOptions options)
+        public static (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) ReadInstance(int randomSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to read an instance from a file, but the command line options are null!");
@@ -123,7 +124,7 @@ namespace MulticutInTrees.InstanceGeneration
             }
 
             Graph tree = Utils.CreateGraphWithEdges(numberOfNodes, edges);
-            CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, dps);
+            CountedCollection<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, dps);
 
             return (tree, demandPairs, optimalK);
         }

@@ -40,7 +40,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestConstructor()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             int maxSize = 10;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -56,7 +56,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestNullParameter()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             int maxSize = 10;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -88,7 +88,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node0, node3, tree);
             DemandPair dp3 = new DemandPair(3, node0, node4, tree);
@@ -122,7 +122,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node0, node3, tree);
             DemandPair dp3 = new DemandPair(3, node0, node4, tree);
@@ -158,7 +158,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14, edge45 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node0, node2, tree);
             DemandPair dp2 = new DemandPair(2, node0, node3, tree);
             DemandPair dp3 = new DemandPair(3, node0, node5, tree);
@@ -198,7 +198,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14, edge05 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node5, node2, tree);
             DemandPair dp2 = new DemandPair(2, node5, node3, tree);
             DemandPair dp3 = new DemandPair(3, node5, node1, tree);
@@ -236,7 +236,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge13, edge14, edge05 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node5, node2, tree);
             DemandPair dp2 = new DemandPair(2, node5, node3, tree);
             DemandPair dp3 = new DemandPair(3, node5, node1, tree);

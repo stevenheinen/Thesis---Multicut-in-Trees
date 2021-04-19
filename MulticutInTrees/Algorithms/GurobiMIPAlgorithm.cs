@@ -25,7 +25,7 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// The <see cref="DemandPair"/>s in the instance.
         /// </summary>
-        private List<DemandPair> DemandPairs { get; }
+        private IEnumerable<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// Counter that can be used for operations that should not impact the performance.
@@ -38,7 +38,7 @@ namespace MulticutInTrees.Algorithms
         /// <param name="tree">The tree to run the algorithm on.</param>
         /// <param name="demandPairs">The <see cref="DemandPair"/>s in the instance.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
-        internal GurobiMIPAlgorithm(Graph tree, List<DemandPair> demandPairs)
+        internal GurobiMIPAlgorithm(Graph tree, IEnumerable<DemandPair> demandPairs)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), "Trying to create an instance of the Gurobi MIP algorithm, but the tree in the instance is null!");
@@ -60,7 +60,7 @@ namespace MulticutInTrees.Algorithms
             Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of the Gurobi MIP algorithm, but the instance to solve is null!");
 #endif
             Tree = instance.Tree;
-            DemandPairs = instance.DemandPairs.GetInternalList();
+            DemandPairs = instance.DemandPairs.GetLinkedList();
             MockCounter = new Counter();
         }
 

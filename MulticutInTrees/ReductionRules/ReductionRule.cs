@@ -19,9 +19,9 @@ namespace MulticutInTrees.ReductionRules
         protected Graph Tree { get; }
 
         /// <summary>
-        /// The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.
+        /// The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.
         /// </summary>
-        protected CountedList<DemandPair> DemandPairs { get; }
+        protected CountedCollection<DemandPair> DemandPairs { get; }
 
         /// <summary>
         /// The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.
@@ -67,11 +67,11 @@ namespace MulticutInTrees.ReductionRules
         /// Constructor for a <see cref="ReductionRule"/>.
         /// </summary>
         /// <param name="tree">The input <see cref="Graph"/> (tree) in the instance.</param>
-        /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="demandPairs">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithms.Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
         /// <param name="trueMeansInfeasibleInstance">If a <see cref="ReductionRule"/> returns <see langword="true"/> when it is checked for applicability, and this value is also <see langword="true"/>, we have an instance that cannot be solved. When a <see cref="ReductionRule"/> cannot determine that an instance is infeasible, pass <see langword="false"/> to this constructor.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/> or <paramref name="algorithm"/> is <see langword="null"/>.</exception>
-        protected ReductionRule(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, bool trueMeansInfeasibleInstance = false)
+        protected ReductionRule(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, bool trueMeansInfeasibleInstance = false)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a reduction rule, but the input tree is null!");

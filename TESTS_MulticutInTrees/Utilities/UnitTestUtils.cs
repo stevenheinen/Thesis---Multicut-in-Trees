@@ -233,7 +233,7 @@ namespace TESTS_MulticutInTrees.Utilities
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 3) }));
             Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (3, 0), (2, 1) }));
 
-            CountedList<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 4) });
+            CountedCollection<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 4) });
             Assert.IsNotNull(demandPairs);
             Assert.AreEqual(3, demandPairs.Count(MockCounter));
         }

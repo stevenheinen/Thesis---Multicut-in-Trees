@@ -42,13 +42,13 @@ namespace MulticutInTrees.ReductionRules
         /// Constructor for <see cref="CommonFactor"/>.
         /// </summary>
         /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
-        /// <param name="demandPairs">The <see cref="CountedList{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="demandPairs">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>"
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public CommonFactor(Graph tree, CountedList<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
+        public CommonFactor(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the tree is null!");
@@ -167,13 +167,14 @@ namespace MulticutInTrees.ReductionRules
         private void FindInitialIntersections()
         {
             int numberOfDPs = DemandPairs.Count(MockCounter);
+            List<DemandPair> temporaryDPs = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
             for (int i = 0; i < numberOfDPs - 1; i++)
             {
-                DemandPair dp1 = DemandPairs[i, Measurements.DemandPairsOperationsCounter];
+                DemandPair dp1 = temporaryDPs[i];
                 IEnumerable<Edge<Node>> path1 = dp1.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
                 for (int j = i + 1; j < numberOfDPs; j++)
                 {
-                    DemandPair dp2 = DemandPairs[j, Measurements.DemandPairsOperationsCounter];
+                    DemandPair dp2 = temporaryDPs[j];
                     IEnumerable<Edge<Node>> path2 = dp2.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
                     IEnumerable<Edge<Node>> intersection = path1.Intersect(path2);
 

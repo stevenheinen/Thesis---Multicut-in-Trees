@@ -40,7 +40,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestConstructor()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             int maxSize = 10;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -57,7 +57,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         public void TestNullParameter()
         {
             Graph tree = new Graph();
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             int maxSize = 10;
             MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
@@ -127,7 +127,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge54, edge43, edge414, edge32, edge312, edge313, edge21, edge10, edge111, edge56, edge59, edge515, edge67, edge78, edge716, edge717, edge718, edge819, edge820, edge910, edge921, edge1022 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node7, node2, tree);
             DemandPair dp2 = new DemandPair(2, node7, node12, tree);
             DemandPair dp3 = new DemandPair(3, node7, node13, tree);
@@ -208,7 +208,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge54, edge43, edge414, edge32, edge312, edge313, edge21, edge10, edge111, edge56, edge59, edge515, edge67, edge78, edge716, edge717, edge718, edge819, edge820, edge910, edge921, edge1022 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node7, node2, tree);
             DemandPair dp2 = new DemandPair(2, node7, node12, tree);
             DemandPair dp3 = new DemandPair(3, node7, node19, tree);
@@ -289,7 +289,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge54, edge43, edge414, edge32, edge312, edge313, edge21, edge10, edge111, edge56, edge59, edge515, edge67, edge78, edge716, edge717, edge718, edge819, edge820, edge910, edge921, edge1022 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node7, node1, tree);
             DemandPair dp2 = new DemandPair(2, node7, node12, tree);
             DemandPair dp3 = new DemandPair(3, node7, node13, tree);
@@ -374,7 +374,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge54, edge43, edge414, edge32, edge312, edge313, edge21, edge10, edge111, edge56, edge59, edge515, edge67, edge78, edge716, edge717, edge718, edge819, edge820, edge910, edge921, edge1022 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node7, node1, tree);
             DemandPair dp2 = new DemandPair(2, node7, node12, tree);
             DemandPair dp3 = new DemandPair(3, node7, node13, tree);
@@ -455,7 +455,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             tree.AddEdges(new List<Edge<Node>>() { edge54, edge43, edge414, edge32, edge312, edge313, edge21, edge10, edge111, edge56, edge59, edge515, edge67, edge78, edge716, edge717, edge718, edge819, edge820, edge910, edge921 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            CountedList<DemandPair> demandPairs = new CountedList<DemandPair>();
+            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
             DemandPair dp1 = new DemandPair(1, node20, node4, tree);
             DemandPair dp2 = new DemandPair(2, node20, node12, tree);
             DemandPair dp3 = new DemandPair(3, node20, node6, tree);
