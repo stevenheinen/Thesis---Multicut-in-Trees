@@ -34,8 +34,7 @@ namespace MulticutInTrees.Experiments
 #endif
             List<ExperimentOutput> results = options.AlgorithmType switch
             {
-                AlgorithmType.GuoNiedermeierKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
-                AlgorithmType.ImprovedGuoNiedermeierKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
+                AlgorithmType.GuoNiedermeierKernelisation or AlgorithmType.ImprovedGuoNiedermeierKernelisation or AlgorithmType.BousquetKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
                 AlgorithmType.GurobiMIPSolver => RunMultipleExperiments(options, RunGurobiMIPAlgorithm),
                 AlgorithmType.GuoNiederMeierBranching => RunMultipleExperiments(options, RunBranchingAlgorithm),
                 AlgorithmType.BruteForce => RunMultipleExperiments(options, RunBruteForceAlgorithm),
@@ -66,7 +65,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine(FormatParseOutput($"Running multiple experiments with the {options.AlgorithmType} algorithm", options.RandomSeed, options));
             }
 
-            List<ExperimentOutput> output = new List<ExperimentOutput>();
+            List<ExperimentOutput> output = new();
 
             for (int i = 0; i < options.Experiments; i++)
             {
@@ -93,7 +92,7 @@ namespace MulticutInTrees.Experiments
             Utils.NullCheck(experimentMessage, nameof(experimentMessage), "Trying to format the parse output to a nice readable message, but the experiment specific message is null!");
             Utils.NullCheck(options, nameof(options), "Trying to format the parse output to a nice readable message, but the command line arguments are null!");
 #endif
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append($"{experimentMessage} on the following instance: {options.Experiments} different experiments, each with {options.Repetitions} repetitions, random seed {randomSeed}, ");
             sb.Append(options.MaxSolutionSize > 0 ? $"a maximum solution size of {options.MaxSolutionSize}, " : "the optimal solution size, ");
 
@@ -126,14 +125,14 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine(FormatParseOutput("Generating the instance", options.RandomSeed, options));
             }
 
-            MulticutInstance instance = new MulticutInstance(randomSeed, options);
+            MulticutInstance instance = new(randomSeed, options);
 
             if (options.Verbose)
             {
                 Console.WriteLine("Instance generated!");
             }
 
-            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, randomSeed, instance.K, instance.OptimalK, true, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, randomSeed, instance.K, instance.OptimalK, true, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -155,9 +154,9 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine(FormatParseOutput("Running an experiment with the brute force algorithm", options.RandomSeed, options));
             }
 
-            MulticutInstance instance = new MulticutInstance(randomSeed, options);
-            BruteForceAlgorithm algorithm = new BruteForceAlgorithm(instance);
-            Stopwatch stopwatch = new Stopwatch();
+            MulticutInstance instance = new(randomSeed, options);
+            BruteForceAlgorithm algorithm = new(instance);
+            Stopwatch stopwatch = new();
             stopwatch.Start();
             bool solved = algorithm.Run();
             stopwatch.Stop();
@@ -171,7 +170,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, randomSeed, instance.K, instance.OptimalK, solved, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, randomSeed, instance.K, instance.OptimalK, solved, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -193,9 +192,9 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine(FormatParseOutput("Finding the minimum possible value for the maximum solution size using the Gurobi MIP solver", options.RandomSeed, options));
             }
 
-            MulticutInstance instance = new MulticutInstance(randomSeed, options);
-            GurobiMIPAlgorithm algorithm = new GurobiMIPAlgorithm(instance);
-            Stopwatch stopwatch = new Stopwatch();
+            MulticutInstance instance = new(randomSeed, options);
+            GurobiMIPAlgorithm algorithm = new(instance);
+            Stopwatch stopwatch = new();
             stopwatch.Start();
             int minimumSize = algorithm.Run(options.Verbose);
             stopwatch.Stop();
@@ -209,7 +208,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new ExperimentOutput(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -231,11 +230,11 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine(FormatParseOutput("Running Guo and Niedermeiers branching algorithm", randomSeed, options));
             }
 
-            MulticutInstance instance = new MulticutInstance(randomSeed, options);
-            GuoNiedermeierBranching gnBranching = new GuoNiedermeierBranching(instance);
-            Stopwatch stopwatch = new Stopwatch();
+            MulticutInstance instance = new(randomSeed, options);
+            GuoNiedermeierBranching gnBranching = new(instance);
+            Stopwatch stopwatch = new();
             stopwatch.Start();
-            (List<Edge<Node>> solution, ExperimentOutput experimentOutput) = gnBranching.Run(false);
+            (List<Edge<Node>> solution, ExperimentOutput experimentOutput) = gnBranching.Run();
             stopwatch.Stop();
 
             if (options.Verbose)
@@ -269,9 +268,9 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine(FormatParseOutput($"Running the {options.AlgorithmType} algorithm", randomSeed, options));
             }
 
-            MulticutInstance instance = new MulticutInstance(randomSeed, options);
+            MulticutInstance instance = new(randomSeed, options);
             Algorithm algorithm = CreateAlgorithmInstance(options.AlgorithmType, instance);
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new();
             stopwatch.Start();
             (Graph tree, List<Edge<Node>> partialSolution, List<DemandPair> finalDemandPairs, ExperimentOutput experimentOutput) = algorithm.Run();
             stopwatch.Stop();
@@ -312,6 +311,7 @@ namespace MulticutInTrees.Experiments
             {
                 AlgorithmType.GuoNiedermeierKernelisation => new GuoNiedermeierKernelisation(instance),
                 AlgorithmType.ImprovedGuoNiedermeierKernelisation => new ImprovedGuoNiedermeierKernelisation(instance),
+                AlgorithmType.BousquetKernelisation => new BousquetKernelisation(instance),
                 _ => throw new NotSupportedException($"The algorithm type {algorithmType} is not supported!")
             };
         }

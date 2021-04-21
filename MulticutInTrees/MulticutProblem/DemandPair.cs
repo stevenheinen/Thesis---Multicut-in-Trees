@@ -177,7 +177,7 @@ namespace MulticutInTrees.MulticutProblem
                 throw new NotOnDemandPathException($"Trying to change the endpoint of {this}, but the old endpoint given as argument is not on this demand path!");
             }
 #endif
-            List<Edge<Node>> result = new List<Edge<Node>>();
+            List<Edge<Node>> result = new();
 
             if (oldEndpoint == Node1)
             {

@@ -37,9 +37,9 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new FileNotFoundException($"Trying to read demand pairs from the file {filePath}, but the file does not exist!");
             }
 #endif
-            List<(int, int)> dps = new List<(int, int)>();
+            List<(int, int)> dps = new();
 
-            using (StreamReader sr = new StreamReader(filePath))
+            using (StreamReader sr = new(filePath))
             {
                 string line = sr.ReadLine();
                 if (!int.TryParse(line, out int numberOfDPs))

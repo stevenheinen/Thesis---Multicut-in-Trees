@@ -80,9 +80,8 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Try to solve the instance.
         /// </summary>
-        /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
         /// <returns>A tuple of a <see cref="List{T}"/> of tuples of <see cref="Edge{TNode}"/> in the solution, and an <see cref="ExperimentOutput"/> that contains the information about the time required.</returns>
-        public (List<Edge<Node>>, ExperimentOutput) Run(bool findSmallest)
+        public (List<Edge<Node>>, ExperimentOutput) Run()
         {
             Measurements.TimeSpentModifyingInstance.Start();
 
@@ -97,14 +96,14 @@ namespace MulticutInTrees.Algorithms
             FillDemandPathsPerEdge();
             FindLeastCommonAncestors();
 
-            CountedList<DemandPair> sortedDemandPairs = new CountedList<DemandPair>(LeastCommonAncestors.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key), Measurements.DemandPairsOperationsCounter);
-            HashSet<DemandPair> solvedDemandPairs = new HashSet<DemandPair>();
-            List<Edge<Node>> solution = new List<Edge<Node>>();
-            (bool solved, int _) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution, findSmallest);
+            CountedList<DemandPair> sortedDemandPairs = new(LeastCommonAncestors.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).OrderByDescending(e => e.Value.DepthFromRoot(MockCounter)).Select(e => e.Key), Measurements.DemandPairsOperationsCounter);
+            HashSet<DemandPair> solvedDemandPairs = new();
+            List<Edge<Node>> solution = new();
+            (bool solved, int _) = RecSolve(sortedDemandPairs, 0, solvedDemandPairs, solution);
 
             Measurements.TimeSpentModifyingInstance.Stop();
 
-            ExperimentOutput experimentOutput = new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType.GuoNiederMeierBranching, Instance.RandomSeed, Instance.K, Instance.OptimalK, solved, -1, -1, Measurements, new List<PerformanceMeasurements>().AsReadOnly());
+            ExperimentOutput experimentOutput = new(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType.GuoNiederMeierBranching, Instance.RandomSeed, Instance.K, Instance.OptimalK, solved, -1, -1, Measurements, new List<PerformanceMeasurements>().AsReadOnly());
 
             return (solution, experimentOutput);
         }
@@ -137,9 +136,8 @@ namespace MulticutInTrees.Algorithms
         /// <param name="currentIndex">The index of the current <see cref="DemandPair"/> in <paramref name="solvedDemandPairs"/> we need to look at.</param>
         /// <param name="solvedDemandPairs"><see cref="HashSet{T}"/> with <see cref="DemandPair"/>s that are already separated.</param>
         /// <param name="solution"><see cref="List{T}"/> with the solution thus far. Is added to in this method.</param>
-        /// <param name="findSmallest">Whether we should find a solution with the smallest possible size, or just a solution with size at most k.</param>
         /// <returns><see langword="true"/> if a solution can be found with these parameters, <see langword="false"/> otherwise.</returns>
-        private (bool, int) RecSolve(CountedList<DemandPair> sortedDemandPairs, int currentIndex, HashSet<DemandPair> solvedDemandPairs, List<Edge<Node>> solution, bool findSmallest)
+        private (bool, int) RecSolve(CountedList<DemandPair> sortedDemandPairs, int currentIndex, HashSet<DemandPair> solvedDemandPairs, List<Edge<Node>> solution)
         {
             int nrPairs = sortedDemandPairs.Count(Measurements.DemandPairsOperationsCounter);
             for (int i = currentIndex; i < nrPairs; i++)
@@ -171,40 +169,35 @@ namespace MulticutInTrees.Algorithms
                 {
                     (Edge<Node> before, Edge<Node> after) = demandPair.EdgeBeforeAndAfter(RootedTreeNodeToNode[leastCommonAncestor], Measurements.TreeOperationsCounter);
 
-                    List<Edge<Node>> tempSolution1 = new List<Edge<Node>>(solution) { before };
-                    HashSet<DemandPair> tempSolvedDemandPairs1 = new HashSet<DemandPair>(solvedDemandPairs);
+                    List<Edge<Node>> tempSolution1 = new(solution);
+                    HashSet<DemandPair> tempSolvedDemandPairs1 = new(solvedDemandPairs);
                     foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[before, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                     {
                         tempSolvedDemandPairs1.Add(solvedDemandPair);
                     }
-                    (bool solved1, int size1) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs1, tempSolution1, findSmallest);
+                    (bool solved1, int size1) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs1, tempSolution1);
 
-                    if (!solved1 || findSmallest)
+                    List<Edge<Node>> tempSolution2 = new(solution);
+                    HashSet<DemandPair> tempSolvedDemandPairs2 = new(solvedDemandPairs);
+                    foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[after, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                     {
-                        List<Edge<Node>> tempSolution2 = new List<Edge<Node>>(solution) { after };
-                        HashSet<DemandPair> tempSolvedDemandPairs2 = new HashSet<DemandPair>(solvedDemandPairs);
-                        foreach (DemandPair solvedDemandPair in DemandPairsPerEdge[after, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
-                        {
-                            tempSolvedDemandPairs2.Add(solvedDemandPair);
-                        }
-                        (bool solved2, int size2) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs2, tempSolution2, findSmallest);
-
-                        if (!solved1 && !solved2)
-                        {
-                            return (false, Instance.K + 1);
-                        }
-                        if (solved1 && size1 <= size2)
-                        {
-                            edgeInSolution = before;
-                        }
-                        else // solved2 is true
-                        {
-                            edgeInSolution = after;
-                        }
+                        tempSolvedDemandPairs2.Add(solvedDemandPair);
                     }
-                    else // we know for sure solved1 is true
+                    (bool solved2, int size2) = RecSolve(sortedDemandPairs, i + 1, tempSolvedDemandPairs2, tempSolution2);
+
+                    if (!solved1 && !solved2)
+                    {
+                        return (false, Instance.K + 1);
+                    }
+                    
+                    // We know at least 1 of the branches returned true. A branch that returns false has K+1 as size, so the one that returns true will always be smaller.
+                    if (size1 <= size2)
                     {
                         edgeInSolution = before;
+                    }
+                    else
+                    {
+                        edgeInSolution = after;
                     }
                 }
 
@@ -219,6 +212,7 @@ namespace MulticutInTrees.Algorithms
             {
                 return (false, Instance.K + 1);
             }
+
             return (true, solution.Count);
         }
 
@@ -230,8 +224,8 @@ namespace MulticutInTrees.Algorithms
             foreach (DemandPair demandPair in DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 // Find the ancestors for each endpoint of the demand pair.
-                CountedList<RootedTreeNode> ancestors1 = new CountedList<RootedTreeNode>(NodeToRootedTreeNode[demandPair.Node1].FindAllAncestors(), Measurements.TreeOperationsCounter);
-                CountedList<RootedTreeNode> ancestors2 = new CountedList<RootedTreeNode>(NodeToRootedTreeNode[demandPair.Node2].FindAllAncestors(), Measurements.TreeOperationsCounter);
+                CountedList<RootedTreeNode> ancestors1 = new(NodeToRootedTreeNode[demandPair.Node1].FindAllAncestors(), Measurements.TreeOperationsCounter);
+                CountedList<RootedTreeNode> ancestors2 = new(NodeToRootedTreeNode[demandPair.Node2].FindAllAncestors(), Measurements.TreeOperationsCounter);
                 int length1 = ancestors1.Count(Measurements.TreeOperationsCounter);
                 int length2 = ancestors2.Count(Measurements.TreeOperationsCounter);
                 int minSize = Math.Min(length1, length2) + 1;

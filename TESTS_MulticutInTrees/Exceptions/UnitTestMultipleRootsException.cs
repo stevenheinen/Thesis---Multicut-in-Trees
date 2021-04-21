@@ -12,14 +12,14 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorNoArguments()
         {
-            MultipleRootsException multipleRootsException = new MultipleRootsException();
+            MultipleRootsException multipleRootsException = new();
             Assert.IsNotNull(multipleRootsException);
         }
 
         [TestMethod]
         public void TestConstructorMessage()
         {
-            MultipleRootsException multipleRootsException = new MultipleRootsException("Test message");
+            MultipleRootsException multipleRootsException = new("Test message");
             Assert.IsNotNull(multipleRootsException);
             Assert.AreEqual(multipleRootsException.Message, "Test message");
         }
@@ -27,8 +27,8 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorMessageInner()
         {
-            Exception inner = new Exception();
-            MultipleRootsException multipleRootsException = new MultipleRootsException("Test", inner);
+            Exception inner = new();
+            MultipleRootsException multipleRootsException = new("Test", inner);
             Assert.IsNotNull(multipleRootsException);
             Assert.AreEqual(multipleRootsException.Message, "Test");
             Assert.AreEqual(multipleRootsException.InnerException, inner);

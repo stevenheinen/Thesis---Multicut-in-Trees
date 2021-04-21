@@ -34,9 +34,9 @@ namespace MulticutInTrees.InstanceGeneration
             }
 #endif
             int numberOfNodes;
-            List<(int, int)> edges = new List<(int, int)>();
+            List<(int, int)> edges = new();
 
-            using (StreamReader sr = new StreamReader(filePath))
+            using (StreamReader sr = new(filePath))
             {
                 string line = sr.ReadLine();
                 if (!int.TryParse(line, out numberOfNodes))

@@ -12,14 +12,14 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorNoArguments()
         {
-            AlreadyInGraphException alreadyInGraphException = new AlreadyInGraphException();
+            AlreadyInGraphException alreadyInGraphException = new();
             Assert.IsNotNull(alreadyInGraphException);
         }
 
         [TestMethod]
         public void TestConstructorMessage()
         {
-            AlreadyInGraphException alreadyInGraphException = new AlreadyInGraphException("Test message");
+            AlreadyInGraphException alreadyInGraphException = new("Test message");
             Assert.IsNotNull(alreadyInGraphException);
             Assert.AreEqual(alreadyInGraphException.Message, "Test message");
         }
@@ -27,8 +27,8 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorMessageInner()
         {
-            Exception inner = new Exception();
-            AlreadyInGraphException alreadyInGraphException = new AlreadyInGraphException("Test", inner);
+            Exception inner = new();
+            AlreadyInGraphException alreadyInGraphException = new("Test", inner);
             Assert.IsNotNull(alreadyInGraphException);
             Assert.AreEqual(alreadyInGraphException.Message, "Test");
             Assert.AreEqual(alreadyInGraphException.InnerException, inner);

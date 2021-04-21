@@ -10,16 +10,16 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
     [TestClass]
     public class UnitTestCountedDictionary
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter counter = new();
 
         [TestMethod]
         public void TestConstructor()
         {
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>();
+            CountedDictionary<int, int> countedDictionary = new();
             Assert.IsNotNull(countedDictionary);
             Assert.AreEqual(0, countedDictionary.Count(counter));
 
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
             countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
             Assert.IsNotNull(countedDictionary);
             Assert.AreEqual(dictionary.Count, countedDictionary.Count(counter));
@@ -29,8 +29,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         public void TestNullArgument()
         {
             int number = 0;
-            List<int> list = new List<int>();
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>();
+            List<int> list = new();
+            CountedDictionary<int, int> countedDictionary = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => countedDictionary.GetCountedEnumerable(null));
             Assert.ThrowsException<ArgumentNullException>(() => countedDictionary.Add(number, number, null));
@@ -48,25 +48,25 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestGetKeys()
         {
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
-            List<int> expectedKeys = new List<int>() { 984, 897, 749, 74, 78, 748, 43, 3517420 };
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            CountedDictionary<int, int> countedDictionary = new(dictionary, counter);
+            List<int> expectedKeys = new() { 984, 897, 749, 74, 78, 748, 43, 3517420 };
             CollectionAssert.AreEqual(expectedKeys, new List<int>(countedDictionary.GetKeys(counter)));
         }
 
         [TestMethod]
         public void TestGetValues()
         {
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
-            List<int> expectedValues = new List<int>() { 894, 98479, 748, 97489, 789, 7, 2, 0 };
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            CountedDictionary<int, int> countedDictionary = new(dictionary, counter);
+            List<int> expectedValues = new() { 894, 98479, 748, 97489, 789, 7, 2, 0 };
             CollectionAssert.AreEqual(expectedValues, new List<int>(countedDictionary.GetValues(counter)));
         }
 
         [TestMethod]
         public void TestIndex()
         {
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>();
+            CountedDictionary<int, int> countedDictionary = new();
 
             Assert.ThrowsException<KeyNotFoundException>(() => { int a = countedDictionary[8, counter]; });
 
@@ -79,8 +79,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestContainsKey()
         {
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            CountedDictionary<int, int> countedDictionary = new(dictionary, counter);
             Assert.IsTrue(countedDictionary.ContainsKey(74, counter));
             Assert.IsFalse(countedDictionary.ContainsKey(165516, counter));
         }
@@ -88,8 +88,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestRemove()
         {
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            CountedDictionary<int, int> countedDictionary = new(dictionary, counter);
             Assert.IsTrue(countedDictionary.Remove(74, counter));
             Assert.AreEqual(dictionary.Count - 1, countedDictionary.Count(counter));
             Assert.IsFalse(countedDictionary.Remove(165516, counter));
@@ -99,8 +99,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestTryGetValue()
         {
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            CountedDictionary<int, int> countedDictionary = new(dictionary, counter);
             Assert.IsTrue(countedDictionary.TryGetValue(74, out int res, counter));
             Assert.AreEqual(97489, res);
             Assert.IsFalse(countedDictionary.TryGetValue(165516, out int res2, counter));
@@ -111,8 +111,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestClear()
         {
-            Dictionary<int, int> dictionary = new Dictionary<int, int>() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
-            CountedDictionary<int, int> countedDictionary = new CountedDictionary<int, int>(dictionary, counter);
+            Dictionary<int, int> dictionary = new() { { 984, 894 }, { 897, 98479 }, { 749, 748 }, { 74, 97489 }, { 78, 789 }, { 748, 7 }, { 43, 2 }, { 3517420, 0 } };
+            CountedDictionary<int, int> countedDictionary = new(dictionary, counter);
             countedDictionary.Clear(counter);
             Assert.AreEqual(0, countedDictionary.Count(counter));
         }

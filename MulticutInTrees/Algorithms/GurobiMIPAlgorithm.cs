@@ -74,7 +74,7 @@ namespace MulticutInTrees.Algorithms
         {
             try
             {
-                GRBEnv env = new GRBEnv(true);
+                GRBEnv env = new(true);
                 if (verbose)
                 {
                     env.Set("LogToConsole", "1");
@@ -86,15 +86,15 @@ namespace MulticutInTrees.Algorithms
                 }
                 env.Start();
 
-                GRBModel model = new GRBModel(env);
+                GRBModel model = new(env);
 
                 int nrEdges = Tree.NumberOfEdges(MockCounter);
                 string[] edgeNames = Tree.Edges(MockCounter).Select(e => e.ToString()).ToArray();
 
-                Dictionary<string, GRBVar> edgeNameToVariable = new Dictionary<string, GRBVar>();
+                Dictionary<string, GRBVar> edgeNameToVariable = new();
 
                 GRBVar[] variables = new GRBVar[nrEdges];
-                GRBLinExpr objective = new GRBLinExpr();
+                GRBLinExpr objective = new();
                 for (int i = 0; i < nrEdges; i++)
                 {
                     variables[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, edgeNames[i]);

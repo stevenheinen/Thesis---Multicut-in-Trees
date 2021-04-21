@@ -14,20 +14,20 @@ namespace TESTS_MulticutInTrees.MulticutProblem
     [TestClass]
     public class UnitTestDemandPair
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestConstructor()
         {
-            Graph tree = new Graph();
+            Graph tree = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
+            Node node0 = new(0);
+            Node node1 = new(1);
 
             tree.AddNodes(new List<Node>() { node0, node1 }, MockCounter);
             tree.AddEdge(new Edge<Node>(node0, node1), MockCounter);
 
-            DemandPair dp = new DemandPair(0, node0, node1, tree);
+            DemandPair dp = new(0, node0, node1, tree);
             Assert.IsNotNull(dp);
 
             Assert.AreEqual(node0, dp.Node1);
@@ -38,22 +38,22 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestNullParameter()
         {
-            Graph tree = new Graph();
+            Graph tree = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
 
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
+            Edge<Node> edge01 = new(node0, node1);
 
             tree.AddNodes(new List<Node>() { node0, node1 }, MockCounter);
             tree.AddEdge(edge01, MockCounter);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(1, node0, null, tree); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(2, null, node0, tree); });
-            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new DemandPair(3, node0, node1, null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new(1, node0, null, tree); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new(2, null, node0, tree); });
+            Assert.ThrowsException<ArgumentNullException>(() => { DemandPair _dp = new(3, node0, node1, null); });
 
-            DemandPair dp = new DemandPair(0, node0, node1, tree);
+            DemandPair dp = new(0, node0, node1, tree);
 
             Assert.ThrowsException<ArgumentNullException>(() => dp.OnEdgeContracted(null, node0, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => dp.OnEdgeContracted(edge01, null, MockCounter));
@@ -76,21 +76,21 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestOnEndpointChanged()
         {
-            Graph tree = new Graph();
+            Graph tree = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
 
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23 }, MockCounter);
 
-            DemandPair dp = new DemandPair(0, node0, node3, tree);
+            DemandPair dp = new(0, node0, node3, tree);
 
             Assert.ThrowsException<NotOnDemandPathException>(() => dp.ChangeEndpoint(node2, node1, MockCounter));
 
@@ -107,21 +107,21 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestOnEdgeContracted()
         {
-            Graph tree = new Graph();
+            Graph tree = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
 
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23 }, MockCounter);
 
-            DemandPair dp = new DemandPair(0, node1, node2, tree);
+            DemandPair dp = new(0, node1, node2, tree);
 
             Assert.ThrowsException<ZeroLengthDemandPathException>(() => dp.OnEdgeContracted(edge12, node1, MockCounter));
 

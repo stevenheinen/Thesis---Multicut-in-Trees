@@ -11,12 +11,12 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
     [TestClass]
     public class UnitTestTreeFromPruferSequence
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter counter = new();
 
         [TestMethod]
         public void TestTree()
         {
-            Random random = new Random(87867438);
+            Random random = new(87867438);
 
             Graph tree = TreeFromPruferSequence.GenerateTree(525, random);
             Assert.IsNotNull(tree);

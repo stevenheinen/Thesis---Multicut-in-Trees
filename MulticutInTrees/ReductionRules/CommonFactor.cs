@@ -79,7 +79,7 @@ namespace MulticutInTrees.ReductionRules
         {
             IEnumerable<Edge<Node>> p0Path = p0.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
             int subsetFailCount = 0;
-            HashSet<(DemandPair, DemandPair)> checkedPairs = new HashSet<(DemandPair, DemandPair)>();
+            HashSet<(DemandPair, DemandPair)> checkedPairs = new();
             foreach (DemandPair pi in intersectingPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 foreach (DemandPair pj in intersectingPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
@@ -124,7 +124,7 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="dp1">The first <see cref="DemandPair"/>.</param>
         /// <param name="dp2">The second <see cref="DemandPair"/>.</param>
         /// <returns>A tuple with <paramref name="dp1"/> and <paramref name="dp2"/> sorted on their unique ID to be used as key for <see cref="DemandPairIntersections"/>.</returns>
-        private (DemandPair, DemandPair) GetIntersectionKey(DemandPair dp1, DemandPair dp2)
+        private static (DemandPair, DemandPair) GetIntersectionKey(DemandPair dp1, DemandPair dp2)
         {
             return dp1.ID < dp2.ID ? (dp1, dp2) : (dp2, dp1);
         }
@@ -136,7 +136,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/>, <see langword="false"/> otherwise.</returns>
         private bool CheckApplicability(IEnumerable<DemandPair> demandPairsToCheck)
         {
-            List<DemandPair> pairsToBeRemoved = new List<DemandPair>();
+            List<DemandPair> pairsToBeRemoved = new();
 
             int k = MaxSolutionSize - PartialSolution.Count;
             foreach (DemandPair p0 in demandPairsToCheck)
@@ -208,12 +208,81 @@ namespace MulticutInTrees.ReductionRules
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            // TODO: WIP!! INTERSECTIONS STILL NEED TO BE UPDATED
-            // TODO: WIP!! ALSO JUST THE IMPLEMENTATION
+            HashSet<DemandPair> pairsToCheck = new();
 
+            foreach (DemandPair dp in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            {
+                foreach (DemandPair intersectingDemandPair in IntersectingDemandPairs[dp, Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+                {
+                    DemandPairIntersections.Remove(GetIntersectionKey(dp, intersectingDemandPair), Measurements.DemandPairsOperationsCounter);
+                }
 
-            Measurements.TimeSpentCheckingApplicability.Stop();
-            throw new NotImplementedException();
+                IntersectingDemandPairs.Remove(dp, Measurements.DemandPairsOperationsCounter);
+            }
+
+            foreach ((Edge<Node> edge, Node _, CountedCollection<DemandPair> dps) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
+            {
+                List<DemandPair> pairsOnEdge = dps.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
+                for (int i = 0; i < pairsOnEdge.Count - 1; i++)
+                {
+                    // todo: check if this makes sense. I do not think it needs to happen...
+                    pairsToCheck.Add(pairsOnEdge[i]);
+                    
+                    for (int j = i + 1; j < pairsOnEdge.Count; j++)
+                    {
+                        (DemandPair, DemandPair) key = GetIntersectionKey(pairsOnEdge[i], pairsOnEdge[j]);
+                        DemandPairIntersections[key, Measurements.DemandPairsOperationsCounter].Remove(edge, Measurements.TreeOperationsCounter);
+                        if (DemandPairIntersections[key, MockCounter].Count(MockCounter) == 0)
+                        {
+                            DemandPairIntersections.Remove(key, MockCounter);
+                            IntersectingDemandPairs[pairsOnEdge[i], MockCounter].Remove(pairsOnEdge[j], MockCounter);
+                            IntersectingDemandPairs[pairsOnEdge[j], MockCounter].Remove(pairsOnEdge[i], MockCounter);
+                            if (IntersectingDemandPairs[pairsOnEdge[i], MockCounter].Count(MockCounter) == 0)
+                            {
+                                IntersectingDemandPairs.Remove(pairsOnEdge[i], MockCounter);
+                            }
+                            if (IntersectingDemandPairs[pairsOnEdge[j], MockCounter].Count(MockCounter) == 0)
+                            {
+                                IntersectingDemandPairs.Remove(pairsOnEdge[j], MockCounter);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach ((CountedList<Edge<Node>> edges, DemandPair dp) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            {
+                pairsToCheck.Add(dp);
+
+                foreach (DemandPair intersectingDemandPair in IntersectingDemandPairs[dp, Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+                {
+                    (DemandPair, DemandPair) key = GetIntersectionKey(dp, intersectingDemandPair);
+                    foreach (Edge<Node> edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter)) 
+                    {
+                        DemandPairIntersections[key, Measurements.DemandPairsOperationsCounter].Remove(edge, Measurements.TreeOperationsCounter);
+                    }
+                    if (DemandPairIntersections[key, MockCounter].Count(MockCounter) == 0)
+                    {
+                        DemandPairIntersections.Remove(key, MockCounter);
+                        IntersectingDemandPairs[dp, MockCounter].Remove(intersectingDemandPair, MockCounter);
+                        IntersectingDemandPairs[intersectingDemandPair, MockCounter].Remove(dp, MockCounter);
+                        if (IntersectingDemandPairs[dp, MockCounter].Count(MockCounter) == 0)
+                        {
+                            IntersectingDemandPairs.Remove(dp, MockCounter);
+                        }
+                        if (IntersectingDemandPairs[intersectingDemandPair, MockCounter].Count(MockCounter) == 0)
+                        {
+                            IntersectingDemandPairs.Remove(intersectingDemandPair, MockCounter);
+                        }
+                    }
+                }
+            }
+
+            LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
+            LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+            LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
+
+            return CheckApplicability(pairsToCheck);
         }
 
         /// <inheritdoc/>

@@ -87,12 +87,7 @@ namespace MulticutInTrees.Utilities
             NullCheck(subset, nameof(subset), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the first IEnumerable is null!");
             NullCheck(largerSet, nameof(largerSet), "Trying to see if an IEnumerable is a subset of another IEnumerable, but the second IEnumerable is null!");
 #endif
-            if (subset.Count() > largerSet.Count())
-            {
-                return false;
-            }
-
-            HashSet<T> larger = new HashSet<T>(largerSet);
+            HashSet<T> larger = new(largerSet);
             return subset.All(n => larger.Contains(n));
         }
 
@@ -110,7 +105,7 @@ namespace MulticutInTrees.Utilities
 #if !EXPERIMENT
             NullCheck(list, nameof(list), "Trying to print an IEnumerable, but the IEnumerable is null!");
 #endif
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append($"{list.GetType()} with {list.Count()} elements: [");
             foreach (T elem in list)
             {
@@ -124,7 +119,7 @@ namespace MulticutInTrees.Utilities
             }
             else
             {
-                sb.Append("]");
+                sb.Append(']');
             }
             return sb.ToString();
         }
@@ -167,7 +162,7 @@ namespace MulticutInTrees.Utilities
 #if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to transform a node path to an edge path, but the path is null!");
 #endif
-            List<(TNode, TNode)> result = new List<(TNode, TNode)>();
+            List<(TNode, TNode)> result = new();
             for (int i = 0; i < path.Count() - 1; i++)
             {
                 TNode endpoint1 = path.ElementAt(i);
@@ -310,7 +305,7 @@ namespace MulticutInTrees.Utilities
             IEnumerable<T[]> oneElemSequences = list.Select(x => new[] { x });
 
             // Generate List of T sequences
-            List<List<T>> result = new List<List<T>>
+            List<List<T>> result = new()
             {
                 // Add initial empty set
                 new List<T>()
@@ -347,7 +342,7 @@ namespace MulticutInTrees.Utilities
         /// <exception cref="ArgumentException">Thrown when <paramref name="graph"/> is not a tree.</exception>
         public static (RootedTree, Dictionary<TNode, RootedTreeNode>) CreateRootedTreeFromGraph<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
 #if !EXPERIMENT
             NullCheck(graph, nameof(graph), "Trying to create a rooted tree from a graph, but the provided graph is null!");
             if (!graph.IsTree(mockCounter))
@@ -355,12 +350,12 @@ namespace MulticutInTrees.Utilities
                 throw new ArgumentException("Trying to create a rooted tree from a graph, but the provided graph is not a tree!", nameof(graph));
             }
 #endif
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
 
-            Dictionary<TNode, RootedTreeNode> nodeToTreeNode = new Dictionary<TNode, RootedTreeNode>();
+            Dictionary<TNode, RootedTreeNode> nodeToTreeNode = new();
             foreach (TNode node in graph.Nodes(mockCounter))
             {
-                RootedTreeNode newNode = new RootedTreeNode(node.ID);
+                RootedTreeNode newNode = new(node.ID);
                 nodeToTreeNode[node] = newNode;
                 tree.AddNode(newNode, mockCounter);
             }
@@ -375,10 +370,10 @@ namespace MulticutInTrees.Utilities
             edges = edges.Skip(1);
             RootedTreeNode node1 = nodeToTreeNode[firstGraphEdge.Endpoint1];
             RootedTreeNode node2 = nodeToTreeNode[firstGraphEdge.Endpoint2];
-            Edge<RootedTreeNode> firstEdge = new Edge<RootedTreeNode>(node1, node2);
+            Edge<RootedTreeNode> firstEdge = new(node1, node2);
             tree.AddEdge(firstEdge, mockCounter);
 
-            Queue<RootedTreeNode> queue = new Queue<RootedTreeNode>();
+            Queue<RootedTreeNode> queue = new();
             queue.Enqueue(node1);
             queue.Enqueue(node2);
 
@@ -390,7 +385,7 @@ namespace MulticutInTrees.Utilities
                 
                 foreach (RootedTreeNode child in children)
                 {
-                    Edge<RootedTreeNode> edge = new Edge<RootedTreeNode>(node, child);
+                    Edge<RootedTreeNode> edge = new(node, child);
                     tree.AddEdge(edge, mockCounter);
                     queue.Enqueue(child);
                 }
@@ -440,20 +435,20 @@ namespace MulticutInTrees.Utilities
                 }
             }
 #endif
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
 
-            Graph graph = new Graph();
+            Graph graph = new();
 
             Node[] nodes = new Node[numberOfNodes];
             for (uint i = 0; i < numberOfNodes; i++)
             {
-                Node node = new Node(i);
+                Node node = new(i);
                 nodes[i] = node;
             }
 
             graph.AddNode(nodes[0], mockCounter);
 
-            Queue<Node> queue = new Queue<Node>();
+            Queue<Node> queue = new();
             queue.Enqueue(nodes[0]);
 
             while (queue.Count > 0)
@@ -467,7 +462,7 @@ namespace MulticutInTrees.Utilities
                     {
                         graph.AddNode(neighbour, mockCounter);
                     }
-                    Edge<Node> edge = new Edge<Node>(node, neighbour);
+                    Edge<Node> edge = new(node, neighbour);
                     graph.AddEdge(edge, mockCounter);
                     queue.Enqueue(neighbour);
                 }
@@ -504,8 +499,8 @@ namespace MulticutInTrees.Utilities
                 }
             }
 #endif
-            Counter mockCounter = new Counter();
-            CountedCollection<DemandPair> result = new CountedCollection<DemandPair>();
+            Counter mockCounter = new();
+            CountedCollection<DemandPair> result = new();
 
             uint id = 0;
             foreach ((int, int) dp in endpoints)

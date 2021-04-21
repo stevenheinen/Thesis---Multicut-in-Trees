@@ -13,12 +13,12 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestRootedTree
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestConstructor()
         {
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
             Assert.IsNotNull(tree);
 
             Assert.IsNotNull(tree.Edges(MockCounter));
@@ -28,27 +28,27 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddNode()
         {
-            RootedTree tree = new RootedTree();
-            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTree tree = new();
+            RootedTreeNode node0 = new(0);
             tree.AddNode(node0, MockCounter);
             Assert.AreEqual(node0, tree.GetRoot(MockCounter));
 
-            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node1 = new(1);
             tree.AddNode(node1, MockCounter);
-            Edge<RootedTreeNode> edge01 = new Edge<RootedTreeNode>(node0, node1);
+            Edge<RootedTreeNode> edge01 = new(node0, node1);
             tree.AddEdge(edge01, MockCounter);
             Assert.AreEqual(node0, node1.GetParent(MockCounter));
 
-            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node2 = new(2);
             tree.AddNode(node2, MockCounter);
-            Edge<RootedTreeNode> edge02 = new Edge<RootedTreeNode>(node0, node2);
+            Edge<RootedTreeNode> edge02 = new(node0, node2);
             tree.AddEdge(edge02, MockCounter);
             Assert.AreEqual(node0, node2.GetParent(MockCounter));
             Assert.AreEqual(2, node0.NumberOfChildren(MockCounter));
 
-            RootedTreeNode node3 = new RootedTreeNode(3);
+            RootedTreeNode node3 = new(3);
             tree.AddNode(node3, MockCounter);
-            Edge<RootedTreeNode> edge13 = new Edge<RootedTreeNode>(node1, node3);
+            Edge<RootedTreeNode> edge13 = new(node1, node3);
             tree.AddEdge(edge13, MockCounter);
             Assert.AreEqual(node1, node3.GetParent(MockCounter));
             Assert.AreEqual(node0, node1.GetParent(MockCounter));
@@ -59,32 +59,32 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddChildrenToParent()
         {
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
 
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
-            RootedTreeNode node3 = new RootedTreeNode(3);
-            RootedTreeNode node4 = new RootedTreeNode(4);
-            RootedTreeNode node5 = new RootedTreeNode(5);
-            RootedTreeNode node6 = new RootedTreeNode(6);
-            RootedTreeNode node7 = new RootedTreeNode(7);
-            RootedTreeNode node8 = new RootedTreeNode(8);
-            RootedTreeNode node9 = new RootedTreeNode(9);
-            RootedTreeNode node10 = new RootedTreeNode(10);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
+            RootedTreeNode node3 = new(3);
+            RootedTreeNode node4 = new(4);
+            RootedTreeNode node5 = new(5);
+            RootedTreeNode node6 = new(6);
+            RootedTreeNode node7 = new(7);
+            RootedTreeNode node8 = new(8);
+            RootedTreeNode node9 = new(9);
+            RootedTreeNode node10 = new(10);
 
             tree.AddNodes(new List<RootedTreeNode>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
-            Edge<RootedTreeNode> edge01 = new Edge<RootedTreeNode>(node0, node1);
-            Edge<RootedTreeNode> edge02 = new Edge<RootedTreeNode>(node0, node2);
-            Edge<RootedTreeNode> edge03 = new Edge<RootedTreeNode>(node0, node3);
-            Edge<RootedTreeNode> edge14 = new Edge<RootedTreeNode>(node1, node4);
-            Edge<RootedTreeNode> edge15 = new Edge<RootedTreeNode>(node1, node5);
-            Edge<RootedTreeNode> edge26 = new Edge<RootedTreeNode>(node2, node6);
-            Edge<RootedTreeNode> edge37 = new Edge<RootedTreeNode>(node3, node7);
-            Edge<RootedTreeNode> edge38 = new Edge<RootedTreeNode>(node3, node8);
-            Edge<RootedTreeNode> edge39 = new Edge<RootedTreeNode>(node3, node9);
-            Edge<RootedTreeNode> edge310 = new Edge<RootedTreeNode>(node3, node10);
+            Edge<RootedTreeNode> edge01 = new(node0, node1);
+            Edge<RootedTreeNode> edge02 = new(node0, node2);
+            Edge<RootedTreeNode> edge03 = new(node0, node3);
+            Edge<RootedTreeNode> edge14 = new(node1, node4);
+            Edge<RootedTreeNode> edge15 = new(node1, node5);
+            Edge<RootedTreeNode> edge26 = new(node2, node6);
+            Edge<RootedTreeNode> edge37 = new(node3, node7);
+            Edge<RootedTreeNode> edge38 = new(node3, node8);
+            Edge<RootedTreeNode> edge39 = new(node3, node9);
+            Edge<RootedTreeNode> edge310 = new(node3, node10);
 
             tree.AddEdges(new List<Edge<RootedTreeNode>>() { edge01, edge02, edge03, edge14, edge15, edge26, edge37, edge38, edge39, edge310 }, MockCounter);
 
@@ -104,8 +104,8 @@ namespace TESTS_MulticutInTrees.Graphs
 
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
-                RootedTree tree2 = new RootedTree();
-                RootedTreeNode node11 = new RootedTreeNode(11);
+                RootedTree tree2 = new();
+                RootedTreeNode node11 = new(11);
                 tree2.AddNode(node11, MockCounter);
                 method.Invoke(tree2, new object[] { node11, MockCounter });
             });
@@ -117,7 +117,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             TargetInvocationException a = Assert.ThrowsException<TargetInvocationException>(() =>
             {
-                RootedTree tree = new RootedTree();
+                RootedTree tree = new();
                 MethodInfo method = typeof(RootedTree).GetMethod("AddChildrenToParent", BindingFlags.NonPublic | BindingFlags.Instance);
                 method.Invoke(tree, new object[] { null, MockCounter });
             });
@@ -126,8 +126,8 @@ namespace TESTS_MulticutInTrees.Graphs
 
             a = Assert.ThrowsException<TargetInvocationException>(() =>
             {
-                RootedTree tree = new RootedTree();
-                RootedTreeNode node = new RootedTreeNode(0);
+                RootedTree tree = new();
+                RootedTreeNode node = new(0);
                 MethodInfo method = typeof(RootedTree).GetMethod("AddChildrenToParent", BindingFlags.NonPublic | BindingFlags.Instance);
                 method.Invoke(tree, new object[] { node, null });
             });
@@ -137,32 +137,32 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveNode()
         {
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
 
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
-            RootedTreeNode node3 = new RootedTreeNode(3);
-            RootedTreeNode node4 = new RootedTreeNode(4);
-            RootedTreeNode node5 = new RootedTreeNode(5);
-            RootedTreeNode node6 = new RootedTreeNode(6);
-            RootedTreeNode node7 = new RootedTreeNode(7);
-            RootedTreeNode node8 = new RootedTreeNode(8);
-            RootedTreeNode node9 = new RootedTreeNode(9);
-            RootedTreeNode node10 = new RootedTreeNode(10);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
+            RootedTreeNode node3 = new(3);
+            RootedTreeNode node4 = new(4);
+            RootedTreeNode node5 = new(5);
+            RootedTreeNode node6 = new(6);
+            RootedTreeNode node7 = new(7);
+            RootedTreeNode node8 = new(8);
+            RootedTreeNode node9 = new(9);
+            RootedTreeNode node10 = new(10);
 
             tree.AddNodes(new List<RootedTreeNode>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
-            Edge<RootedTreeNode> edge01 = new Edge<RootedTreeNode>(node0, node1);
-            Edge<RootedTreeNode> edge02 = new Edge<RootedTreeNode>(node0, node2);
-            Edge<RootedTreeNode> edge03 = new Edge<RootedTreeNode>(node0, node3);
-            Edge<RootedTreeNode> edge14 = new Edge<RootedTreeNode>(node1, node4);
-            Edge<RootedTreeNode> edge15 = new Edge<RootedTreeNode>(node1, node5);
-            Edge<RootedTreeNode> edge26 = new Edge<RootedTreeNode>(node2, node6);
-            Edge<RootedTreeNode> edge37 = new Edge<RootedTreeNode>(node3, node7);
-            Edge<RootedTreeNode> edge38 = new Edge<RootedTreeNode>(node3, node8);
-            Edge<RootedTreeNode> edge39 = new Edge<RootedTreeNode>(node3, node9);
-            Edge<RootedTreeNode> edge310 = new Edge<RootedTreeNode>(node3, node10);
+            Edge<RootedTreeNode> edge01 = new(node0, node1);
+            Edge<RootedTreeNode> edge02 = new(node0, node2);
+            Edge<RootedTreeNode> edge03 = new(node0, node3);
+            Edge<RootedTreeNode> edge14 = new(node1, node4);
+            Edge<RootedTreeNode> edge15 = new(node1, node5);
+            Edge<RootedTreeNode> edge26 = new(node2, node6);
+            Edge<RootedTreeNode> edge37 = new(node3, node7);
+            Edge<RootedTreeNode> edge38 = new(node3, node8);
+            Edge<RootedTreeNode> edge39 = new(node3, node9);
+            Edge<RootedTreeNode> edge310 = new(node3, node10);
 
             tree.AddEdges(new List<Edge<RootedTreeNode>>() { edge01, edge02, edge03, edge14, edge15, edge26, edge37, edge38, edge39, edge310 }, MockCounter);
 
@@ -206,32 +206,32 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveNodes()
         {
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
 
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
-            RootedTreeNode node3 = new RootedTreeNode(3);
-            RootedTreeNode node4 = new RootedTreeNode(4);
-            RootedTreeNode node5 = new RootedTreeNode(5);
-            RootedTreeNode node6 = new RootedTreeNode(6);
-            RootedTreeNode node7 = new RootedTreeNode(7);
-            RootedTreeNode node8 = new RootedTreeNode(8);
-            RootedTreeNode node9 = new RootedTreeNode(9);
-            RootedTreeNode node10 = new RootedTreeNode(10);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
+            RootedTreeNode node3 = new(3);
+            RootedTreeNode node4 = new(4);
+            RootedTreeNode node5 = new(5);
+            RootedTreeNode node6 = new(6);
+            RootedTreeNode node7 = new(7);
+            RootedTreeNode node8 = new(8);
+            RootedTreeNode node9 = new(9);
+            RootedTreeNode node10 = new(10);
 
             tree.AddNodes(new List<RootedTreeNode>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
-            Edge<RootedTreeNode> edge01 = new Edge<RootedTreeNode>(node0, node1);
-            Edge<RootedTreeNode> edge02 = new Edge<RootedTreeNode>(node0, node2);
-            Edge<RootedTreeNode> edge03 = new Edge<RootedTreeNode>(node0, node3);
-            Edge<RootedTreeNode> edge14 = new Edge<RootedTreeNode>(node1, node4);
-            Edge<RootedTreeNode> edge15 = new Edge<RootedTreeNode>(node1, node5);
-            Edge<RootedTreeNode> edge26 = new Edge<RootedTreeNode>(node2, node6);
-            Edge<RootedTreeNode> edge37 = new Edge<RootedTreeNode>(node3, node7);
-            Edge<RootedTreeNode> edge38 = new Edge<RootedTreeNode>(node3, node8);
-            Edge<RootedTreeNode> edge39 = new Edge<RootedTreeNode>(node3, node9);
-            Edge<RootedTreeNode> edge310 = new Edge<RootedTreeNode>(node3, node10);
+            Edge<RootedTreeNode> edge01 = new(node0, node1);
+            Edge<RootedTreeNode> edge02 = new(node0, node2);
+            Edge<RootedTreeNode> edge03 = new(node0, node3);
+            Edge<RootedTreeNode> edge14 = new(node1, node4);
+            Edge<RootedTreeNode> edge15 = new(node1, node5);
+            Edge<RootedTreeNode> edge26 = new(node2, node6);
+            Edge<RootedTreeNode> edge37 = new(node3, node7);
+            Edge<RootedTreeNode> edge38 = new(node3, node8);
+            Edge<RootedTreeNode> edge39 = new(node3, node9);
+            Edge<RootedTreeNode> edge310 = new(node3, node10);
 
             tree.AddEdges(new List<Edge<RootedTreeNode>>() { edge01, edge02, edge03, edge14, edge15, edge26, edge37, edge38, edge39, edge310 }, MockCounter);
 
@@ -250,7 +250,7 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestUpdateRoot()
         {
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
             MethodInfo method = typeof(RootedTree).GetMethod("FindRoot", BindingFlags.NonPublic | BindingFlags.Instance);
 
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
@@ -259,8 +259,8 @@ namespace TESTS_MulticutInTrees.Graphs
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(NoRootException));
 
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
             tree.AddNode(node0, MockCounter);
             tree.AddNode(node1, MockCounter);
             tree.AddEdge(new Edge<RootedTreeNode>(node0, node1), MockCounter);
@@ -271,9 +271,9 @@ namespace TESTS_MulticutInTrees.Graphs
             PropertyInfo nodesProperty = typeof(RootedTree).GetProperty("InternalNodes", BindingFlags.NonPublic | BindingFlags.Instance);
             TargetInvocationException u = Assert.ThrowsException<TargetInvocationException>(() =>
             {
-                RootedTreeNode node2 = new RootedTreeNode(2);
-                RootedTreeNode node3 = new RootedTreeNode(3);
-                CountedCollection<RootedTreeNode> collection = (CountedCollection<RootedTreeNode>)nodesProperty.GetGetMethod(true).Invoke(tree, new object[] { });
+                RootedTreeNode node2 = new(2);
+                RootedTreeNode node3 = new(3);
+                CountedCollection<RootedTreeNode> collection = (CountedCollection<RootedTreeNode>)nodesProperty.GetGetMethod(true).Invoke(tree, Array.Empty<object>());
                 collection.Clear(MockCounter);
                 collection.Add(node2, MockCounter);
                 collection.Add(node3, MockCounter);
@@ -285,9 +285,9 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestArgumentNull()
         {
-            RootedTree t = new RootedTree();
-            RootedTreeNode n = new RootedTreeNode(0);
-            RootedTreeNode n2 = new RootedTreeNode(1);
+            RootedTree t = new();
+            RootedTreeNode n = new(0);
+            RootedTreeNode n2 = new(1);
 
             MethodInfo method = typeof(RootedTree).GetMethod("AddChildrenToParent", BindingFlags.NonPublic | BindingFlags.Instance);
             TargetInvocationException e = Assert.ThrowsException<TargetInvocationException>(() =>
@@ -305,13 +305,13 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestValidTree()
         {
-            RootedTree tree = new RootedTree();
+            RootedTree tree = new();
 
             Assert.IsFalse(tree.IsValid());
 
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
 
             tree.AddNodes(new List<RootedTreeNode>() { node0, node1, node2 }, MockCounter);
 
@@ -329,11 +329,11 @@ namespace TESTS_MulticutInTrees.Graphs
 
             Assert.IsTrue(tree.IsValid());
 
-            RootedTreeNode node3 = new RootedTreeNode(3);
+            RootedTreeNode node3 = new(3);
             setParentMethod.Invoke(node3, new object[] { node2, MockCounter });
 
             PropertyInfo nodeproperty = typeof(RootedTree).GetProperty("InternalNodes", BindingFlags.NonPublic | BindingFlags.Instance);
-            CountedCollection<RootedTreeNode> collection = (CountedCollection<RootedTreeNode>)nodeproperty.GetGetMethod(true).Invoke(tree, new object[] { });
+            CountedCollection<RootedTreeNode> collection = (CountedCollection<RootedTreeNode>)nodeproperty.GetGetMethod(true).Invoke(tree, Array.Empty<object>());
             collection.Clear(MockCounter);
             collection.Add(node0, MockCounter);
             collection.Add(node1, MockCounter);

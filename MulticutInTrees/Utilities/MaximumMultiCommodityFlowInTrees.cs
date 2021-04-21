@@ -20,7 +20,7 @@ namespace MulticutInTrees.Utilities
         /// <summary>
         /// The <see cref="Counter"/> that can be used for operations that should not impact the performance of this algorithm.
         /// </summary>
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         /// <summary>
         /// Compute the size of the maximum multi-commodity flow in <paramref name="graph"/> with <paramref name="commodities"/> as commodities.
@@ -64,21 +64,21 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(measurements, nameof(measurements), "Trying to compute the multi commodity flow in a tree, but the performance measures are null!");
 #endif
             // Create a list with original commodities, that should not be modified, and a copy with commodities that can be modified.
-            ReadOnlyCollection<Commodity<RootedTreeNode>> originalCommodities = new ReadOnlyCollection<Commodity<RootedTreeNode>>(commodities.Select(n => new Commodity<RootedTreeNode>(n.Item1, n.Item2)).ToList());
-            CountedList<Commodity<RootedTreeNode>> modifiedCommodities = new CountedList<Commodity<RootedTreeNode>>();
+            ReadOnlyCollection<Commodity<RootedTreeNode>> originalCommodities = new(commodities.Select(n => new Commodity<RootedTreeNode>(n.Item1, n.Item2)).ToList());
+            CountedList<Commodity<RootedTreeNode>> modifiedCommodities = new();
             foreach (Commodity<RootedTreeNode> commodity in originalCommodities)
             {
                 modifiedCommodities.Add(new Commodity<RootedTreeNode>(commodity.EndPoint1, commodity.EndPoint2, commodity), MockCounter);
             }
 
             // Find the internal nodes and sort them on non-increasing depth.
-            CountedList<RootedTreeNode> internalNodesSortedOnDepth = new CountedList<RootedTreeNode>(tree.Nodes(MockCounter).Where(n => { measurements.TreeOperationsCounter++; return n.NumberOfChildren(MockCounter) > 0; }).OrderByDescending(n => { measurements.TreeOperationsCounter++; return n.DepthFromRoot(measurements.TreeOperationsCounter); }).ToList(), MockCounter);
+            CountedList<RootedTreeNode> internalNodesSortedOnDepth = new(tree.Nodes(MockCounter).Where(n => { measurements.TreeOperationsCounter++; return n.NumberOfChildren(MockCounter) > 0; }).OrderByDescending(n => { measurements.TreeOperationsCounter++; return n.DepthFromRoot(measurements.TreeOperationsCounter); }).ToList(), MockCounter);
 
             // Execute the upward pass that checks for strictly advantageous commodities.
             UpwardPass(internalNodesSortedOnDepth, modifiedCommodities, measurements);
 
             // Reverse the internal nodes so they are now sorted on non-decreasing depth.
-            CountedList<RootedTreeNode> reversedInternalNodesSortedOnDepth = new CountedList<RootedTreeNode>();
+            CountedList<RootedTreeNode> reversedInternalNodesSortedOnDepth = new();
             foreach (RootedTreeNode node in internalNodesSortedOnDepth.GetCountedEnumerable(MockCounter))
             {
                 reversedInternalNodesSortedOnDepth.Insert(0, node, MockCounter);
@@ -101,17 +101,17 @@ namespace MulticutInTrees.Utilities
         {
             foreach (RootedTreeNode node in internalNodesSortedOnDepth.GetCountedEnumerable(measurements.TreeOperationsCounter))
             {
-                HashSet<RootedTreeNode> children = new HashSet<RootedTreeNode>(node.Children(measurements.TreeOperationsCounter));
+                HashSet<RootedTreeNode> children = new(node.Children(measurements.TreeOperationsCounter));
 
                 // Determine all commodities of length 1 and add their leaf-endpoint as already used node.
-                HashSet<Commodity<RootedTreeNode>> resolvedCommodities = new HashSet<Commodity<RootedTreeNode>>(commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(node, children)));
+                HashSet<Commodity<RootedTreeNode>> resolvedCommodities = new(commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(node, children)));
                 HashSet<RootedTreeNode> takenNodes = DetermineTakenNodes(children, resolvedCommodities);
 
                 // Find all commodities in the subtree
                 List<Commodity<RootedTreeNode>> commoditiesInSubtree = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(children)).ToList();
 
-                Dictionary<RootedTreeNode, Node> nToNode = new Dictionary<RootedTreeNode, Node>();
-                Dictionary<Node, RootedTreeNode> nodeToN = new Dictionary<Node, RootedTreeNode>();
+                Dictionary<RootedTreeNode, Node> nToNode = new();
+                Dictionary<Node, RootedTreeNode> nodeToN = new();
 
                 // Create the graph for the matching and find a matching in it.
                 Graph graph = CreateMatchingGraph(children, nToNode, nodeToN, takenNodes, commoditiesInSubtree, false, new Dictionary<(Node, Node), Commodity<RootedTreeNode>>(), null);
@@ -134,7 +134,7 @@ namespace MulticutInTrees.Utilities
         /// <returns>A <see cref="HashSet{T}"/> with <typeparamref name="TNode"/>s that are unmatched.</returns>
         private static HashSet<TNode> FindUnmatchedNodes<TNode>(IEnumerable<TNode> allNodes, IEnumerable<(TNode, TNode)> matching) where TNode : AbstractNode<TNode>
         {
-            HashSet<TNode> result = new HashSet<TNode>(allNodes);
+            HashSet<TNode> result = new(allNodes);
             foreach ((TNode, TNode) edge in matching)
             {
                 result.Remove(edge.Item1);
@@ -175,12 +175,12 @@ namespace MulticutInTrees.Utilities
         private static void DetermineStrictlyAdvantageousCommodities(RootedTreeNode node, CountedList<Commodity<RootedTreeNode>> commodities, HashSet<RootedTreeNode> takenNodes, HashSet<Node> unmatchedNodes, Dictionary<RootedTreeNode, Node> nToNode, List<(Node, Node)> matching, PerformanceMeasurements measurements)
         {
             // Find all remaining free nodes in the current subtree.
-            HashSet<RootedTreeNode> subtree = new HashSet<RootedTreeNode>(node.Children(measurements.TreeOperationsCounter)) { node };
+            HashSet<RootedTreeNode> subtree = new(node.Children(measurements.TreeOperationsCounter)) { node };
             subtree.RemoveWhere(takenNodes.Contains);
             List<Commodity<RootedTreeNode>> partlyInSubtreeCommodities = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsPartlyInSubtree(subtree, node, measurements.TreeOperationsCounter)).ToList();
 
             // Determine all free nodes.
-            HashSet<Node> freeNodes = new HashSet<Node>(DFS.FreeNodes(new List<Node>(unmatchedNodes), new HashSet<(Node, Node)>(matching), measurements.TreeOperationsCounter));
+            HashSet<Node> freeNodes = new(DFS.FreeNodes(new List<Node>(unmatchedNodes), new HashSet<(Node, Node)>(matching), measurements.TreeOperationsCounter));
 
             foreach (Commodity<RootedTreeNode> commodity in partlyInSubtreeCommodities)
             {
@@ -225,14 +225,14 @@ namespace MulticutInTrees.Utilities
             // Create nodes for the matching graph.
             List<Node> nodes = children.Select(n =>
             {
-                Node node = new Node(n.ID);
+                Node node = new(n.ID);
                 nToNode[n] = node;
                 nodeToN[node] = n;
                 return node;
             }).ToList();
 
             // Create an edge for each commodity that is in the subtree
-            HashSet<(Node, Node)> edges = new HashSet<(Node, Node)>();
+            HashSet<(Node, Node)> edges = new();
             foreach (Commodity<RootedTreeNode> localCommodity in commoditiesInSubtree)
             {
                 // If this is the upward pass, and we have picked a commodity in the subtree above this one, check if we can still use this edge. Otherwise, skip.
@@ -258,7 +258,7 @@ namespace MulticutInTrees.Utilities
             }
 
             // Create and return the graph.
-            Graph graph = new Graph();
+            Graph graph = new();
             graph.AddNodes(nodes, MockCounter);
             graph.AddEdges(edges.Select(e => new Edge<Node>(e.Item1, e.Item2)), MockCounter);
             return graph;
@@ -273,7 +273,7 @@ namespace MulticutInTrees.Utilities
         /// <returns>A <see cref="HashSet{T}"/> of <typeparamref name="TNode"/> that contains all <typeparamref name="TNode"/>s that are an endpoint of any <see cref="Commodity{N}"/> in <paramref name="resolvedCommodities"/>.</returns>
         private static HashSet<TNode> DetermineTakenNodes<TNode>(HashSet<TNode> children, HashSet<Commodity<TNode>> resolvedCommodities) where TNode : RootedTreeNode
         {
-            HashSet<TNode> takenNodes = new HashSet<TNode>();
+            HashSet<TNode> takenNodes = new();
             foreach (Commodity<TNode> commodity in new HashSet<Commodity<TNode>>(resolvedCommodities))
             {
                 TNode endpointInSubtree = commodity.EndpointInSubtree(children);
@@ -327,10 +327,10 @@ namespace MulticutInTrees.Utilities
         private static List<Commodity<RootedTreeNode>> DownwardPass(CountedList<RootedTreeNode> internalNodesSortedOnDepth, CountedList<Commodity<RootedTreeNode>> commodities, PerformanceMeasurements measurements)
         {
             // Final list of picked commodities
-            List<Commodity<RootedTreeNode>> pickedCommodities = new List<Commodity<RootedTreeNode>>();
+            List<Commodity<RootedTreeNode>> pickedCommodities = new();
 
             // Dictionary with per edge in the problem instance the commodity that is picked along it.
-            Dictionary<(RootedTreeNode, RootedTreeNode), Commodity<RootedTreeNode>> edgeToPickedCommodity = new Dictionary<(RootedTreeNode, RootedTreeNode), Commodity<RootedTreeNode>>();
+            Dictionary<(RootedTreeNode, RootedTreeNode), Commodity<RootedTreeNode>> edgeToPickedCommodity = new();
 
             foreach (RootedTreeNode node in internalNodesSortedOnDepth.GetCountedEnumerable(measurements.TreeOperationsCounter))
             {
@@ -343,14 +343,14 @@ namespace MulticutInTrees.Utilities
                     edgeToPickedCommodity.TryGetValue(Utils.OrderEdgeSmallToLarge((parent, node)), out pickedCommodity);
                 }
 
-                HashSet<RootedTreeNode> children = new HashSet<RootedTreeNode>(node.Children(measurements.TreeOperationsCounter));
-                HashSet<Commodity<RootedTreeNode>> resolvedCommodities = new HashSet<Commodity<RootedTreeNode>>(commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(node, children)));
+                HashSet<RootedTreeNode> children = new(node.Children(measurements.TreeOperationsCounter));
+                HashSet<Commodity<RootedTreeNode>> resolvedCommodities = new(commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(node, children)));
                 HashSet<RootedTreeNode> takenNodes = DetermineTakenNodes(children, resolvedCommodities);
                 List<Commodity<RootedTreeNode>> commoditiesInSubtree = commodities.GetCountedEnumerable(measurements.DemandPairsOperationsCounter).Where(n => n.IsBetween(children)).ToList();
 
-                Dictionary<RootedTreeNode, Node> nToNode = new Dictionary<RootedTreeNode, Node>();
-                Dictionary<Node, RootedTreeNode> nodeToN = new Dictionary<Node, RootedTreeNode>();
-                Dictionary<(Node, Node), Commodity<RootedTreeNode>> edgeToCommodity = new Dictionary<(Node, Node), Commodity<RootedTreeNode>>();
+                Dictionary<RootedTreeNode, Node> nToNode = new();
+                Dictionary<Node, RootedTreeNode> nodeToN = new();
+                Dictionary<(Node, Node), Commodity<RootedTreeNode>> edgeToCommodity = new();
 
                 // Compute the matching graph and the matching in that graph.
                 Graph graph = CreateMatchingGraph(children, nToNode, nodeToN, takenNodes, commoditiesInSubtree, true, edgeToCommodity, pickedCommodity);

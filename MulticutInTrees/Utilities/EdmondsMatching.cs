@@ -17,7 +17,7 @@ namespace MulticutInTrees.Utilities
     public static class EdmondsMatching
     {
         // todo: replace with correct counters
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         /// <summary>
         /// Finds a maximum matching in <paramref name="graph"/>.
@@ -156,10 +156,10 @@ namespace MulticutInTrees.Utilities
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find an initial matching in a graph, but the graph is null!");
 #endif
-            List<(TNode, TNode)> matching = new List<(TNode, TNode)>();
+            List<(TNode, TNode)> matching = new();
 
             // Save we have not matched any of the nodes.
-            Dictionary<TNode, bool> matched = new Dictionary<TNode, bool>();
+            Dictionary<TNode, bool> matched = new();
             foreach (TNode node in graph.Nodes(MockCounter))
             {
                 matched[node] = false;
@@ -220,7 +220,7 @@ namespace MulticutInTrees.Utilities
                 return new List<(TNode, TNode)>() { graph.Edges(MockCounter).Select(e => (e.Endpoint1, e.Endpoint2)).First() };
             }
 
-            HashSet<TNode> unmatchedVertices = new HashSet<TNode>(graph.Nodes(MockCounter));
+            HashSet<TNode> unmatchedVertices = new(graph.Nodes(MockCounter));
             foreach ((TNode, TNode) edge in matching)
             {
                 unmatchedVertices.Remove(edge.Item1);
@@ -232,7 +232,7 @@ namespace MulticutInTrees.Utilities
                 return new List<(TNode, TNode)>();
             }
 
-            HashSet<TNode> adjacentVertices = new HashSet<TNode>();
+            HashSet<TNode> adjacentVertices = new();
             foreach (TNode vertex in unmatchedVertices)
             {
                 foreach (TNode neighbour in vertex.Neighbours(MockCounter))
@@ -241,7 +241,7 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
-            HashSet<(TNode, TNode)> hashedMatching = new HashSet<(TNode, TNode)>(matching);
+            HashSet<(TNode, TNode)> hashedMatching = new(matching);
             List<(TNode, TNode)> unmatchedEdges = graph.Edges(MockCounter).Select(Utils.OrderEdgeSmallToLarge<TEdge, TNode>).Where(n => !hashedMatching.Contains(n) && !hashedMatching.Contains((n.Item2, n.Item1))).ToList();
 
             if (unmatchedEdges.Count == 0)
@@ -249,9 +249,9 @@ namespace MulticutInTrees.Utilities
                 return new List<(TNode, TNode)>();
             }
 
-            HashSet<Node> nodesInD = new HashSet<Node>();
-            Dictionary<Node, TNode> originalNodes = new Dictionary<Node, TNode>();
-            Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs = new Dictionary<(TNode, TNode), TNode>();
+            HashSet<Node> nodesInD = new();
+            Dictionary<Node, TNode> originalNodes = new();
+            Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs = new();
             BuildDigraphD(unmatchedEdges, hashedMatching, nodesInD, originalNodes, nodesInMiddleOfArcs);
 
             List<(TNode, TNode)> pathPPrime = FindPathPPrime(nodesInD, unmatchedEdges, originalNodes, unmatchedVertices, adjacentVertices, nodesInMiddleOfArcs);
@@ -291,7 +291,7 @@ namespace MulticutInTrees.Utilities
             {
                 return new List<(TNode, TNode)>();
             }
-            HashSet<Node> target = new HashSet<Node>(nodesInD.Where(n => n != start && adjacentVertices.Contains(originalNodes[n])));
+            HashSet<Node> target = new(nodesInD.Where(n => n != start && adjacentVertices.Contains(originalNodes[n])));
 
             if (target.Count == 0)
             {
@@ -347,8 +347,8 @@ namespace MulticutInTrees.Utilities
             nodesInMiddleOfArcs ??= new Dictionary<(TNode, TNode), TNode>();
 
             // Build digraph D with an arc (u,v) if there is an x such that (u,x) in E-M and (x,v) in M.
-            List<(Node, Node)> arcsInD = new List<(Node, Node)>();
-            Dictionary<TNode, Node> originalToD = new Dictionary<TNode, Node>();
+            List<(Node, Node)> arcsInD = new();
+            Dictionary<TNode, Node> originalToD = new();
 
             foreach ((TNode, TNode) unmatchedEdge in unmatchedEdges)
             {
@@ -370,7 +370,7 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
-            Graph d = new Graph();
+            Graph d = new();
             d.AddNodes(nodesInD, MockCounter);
             d.AddEdges(arcsInD.Select(i => new Edge<Node>(i.Item1, i.Item2, true)), MockCounter);
             return d;
@@ -440,7 +440,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(nonSimpleWalk, nameof(nonSimpleWalk), "Trying to find and contract a blossom, but the list with the non-simple walk is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find and contract a blossom, but the list with the current matching is null!");
 #endif
-            List<TNode> blossom = new List<TNode>();
+            List<TNode> blossom = new();
             for (int i = 0; i < nonSimpleWalk.Count - 1; i++)
             {
                 for (int j = i + 1; j < nonSimpleWalk.Count; j++)
@@ -452,8 +452,8 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
-            HashSet<TEdge> originalEdges = new HashSet<TEdge>();
-            HashSet<TNode> neighbours = new HashSet<TNode>();
+            HashSet<TEdge> originalEdges = new();
+            HashSet<TNode> neighbours = new();
             foreach (TNode node in blossom)
             {
                 foreach (TNode neighbour in node.Neighbours(MockCounter))
@@ -593,13 +593,13 @@ namespace MulticutInTrees.Utilities
             TNode lastNodeBeforeBlossom = contractedPath.SkipWhile(n => !n.Item2.Equals(contractedBlossom)).First().Item1;
             TNode firstNodeAfterBlossom = contractedPath.SkipWhile(n => !n.Item1.Equals(contractedBlossom)).First().Item2;
 
-            HashSet<TNode> seen = new HashSet<TNode>(graph.Nodes(MockCounter));
+            HashSet<TNode> seen = new(graph.Nodes(MockCounter));
             seen.RemoveWhere(n => blossom.Contains(n) || matching.Select(m => m.Item1).Contains(n) || matching.Select(m => m.Item2).Contains(n));
 
             IEnumerable<(TNode, TNode)> beforeBlossom = contractedPath.TakeWhile(n => !n.Item2.Equals(contractedBlossom));
             IEnumerable<(TNode, TNode)> afterBlossom = contractedPath.Skip(contractedPath.Select(n => n.Item2).ToList().IndexOf(firstNodeAfterBlossom) + 1);
 
-            List<(TNode, TNode)> path1 = new List<(TNode, TNode)>(beforeBlossom);
+            List<(TNode, TNode)> path1 = new(beforeBlossom);
             List<(TNode, TNode)> shortest = Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<TNode>() { firstNodeAfterBlossom }, MockCounter, new HashSet<TNode>(seen)));
             path1.AddRange(shortest);
             path1.AddRange(afterBlossom);
@@ -610,7 +610,7 @@ namespace MulticutInTrees.Utilities
             }
 
             seen.Add(shortest[1].Item2);
-            List<(TNode, TNode)> path2 = new List<(TNode, TNode)>(beforeBlossom);
+            List<(TNode, TNode)> path2 = new(beforeBlossom);
             path2.AddRange(Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<TNode>() { firstNodeAfterBlossom }, MockCounter, seen)));
             path2.AddRange(afterBlossom);
             return path2;
@@ -636,7 +636,7 @@ namespace MulticutInTrees.Utilities
                 return false;
             }
 
-            HashSet<(TNode, TNode)> hashedMatching = new HashSet<(TNode, TNode)>(matching);
+            HashSet<(TNode, TNode)> hashedMatching = new(matching);
 
             // Check if the alternating no-yes-no-yes-...-yes-no path is correct given the matching.
             for (int i = 1; i < path.Count - 1; i += 2)

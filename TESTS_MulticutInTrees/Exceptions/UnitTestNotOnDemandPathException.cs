@@ -14,14 +14,14 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorNoArguments()
         {
-            NotOnDemandPathException notInGraphException = new NotOnDemandPathException();
+            NotOnDemandPathException notInGraphException = new();
             Assert.IsNotNull(notInGraphException);
         }
 
         [TestMethod]
         public void TestConstructorMessage()
         {
-            NotOnDemandPathException notInGraphException = new NotOnDemandPathException("Test message");
+            NotOnDemandPathException notInGraphException = new("Test message");
             Assert.IsNotNull(notInGraphException);
             Assert.AreEqual(notInGraphException.Message, "Test message");
         }
@@ -29,8 +29,8 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorMessageInner()
         {
-            Exception inner = new Exception();
-            NotOnDemandPathException notInGraphException = new NotOnDemandPathException("Test", inner);
+            Exception inner = new();
+            NotOnDemandPathException notInGraphException = new("Test", inner);
             Assert.IsNotNull(notInGraphException);
             Assert.AreEqual(notInGraphException.Message, "Test");
             Assert.AreEqual(notInGraphException.InnerException, inner);

@@ -78,7 +78,7 @@ namespace MulticutInTrees.ReductionRules
         private CountedList<DemandPair> DeterminePairsToBeDeleted()
         {
             int k = MaxSolutionSize - PartialSolution.Count;
-            CountedList<DemandPair> result = new CountedList<DemandPair>();
+            CountedList<DemandPair> result = new();
             foreach (Node node in DemandPairsPerNode.GetKeys(Measurements.DemandPairsPerEdgeKeysCounter))
             {
                 CountedCollection<DemandPair> demandPairs = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter];
@@ -87,7 +87,7 @@ namespace MulticutInTrees.ReductionRules
                     continue;
                 }
                 int caterpillarComponent = CaterpillarComponentPerNode[node, Measurements.TreeOperationsCounter];
-                CountedDictionary<int, CountedList<DemandPair>> pairsPerComponent = new CountedDictionary<int, CountedList<DemandPair>>();
+                CountedDictionary<int, CountedList<DemandPair>> pairsPerComponent = new();
                 foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
                 {
                     Node endpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;

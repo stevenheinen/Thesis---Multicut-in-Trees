@@ -11,12 +11,12 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
     [TestClass]
     public class UnitTestCaterpillarGenerator
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestNullParameter()
         {
-            Random random = new Random(654);
+            Random random = new(654);
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => CaterpillarGenerator.CreateCaterpillar(-1, random));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => CaterpillarGenerator.CreateCaterpillar(3, random));
             Assert.ThrowsException<ArgumentNullException>(() => CaterpillarGenerator.CreateCaterpillar(105, null));
@@ -25,7 +25,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         [TestMethod]
         public void TestNodeTypes()
         {
-            Random random = new Random(13758613);
+            Random random = new(13758613);
             int numberOfNodes = 3841;
 
             Graph caterpillar = CaterpillarGenerator.CreateCaterpillar(numberOfNodes, random);

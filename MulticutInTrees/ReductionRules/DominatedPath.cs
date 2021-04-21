@@ -49,7 +49,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
         private bool TryApplyReductionRule(IEnumerable<DemandPair> demandPairsToCheck)
         {
-            HashSet<DemandPair> demandPairsToRemove = new HashSet<DemandPair>();
+            HashSet<DemandPair> demandPairsToRemove = new();
 
             foreach (DemandPair demandPair in demandPairsToCheck)
             {
@@ -85,8 +85,8 @@ namespace MulticutInTrees.ReductionRules
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            HashSet<DemandPair> demandPairsToCheck = new HashSet<DemandPair>();
-            HashSet<DemandPair> removedPairs = new HashSet<DemandPair>(LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
+            HashSet<DemandPair> demandPairsToCheck = new();
+            HashSet<DemandPair> removedPairs = new(LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
 
             foreach ((Edge<Node> _, Node _, CountedCollection<DemandPair> demandPairs) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {

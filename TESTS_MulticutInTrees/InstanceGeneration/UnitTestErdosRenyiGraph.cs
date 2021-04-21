@@ -11,12 +11,12 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
     [TestClass]
     public class UnitTestErdosRenyiGraph
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter counter = new();
 
         [TestMethod]
         public void TestWrongParameters()
         {
-            Random random = new Random(0);
+            Random random = new(0);
 
             Assert.ThrowsException<ArgumentNullException>(() => ErdosRenyiGraph.CreateErdosRenyiGraph(10, 0.5, null));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => ErdosRenyiGraph.CreateErdosRenyiGraph(-54, 0.5, random));
@@ -27,7 +27,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         [TestMethod]
         public void TestCase1()
         {
-            Random random = new Random(654685432);
+            Random random = new(654685432);
             int numberOfNodes = 1000;
             double chance = 0.5;
             Graph graph = ErdosRenyiGraph.CreateErdosRenyiGraph(numberOfNodes, chance, random);

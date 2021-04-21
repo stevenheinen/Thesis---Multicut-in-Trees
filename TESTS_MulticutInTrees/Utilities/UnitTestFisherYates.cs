@@ -16,9 +16,9 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void CheckReadOnly()
         {
-            Random random = new Random(6);
+            Random random = new(6);
 
-            List<int> list = new List<int>() { 7987, 4, 844, 54, 658, 1, 68, 135, 1745, 5324, 654, 15, 143, 514, 2414, 25, 24, 2512402, 125, 45, 441, 245, 41, 51, 5, 0, 7, 14705704 };
+            List<int> list = new() { 7987, 4, 844, 54, 658, 1, 68, 135, 1745, 5324, 654, 15, 143, 514, 2414, 25, 24, 2512402, 125, 45, 441, 245, 41, 51, 5, 0, 7, 14705704 };
 
             Assert.ThrowsException<NotSupportedException>(() =>
             {
@@ -53,10 +53,10 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestShuffle()
         {
-            Random random = new Random(697814);
+            Random random = new(697814);
 
-            List<int> originalList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-            List<int> list = new List<int>(originalList);
+            List<int> originalList = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+            List<int> list = new(originalList);
             list.Shuffle(random);
 
             foreach (int i in originalList)
@@ -90,17 +90,17 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestOtherElementTypes()
         {
-            Random random = new Random(6543);
+            Random random = new(6543);
 
-            RootedTreeNode t0 = new RootedTreeNode(0);
-            RootedTreeNode t1 = new RootedTreeNode(1);
-            RootedTreeNode t2 = new RootedTreeNode(2);
-            RootedTreeNode t3 = new RootedTreeNode(3);
-            RootedTreeNode t4 = new RootedTreeNode(4);
-            RootedTreeNode t5 = new RootedTreeNode(5);
-            RootedTreeNode t6 = new RootedTreeNode(6);
+            RootedTreeNode t0 = new(0);
+            RootedTreeNode t1 = new(1);
+            RootedTreeNode t2 = new(2);
+            RootedTreeNode t3 = new(3);
+            RootedTreeNode t4 = new(4);
+            RootedTreeNode t5 = new(5);
+            RootedTreeNode t6 = new(6);
 
-            List<RootedTreeNode> nodes = new List<RootedTreeNode>() { t0, t1, t2, t3, t4, t5, t6 };
+            List<RootedTreeNode> nodes = new() { t0, t1, t2, t3, t4, t5, t6 };
             nodes.Shuffle(random);
             Assert.IsNotNull(nodes);
         }
@@ -108,13 +108,13 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestOtherListTypes()
         {
-            Random random = new Random(0);
+            Random random = new(0);
 
             int[] array = new int[5] { 4, 9, 5, 3, 1 };
             array.Shuffle(random);
             Assert.IsNotNull(array);
 
-            Collection<int> collection = new Collection<int>() { 4, 9, 5, 3, 1 };
+            Collection<int> collection = new() { 4, 9, 5, 3, 1 };
             collection.Shuffle(random);
             Assert.IsNotNull(collection);
         }

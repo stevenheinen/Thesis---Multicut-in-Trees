@@ -45,21 +45,22 @@ namespace MulticutInTrees.Algorithms
         /// <inheritdoc cref="Algorithm.CreateReductionRules"/>
         protected override void CreateReductionRules()
         {
-            List<ReductionRule> reductionRules = new List<ReductionRule>();
+            List<ReductionRule> reductionRules = new();
 
-            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
+            UnitPath unitPath = new(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
 
-            DisjointPaths disjointPaths = new DisjointPaths(Tree, DemandPairs, this, PartialSolution, K);
+            DisjointPaths disjointPaths = new(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
 
-            UniqueDirection uniqueDirection = new UniqueDirection(Tree, DemandPairs, this, DemandPairsPerNode, DemandPairsPerEdge);
+            UniqueDirection uniqueDirection = new(Tree, DemandPairs, this, DemandPairsPerNode, DemandPairsPerEdge);
             reductionRules.Add(uniqueDirection);
 
-            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);
+            DominatedPath dominatedPath = new(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
 
-            // todo: common factor reduction rule
+            CommonFactor commonFactor = new(Tree, DemandPairs, this, PartialSolution, K);
+            reductionRules.Add(commonFactor);
 
             // todo: bidimensional dominating wingspan reduction rule
 

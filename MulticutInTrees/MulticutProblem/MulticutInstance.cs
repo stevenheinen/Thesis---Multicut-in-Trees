@@ -74,7 +74,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than zero.</exception>
         internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int randomSeed, Graph tree, CountedCollection<DemandPair> demandPairs, int k, int optimalK)
         {
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(tree, nameof(tree), "Trying to create a multicut instance, but the tree is null!");
             Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), "Trying to create a multicut instance, but the list of demand pairs is null!");
@@ -109,7 +109,7 @@ namespace MulticutInTrees.MulticutProblem
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(options, nameof(options), "Trying to create a multicut instance, but the commandline options are null!");
 #endif
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
 
             // Try to read the instance from the files
             (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(randomSeed, options);
@@ -143,7 +143,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="options">The <see cref="CommandLineOptions"/> given to the program.</param>
         /// <returns>A tuple with a <see cref="Graph"/>, a <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s and the optimal K parameter value.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
+        private static (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(options, nameof(options), "Trying to create a multicut instance, but the commandline options are null!");
@@ -153,13 +153,13 @@ namespace MulticutInTrees.MulticutProblem
                 Console.WriteLine("Instance not yet found in the instance files, creating it!");
             }
 
-            Random treeRandom = new Random(randomSeed);
-            Random demandPairRandom = new Random(randomSeed);
+            Random treeRandom = new(randomSeed);
+            Random demandPairRandom = new(randomSeed);
             Graph tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
             Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
             CountedCollection<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
 
-            GurobiMIPAlgorithm algorithm = new GurobiMIPAlgorithm(tree, demandPairs.GetLinkedList());
+            GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
             int optimalK = algorithm.Run(options.Verbose);
 
             InstanceReaderWriter.WriteInstance(randomSeed, options, tree, demandPairs.GetLinkedList(), optimalK);
@@ -182,7 +182,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <returns>A <see cref="Graph"/> that is generated according to <paramref name="inputTreeType"/>.</returns>
         /// <exception cref="ArgumentException">Thrown when <paramref name="inputTreeType"/> is its default value: <see cref="InputTreeType.None"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="inputTreeType"/> is not supported as tree generation type.</exception>
-        private Graph CreateInputTree(InputTreeType inputTreeType, Random random, int numberOfNodes, string filePath)
+        private static Graph CreateInputTree(InputTreeType inputTreeType, Random random, int numberOfNodes, string filePath)
         {
 #if !EXPERIMENT
             if (inputTreeType == InputTreeType.None)
@@ -213,7 +213,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s that were generated according to the method given by <paramref name="inputDemandPairsType"/>.</returns>
         /// <exception cref="ArgumentException">Thrown when <paramref name="inputDemandPairsType"/> is its default value: <see cref="InputDemandPairsType.None"/>.</exception>
         /// <exception cref="NotSupportedException">Thrown when <paramref name="inputDemandPairsType"/> is not supported as demand pair generation type.</exception>
-        private CountedCollection<DemandPair> CreateInputDemandPairs(Random random, Graph inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
+        private static CountedCollection<DemandPair> CreateInputDemandPairs(Random random, Graph inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
         {
 #if !EXPERIMENT
             if (inputDemandPairsType == InputDemandPairsType.None)
@@ -236,9 +236,9 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="commandLineArgument">The dictionary in string format from the command line.</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the requested length distribution for demand pairs.</returns>
         /// <exception cref="ArgumentException">Thrown when the dictionary in the command line is not in the correct format.</exception>
-        private Dictionary<(int, int), double> ParseLengthDistributionDictionary(string commandLineArgument)
+        private static Dictionary<(int, int), double> ParseLengthDistributionDictionary(string commandLineArgument)
         {
-            Dictionary<(int, int), double> result = new Dictionary<(int, int), double>();
+            Dictionary<(int, int), double> result = new();
 
             if (commandLineArgument is null)
             {

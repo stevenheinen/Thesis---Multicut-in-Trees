@@ -38,14 +38,14 @@ namespace MulticutInTrees.Utilities
                 throw new InvalidOperationException("Trying to find the shortest path to a set, but the startnode is already part of the set!");
             }
 #endif
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
             seen ??= new HashSet<TNode>();
-            Queue<TNode> queue = new Queue<TNode>();
+            Queue<TNode> queue = new();
             queue.Enqueue(startNode);
             seen.Add(startNode);
 
             // Keep track of which node pushed which node onto the stack to test for cycles.
-            Dictionary<TNode, TNode> pushingNode = new Dictionary<TNode, TNode>
+            Dictionary<TNode, TNode> pushingNode = new()
             {
                 [startNode] = startNode
             };
@@ -65,7 +65,7 @@ namespace MulticutInTrees.Utilities
 
                     if (targetSet.Contains(neighbour))
                     {
-                        List<TNode> path = new List<TNode>
+                        List<TNode> path = new()
                         {
                             neighbour
                         };

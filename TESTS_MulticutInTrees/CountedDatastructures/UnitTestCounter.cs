@@ -11,7 +11,7 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestConstructor()
         {
-            Counter counter = new Counter();
+            Counter counter = new();
             Assert.IsNotNull(counter);
             Assert.AreEqual(0, counter.Value);
         }
@@ -19,7 +19,7 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestIncrement()
         {
-            Counter counter = new Counter();
+            Counter counter = new();
             counter++;
             Assert.AreEqual(1, counter.Value);
             ++counter;
@@ -29,7 +29,7 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestDecrement()
         {
-            Counter counter = new Counter();
+            Counter counter = new();
             counter--;
             Assert.AreEqual(-1, counter.Value);
             --counter;
@@ -39,31 +39,37 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestAddition()
         {
-            Counter counter = new Counter();
+            Counter counter = new();
             counter += 683717687;
             counter += 34568;
             Assert.AreEqual(683752255, counter.Value);
+#pragma warning disable IDE0054 // Use compound assignment
             counter = counter + 127536;
+#pragma warning restore IDE0054 // Use compound assignment
             Assert.AreEqual(683879791, counter.Value);
         }
 
         [TestMethod]
         public void TestSubtraction()
         {
-            Counter counter = new Counter();
+            Counter counter = new();
             counter += 684651743681;
             counter -= 864684;
             counter -= 135236154;
             Assert.AreEqual(684515642843, counter.Value);
+#pragma warning disable IDE0054 // Use compound assignment
             counter = counter - 234786591;
+#pragma warning restore IDE0054 // Use compound assignment
             Assert.AreEqual(684280856252, counter.Value);
         }
 
         [TestMethod]
         public void TestToString()
         {
-            Counter counter = new Counter();
+            Counter counter = new();
+#pragma warning disable IDE0054 // Use compound assignment
             counter = counter + 2357811;
+#pragma warning restore IDE0054 // Use compound assignment
             Assert.AreEqual("2357811", counter.ToString());
         }
     }

@@ -13,8 +13,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestNullParameter()
         {
-            List<int> enumerable = new List<int>();
-            Counter counter = new Counter();
+            List<int> enumerable = new();
+            Counter counter = new();
             Assert.ThrowsException<ArgumentNullException>(() => new CountedEnumerable<int>(null, counter));
             Assert.ThrowsException<ArgumentNullException>(() => new CountedEnumerable<int>(enumerable, null));
         }
@@ -22,9 +22,9 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestGetEnumerator()
         {
-            List<int> enumerable = new List<int>();
-            Counter counter = new Counter();
-            CountedEnumerable<int> countedEnumerable = new CountedEnumerable<int>(enumerable, counter);
+            List<int> enumerable = new();
+            Counter counter = new();
+            CountedEnumerable<int> countedEnumerable = new(enumerable, counter);
             Assert.IsNotNull(countedEnumerable.GetEnumerator());
         }
     }

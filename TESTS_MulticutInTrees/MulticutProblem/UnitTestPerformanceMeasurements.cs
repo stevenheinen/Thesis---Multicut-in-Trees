@@ -18,7 +18,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestConstructor()
         {
-            PerformanceMeasurements pm = new PerformanceMeasurements("test");
+            PerformanceMeasurements pm = new("test");
             Assert.IsNotNull(pm);
         }
 
@@ -27,7 +27,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             string ownerName = "3718ty187tg1311241`2-0b5130t13";
             string expected = $"\n==============================================================\n==============================================================\n{ownerName} instance modifications\n==============================================================\nNumber of contracted edges:    0\nNumber of changed demandpairs: 0\nNumber of removed demandpairs: 0\n==============================================================\n{ownerName} operations\n==============================================================\nOperations on the input tree:              0\nOperations on demandpairs:                 0\nOperations on demandpairs per edge keys:   0\nOperations on demandpairs per edge values: 0\n==============================================================\n{ownerName} time\n==============================================================\nTime spent checking applicability (in ticks): 0\nTime spent modifying the instance (in ticks): 0\nTime spent checking applicability (TimeSpan): 00:00:00.0000000\nTime spent modifying the instance (TimeSpan): 00:00:00.0000000\n==============================================================\n\n";
-            PerformanceMeasurements pm = new PerformanceMeasurements(ownerName);
+            PerformanceMeasurements pm = new(ownerName);
             Assert.AreEqual(expected, pm.ToString());
         }
     }

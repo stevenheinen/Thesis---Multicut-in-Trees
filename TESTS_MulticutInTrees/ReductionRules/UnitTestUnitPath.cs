@@ -17,10 +17,10 @@ namespace TESTS_MulticutInTrees.ReductionRules
     [TestClass]
     public class UnitTestUnitPath
     {
-        private static readonly Counter MockCounter = new Counter();
-        private static readonly PerformanceMeasurements MockMeasurements = new PerformanceMeasurements(nameof(UnitTestUnitPath));
+        private static readonly Counter MockCounter = new();
+        private static readonly PerformanceMeasurements MockMeasurements = new(nameof(UnitTestUnitPath));
 
-        private UnitPath GetReductionRuleInAlgorithm(Algorithm algorithm)
+        private static UnitPath GetReductionRuleInAlgorithm(Algorithm algorithm)
         {
             MethodInfo runPropertySet = typeof(ReductionRule).GetProperty("HasRun", BindingFlags.Public | BindingFlags.Instance).GetSetMethod(true);
             foreach (ReductionRule rr in algorithm.ReductionRules)
@@ -39,12 +39,12 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestConstructor()
         {
-            Graph tree = new Graph();
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
-            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            Graph tree = new();
+            CountedCollection<DemandPair> demandPairs = new();
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
+            GuoNiedermeierKernelisation gnfpt = new(instance);
 
-            UnitPath unitPath = new UnitPath(tree, demandPairs, gnfpt);
+            UnitPath unitPath = new(tree, demandPairs, gnfpt);
 
             Assert.IsNotNull(unitPath);
         }
@@ -52,44 +52,44 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestNullParameter()
         {
-            Graph tree = new Graph();
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>();
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
-            GuoNiedermeierKernelisation gnfpt = new GuoNiedermeierKernelisation(instance);
+            Graph tree = new();
+            CountedCollection<DemandPair> demandPairs = new();
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
+            GuoNiedermeierKernelisation gnfpt = new(instance);
 
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(null, demandPairs, gnfpt); });
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, null, gnfpt); });
-            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new UnitPath(tree, demandPairs, null); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new(null, demandPairs, gnfpt); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new(tree, null, gnfpt); });
+            Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new(tree, demandPairs, null); });
         }
 
         [TestMethod]
         public void TestAfterEdgeContraction1()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node2 = new Node(2);
-            Node node1 = new Node(1);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node2 = new(2);
+            Node node1 = new(1);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
-            Edge<Node> edge34 = new Edge<Node>(node3, node4);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
+            Edge<Node> edge34 = new(node3, node4);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(1, node0, node4, tree);
-            DemandPair dp2 = new DemandPair(2, node1, node3, tree);
+            DemandPair dp1 = new(1, node0, node4, tree);
+            DemandPair dp2 = new(2, node1, node3, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 
@@ -101,31 +101,31 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterEdgeContraction2()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node2 = new Node(2);
-            Node node1 = new Node(1);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node2 = new(2);
+            Node node1 = new(1);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
-            Edge<Node> edge34 = new Edge<Node>(node3, node4);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
+            Edge<Node> edge34 = new(node3, node4);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(1, node0, node4, tree);
-            DemandPair dp2 = new DemandPair(2, node1, node3, tree);
+            DemandPair dp1 = new(1, node0, node4, tree);
+            DemandPair dp2 = new(2, node1, node3, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 
@@ -137,27 +137,27 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterDemandPathRemove()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node3 = new Node(3);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node3 = new(3);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node3, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge13 = new Edge<Node>(node1, node3);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge13 = new(node1, node3);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge13, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(1, node0, node5, tree);
-            DemandPair dp2 = new DemandPair(2, node1, node3, tree);
+            DemandPair dp1 = new(1, node0, node5, tree);
+            DemandPair dp2 = new(2, node1, node3, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 
@@ -169,31 +169,31 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterDemandPathChanged1()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
-            Edge<Node> edge34 = new Edge<Node>(node3, node4);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
+            Edge<Node> edge34 = new(node3, node4);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(1, node0, node4, tree);
-            DemandPair dp2 = new DemandPair(2, node1, node3, tree);
+            DemandPair dp1 = new(1, node0, node4, tree);
+            DemandPair dp2 = new(2, node1, node3, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 
@@ -205,31 +205,31 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestAfterDemandPathChanged2()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
-            Edge<Node> edge34 = new Edge<Node>(node3, node4);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
+            Edge<Node> edge34 = new(node3, node4);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(1, node0, node4, tree);
-            DemandPair dp2 = new DemandPair(2, node1, node3, tree);
+            DemandPair dp1 = new(1, node0, node4, tree);
+            DemandPair dp2 = new(2, node1, node3, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1, dp2 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 
@@ -241,30 +241,30 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestRunFirstIteration1()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
-            Edge<Node> edge34 = new Edge<Node>(node3, node4);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
+            Edge<Node> edge34 = new(node3, node4);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new DemandPair(0, node0, node4, tree);
+            DemandPair dp1 = new(0, node0, node4, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp1 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 
@@ -274,30 +274,30 @@ namespace TESTS_MulticutInTrees.ReductionRules
         [TestMethod]
         public void TestRunFirstIteration2()
         {
-            Graph tree = new Graph();
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Graph tree = new();
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge12 = new Edge<Node>(node1, node2);
-            Edge<Node> edge23 = new Edge<Node>(node2, node3);
-            Edge<Node> edge34 = new Edge<Node>(node3, node4);
-            Edge<Node> edge35 = new Edge<Node>(node3, node5);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge12 = new(node1, node2);
+            Edge<Node> edge23 = new(node2, node3);
+            Edge<Node> edge34 = new(node3, node4);
+            Edge<Node> edge35 = new(node3, node5);
             tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge34, edge35 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp2 = new DemandPair(0, node1, node2, tree);
+            DemandPair dp2 = new(0, node1, node2, tree);
 
-            CountedCollection<DemandPair> demandPairs = new CountedCollection<DemandPair>(new List<DemandPair>() { dp2 }, MockCounter);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp2 }, MockCounter);
 
-            MulticutInstance instance = new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
-            GuoNiedermeierKernelisation algorithm = new GuoNiedermeierKernelisation(instance);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
 

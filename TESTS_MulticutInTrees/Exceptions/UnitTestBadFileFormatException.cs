@@ -12,14 +12,14 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorNoArguments()
         {
-            BadFileFormatException addNeighbourToSelfException = new BadFileFormatException();
+            BadFileFormatException addNeighbourToSelfException = new();
             Assert.IsNotNull(addNeighbourToSelfException);
         }
 
         [TestMethod]
         public void TestConstructorMessage()
         {
-            BadFileFormatException addNeighbourToSelfException = new BadFileFormatException("Test message");
+            BadFileFormatException addNeighbourToSelfException = new("Test message");
             Assert.IsNotNull(addNeighbourToSelfException);
             Assert.AreEqual(addNeighbourToSelfException.Message, "Test message");
         }
@@ -27,8 +27,8 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorMessageInner()
         {
-            Exception inner = new Exception();
-            BadFileFormatException addNeighbourToSelfException = new BadFileFormatException("Test", inner);
+            Exception inner = new();
+            BadFileFormatException addNeighbourToSelfException = new("Test", inner);
             Assert.IsNotNull(addNeighbourToSelfException);
             Assert.AreEqual(addNeighbourToSelfException.Message, "Test");
             Assert.AreEqual(addNeighbourToSelfException.InnerException, inner);

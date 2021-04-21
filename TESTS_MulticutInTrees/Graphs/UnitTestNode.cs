@@ -12,7 +12,7 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestNode
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestConstructorNoNeighbours()
@@ -25,14 +25,14 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestID()
         {
-            Node node = new Node(496);
+            Node node = new(496);
             Assert.AreEqual(node.ID, (uint)496);
         }
 
         [TestMethod]
         public void TestNeighbours()
         {
-            Node node = new Node(0);
+            Node node = new(0);
             Assert.IsNotNull(node.Neighbours(MockCounter));
         }
 
@@ -41,7 +41,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<AddNeighbourToSelfException>(() =>
             {
-                Node node0 = new Node(0);
+                Node node0 = new(0);
                 node0.AddNeighbour(node0, MockCounter);
             });
         }
@@ -49,8 +49,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddChildAddOtherNode()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
+            Node node0 = new(0);
+            Node node1 = new(1);
 
             Assert.IsFalse(node0.HasNeighbour(node1, MockCounter));
             node0.AddNeighbour(node1, MockCounter);
@@ -62,7 +62,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                Node node0 = new Node(0);
+                Node node0 = new(0);
                 node0.AddNeighbour(null, MockCounter);
             });
         }
@@ -70,9 +70,9 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddChildren()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
 
             node0.AddNeighbours(new List<Node>() { node1, node2 }, MockCounter);
             Assert.IsTrue(node0.HasNeighbour(node1, MockCounter));
@@ -84,7 +84,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                Node node0 = new Node(0);
+                Node node0 = new(0);
                 node0.AddNeighbours(null, MockCounter);
             });
         }
@@ -92,9 +92,9 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveAllChildren()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
 
             node0.AddNeighbours(new List<Node>() { node1, node2 }, MockCounter);
             node0.RemoveAllNeighbours(MockCounter);
@@ -106,8 +106,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveChild()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
+            Node node0 = new(0);
+            Node node1 = new(1);
 
             node0.AddNeighbour(node1, MockCounter);
             node0.RemoveNeighbour(node1, MockCounter);
@@ -120,8 +120,8 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<NotANeighbourException>(() =>
             {
-                Node node0 = new Node(0);
-                Node node1 = new Node(1);
+                Node node0 = new(0);
+                Node node1 = new(1);
                 node0.RemoveNeighbour(node1, MockCounter);
             });
         }
@@ -131,7 +131,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                Node node0 = new Node(0);
+                Node node0 = new(0);
                 node0.RemoveNeighbour(null, MockCounter);
             });
         }
@@ -139,10 +139,10 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveChildren()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             node0.AddNeighbours(new List<Node>() { node1, node3, node2 }, MockCounter);
             node0.RemoveNeighbours(new List<Node>() { node2, node1 }, MockCounter);
@@ -156,9 +156,9 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                Node node0 = new Node(0);
-                Node node1 = new Node(1);
-                Node node2 = new Node(2);
+                Node node0 = new(0);
+                Node node1 = new(1);
+                Node node2 = new(2);
                 node0.AddNeighbours(new List<Node>() { node1, node2 }, MockCounter);
                 node0.RemoveNeighbours(null, MockCounter);
             });
@@ -167,16 +167,16 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestToString()
         {
-            Node node = new Node(24362);
+            Node node = new(24362);
             Assert.AreEqual("Node 24362", node.ToString());
         }
 
         [TestMethod]
         public void TestHasNeighbour()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
             node2.AddNeighbour(node1, MockCounter);
             node1.AddNeighbour(node0, MockCounter);
             Assert.IsTrue(node2.HasNeighbour(node1, MockCounter));
@@ -192,7 +192,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                Node node = new Node(0);
+                Node node = new(0);
                 node.HasNeighbour(null, MockCounter);
             });
         }
@@ -200,8 +200,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestNeighbourList()
         {
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
+            Node node0 = new(0);
+            Node node1 = new(1);
 
             Assert.IsNotNull(node0.Neighbours(MockCounter));
             node0.AddNeighbour(node1, MockCounter);
@@ -212,7 +212,7 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestDegree()
         {
-            List<Node> nodes = new List<Node>()
+            List<Node> nodes = new()
             {
                 new Node(0),
                 new Node(1),
@@ -256,8 +256,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestNullArgument()
         {
-            Node n = new Node(0);
-            List<Node> list = new List<Node>();
+            Node n = new(0);
+            List<Node> list = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbour(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => n.AddNeighbour(n, null));

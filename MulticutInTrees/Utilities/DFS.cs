@@ -67,17 +67,17 @@ namespace MulticutInTrees.Utilities
         /// <returns>A <see cref="List{T}"/> with all <typeparamref name="TNode"/>s that are connected to <paramref name="startNode"/>.</returns>
         private static List<TNode> FindConnectedComponent<TNode>(TNode startNode, TNode findNode, Counter graphCounter, HashSet<TNode> seen = null, bool acyclicCheck = false, bool findPath = false) where TNode : AbstractNode<TNode>
         {
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
 
-            List<TNode> result = new List<TNode>();
+            List<TNode> result = new();
             seen ??= new HashSet<TNode>();
-            Stack<TNode> stack = new Stack<TNode>();
+            Stack<TNode> stack = new();
             stack.Push(startNode);
             seen.Add(startNode);
             result.Add(startNode);
 
             // Keep track of which node pushed which node onto the stack to test for cycles.
-            Dictionary<TNode, TNode> pushingNode = new Dictionary<TNode, TNode>();
+            Dictionary<TNode, TNode> pushingNode = new();
             if (acyclicCheck || findPath)
             {
                 pushingNode[startNode] = startNode;
@@ -97,7 +97,7 @@ namespace MulticutInTrees.Utilities
                         {
                             if (findPath)
                             {
-                                List<TNode> path = new List<TNode>
+                                List<TNode> path = new()
                                 {
                                     findNode
                                 };
@@ -147,15 +147,15 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(nodes, nameof(nodes), "Trying to determine caterpillar components in a set of nodes, but the IEnumerable with nodes is null!");
             Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to determine caterpillar components in a set of nodes, but the counter is null!");
 #endif
-            Dictionary<TNode, int> result = new Dictionary<TNode, int>();
+            Dictionary<TNode, int> result = new();
 
             if (!nodes.Any())
             {
                 return result;
             }
 
-            HashSet<TNode> seen = new HashSet<TNode>();
-            Stack<TNode> stack = new Stack<TNode>();
+            HashSet<TNode> seen = new();
+            Stack<TNode> stack = new();
             int caterpillarNumber = 0;
             TNode first = nodes.First();
             stack.Push(first);
@@ -217,7 +217,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(allNodes, nameof(allNodes), "Trying to find all connected components of an IEnumerable with nodes, but the IEnumberable is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all connected components of an IEnumerable with nodes, but the counter is null!");
 #endif
-            List<List<TNode>> result = new List<List<TNode>>();
+            List<List<TNode>> result = new();
             seen ??= new HashSet<TNode>();
             foreach (TNode node in allNodes)
             {
@@ -296,13 +296,13 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(matching, nameof(matching), "Trying to find all free nodes, but the list with the current matching is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find all free nodes, but the counter is null!");
 #endif
-            Counter mockCounter = new Counter();
+            Counter mockCounter = new();
 
-            HashSet<TNode> seen = new HashSet<TNode>();
-            List<TNode> result = new List<TNode>();
+            HashSet<TNode> seen = new();
+            List<TNode> result = new();
 
             // Bool in the stack means: NextShouldBeInMatching
-            Stack<(TNode, bool, int)> stack = new Stack<(TNode, bool, int)>();
+            Stack<(TNode, bool, int)> stack = new();
             foreach (TNode node in unmatchedNodes)
             {
                 stack.Push((node, false, 1));

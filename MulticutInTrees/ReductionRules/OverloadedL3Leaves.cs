@@ -75,8 +75,8 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            List<(DemandPair, Node, Node)> dpsToBeChanged = new List<(DemandPair, Node, Node)>();
-            List<DemandPair> dpsToBeRemoved = new List<DemandPair>();
+            List<(DemandPair, Node, Node)> dpsToBeChanged = new();
+            List<DemandPair> dpsToBeRemoved = new();
 
             foreach ((Node parent, CountedList<DemandPair> affectedDemandPairs, Node otherNode) in overloadedLeaves.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
@@ -101,7 +101,7 @@ namespace MulticutInTrees.ReductionRules
         private CountedList<(Node, CountedList<DemandPair>, Node)> FindOverloadedL3Leaves()
         {
             int k = MaxSolutionSize - PartialSolution.Count;
-            CountedList<(Node, CountedList<DemandPair>, Node)> result = new CountedList<(Node, CountedList<DemandPair>, Node)>();
+            CountedList<(Node, CountedList<DemandPair>, Node)> result = new();
             foreach (Node node in Tree.Nodes(Measurements.TreeOperationsCounter))
             {
                 DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> demandPairsAtNode, Measurements.DemandPairsPerEdgeKeysCounter);
@@ -109,7 +109,7 @@ namespace MulticutInTrees.ReductionRules
                 {
                     continue;
                 }
-                CountedDictionary<Node, CountedList<DemandPair>> i3NodeToDemandPairsInChildren = new CountedDictionary<Node, CountedList<DemandPair>>();
+                CountedDictionary<Node, CountedList<DemandPair>> i3NodeToDemandPairsInChildren = new();
                 foreach (DemandPair demandPair in demandPairsAtNode.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
                     Node otherEndpoint = demandPair.Node1 == node ? demandPair.Node2 : demandPair.Node1;

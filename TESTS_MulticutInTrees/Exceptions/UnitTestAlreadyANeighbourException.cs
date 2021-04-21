@@ -12,14 +12,14 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorNoArguments()
         {
-            AlreadyANeighbourException addNeighbourToSelfException = new AlreadyANeighbourException();
+            AlreadyANeighbourException addNeighbourToSelfException = new();
             Assert.IsNotNull(addNeighbourToSelfException);
         }
 
         [TestMethod]
         public void TestConstructorMessage()
         {
-            AlreadyANeighbourException addNeighbourToSelfException = new AlreadyANeighbourException("Test message");
+            AlreadyANeighbourException addNeighbourToSelfException = new("Test message");
             Assert.IsNotNull(addNeighbourToSelfException);
             Assert.AreEqual(addNeighbourToSelfException.Message, "Test message");
         }
@@ -27,8 +27,8 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorMessageInner()
         {
-            Exception inner = new Exception();
-            AlreadyANeighbourException addNeighbourToSelfException = new AlreadyANeighbourException("Test", inner);
+            Exception inner = new();
+            AlreadyANeighbourException addNeighbourToSelfException = new("Test", inner);
             Assert.IsNotNull(addNeighbourToSelfException);
             Assert.AreEqual(addNeighbourToSelfException.Message, "Test");
             Assert.AreEqual(addNeighbourToSelfException.InnerException, inner);

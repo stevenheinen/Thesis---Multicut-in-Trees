@@ -10,14 +10,14 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestEdge
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestConstructor()
         {
-            Node n1 = new Node(1);
-            Node n2 = new Node(2);
-            Edge<Node> edge = new Edge<Node>(n1, n2);
+            Node n1 = new(1);
+            Node n2 = new(2);
+            Edge<Node> edge = new(n1, n2);
 
             Assert.IsNotNull(edge);
 
@@ -27,10 +27,10 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestNullParameter()
         {
-            Node n1 = new Node(1);
-            Node n2 = new Node(2);
-            Node n3 = new Node(3);
-            Edge<Node> edge = new Edge<Node>(n1, n2);
+            Node n1 = new(1);
+            Node n2 = new(2);
+            Node n3 = new(3);
+            Edge<Node> edge = new(n1, n2);
 
             Assert.ThrowsException<ArgumentNullException>(() => new Edge<Node>(null, n2));
             Assert.ThrowsException<ArgumentNullException>(() => new Edge<Node>(n1, null));
@@ -43,10 +43,10 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestHasEndpoint()
         {
-            Node n1 = new Node(1);
-            Node n2 = new Node(2);
-            Node n3 = new Node(3);
-            Edge<Node> edge = new Edge<Node>(n1, n2);
+            Node n1 = new(1);
+            Node n2 = new(2);
+            Node n3 = new(3);
+            Edge<Node> edge = new(n1, n2);
 
             Assert.IsTrue(edge.HasEndpoint(n1));
             Assert.IsTrue(edge.HasEndpoint(n2));
@@ -56,10 +56,10 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestChangeEndpoint1()
         {
-            Node n1 = new Node(1);
-            Node n2 = new Node(2);
-            Node n3 = new Node(3);
-            Edge<Node> edge = new Edge<Node>(n1, n2);
+            Node n1 = new(1);
+            Node n2 = new(2);
+            Node n3 = new(3);
+            Edge<Node> edge = new(n1, n2);
             n1.AddNeighbour(n2, MockCounter);
 
             edge.ChangeEndpoint(n1, n3, MockCounter);

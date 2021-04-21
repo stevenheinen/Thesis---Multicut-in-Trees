@@ -58,7 +58,7 @@ namespace MulticutInTrees.InstanceGeneration
                 vertices[prufer[i]]++;
             }
 
-            List<(int, int)> edges = new List<(int, int)>();
+            List<(int, int)> edges = new();
             for (int i = 0; i < numberOfNodes - 2; i++)
             {
                 for (int k = 0; k < numberOfNodes; k++)

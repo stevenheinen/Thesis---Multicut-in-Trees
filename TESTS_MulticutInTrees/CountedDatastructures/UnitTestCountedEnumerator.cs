@@ -13,9 +13,9 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestNullParameter()
         {
-            List<int> list = new List<int>();
+            List<int> list = new();
             IEnumerator<int> enumerator = list.GetEnumerator();
-            Counter counter = new Counter();
+            Counter counter = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => new CountedEnumerator<int>(null, counter));
             Assert.ThrowsException<ArgumentNullException>(() => new CountedEnumerator<int>(enumerator, null));

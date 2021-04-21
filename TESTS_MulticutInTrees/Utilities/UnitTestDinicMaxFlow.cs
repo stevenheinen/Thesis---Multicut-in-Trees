@@ -13,15 +13,15 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestDinicMaxFlow
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestArgumentNull()
         {
-            Graph g = new Graph();
-            Node n = new Node(0);
-            Dictionary<(uint, uint), int> c = new Dictionary<(uint, uint), int>();
-            Dictionary<uint, int> l = new Dictionary<uint, int>();
+            Graph g = new();
+            Node n = new(0);
+            Dictionary<(uint, uint), int> c = new();
+            Dictionary<uint, int> l = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => DinicMaxFlow.MaxFlowMultipleSourcesSinksUnitCapacities<Graph, Edge<Node>, Node>(g, new List<Node>() { n }, null));
             Assert.ThrowsException<ArgumentNullException>(() => DinicMaxFlow.MaxFlowMultipleSourcesSinksUnitCapacities<Graph, Edge<Node>, Node>(g, null, new List<Node>() { n }));
@@ -112,14 +112,14 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFlowSingleSourceSingleSinkCapacities()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
             graph.AddEdge(new Edge<Node>(node0, node1, true), MockCounter);
@@ -131,7 +131,7 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(new Edge<Node>(node4, node5, true), MockCounter);
             graph.AddEdge(new Edge<Node>(node3, node5, true), MockCounter);
 
-            Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>()
+            Dictionary<(uint, uint), int> capacities = new()
             {
                 { (0, 1), 11 },
                 { (0, 2), 12 },
@@ -158,19 +158,19 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFlowSingleSourceSingleSinkUnitCapacities()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
-            Node node9 = new Node(9);
-            Node node10 = new Node(10);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
+            Node node6 = new(6);
+            Node node7 = new(7);
+            Node node8 = new(8);
+            Node node9 = new(9);
+            Node node10 = new(10);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
@@ -197,19 +197,19 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFlowSingleSourceSingleSinkUnitCapacities2()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
-            Node node9 = new Node(9);
-            Node node10 = new Node(10);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
+            Node node6 = new(6);
+            Node node7 = new(7);
+            Node node8 = new(8);
+            Node node9 = new(9);
+            Node node10 = new(10);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
 
@@ -234,12 +234,12 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFlowMultipleSourceMultipleSinkUnitCapacities()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
             graph.AddEdge(new Edge<Node>(node0, node2), MockCounter);
@@ -247,8 +247,8 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(new Edge<Node>(node0, node1), MockCounter);
             graph.AddEdge(new Edge<Node>(node1, node2), MockCounter);
 
-            List<Node> sources = new List<Node>() { node0, node1 };
-            List<Node> sinks = new List<Node>() { node2, node3 };
+            List<Node> sources = new() { node0, node1 };
+            List<Node> sinks = new() { node2, node3 };
 
             int flow = DinicMaxFlow.MaxFlowMultipleSourcesSinksUnitCapacities<Graph, Edge<Node>, Node>(graph, sources, sinks);
             Assert.AreEqual(2, flow);
@@ -257,13 +257,13 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestFlowMultipleSourceMultipleSink()
         {
-            Random random = new Random(34698);
-            Graph graph = new Graph();
+            Random random = new(34698);
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
             graph.AddEdge(new Edge<Node>(node0, node2), MockCounter);
@@ -271,7 +271,7 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(new Edge<Node>(node1, node2), MockCounter);
             graph.AddEdge(new Edge<Node>(node1, node3), MockCounter);
 
-            Dictionary<(uint, uint), int> capacities = new Dictionary<(uint, uint), int>()
+            Dictionary<(uint, uint), int> capacities = new()
             {
                 { (0, 2), 1 },
                 { (2, 0), 1 },
@@ -283,9 +283,9 @@ namespace TESTS_MulticutInTrees.Utilities
                 { (3, 1), 4 }
             };
 
-            List<Node> sources = new List<Node>() { node0, node0, node0, node0, node1, node1, node1 };
+            List<Node> sources = new() { node0, node0, node0, node0, node1, node1, node1 };
             sources.Shuffle(random);
-            List<Node> sinks = new List<Node>() { node2, node2, node2, node2, node2, node3 };
+            List<Node> sinks = new() { node2, node2, node2, node2, node2, node3 };
             sinks.Shuffle(random);
 
             int flow = DinicMaxFlow.MaxFlowMultipleSourcesSinks<Graph, Edge<Node>, Node>(graph, sources, sinks, capacities);
@@ -295,13 +295,13 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestNotEnoughCapacities()
         {
-            Random random = new Random(6541);
-            Graph graph = new Graph();
+            Random random = new(6541);
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
             graph.AddEdge(new Edge<Node>(node0, node2), MockCounter);
@@ -309,12 +309,12 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(new Edge<Node>(node1, node2), MockCounter);
             graph.AddEdge(new Edge<Node>(node1, node3), MockCounter);
 
-            List<Node> sources = new List<Node>() { node0, node0, node0, node0, node1, node1, node1 };
+            List<Node> sources = new() { node0, node0, node0, node0, node1, node1, node1 };
             sources.Shuffle(random);
-            List<Node> sinks = new List<Node>() { node2, node2, node2, node2, node2, node3 };
+            List<Node> sinks = new() { node2, node2, node2, node2, node2, node3 };
             sinks.Shuffle(random);
 
-            Dictionary<(uint, uint), int> capacities1 = new Dictionary<(uint, uint), int>()
+            Dictionary<(uint, uint), int> capacities1 = new()
             {
                 { (0, 2), 1 },
                 { (2, 0), 1 },
@@ -326,7 +326,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 { (3, 1), 4 }
             };
 
-            Dictionary<(uint, uint), int> capacities2 = new Dictionary<(uint, uint), int>()
+            Dictionary<(uint, uint), int> capacities2 = new()
             {
                 { (0, 2), 1 },
                 { (0, 3), 5 },
@@ -337,7 +337,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 { (3, 1), 4 }
             };
 
-            Dictionary<(uint, uint), int> capacities3 = new Dictionary<(uint, uint), int>()
+            Dictionary<(uint, uint), int> capacities3 = new()
             {
                 { (0, 2), 1 },
                 { (2, 0), 1 },
@@ -347,7 +347,7 @@ namespace TESTS_MulticutInTrees.Utilities
                 { (3, 1), 4 }
             };
 
-            Dictionary<(uint, uint), int> capacities4 = new Dictionary<(uint, uint), int>()
+            Dictionary<(uint, uint), int> capacities4 = new()
             {
                 { (0, 2), 1 },
                 { (2, 0), 1 },
@@ -394,12 +394,12 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestSameSourceSink()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
             graph.AddEdge(new Edge<Node>(node0, node2), MockCounter);
@@ -414,12 +414,12 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestMultipleSourceSinkButActuallyOne()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
 
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3 }, MockCounter);
             graph.AddEdge(new Edge<Node>(node0, node2), MockCounter);
@@ -427,8 +427,8 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.AddEdge(new Edge<Node>(node1, node2), MockCounter);
             graph.AddEdge(new Edge<Node>(node1, node3), MockCounter);
 
-            List<Node> sources = new List<Node>() { node0 };
-            List<Node> sinks = new List<Node>() { node2 };
+            List<Node> sources = new() { node0 };
+            List<Node> sinks = new() { node2 };
 
             int flow = DinicMaxFlow.MaxFlowMultipleSourcesSinksUnitCapacities<Graph, Edge<Node>, Node>(graph, sources, sinks);
             Assert.AreEqual(2, flow);

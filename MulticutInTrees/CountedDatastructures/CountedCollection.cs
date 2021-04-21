@@ -152,7 +152,7 @@ namespace MulticutInTrees.CountedDatastructures
             }
 #endif
             counter++;
-            LinkedListNode<T> node = new LinkedListNode<T>(item);
+            LinkedListNode<T> node = new(item);
             Dictionary[item] = node;
             LinkedList.AddLast(node);
         }
@@ -240,7 +240,7 @@ namespace MulticutInTrees.CountedDatastructures
             Utilities.Utils.NullCheck(predicate, nameof(predicate), "Trying to remove elements from the start of a CountedCollection, but the predicate is null!");
             Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from the start of a CountedCollection, but the Counter is null!");
 #endif
-            List<T> result = new List<T>();
+            List<T> result = new();
             while (predicate(LinkedList.First.Value))
             {
                 counter++;
@@ -267,7 +267,7 @@ namespace MulticutInTrees.CountedDatastructures
                 throw new ArgumentOutOfRangeException(nameof(count), "Trying to remove elements from the start of a CountedCollection, but the amount of elements to remove is negative!");
             }
 #endif
-            List<T> result = new List<T>();
+            List<T> result = new();
             for (int i = 0; i < count; i++)
             {
                 counter++;
@@ -290,7 +290,7 @@ namespace MulticutInTrees.CountedDatastructures
             Utilities.Utils.NullCheck(predicate, nameof(predicate), "Trying to remove elements from the end of a CountedCollection, but the predicate is null!");
             Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to remove elements from end start of a CountedCollection, but the Counter is null!");
 #endif
-            List<T> result = new List<T>();
+            List<T> result = new();
             while (predicate(LinkedList.Last.Value))
             {
                 counter++;
@@ -317,7 +317,7 @@ namespace MulticutInTrees.CountedDatastructures
                 throw new ArgumentOutOfRangeException(nameof(count), "Trying to remove elements from the end of a CountedCollection, but the amount of elements to remove is negative!");
             }
 #endif
-            List<T> result = new List<T>();
+            List<T> result = new();
             for (int i = 0; i < count; i++)
             {
                 counter++;

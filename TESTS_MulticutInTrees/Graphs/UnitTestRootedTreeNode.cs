@@ -12,35 +12,35 @@ namespace TESTS_MulticutInTrees.Graphs
     [TestClass]
     public class UnitTestTreeNode
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestConstructorID()
         {
-            RootedTreeNode node = new RootedTreeNode(0);
+            RootedTreeNode node = new(0);
             Assert.IsNotNull(node);
         }
 
         [TestMethod]
         public void TestID()
         {
-            RootedTreeNode node = new RootedTreeNode(3248);
+            RootedTreeNode node = new(3248);
             Assert.AreEqual(node.ID, (uint)3248);
         }
 
         [TestMethod]
         public void TestChildren()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
+            RootedTreeNode node0 = new(0);
             Assert.IsNotNull(node0.Children(MockCounter));
         }
 
         [TestMethod]
         public void TestParent()
         {
-            RootedTreeNode parent = new RootedTreeNode(0);
-            RootedTreeNode child = new RootedTreeNode(1);
-            RootedTreeNode node = new RootedTreeNode(2);
+            RootedTreeNode parent = new(0);
+            RootedTreeNode child = new(1);
+            RootedTreeNode node = new(2);
             parent.AddNeighbour(node, MockCounter);
             node.AddNeighbour(child, MockCounter);
             Assert.AreEqual(child.GetParent(MockCounter), node);
@@ -50,8 +50,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestIsRoot()
         {
-            RootedTreeNode root = new RootedTreeNode(0);
-            RootedTreeNode notRoot = new RootedTreeNode(1);
+            RootedTreeNode root = new(0);
+            RootedTreeNode notRoot = new(1);
             root.AddNeighbour(notRoot, MockCounter);
             Assert.IsTrue(root.IsRoot(MockCounter));
             Assert.IsFalse(notRoot.IsRoot(MockCounter));
@@ -60,13 +60,13 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestHasChild()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
             node0.AddNeighbour(node1, MockCounter);
             Assert.IsTrue(node0.HasChild(node1, MockCounter));
             Assert.IsFalse(node1.HasChild(node0, MockCounter));
 
-            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node2 = new(2);
             node2.AddNeighbour(node0, MockCounter);
             Assert.IsTrue(node2.HasChild(node0, MockCounter));
             Assert.IsFalse(node0.HasChild(node2, MockCounter));
@@ -80,7 +80,7 @@ namespace TESTS_MulticutInTrees.Graphs
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                RootedTreeNode node = new RootedTreeNode(0);
+                RootedTreeNode node = new(0);
                 node.HasChild(null, MockCounter);
             });
         }
@@ -88,16 +88,16 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestToString()
         {
-            RootedTreeNode node = new RootedTreeNode(5664);
+            RootedTreeNode node = new(5664);
             Assert.AreEqual($"{node}", "RootedTreeNode 5664");
         }
 
         [TestMethod]
         public void TestAddChild()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
 
             node0.AddNeighbour(node1, MockCounter);
             node0.AddNeighbour(node2, MockCounter);
@@ -129,8 +129,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddChildren()
         {
-            RootedTreeNode parent = new RootedTreeNode(0);
-            List<RootedTreeNode> children = new List<RootedTreeNode>()
+            RootedTreeNode parent = new(0);
+            List<RootedTreeNode> children = new()
             {
                 new RootedTreeNode(1),
                 new RootedTreeNode(2),
@@ -154,10 +154,10 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveChild()
         {
-            RootedTreeNode parent = new RootedTreeNode(0);
-            RootedTreeNode child = new RootedTreeNode(1);
+            RootedTreeNode parent = new(0);
+            RootedTreeNode child = new(1);
             parent.AddNeighbour(child, MockCounter);
-            RootedTreeNode nonChild = new RootedTreeNode(2);
+            RootedTreeNode nonChild = new(2);
 
             parent.RemoveNeighbour(child, MockCounter);
 
@@ -187,15 +187,15 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveChildren()
         {
-            List<RootedTreeNode> children = new List<RootedTreeNode>()
+            List<RootedTreeNode> children = new()
             {
                 new RootedTreeNode(1),
                 new RootedTreeNode(2),
                 new RootedTreeNode(3),
                 new RootedTreeNode(4),
             };
-            RootedTreeNode parent = new RootedTreeNode(0);
-            RootedTreeNode child = new RootedTreeNode(5);
+            RootedTreeNode parent = new(0);
+            RootedTreeNode child = new(5);
             parent.AddNeighbours(children, MockCounter);
             parent.AddNeighbour(child, MockCounter);
 
@@ -219,12 +219,12 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveAllChildren()
         {
-            List<RootedTreeNode> children = new List<RootedTreeNode>()
+            List<RootedTreeNode> children = new()
             {
                 new RootedTreeNode(1),
                 new RootedTreeNode(2),
             };
-            RootedTreeNode parent = new RootedTreeNode(0);
+            RootedTreeNode parent = new(0);
             parent.AddNeighbours(children, MockCounter);
 
             parent.RemoveAllNeighbours(MockCounter);
@@ -239,12 +239,12 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestDegree()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
-            RootedTreeNode node3 = new RootedTreeNode(3);
-            RootedTreeNode node4 = new RootedTreeNode(4);
-            RootedTreeNode node5 = new RootedTreeNode(5);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
+            RootedTreeNode node3 = new(3);
+            RootedTreeNode node4 = new(4);
+            RootedTreeNode node5 = new(5);
 
             Assert.AreEqual(node0.Degree(MockCounter), 0);
 
@@ -267,13 +267,13 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestDepthFromRoot()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
-            RootedTreeNode node3 = new RootedTreeNode(3);
-            RootedTreeNode node4 = new RootedTreeNode(4);
-            RootedTreeNode node5 = new RootedTreeNode(5);
-            RootedTreeNode node6 = new RootedTreeNode(6);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
+            RootedTreeNode node3 = new(3);
+            RootedTreeNode node4 = new(4);
+            RootedTreeNode node5 = new(5);
+            RootedTreeNode node6 = new(6);
 
             node0.AddNeighbours(new List<RootedTreeNode>() { node1, node2, node3 }, MockCounter);
             node2.AddNeighbour(node4, MockCounter);
@@ -293,14 +293,14 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestDepthOfSubtree()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
-            RootedTreeNode node3 = new RootedTreeNode(3);
-            RootedTreeNode node4 = new RootedTreeNode(4);
-            RootedTreeNode node5 = new RootedTreeNode(5);
-            RootedTreeNode node6 = new RootedTreeNode(6);
-            RootedTreeNode node7 = new RootedTreeNode(7);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
+            RootedTreeNode node3 = new(3);
+            RootedTreeNode node4 = new(4);
+            RootedTreeNode node5 = new(5);
+            RootedTreeNode node6 = new(6);
+            RootedTreeNode node7 = new(7);
 
             node0.AddNeighbours(new List<RootedTreeNode>() { node1, node2 }, MockCounter);
             node1.AddNeighbour(node3, MockCounter);
@@ -323,9 +323,9 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddNeighbour()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
-            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
+            RootedTreeNode node2 = new(2);
 
             node0.AddNeighbour(node1, MockCounter);
             node0.AddNeighbour(node2, MockCounter);
@@ -357,8 +357,8 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestAddNeighbours()
         {
-            RootedTreeNode parent = new RootedTreeNode(0);
-            List<RootedTreeNode> children = new List<RootedTreeNode>()
+            RootedTreeNode parent = new(0);
+            List<RootedTreeNode> children = new()
             {
                 new RootedTreeNode(1),
                 new RootedTreeNode(2),
@@ -382,13 +382,13 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveAllNeighbours()
         {
-            RootedTreeNode uberParent = new RootedTreeNode(3);
-            List<RootedTreeNode> children = new List<RootedTreeNode>()
+            RootedTreeNode uberParent = new(3);
+            List<RootedTreeNode> children = new()
             {
                 new RootedTreeNode(1),
                 new RootedTreeNode(2),
             };
-            RootedTreeNode parent = new RootedTreeNode(0);
+            RootedTreeNode parent = new(0);
             parent.AddNeighbours(children, MockCounter);
             uberParent.AddNeighbour(parent, MockCounter);
 
@@ -406,11 +406,11 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveNeighbour()
         {
-            RootedTreeNode parent = new RootedTreeNode(0);
-            RootedTreeNode child = new RootedTreeNode(1);
+            RootedTreeNode parent = new(0);
+            RootedTreeNode child = new(1);
             parent.AddNeighbour(child, MockCounter);
-            RootedTreeNode nonChild = new RootedTreeNode(2);
-            RootedTreeNode uberParent = new RootedTreeNode(3);
+            RootedTreeNode nonChild = new(2);
+            RootedTreeNode uberParent = new(3);
             uberParent.AddNeighbour(parent, MockCounter);
             Assert.IsTrue(parent.GetParent(MockCounter) == uberParent);
 
@@ -445,18 +445,18 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestRemoveNeighbours()
         {
-            List<RootedTreeNode> children = new List<RootedTreeNode>()
+            List<RootedTreeNode> children = new()
             {
                 new RootedTreeNode(1),
                 new RootedTreeNode(2),
                 new RootedTreeNode(3),
                 new RootedTreeNode(4),
             };
-            RootedTreeNode parent = new RootedTreeNode(0);
+            RootedTreeNode parent = new(0);
             parent.AddNeighbours(children, MockCounter);
-            RootedTreeNode child = new RootedTreeNode(5);
+            RootedTreeNode child = new(5);
             parent.AddNeighbour(child, MockCounter);
-            RootedTreeNode uberParent = new RootedTreeNode(6);
+            RootedTreeNode uberParent = new(6);
             uberParent.AddNeighbour((RootedTreeNode)parent, MockCounter);
 
             Assert.ThrowsException<ArgumentNullException>(() =>
@@ -482,10 +482,10 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestHasNeighbour()
         {
-            RootedTreeNode node0 = new RootedTreeNode(0);
-            RootedTreeNode node1 = new RootedTreeNode(1);
+            RootedTreeNode node0 = new(0);
+            RootedTreeNode node1 = new(1);
             node0.AddNeighbour((RootedTreeNode)node1, MockCounter);
-            RootedTreeNode node2 = new RootedTreeNode(2);
+            RootedTreeNode node2 = new(2);
             node1.AddNeighbour(node2, MockCounter);
             Assert.IsTrue(node1.HasNeighbour(node2, MockCounter));
             Assert.IsTrue(node1.HasNeighbour(node0, MockCounter));
@@ -503,9 +503,9 @@ namespace TESTS_MulticutInTrees.Graphs
         [TestMethod]
         public void TestNullArgument()
         {
-            RootedTreeNode t = new RootedTreeNode(0);
-            RootedTreeNode n1 = new RootedTreeNode(1);
-            List<RootedTreeNode> list = new List<RootedTreeNode>();
+            RootedTreeNode t = new(0);
+            RootedTreeNode n1 = new(1);
+            List<RootedTreeNode> list = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => t.AddNeighbour(null, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => t.AddNeighbours(null, MockCounter));

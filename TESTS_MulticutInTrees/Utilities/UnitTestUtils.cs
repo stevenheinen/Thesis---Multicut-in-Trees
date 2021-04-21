@@ -14,14 +14,14 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestUtils
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestNullParameter()
         {
-            Node n = new Node(0);
-            List<int> list = new List<int>();
-            Random random = new Random(0);
+            Node n = new(0);
+            List<int> list = new();
+            Random random = new(0);
             Assert.ThrowsException<ArgumentNullException>(() => Utils.OrderEdgeSmallToLarge((null, n)));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.OrderEdgeSmallToLarge((n, null)));
             Assert.ThrowsException<ArgumentNullException>(() => Utils.IsSubsetOf(null, list));
@@ -45,8 +45,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestOrderEdgeSmallToLarge()
         {
-            Node n0 = new Node(0);
-            Node n1 = new Node(1);
+            Node n0 = new(0);
+            Node n1 = new(1);
 
             Assert.AreEqual((n0, n1), Utils.OrderEdgeSmallToLarge((n0, n1)));
             Assert.AreEqual((n0, n1), Utils.OrderEdgeSmallToLarge((n1, n0)));
@@ -68,7 +68,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestPrint()
         {
-            List<int> list = new List<int>();
+            List<int> list = new();
             Assert.AreEqual("System.Collections.Generic.List`1[System.Int32] with 0 elements.", list.Print());
 
             list = new List<int>() { 4, 984, 8, 465, 8, 47, 643, 85, 6, 43, 54, 384, 3, 46, 74, -146785, 4, -4, -4, 4, 56, 1, 4, -49 };
@@ -78,8 +78,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestPickRandom()
         {
-            Random random = new Random(638276819);
-            List<int> list = new List<int>() { 6854, 6584, 64, 684, 35, 2173, 814, 98, 14, 631, 18, 7, 6871, 8, 7, 81, 78, 17, 86, 167, 817, 3, 98, 78, 171, 306714107, 43, 714, 07, 7, 737, 54, 0, 54, 07, 1, 04, 453, 08, 3 };
+            Random random = new(638276819);
+            List<int> list = new() { 6854, 6584, 64, 684, 35, 2173, 814, 98, 14, 631, 18, 7, 6871, 8, 7, 81, 78, 17, 86, 167, 817, 3, 98, 78, 171, 306714107, 43, 714, 07, 7, 737, 54, 0, 54, 07, 1, 04, 453, 08, 3 };
             for (int i = 0; i < 1000; i++)
             {
                 int element = list.PickRandom(random);
@@ -90,8 +90,8 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestPickRandomWhere()
         {
-            Random random = new Random(746818141);
-            List<int> list = new List<int>() { 6854, 6584, 64, 684, 35, 2173, 814, 98, 14, 631, 18, 7, 6871, 8, 7, 81, 78, 17, 86, 167, 817, 3, 98, 78, 171, 306714107, 43, 714, 07, 7, 737, 54, 0, 54, 07, 1, 04, 453, 08, 3 };
+            Random random = new(746818141);
+            List<int> list = new() { 6854, 6584, 64, 684, 35, 2173, 814, 98, 14, 631, 18, 7, 6871, 8, 7, 81, 78, 17, 86, 167, 817, 3, 98, 78, 171, 306714107, 43, 714, 07, 7, 737, 54, 0, 54, 07, 1, 04, 453, 08, 3 };
             for (int i = 0; i < 1000; i++)
             {
                 int element = list.PickRandomWhere(n => n % 2 == 0, random);
@@ -125,7 +125,7 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestAllSubsetsOfSize()
         {
-            List<int> list = new List<int>() { 1, 2, 3, 4, 5 };
+            List<int> list = new() { 1, 2, 3, 4, 5 };
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => list.AllSubsetsOfSize(-1));
 
             int size = 0;

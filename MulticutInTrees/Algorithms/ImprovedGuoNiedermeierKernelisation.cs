@@ -28,30 +28,30 @@ namespace MulticutInTrees.Algorithms
         /// <inheritdoc cref="Algorithm.CreateReductionRules"/>
         protected override void CreateReductionRules()
         {
-            List<ReductionRule> reductionRules = new List<ReductionRule>();
+            List<ReductionRule> reductionRules = new();
 
-            IdleEdge idleEdge = new IdleEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
+            IdleEdge idleEdge = new(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(idleEdge);
 
-            UnitPath unitPath = new UnitPath(Tree, DemandPairs, this);
+            UnitPath unitPath = new(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
 
-            ImprovedDominatedEdge improvedDominatedEdge = new ImprovedDominatedEdge(Tree, DemandPairs, this, DemandPairsPerEdge);
+            ImprovedDominatedEdge improvedDominatedEdge = new(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(improvedDominatedEdge);
 
-            DominatedPath dominatedPath = new DominatedPath(Tree, DemandPairs, this, DemandPairsPerEdge);
+            DominatedPath dominatedPath = new(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
 
-            DisjointPaths disjointPaths = new DisjointPaths(Tree, DemandPairs, this, PartialSolution, K);
+            DisjointPaths disjointPaths = new(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
 
-            OverloadedEdge overloadedEdge = new OverloadedEdge(Tree, DemandPairs, this, PartialSolution, K, DemandPairsPerEdge);
+            OverloadedEdge overloadedEdge = new(Tree, DemandPairs, this, PartialSolution, K, DemandPairsPerEdge);
             reductionRules.Add(overloadedEdge);
 
-            OverloadedCaterpillar overloadedCaterpillar = new OverloadedCaterpillar(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);
+            OverloadedCaterpillar overloadedCaterpillar = new(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);
             reductionRules.Add(overloadedCaterpillar);
 
-            OverloadedL3Leaves overloadedL3Leaves = new OverloadedL3Leaves(Tree, DemandPairs, this, DemandPairsPerNode, PartialSolution, K);
+            OverloadedL3Leaves overloadedL3Leaves = new(Tree, DemandPairs, this, DemandPairsPerNode, PartialSolution, K);
             reductionRules.Add(overloadedL3Leaves);
 
             ReductionRules = new ReadOnlyCollection<ReductionRule>(reductionRules);

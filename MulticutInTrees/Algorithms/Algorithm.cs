@@ -328,7 +328,7 @@ namespace MulticutInTrees.Algorithms
 #if VERBOSEDEBUG
             Console.WriteLine($"Changing endpoint of demandpair {demandPair} from {oldEndpoint} to {newEndpoint}.");
 #endif
-            CountedList<Edge<Node>> oldEdges = new CountedList<Edge<Node>>(demandPair.ChangeEndpoint(oldEndpoint, newEndpoint, measurements.DemandPairsOperationsCounter), measurements.TreeOperationsCounter);
+            CountedList<Edge<Node>> oldEdges = new(demandPair.ChangeEndpoint(oldEndpoint, newEndpoint, measurements.DemandPairsOperationsCounter), measurements.TreeOperationsCounter);
 
             RemoveDemandPairFromNode(oldEndpoint, demandPair, measurements);
             if (!DemandPairsPerNode.ContainsKey(newEndpoint, measurements.DemandPairsPerEdgeKeysCounter))
@@ -379,7 +379,7 @@ namespace MulticutInTrees.Algorithms
             }
 #endif
             PartialSolution.Add(edge);
-            CountedList<DemandPair> separatedDemandPairs = new CountedList<DemandPair>(DemandPairsPerEdge[edge, measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(MockCounter), MockCounter);
+            CountedList<DemandPair> separatedDemandPairs = new(DemandPairsPerEdge[edge, measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(MockCounter), MockCounter);
 
             RemoveDemandPairs(separatedDemandPairs, measurements);
             Node res = ContractEdge(edge, measurements);
@@ -684,7 +684,7 @@ namespace MulticutInTrees.Algorithms
             }
             int oldValue = CaterpillarComponentPerNode[internalNeighbours.First(n => !n.Equals(i1Node)), MockCounter];
             int newValue = CaterpillarComponentPerNode[internalNeighbours.Last(n => !n.Equals(i1Node)), MockCounter];
-            List<Node> keysToBeModified = new List<Node>();
+            List<Node> keysToBeModified = new();
             foreach (KeyValuePair<Node, int> kv in CaterpillarComponentPerNode.GetCountedEnumerable(measurements.TreeOperationsCounter))
             {
                 if (kv.Value == oldValue)

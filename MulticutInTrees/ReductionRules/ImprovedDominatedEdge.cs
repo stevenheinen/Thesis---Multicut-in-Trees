@@ -85,8 +85,8 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
         protected override bool TryApplyReductionRule(IEnumerable<Edge<Node>> edgesToCheck)
         {
-            Dictionary<Edge<Node>, Edge<Node>> comparedEdge = new Dictionary<Edge<Node>, Edge<Node>>();
-            HashSet<Edge<Node>> edgesToBeContracted = new HashSet<Edge<Node>>();
+            Dictionary<Edge<Node>, Edge<Node>> comparedEdge = new();
+            HashSet<Edge<Node>> edgesToBeContracted = new();
 
             foreach (Edge<Node> edge in edgesToCheck)
             {

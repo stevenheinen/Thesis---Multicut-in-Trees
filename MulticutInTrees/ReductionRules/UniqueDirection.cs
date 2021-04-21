@@ -58,17 +58,26 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
         private void CheckApplicabilityNode(Node node, HashSet<Edge<Node>> edgesToBeContracted)
         {
+            // todo: temp
+            Console.WriteLine($"Now checking {node}");
+
             if (!DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> dpsAtNode, Measurements.DemandPairsPerEdgeKeysCounter))
             {
+                // todo: temp
+                Console.WriteLine($"No DPs at {node}, going to the next one");
                 return;
             }
 
             if (node.Degree(Measurements.TreeOperationsCounter) == 1)
             {
+                // todo: temp
+                Console.WriteLine($"{node} is a leaf");
                 CheckApplicabilityLeaf(node, dpsAtNode, edgesToBeContracted);
             }
             else
             {
+                // todo: temp
+                Console.WriteLine($"{node} is an internal node");
                 CheckApplicabilityInternalNode(node, dpsAtNode, edgesToBeContracted);
             }
         }
@@ -81,10 +90,23 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
         private void CheckApplicabilityInternalNode(Node node, CountedCollection<DemandPair> dpsAtNode, HashSet<Edge<Node>> edgesToBeContracted)
         {
+            foreach (Node neighbour in node.Neighbours(Measurements.TreeOperationsCounter))
+            {
+                if (neighbour.Type == NodeType.L1 || neighbour.Type == NodeType.L2 || neighbour.Type == NodeType.L3)
+                {
+                    // todo: temp
+                    Console.WriteLine($"{node} has a leaf, so we do nothing");
+
+                    return;
+                }
+            }
+
             Edge<Node> firstEdge = DetermineCommonEdge(node, dpsAtNode);
 
             if (firstEdge is null)
             {
+                // todo: temp
+                Console.WriteLine($"The DPs do not share a common edge {node}");
                 return;
             }
 
@@ -95,6 +117,9 @@ namespace MulticutInTrees.ReductionRules
                 {
                     continue;
                 }
+
+                // todo: temp
+                Console.WriteLine($"Now checking {edge}");
 
                 if (CanContractNeighbouringEdge(edge, edgesToBeContracted))
                 {
@@ -113,17 +138,20 @@ namespace MulticutInTrees.ReductionRules
         {
             if (!DemandPairsPerEdge.TryGetValue(edge, out CountedCollection<DemandPair> dps, Measurements.DemandPairsPerEdgeKeysCounter))
             {
+                // todo: temp
+                Console.WriteLine($"{edge} is not used by any DP, so we can contract it");
+
                 // No demand pairs use this edge, so we can safely contract it.
                 return true;
             }
 
-            bool canBeContracted = true;
             foreach (DemandPair dp in dps.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
                 bool allOtherEdgesOnPathWillBeContracted = true;
                 foreach (Edge<Node> e in dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
                 {
-                    if (edge == e)                    {
+                    if (edge == e)
+                    {
                         continue;
                     }
 
@@ -136,12 +164,17 @@ namespace MulticutInTrees.ReductionRules
 
                 if (allOtherEdgesOnPathWillBeContracted)
                 {
-                    canBeContracted = false;
-                    break;
+                    // todo: temp
+                    Console.WriteLine($"all other edges on a dp going through {edge} will be contracted, so we cannot contract {edge}");
+                    
+                    return false;
                 }
             }
 
-            return canBeContracted;
+            // todo: temp
+            Console.WriteLine($"We can contract {edge}");
+
+            return true;
         }
 
         /// <summary>
@@ -234,6 +267,9 @@ namespace MulticutInTrees.ReductionRules
 
                 if (allOtherEdgesOnPathWillBeContracted)
                 {
+                    // todo: temp
+                    Console.WriteLine($"all other edges on a dp going through the second edge connected to {leaf} will be contracted, so we cannot contract the edge connected to {leaf}");
+
                     return;
                 }
 
@@ -243,6 +279,9 @@ namespace MulticutInTrees.ReductionRules
                 }
                 else if (secondEdge != edge)
                 {
+                    // todo: temp
+                    Console.WriteLine($"the dps starting at {leaf} do not share the second edge, so we cannot contract it");
+
                     return;
                 }
             }
@@ -257,7 +296,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns>Whether this <see cref="ReductionRule"/> was applicable.</returns>
         private bool TryApplyReductionRule(IEnumerable<Node> nodesToCheck)
         {
-            HashSet<Edge<Node>> edgesToBeContracted = new HashSet<Edge<Node>>();
+            HashSet<Edge<Node>> edgesToBeContracted = new();
             foreach (Node node in nodesToCheck)
             {
                 CheckApplicabilityNode(node, edgesToBeContracted);
@@ -272,7 +311,7 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
-            HashSet<Node> nodesToCheck = new HashSet<Node>();
+            HashSet<Node> nodesToCheck = new();
 
             foreach ((Edge<Node> _, Node node, CountedCollection<DemandPair> _) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {

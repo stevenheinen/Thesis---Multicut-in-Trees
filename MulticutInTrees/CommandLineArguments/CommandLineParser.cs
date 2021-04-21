@@ -19,7 +19,7 @@ namespace MulticutInTrees.CommandLineArguments
         /// <param name="args"></param>
         internal static void ParseAndExecute(IEnumerable<string> args)
         {
-            Parser parser = new Parser(p =>
+            Parser parser = new(p =>
             {
                 p.AutoHelp = true;
                 p.CaseInsensitiveEnumValues = true;

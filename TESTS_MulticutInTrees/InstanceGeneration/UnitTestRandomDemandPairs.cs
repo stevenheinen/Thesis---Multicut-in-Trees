@@ -14,7 +14,7 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
         [TestMethod]
         public void TestGenerateRandomDemandPairs()
         {
-            Random random = new Random(1357151375);
+            Random random = new(1357151375);
 
             Graph tree = TreeFromPruferSequence.GenerateTree(100, random);
 

@@ -90,8 +90,8 @@ namespace MulticutInTrees.MulticutProblem
         /// <returns>A <see cref="string"/> with the performance measured by this <see cref="PerformanceMeasurements"/>.</returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("\n");
+            StringBuilder sb = new();
+            sb.Append('\n');
             sb.Append("==============================================================\n");
             sb.Append("==============================================================\n");
             sb.Append($"{Owner} instance modifications\n");
@@ -114,7 +114,7 @@ namespace MulticutInTrees.MulticutProblem
             sb.Append($"Time spent checking applicability (TimeSpan): {TimeSpentCheckingApplicability.Elapsed:hh\\:mm\\:ss\\.fffffff}\n");
             sb.Append($"Time spent modifying the instance (TimeSpan): {TimeSpentModifyingInstance.Elapsed:hh\\:mm\\:ss\\.fffffff}\n");
             sb.Append("==============================================================\n");
-            sb.Append("\n");
+            sb.Append('\n');
 
             return sb.ToString();
         }

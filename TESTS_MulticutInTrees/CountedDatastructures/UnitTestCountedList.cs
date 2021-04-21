@@ -10,16 +10,16 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
     [TestClass]
     public class UnitTestCountedList
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter counter = new();
 
         [TestMethod]
         public void TestConstructor()
         {
-            CountedList<int> countedList = new CountedList<int>();
+            CountedList<int> countedList = new();
             Assert.IsNotNull(countedList);
             Assert.AreEqual(0, countedList.Count(counter));
 
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
             countedList = new CountedList<int>(list, counter);
             Assert.IsNotNull(countedList);
             Assert.AreEqual(list.Count, countedList.Count(counter));
@@ -29,8 +29,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         public void TestNullArgument()
         {
             int number = 0;
-            List<int> list = new List<int>();
-            CountedList<int> countedList = new CountedList<int>();
+            List<int> list = new();
+            CountedList<int> countedList = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => countedList.GetCountedEnumerable(null));
             Assert.ThrowsException<ArgumentNullException>(() => countedList.Add(number, null));
@@ -49,7 +49,7 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestIndex()
         {
-            CountedList<int> countedList = new CountedList<int>();
+            CountedList<int> countedList = new();
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => { int a = countedList[8, counter]; });
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => { countedList[8, counter] = 8; });
@@ -63,9 +63,9 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestRemoveAt()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedList<int> countedList = new CountedList<int>(list, counter);
-            List<int> wantedList = new List<int>() { 984, 894, 897, 98479, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedList<int> countedList = new(list, counter);
+            List<int> wantedList = new() { 984, 894, 897, 98479, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
             countedList.RemoveAt(4, counter);
             CollectionAssert.AreEqual(wantedList, countedList.GetInternalList());
         }
@@ -73,9 +73,9 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestInsert()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedList<int> countedList = new CountedList<int>(list, counter);
-            List<int> wantedList = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 999999999, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedList<int> countedList = new(list, counter);
+            List<int> wantedList = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 999999999, 748, 7, 43, 2, 3517420, 0, 71050742 };
             countedList.Insert(10, 999999999, counter);
             CollectionAssert.AreEqual(wantedList, countedList.GetInternalList());
         }
@@ -83,8 +83,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestContains()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedList<int> countedList = new CountedList<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedList<int> countedList = new(list, counter);
             Assert.IsTrue(countedList.Contains(97489, counter));
             Assert.IsFalse(countedList.Contains(165516, counter));
         }
@@ -92,8 +92,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestRemove()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedList<int> countedList = new CountedList<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedList<int> countedList = new(list, counter);
             Assert.IsTrue(countedList.Remove(97489, counter));
             Assert.AreEqual(list.Count - 1, countedList.Count(counter));
             Assert.IsFalse(countedList.Remove(165516, counter));
@@ -103,8 +103,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestClear()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedList<int> countedList = new CountedList<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 748, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedList<int> countedList = new(list, counter);
             countedList.Clear(counter);
             Assert.AreEqual(0, countedList.Count(counter));
         }

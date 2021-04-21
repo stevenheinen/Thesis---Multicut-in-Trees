@@ -56,7 +56,14 @@ namespace MulticutInTrees.ReductionRules
             Utils.NullCheck(contractEdge, nameof(contractEdge), "Trying to see whether all demand paths that pass through an edge also pass through another, but the first edge is null!");
             Utils.NullCheck(otherEdge, nameof(otherEdge), "Trying to see whether all demand paths that pass through an edge also pass through another, but the second edge is null!");
 #endif
-            return DemandPairsPerEdge[contractEdge, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).IsSubsetOf(DemandPairsPerEdge[otherEdge, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter));
+            CountedCollection<DemandPair> set1 = DemandPairsPerEdge[contractEdge, Measurements.DemandPairsPerEdgeKeysCounter];
+            CountedCollection<DemandPair> set2 = DemandPairsPerEdge[otherEdge, Measurements.DemandPairsPerEdgeKeysCounter];
+            if (set1.Count(Measurements.DemandPairsPerEdgeValuesCounter) > set2.Count(Measurements.DemandPairsPerEdgeValuesCounter))
+            {
+                return false;
+            }
+
+            return set1.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).IsSubsetOf(set2.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter));
         }
 
         /// <summary>
@@ -86,7 +93,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
         protected virtual bool TryApplyReductionRule(IEnumerable<Edge<Node>> edgesToCheck)
         {
-            HashSet<Edge<Node>> edgesToBeContracted = new HashSet<Edge<Node>>();
+            HashSet<Edge<Node>> edgesToBeContracted = new();
             foreach (Edge<Node> edge1 in edgesToCheck)
             {
                 foreach (Edge<Node> edge2 in FindEdgesOnShortestDemandPathThroughEdge(edge1))
@@ -115,7 +122,7 @@ namespace MulticutInTrees.ReductionRules
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 
-            HashSet<Edge<Node>> edgesToBeChecked = new HashSet<Edge<Node>>();
+            HashSet<Edge<Node>> edgesToBeChecked = new();
 
             foreach (DemandPair demandPair in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {

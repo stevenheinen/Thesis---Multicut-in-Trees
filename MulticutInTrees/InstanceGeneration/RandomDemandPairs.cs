@@ -33,9 +33,9 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new ArgumentOutOfRangeException(nameof(numberOfDemandPairs), "Trying to generate random demand pairs in a tree, but the required number of demand pairs is negative!");
             }
 #endif
-            Counter counter = new Counter();
+            Counter counter = new();
 
-            List<DemandPair> demandPairs = new List<DemandPair>();
+            List<DemandPair> demandPairs = new();
             for (uint i = 0; i < numberOfDemandPairs; i++)
             {
                 // Pick a random index for the first endpoint

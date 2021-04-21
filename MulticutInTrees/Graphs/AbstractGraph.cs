@@ -177,7 +177,7 @@ namespace MulticutInTrees.Graphs
                 throw new NotInGraphException($"Trying to get the neighbouring edges of a node, but the node is not part of this graph!");
             }
 #endif
-            List<TEdge> result = new List<TEdge>();
+            List<TEdge> result = new();
             foreach (TNode neighbour in node.Neighbours(counter))
             {
                 (TNode, TNode) tuple = Utils.OrderEdgeSmallToLarge((neighbour, node));
@@ -511,8 +511,8 @@ namespace MulticutInTrees.Graphs
 #if !EXPERIMENT
             Utils.NullCheck(path, nameof(path), "Trying to transform a node path to an edge path, but the path is null!");
 #endif
-            List<TEdge> result = new List<TEdge>();
-            for (int i = 0; i < path.Count() - 1; i++)
+            List<TEdge> result = new();
+            for (int i = 0; i < path.Count - 1; i++)
             {
                 TNode endpoint1 = path[i];
                 TNode endpoint2 = path[i + 1];

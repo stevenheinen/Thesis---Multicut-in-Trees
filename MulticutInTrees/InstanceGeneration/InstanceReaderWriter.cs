@@ -22,7 +22,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// <see cref="Counter"/> that can be used for operations that should not affect performance.
         /// </summary>
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         /// <summary>
         /// Write an instance to a file.
@@ -47,7 +47,7 @@ namespace MulticutInTrees.InstanceGeneration
 
             try
             {
-                using StreamWriter sw = new StreamWriter(fileName);
+                using StreamWriter sw = new(fileName);
 
                 // Write the header with number of nodes, number of dps and optimal k
                 sw.WriteLine("// [Number of nodes] [Number of demand pairs] [Optimal K]");
@@ -99,10 +99,10 @@ namespace MulticutInTrees.InstanceGeneration
             int optimalK;
             int numberOfNodes;
 
-            List<(int, int)> edges = new List<(int, int)>();
-            List<(int, int)> dps = new List<(int, int)>();
+            List<(int, int)> edges = new();
+            List<(int, int)> dps = new();
 
-            using (StreamReader sr = new StreamReader(fileName))
+            using (StreamReader sr = new(fileName))
             {
                 string line = sr.ReadLine();
 
@@ -138,7 +138,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <returns>A <see cref="List{T}"/> with tuples of two <see cref="int"/>s that are the IDs of the endpoints of an edge.</returns>
         private static List<(int, int)> ReadEdges(ref string line, StreamReader sr, int numberOfNodes)
         {
-            List<(int, int)> edges = new List<(int, int)>();
+            List<(int, int)> edges = new();
 
             // Reading edges, skip comment line
             line = sr.ReadLine();
@@ -176,7 +176,7 @@ namespace MulticutInTrees.InstanceGeneration
         /// <returns>A <see cref="List{T}"/> with tuples of two <see cref="int"/>s that are the IDs of the endpoints of a <see cref="DemandPair"/>.</returns>
         private static List<(int, int)> ReadDemandPairs(ref string line, StreamReader sr, int numberOfDPs)
         {
-            List<(int, int)> dps = new List<(int, int)>();
+            List<(int, int)> dps = new();
 
             // Reading demand pairs
             for (int i = 0; i < numberOfDPs; i++)
@@ -215,7 +215,7 @@ namespace MulticutInTrees.InstanceGeneration
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to create the filename for an instance given command line options, but the command line options are null!");
 #endif
-            StringBuilder fileNameBuilder = new StringBuilder();
+            StringBuilder fileNameBuilder = new();
             fileNameBuilder.Append($"{options.InstanceDirectory}\\MulticutInstance_seed={randomSeed}_treeType={options.InputTreeType}_dpType={options.InputDemandPairsType}");
 
             if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar)

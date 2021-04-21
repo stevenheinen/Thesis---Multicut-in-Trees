@@ -12,16 +12,16 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
     [TestClass]
     public class UnitTestCountedCollection
     {
-        private static readonly Counter counter = new Counter();
+        private static readonly Counter counter = new();
 
         [TestMethod]
         public void TestConstructor()
         {
-            CountedCollection<int> countedCollection = new CountedCollection<int>();
+            CountedCollection<int> countedCollection = new();
             Assert.IsNotNull(countedCollection);
             Assert.AreEqual(0, countedCollection.Count(counter));
 
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
             countedCollection = new CountedCollection<int>(list, counter);
             Assert.IsNotNull(countedCollection);
             Assert.AreEqual(list.Count, countedCollection.Count(counter));
@@ -31,8 +31,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         public void TestNullArgument()
         {
             int number = 0;
-            List<int> list = new List<int>();
-            CountedCollection<int> countedCollection = new CountedCollection<int>();
+            List<int> list = new();
+            CountedCollection<int> countedCollection = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.GetCountedEnumerable(null));
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.Add(number, null));
@@ -57,8 +57,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestCount()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             Assert.AreEqual(list.Count, countedCollection.Count(counter));
             Assert.AreEqual(list.Count(n => n % 2 == 0), countedCollection.Count(n => n % 2 == 0, counter));
         }
@@ -66,8 +66,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestFirst()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             Assert.AreEqual(list[0], countedCollection.First(counter));
             Assert.AreEqual(list.First(n => n > 1000), countedCollection.First(n => n > 1000, counter));
         }
@@ -75,16 +75,16 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestLast()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             Assert.AreEqual(list[^1], countedCollection.Last(counter));
         }
 
         [TestMethod]
         public void TestAdd()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             countedCollection.Add(654465645, counter);
             Assert.ThrowsException<AlreadyPresentException>(() => countedCollection.Add(654465645, counter));
         }
@@ -92,8 +92,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestContains()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             Assert.IsTrue(countedCollection.Contains(97489, counter));
             Assert.IsFalse(countedCollection.Contains(165516, counter));
         }
@@ -101,8 +101,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestRemove()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             Assert.IsTrue(countedCollection.Remove(97489, counter));
             Assert.AreEqual(list.Count - 1, countedCollection.Count(counter));
             Assert.IsFalse(countedCollection.Remove(165516, counter));
@@ -112,8 +112,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestClear()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             countedCollection.Clear(counter);
             Assert.AreEqual(0, countedCollection.Count(counter));
         }
@@ -121,8 +121,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestRemoveFromStartWhile()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             countedCollection.RemoveFromStartWhile(n => n < 1000, counter);
             Assert.AreEqual(list.Count - 3, countedCollection.Count(counter));
         }
@@ -130,8 +130,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestRemoveFromEndWhile()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             countedCollection.RemoveFromEndWhile(n => n < 10 || n > 1000, counter);
             Assert.AreEqual(list.Count - 4, countedCollection.Count(counter));
         }
@@ -139,8 +139,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestElementBeforeAndAfter()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 8, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 8, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             (int before, int after) = countedCollection.ElementBeforeAndAfter(78, counter);
             Assert.AreEqual(97489, before);
             Assert.AreEqual(789, after);
@@ -156,8 +156,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestChangeOccurrence()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050743 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050743 };
+            CountedCollection<int> countedCollection = new(list, counter);
             countedCollection.ChangeOccurrence(n => n % 2 == 1 ? n + 1 : n, counter);
             Assert.AreEqual(0, countedCollection.Count(n => n % 2 == 1, counter));
             Assert.AreEqual(71050744, countedCollection.Last(counter));
@@ -166,8 +166,8 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
         [TestMethod]
         public void TestChangeElement()
         {
-            List<int> list = new List<int>() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
-            CountedCollection<int> countedCollection = new CountedCollection<int>(list, counter);
+            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050742 };
+            CountedCollection<int> countedCollection = new(list, counter);
             Assert.ThrowsException<InvalidOperationException>(() => countedCollection.ChangeElement(-1, 1000, counter));
             countedCollection.ChangeElement(71050742, 1000, counter);
             Assert.AreEqual(1000, countedCollection.Last(counter));

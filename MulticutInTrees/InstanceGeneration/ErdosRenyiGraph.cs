@@ -11,7 +11,7 @@ namespace MulticutInTrees.InstanceGeneration
     /// </summary>
     public static class ErdosRenyiGraph
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         /// <summary>
         /// Creates a random Erdos-Renyi graph.
@@ -39,7 +39,7 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new ArgumentOutOfRangeException(nameof(chancePerEdge), "Trying to create an Erdos-Renyi graph with a change of larger than 1 per possible edge!");
             }
 #endif
-            Graph graph = new Graph();
+            Graph graph = new();
 
             for (uint i = 0; i < numberOfNodes; i++)
             {
@@ -56,7 +56,7 @@ namespace MulticutInTrees.InstanceGeneration
                     }
                     if (random.NextDouble() < chancePerEdge)
                     {
-                        Edge<Node> edge = new Edge<Node>(node1, node2);
+                        Edge<Node> edge = new(node1, node2);
                         graph.AddEdge(edge, MockCounter);
                     }
                 }

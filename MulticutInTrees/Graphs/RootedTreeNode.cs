@@ -157,7 +157,7 @@ namespace MulticutInTrees.Graphs
         /// <returns>A <see cref="List{T}"/> with <see cref="RootedTreeNode"/>s that are ancestors of this <see cref="RootedTreeNode"/>. Ordered from this <see cref="RootedTreeNode"/> to the root.</returns>
         public List<RootedTreeNode> FindAllAncestors()
         {
-            List<RootedTreeNode> ancestors = new List<RootedTreeNode>() { this };
+            List<RootedTreeNode> ancestors = new() { this };
             RootedTreeNode parent = this;
             while ((parent = parent.GetParent(MockCounter)) != null)
             {

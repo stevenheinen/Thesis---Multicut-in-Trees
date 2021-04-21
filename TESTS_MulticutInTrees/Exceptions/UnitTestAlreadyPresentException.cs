@@ -12,14 +12,14 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorNoArguments()
         {
-            AlreadyPresentException alreadyPresentException = new AlreadyPresentException();
+            AlreadyPresentException alreadyPresentException = new();
             Assert.IsNotNull(alreadyPresentException);
         }
 
         [TestMethod]
         public void TestConstructorMessage()
         {
-            AlreadyPresentException alreadyPresentException = new AlreadyPresentException("Test message");
+            AlreadyPresentException alreadyPresentException = new("Test message");
             Assert.IsNotNull(alreadyPresentException);
             Assert.AreEqual(alreadyPresentException.Message, "Test message");
         }
@@ -27,8 +27,8 @@ namespace TESTS_MulticutInTrees.Exceptions
         [TestMethod]
         public void TestConstructorMessageInner()
         {
-            Exception inner = new Exception();
-            AlreadyPresentException alreadyPresentException = new AlreadyPresentException("Test", inner);
+            Exception inner = new();
+            AlreadyPresentException alreadyPresentException = new("Test", inner);
             Assert.IsNotNull(alreadyPresentException);
             Assert.AreEqual(alreadyPresentException.Message, "Test");
             Assert.AreEqual(alreadyPresentException.InnerException, inner);

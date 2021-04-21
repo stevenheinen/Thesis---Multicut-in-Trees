@@ -13,13 +13,13 @@ namespace TESTS_MulticutInTrees.Utilities
     [TestClass]
     public class UnitTestBFS
     {
-        private static readonly Counter MockCounter = new Counter();
+        private static readonly Counter MockCounter = new();
 
         [TestMethod]
         public void TestNullParameter()
         {
-            Node node = new Node(0);
-            HashSet<Node> target = new HashSet<Node>();
+            Node node = new(0);
+            HashSet<Node> target = new();
 
             Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(null, target, MockCounter));
             Assert.ThrowsException<ArgumentNullException>(() => BFS.FindShortestPath(node, null, MockCounter));
@@ -29,27 +29,27 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestOtherExceptions()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
+            Node node6 = new(6);
+            Node node7 = new(7);
+            Node node8 = new(8);
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge02 = new Edge<Node>(node0, node2);
-            Edge<Node> edge03 = new Edge<Node>(node0, node3);
-            Edge<Node> edge14 = new Edge<Node>(node1, node4);
-            Edge<Node> edge15 = new Edge<Node>(node1, node5);
-            Edge<Node> edge25 = new Edge<Node>(node2, node5);
-            Edge<Node> edge26 = new Edge<Node>(node2, node6);
-            Edge<Node> edge37 = new Edge<Node>(node3, node7);
-            Edge<Node> edge67 = new Edge<Node>(node6, node7);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge02 = new(node0, node2);
+            Edge<Node> edge03 = new(node0, node3);
+            Edge<Node> edge14 = new(node1, node4);
+            Edge<Node> edge15 = new(node1, node5);
+            Edge<Node> edge25 = new(node2, node5);
+            Edge<Node> edge26 = new(node2, node6);
+            Edge<Node> edge37 = new(node3, node7);
+            Edge<Node> edge67 = new(node6, node7);
             graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge14, edge15, edge25, edge26, edge37, edge67 }, MockCounter);
             Assert.ThrowsException<InvalidOperationException>(() => BFS.FindShortestPath(node0, new HashSet<Node>(), MockCounter));
             Assert.ThrowsException<InvalidOperationException>(() => BFS.FindShortestPath(node0, new HashSet<Node>() { node0, node2, node8 }, MockCounter));
@@ -59,32 +59,32 @@ namespace TESTS_MulticutInTrees.Utilities
         [TestMethod]
         public void TestShortestPath()
         {
-            Graph graph = new Graph();
+            Graph graph = new();
 
-            Node node0 = new Node(0);
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
+            Node node6 = new(6);
+            Node node7 = new(7);
+            Node node8 = new(8);
             graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8 }, MockCounter);
-            Edge<Node> edge01 = new Edge<Node>(node0, node1);
-            Edge<Node> edge02 = new Edge<Node>(node0, node2);
-            Edge<Node> edge03 = new Edge<Node>(node0, node3);
-            Edge<Node> edge14 = new Edge<Node>(node1, node4);
-            Edge<Node> edge15 = new Edge<Node>(node1, node5);
-            Edge<Node> edge25 = new Edge<Node>(node2, node5);
-            Edge<Node> edge26 = new Edge<Node>(node2, node6);
-            Edge<Node> edge37 = new Edge<Node>(node3, node7);
-            Edge<Node> edge67 = new Edge<Node>(node6, node7);
-            Edge<Node> edge68 = new Edge<Node>(node6, node8);
+            Edge<Node> edge01 = new(node0, node1);
+            Edge<Node> edge02 = new(node0, node2);
+            Edge<Node> edge03 = new(node0, node3);
+            Edge<Node> edge14 = new(node1, node4);
+            Edge<Node> edge15 = new(node1, node5);
+            Edge<Node> edge25 = new(node2, node5);
+            Edge<Node> edge26 = new(node2, node6);
+            Edge<Node> edge37 = new(node3, node7);
+            Edge<Node> edge67 = new(node6, node7);
+            Edge<Node> edge68 = new(node6, node8);
             graph.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge03, edge14, edge15, edge25, edge26, edge37, edge67, edge68 }, MockCounter);
 
             List<Node> path = BFS.FindShortestPath(node0, new HashSet<Node>() { node8 }, MockCounter);
-            List<Node> expectedPath = new List<Node>() { node0, node2, node6, node8 };
+            List<Node> expectedPath = new() { node0, node2, node6, node8 };
 
             CollectionAssert.AreEqual(expectedPath, path);
         }
