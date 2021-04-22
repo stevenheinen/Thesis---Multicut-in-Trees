@@ -79,7 +79,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 3);
 
             GuoNiedermeierBranching gnb = new(instance);
-            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(3, solution.Item1.Count);
@@ -125,7 +125,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 2);
 
             GuoNiedermeierBranching gnb = new(instance);
-            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(2, solution.Item1.Count);
@@ -175,7 +175,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 1);
 
             GuoNiedermeierBranching gnb = new(instance);
-            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(1, solution.Item1.Count);
@@ -237,7 +237,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 3);
 
             GuoNiedermeierBranching gnb = new(instance);
-            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
 
             Assert.IsTrue(solution.Item2.Solvable);
             Assert.AreEqual(3, solution.Item1.Count);
@@ -277,7 +277,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, k, 4);
 
             GuoNiedermeierBranching gnb = new(instance);
-            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run(true);
+            (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
 
             Assert.IsFalse(solution.Item2.Solvable);
         }

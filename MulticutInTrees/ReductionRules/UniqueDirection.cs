@@ -7,14 +7,13 @@ using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities;
 
 namespace MulticutInTrees.ReductionRules
 {
     /// <summary>
     /// <see cref="ReductionRule"/> that contracts edges when all <see cref="DemandPair"/>s starting at a node go in the same direction.
     /// <br/>
-    /// <b>Rule:</b> If all the demand paths starting at a leaf u have the same direction (for at least 2 edges), then contract the edge that is connected to u. If all the demand paths starting at an inner node u have the same direction (for at least 1 edge), then contract the edge e adjacent to u which does not belong to any demand path starting at u.
+    /// <b>Rule:</b> If all the demand paths starting at a leaf u have the same direction (for at least 2 edges), then contract the edge that is connected to u. If all the demand paths starting at an internal node u without leaves and degree 2 have the same direction (for at least 1 edge), then contract the edge e adjacent to u which does not belong to any demand path starting at u.
     /// </summary>
     public class UniqueDirection : ReductionRule
     {
@@ -29,6 +28,11 @@ namespace MulticutInTrees.ReductionRules
         private CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
 
         /// <summary>
+        /// Whether the definition of inner node is "internal degree-2 vertex" (true) or "internal degree-2 vertex without leaves" (false).
+        /// </summary>
+        private bool AllowLeafAttachedToInnerNode { get; }
+
+        /// <summary>
         /// Constructor for the <see cref="DominatedPath"/> reduction rule.
         /// </summary>
         /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
@@ -36,18 +40,20 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is used by.</param>
         /// <param name="demandPairsPerNode"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per <see cref="Node"/>.</param>
         /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge.</param>
+        /// <param name="allowLeafAttachedToInnerNode">Whether the definition of inner node is "internal degree-2 vertex" (true) or "internal degree-2 vertex without leaves" (false).</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="demandPairsPerNode"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
-        public UniqueDirection(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode, CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm)
+        public UniqueDirection(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode, CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge, bool allowLeafAttachedToInnerNode) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
-            Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with demand paths is null!");
-            Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
-            Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per node is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per edge is null!");
+            Utilities.Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
+            Utilities.Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with demand paths is null!");
+            Utilities.Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utilities.Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per node is null!");
+            Utilities.Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per edge is null!");
 #endif
             DemandPairsPerNode = demandPairsPerNode;
             DemandPairsPerEdge = demandPairsPerEdge;
+            AllowLeafAttachedToInnerNode = allowLeafAttachedToInnerNode;
             MockCounter = new Counter();
         }
 
@@ -58,26 +64,18 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
         private void CheckApplicabilityNode(Node node, HashSet<Edge<Node>> edgesToBeContracted)
         {
-            // todo: temp
-            Console.WriteLine($"Now checking {node}");
-
             if (!DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> dpsAtNode, Measurements.DemandPairsPerEdgeKeysCounter))
             {
-                // todo: temp
-                Console.WriteLine($"No DPs at {node}, going to the next one");
                 return;
             }
 
-            if (node.Degree(Measurements.TreeOperationsCounter) == 1)
+            int degree = node.Degree(Measurements.TreeOperationsCounter);
+            if (degree == 1)
             {
-                // todo: temp
-                Console.WriteLine($"{node} is a leaf");
                 CheckApplicabilityLeaf(node, dpsAtNode, edgesToBeContracted);
             }
-            else
+            else if (degree == 2)
             {
-                // todo: temp
-                Console.WriteLine($"{node} is an internal node");
                 CheckApplicabilityInternalNode(node, dpsAtNode, edgesToBeContracted);
             }
         }
@@ -90,14 +88,14 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
         private void CheckApplicabilityInternalNode(Node node, CountedCollection<DemandPair> dpsAtNode, HashSet<Edge<Node>> edgesToBeContracted)
         {
-            foreach (Node neighbour in node.Neighbours(Measurements.TreeOperationsCounter))
+            if (!AllowLeafAttachedToInnerNode)
             {
-                if (neighbour.Type == NodeType.L1 || neighbour.Type == NodeType.L2 || neighbour.Type == NodeType.L3)
+                foreach (Node neighbour in node.Neighbours(Measurements.TreeOperationsCounter))
                 {
-                    // todo: temp
-                    Console.WriteLine($"{node} has a leaf, so we do nothing");
-
-                    return;
+                    if (neighbour.Type == NodeType.L1 || neighbour.Type == NodeType.L2 || neighbour.Type == NodeType.L3)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -105,8 +103,6 @@ namespace MulticutInTrees.ReductionRules
 
             if (firstEdge is null)
             {
-                // todo: temp
-                Console.WriteLine($"The DPs do not share a common edge {node}");
                 return;
             }
 
@@ -118,12 +114,10 @@ namespace MulticutInTrees.ReductionRules
                     continue;
                 }
 
-                // todo: temp
-                Console.WriteLine($"Now checking {edge}");
-
                 if (CanContractNeighbouringEdge(edge, edgesToBeContracted))
                 {
                     edgesToBeContracted.Add(edge);
+                    return;
                 }
             }
         }
@@ -138,9 +132,6 @@ namespace MulticutInTrees.ReductionRules
         {
             if (!DemandPairsPerEdge.TryGetValue(edge, out CountedCollection<DemandPair> dps, Measurements.DemandPairsPerEdgeKeysCounter))
             {
-                // todo: temp
-                Console.WriteLine($"{edge} is not used by any DP, so we can contract it");
-
                 // No demand pairs use this edge, so we can safely contract it.
                 return true;
             }
@@ -164,15 +155,9 @@ namespace MulticutInTrees.ReductionRules
 
                 if (allOtherEdgesOnPathWillBeContracted)
                 {
-                    // todo: temp
-                    Console.WriteLine($"all other edges on a dp going through {edge} will be contracted, so we cannot contract {edge}");
-                    
                     return false;
                 }
             }
-
-            // todo: temp
-            Console.WriteLine($"We can contract {edge}");
 
             return true;
         }
@@ -267,9 +252,6 @@ namespace MulticutInTrees.ReductionRules
 
                 if (allOtherEdgesOnPathWillBeContracted)
                 {
-                    // todo: temp
-                    Console.WriteLine($"all other edges on a dp going through the second edge connected to {leaf} will be contracted, so we cannot contract the edge connected to {leaf}");
-
                     return;
                 }
 
@@ -279,9 +261,6 @@ namespace MulticutInTrees.ReductionRules
                 }
                 else if (secondEdge != edge)
                 {
-                    // todo: temp
-                    Console.WriteLine($"the dps starting at {leaf} do not share the second edge, so we cannot contract it");
-
                     return;
                 }
             }

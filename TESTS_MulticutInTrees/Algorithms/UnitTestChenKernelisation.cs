@@ -14,7 +14,7 @@ using MulticutInTrees.Utilities;
 namespace TESTS_MulticutInTrees.Algorithms
 {
     [TestClass]
-    public class UnitTestBousquetKernelisation
+    public class UnitTestChenKernelisation
     {
         private static readonly Counter MockCounter = new();
 
@@ -40,11 +40,11 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp = new(0, node0, node3, tree);
 
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(new List<DemandPair>() { dp }, MockCounter), 3, 1);
-            BousquetKernelisation g = new(instance);
+            ChenKernelisation g = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) solution = g.Run();
 
             Assert.IsTrue(solution.Item4.Solvable);
-            Assert.AreEqual(1, solution.Item1.NumberOfEdges(MockCounter));
+            Assert.AreEqual(0, solution.Item1.NumberOfEdges(MockCounter));
             Assert.AreEqual(1, solution.Item2.Count);
             Assert.AreEqual(0, solution.Item3.Count);
         }
@@ -105,14 +105,14 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 3, 3);
-            BousquetKernelisation gnfpt = new(instance);
+            ChenKernelisation gnfpt = new(instance);
 
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsTrue(result.Item4.Solvable);
-            Assert.AreEqual(11, result.Item1.NumberOfNodes(MockCounter));
-            Assert.AreEqual(1, result.Item2.Count);
-            Assert.AreEqual(3, result.Item3.Count);
+            Assert.AreEqual(1, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(3, result.Item2.Count);
+            Assert.AreEqual(0, result.Item3.Count);
 
             foreach (DemandPair dp in result.Item3)
             {
@@ -133,7 +133,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
             MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
-            BousquetKernelisation gnfpt = new(instance);
+            ChenKernelisation gnfpt = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
@@ -145,7 +145,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedCollection<DemandPair> demandPairsNaive = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
             MulticutInstance instanceNaive = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
-            BousquetKernelisation gnfptNaive = new(instanceNaive);
+            ChenKernelisation gnfptNaive = new(instanceNaive);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.RunNaively();
 
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(MockCounter), result.Item1.NumberOfNodes(MockCounter));
@@ -153,9 +153,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(389, result.Item1.NumberOfNodes(MockCounter));
-            Assert.AreEqual(4, result.Item2.Count);
-            Assert.AreEqual(103, result.Item3.Count);
+            Assert.AreEqual(20, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(20, result.Item2.Count);
+            Assert.AreEqual(13, result.Item3.Count);
         }
 
         [TestMethod]
@@ -168,7 +168,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
             MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
-            BousquetKernelisation gnfpt = new(instance);
+            ChenKernelisation gnfpt = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
@@ -180,7 +180,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedCollection<DemandPair> demandPairsNaive = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
             MulticutInstance instanceNaive = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
-            BousquetKernelisation gnfptNaive = new(instanceNaive);
+            ChenKernelisation gnfptNaive = new(instanceNaive);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.RunNaively();
 
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(MockCounter), result.Item1.NumberOfNodes(MockCounter));
@@ -188,9 +188,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(846, result.Item1.NumberOfNodes(MockCounter));
-            Assert.AreEqual(5, result.Item2.Count);
-            Assert.AreEqual(395, result.Item3.Count);
+            Assert.AreEqual(104, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(19, result.Item2.Count);
+            Assert.AreEqual(118, result.Item3.Count);
         }
 
         [TestMethod]
@@ -203,7 +203,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(randomSeed))), MockCounter);
             MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, tree, demandPairs, optimalK, optimalK);
-            BousquetKernelisation gnfpt = new(instance);
+            ChenKernelisation gnfpt = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsNotNull(result.Item1);
@@ -215,7 +215,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
             CountedCollection<DemandPair> demandPairsNaive = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
             MulticutInstance instanceNaive = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
-            BousquetKernelisation gnfptNaive = new(instanceNaive);
+            ChenKernelisation gnfptNaive = new(instanceNaive);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.RunNaively();
 
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(MockCounter), result.Item1.NumberOfNodes(MockCounter));
@@ -223,9 +223,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(115, result.Item1.NumberOfNodes(MockCounter));
-            Assert.AreEqual(11, result.Item2.Count);
-            Assert.AreEqual(30, result.Item3.Count);
+            Assert.AreEqual(6, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(22, result.Item2.Count);
+            Assert.AreEqual(5, result.Item3.Count);
         }
     }
 }

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.ReductionRules;
 
@@ -52,8 +51,8 @@ namespace MulticutInTrees.Algorithms
 
             DisjointPaths disjointPaths = new(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);
-
-            UniqueDirection uniqueDirection = new(Tree, DemandPairs, this, DemandPairsPerNode, DemandPairsPerEdge);
+            
+            UniqueDirection uniqueDirection = new(Tree, DemandPairs, this, DemandPairsPerNode, DemandPairsPerEdge, false);
             reductionRules.Add(uniqueDirection);
 
             DominatedPath dominatedPath = new(Tree, DemandPairs, this, DemandPairsPerEdge);
@@ -66,7 +65,7 @@ namespace MulticutInTrees.Algorithms
 
             // todo: generalised dominating wingspan reduction rule
 
-            ReductionRules = new ReadOnlyCollection<ReductionRule>(reductionRules);
+            ReductionRules = reductionRules.AsReadOnly();
         }
     }
 }

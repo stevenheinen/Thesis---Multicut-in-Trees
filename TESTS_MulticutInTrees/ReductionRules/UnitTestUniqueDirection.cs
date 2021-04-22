@@ -45,7 +45,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             BousquetKernelisation algorithm = new(instance);
             CountedDictionary<Node, CountedCollection<DemandPair>> dpsPerNode = new();
             CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> dpsPerEdge = new();
-            UniqueDirection uniqueDirection = new(tree, dps, algorithm, dpsPerNode, dpsPerEdge);
+            UniqueDirection uniqueDirection = new(tree, dps, algorithm, dpsPerNode, dpsPerEdge, false);
             Assert.IsNotNull(uniqueDirection);
         }
 
@@ -59,11 +59,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedDictionary<Node, CountedCollection<DemandPair>> dpsPerNode = new();
             CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> dpsPerEdge = new();
 
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(null, dps, algorithm, dpsPerNode, dpsPerEdge));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, null, algorithm, dpsPerNode, dpsPerEdge));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, null, dpsPerNode, dpsPerEdge));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, null, dpsPerEdge));
-            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, dpsPerNode, null));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(null, dps, algorithm, dpsPerNode, dpsPerEdge, false));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, null, algorithm, dpsPerNode, dpsPerEdge, false));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, null, dpsPerNode, dpsPerEdge, false));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, null, dpsPerEdge, false));
+            Assert.ThrowsException<ArgumentNullException>(() => new UniqueDirection(tree, dps, algorithm, dpsPerNode, null, false));
         }
 
         [TestMethod]
@@ -154,8 +154,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Edge<Node> edge02 = new(node0, node2);
             Edge<Node> edge13 = new(node1, node3);
             Edge<Node> edge14 = new(node1, node4);
-            Edge<Node> edge05 = new(node0, node5);
-            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14, edge05 }, MockCounter);
+            Edge<Node> edge25 = new(node2, node5);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14, edge25 }, MockCounter);
             tree.UpdateNodeTypes();
 
             DemandPair dp1 = new(1, node0, node3, tree);
@@ -169,7 +169,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(3, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(4, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
@@ -201,7 +201,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(1, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(3, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
@@ -239,17 +239,19 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Node node3 = new(3);
             Node node4 = new(4);
             Node node5 = new(5);
-            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5 }, MockCounter);
+            Node node6 = new(6);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6 }, MockCounter);
             Edge<Node> edge01 = new(node0, node1);
             Edge<Node> edge12 = new(node1, node2);
             Edge<Node> edge23 = new(node2, node3);
             Edge<Node> edge24 = new(node2, node4);
             Edge<Node> edge25 = new(node2, node5);
-            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge24, edge25 }, MockCounter);
+            Edge<Node> edge06 = new(node0, node6);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge12, edge23, edge24, edge25, edge06 }, MockCounter);
 
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new(1, node0, node1, tree);
+            DemandPair dp1 = new(1, node6, node1, tree);
             DemandPair dp2 = new(2, node1, node3, tree);
             DemandPair dp3 = new(3, node3, node4, tree);
             DemandPair dp4 = new(4, node4, node5, tree);

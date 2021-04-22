@@ -36,6 +36,10 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         BousquetKernelisation,
         /// <summary>
+        /// The kernelisation algorithm by Chen et al. that finds a kernel of size O(k^3).
+        /// </summary>
+        ChenKernelisation,
+        /// <summary>
         /// Guo and Niedermeier's kernelisation algorithm with improved reduction rules.
         /// </summary>
         ImprovedGuoNiedermeierKernelisation,

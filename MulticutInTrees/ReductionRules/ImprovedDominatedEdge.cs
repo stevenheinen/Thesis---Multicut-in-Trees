@@ -46,13 +46,20 @@ namespace MulticutInTrees.ReductionRules
             foreach (Edge<Node> neighbour in NeighbouringEdges(edge))
             {
                 Edge<Node> compareEdge = neighbour;
-                if (edgesToBeContracted.Contains(neighbour))
+                bool skip = false;
+                while (edgesToBeContracted.Contains(compareEdge))
                 {
-                    if (comparedEdge[neighbour] == edge)
+                    if (comparedEdge[compareEdge] == edge)
                     {
-                        continue;
+                        skip = true;
+                        break;
                     }
-                    compareEdge = comparedEdge[neighbour];
+                    compareEdge = comparedEdge[compareEdge];
+                }
+
+                if (skip)
+                {
+                    continue;
                 }
 
                 if (AllDemandPairsPassThroughAnotherEdge(edge, compareEdge))

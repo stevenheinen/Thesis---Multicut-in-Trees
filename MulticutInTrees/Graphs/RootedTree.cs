@@ -190,10 +190,6 @@ namespace MulticutInTrees.Graphs
 #if !EXPERIMENT
             Utils.NullCheck(node, nameof(node), $"Trying to remove a node from {this}, but the node is null!");
             Utils.NullCheck(counter, nameof(counter), $"Trying to remove a node from {this}, but the counter is null!");
-            if (!IsValid())
-            {
-                throw new InvalidOperationException("The tree is not a valid tree! Have you added the correct edges after adding a node?");
-            }
             if (!HasNode(node, MockCounter))
             {
                 throw new NotInGraphException($"Trying to remove {node} from {this}, but {node} is not part of {this}!");

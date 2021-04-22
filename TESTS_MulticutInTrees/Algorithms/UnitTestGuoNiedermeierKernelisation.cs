@@ -142,10 +142,10 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
-            CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
-            MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
-            GuoNiedermeierKernelisation gnfptNaive = new GuoNiedermeierKernelisation(instanceNaive);
-            (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.Run();
+            CountedCollection<DemandPair> demandPairsNaive = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
+            MulticutInstance instanceNaive = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
+            GuoNiedermeierKernelisation gnfptNaive = new(instanceNaive);
+            (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.RunNaively();
 
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(MockCounter), result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
@@ -177,10 +177,10 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
-            CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
-            MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
-            GuoNiedermeierKernelisation gnfptNaive = new GuoNiedermeierKernelisation(instanceNaive);
-            (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.Run();
+            CountedCollection<DemandPair> demandPairsNaive = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
+            MulticutInstance instanceNaive = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
+            GuoNiedermeierKernelisation gnfptNaive = new(instanceNaive);
+            (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.RunNaively();
 
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(MockCounter), result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);
@@ -212,10 +212,10 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(randomSeed));
-            CountedList<DemandPair> demandPairsNaive = new CountedList<DemandPair>(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
-            MulticutInstance instanceNaive = new MulticutInstance(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
-            GuoNiedermeierKernelisation gnfptNaive = new GuoNiedermeierKernelisation(instanceNaive);
-            (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.Run();
+            CountedCollection<DemandPair> demandPairsNaive = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, treeNaive, new Random(randomSeed))), MockCounter);
+            MulticutInstance instanceNaive = new(InputTreeType.Prufer, InputDemandPairsType.Random, randomSeed, treeNaive, demandPairsNaive, optimalK, optimalK);
+            GuoNiedermeierKernelisation gnfptNaive = new(instanceNaive);
+            (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) resultNaive = gnfptNaive.RunNaively();
 
             Assert.AreEqual(resultNaive.Item1.NumberOfNodes(MockCounter), result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(resultNaive.Item2.Count, result.Item2.Count);

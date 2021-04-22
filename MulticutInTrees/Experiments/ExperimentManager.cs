@@ -34,7 +34,7 @@ namespace MulticutInTrees.Experiments
 #endif
             List<ExperimentOutput> results = options.AlgorithmType switch
             {
-                AlgorithmType.GuoNiedermeierKernelisation or AlgorithmType.ImprovedGuoNiedermeierKernelisation or AlgorithmType.BousquetKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
+                AlgorithmType.GuoNiedermeierKernelisation or AlgorithmType.ImprovedGuoNiedermeierKernelisation or AlgorithmType.BousquetKernelisation or AlgorithmType.ChenKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
                 AlgorithmType.GurobiMIPSolver => RunMultipleExperiments(options, RunGurobiMIPAlgorithm),
                 AlgorithmType.GuoNiederMeierBranching => RunMultipleExperiments(options, RunBranchingAlgorithm),
                 AlgorithmType.BruteForce => RunMultipleExperiments(options, RunBruteForceAlgorithm),
@@ -312,6 +312,7 @@ namespace MulticutInTrees.Experiments
                 AlgorithmType.GuoNiedermeierKernelisation => new GuoNiedermeierKernelisation(instance),
                 AlgorithmType.ImprovedGuoNiedermeierKernelisation => new ImprovedGuoNiedermeierKernelisation(instance),
                 AlgorithmType.BousquetKernelisation => new BousquetKernelisation(instance),
+                AlgorithmType.ChenKernelisation => new ChenKernelisation(instance),
                 _ => throw new NotSupportedException($"The algorithm type {algorithmType} is not supported!")
             };
         }

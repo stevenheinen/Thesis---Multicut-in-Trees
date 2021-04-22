@@ -9,43 +9,48 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DefaultDocumentationFolder>Documentation</DefaultDocumentationFolder>
     <DefaultDocumentationInvalidCharReplacement>_</DefaultDocumentationInvalidCharReplacement>
+    <!-- 0.6.15 -->
     <DefaultDocumentationWikiLinks>true</DefaultDocumentationWikiLinks>
     <DefaultDocumentationFileNameMode>Md5</DefaultDocumentationFileNameMode>
     <DefaultDocumentationNestedTypeVisibility>Everywhere</DefaultDocumentationNestedTypeVisibility>
     <DefaultDocumentationHome>home</DefaultDocumentationHome>
+    <!-- 0.7.2 
+    <DefaultDocumentationRemoveFileExtensionFromLinks>true</DefaultDocumentationRemoveFileExtensionFromLinks>
+    <DefaultDocumentationFileNameMode>Md5</DefaultDocumentationFileNameMode>
+    <DefaultDocumentationNestedTypeVisibilities>Namespace,DeclaringType</DefaultDocumentationNestedTypeVisibilities>
+    <DefaultDocumentationAssemblyPageName>home</DefaultDocumentationAssemblyPageName>
+    -->
     <Configurations>Debug;Release;VerboseDebug;Experiment</Configurations>
   </PropertyGroup>
 
+  <!--
   <Choose>
     <When Condition="'$(BuildingForLiveUnitTesting)' == 'true'">
       <ItemGroup>
-        <PackageReference Include="DefaultDocumentation" Version="0.6.15">
+        <PackageReference Include="DefaultDocumentation" Version="0.7.2">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
       </ItemGroup>
     </When>
-    <!--
     <When Condition="'$(BuildingForLiveUnitTesting)' != 'true'">
       <ItemGroup>
-        <PackageReference Include="DefaultDocumentation" Version="0.6.14">
+        <PackageReference Include="DefaultDocumentation" Version="0.7.2">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
       </ItemGroup>
     </When>
-    -->
   </Choose>
+  -->
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="CsvHelper" Version="26.1.0" />
-    <!--
     <PackageReference Include="DefaultDocumentation" Version="0.6.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    -->
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.9.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
