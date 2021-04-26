@@ -225,11 +225,13 @@ namespace MulticutInTrees.ReductionRules
                 List<DemandPair> pairsOnEdge = dps.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
                 for (int i = 0; i < pairsOnEdge.Count - 1; i++)
                 {
-                    // todo: check if this makes sense. I do not think it needs to happen...
-                    pairsToCheck.Add(pairsOnEdge[i]);
-                    
                     for (int j = i + 1; j < pairsOnEdge.Count; j++)
                     {
+                        foreach (DemandPair candidateDP in IntersectingDemandPairs[pairsOnEdge[i], Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Intersect(IntersectingDemandPairs[pairsOnEdge[j], Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
+                        {
+                            pairsToCheck.Add(candidateDP);
+                        }
+
                         (DemandPair, DemandPair) key = GetIntersectionKey(pairsOnEdge[i], pairsOnEdge[j]);
                         DemandPairIntersections[key, Measurements.DemandPairsOperationsCounter].Remove(edge, Measurements.TreeOperationsCounter);
                         if (DemandPairIntersections[key, MockCounter].Count(MockCounter) == 0)
@@ -256,6 +258,7 @@ namespace MulticutInTrees.ReductionRules
 
                 foreach (DemandPair intersectingDemandPair in IntersectingDemandPairs[dp, Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
                 {
+                    pairsToCheck.Add(intersectingDemandPair);
                     (DemandPair, DemandPair) key = GetIntersectionKey(dp, intersectingDemandPair);
                     foreach (Edge<Node> edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter)) 
                     {

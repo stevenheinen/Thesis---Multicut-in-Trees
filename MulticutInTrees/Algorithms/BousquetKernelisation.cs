@@ -61,7 +61,8 @@ namespace MulticutInTrees.Algorithms
             CommonFactor commonFactor = new(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(commonFactor);
 
-            // todo: bidimensional dominating wingspan reduction rule
+            BidimensionalDominatingWingspan bidimensionalDominatingWingspan = new(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);
+            reductionRules.Add(bidimensionalDominatingWingspan);
 
             // todo: generalised dominating wingspan reduction rule
 

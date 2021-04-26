@@ -50,6 +50,15 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
+        /// Checks whether this <see cref="Edge{TNode}"/> exists between two I_x nodes.
+        /// </summary>
+        /// <returns><see langword="true"/> if the type of both <see cref="Endpoint1"/> and <see cref="Endpoint2"/> is <see cref="NodeType.I1"/>, <see cref="NodeType.I2"/> or <see cref="NodeType.I3"/>, <see langword="false"/> otherwise.</returns>
+        public bool BetweenInternalNodes()
+        {
+            return (Endpoint1.Type == NodeType.I1 || Endpoint1.Type == NodeType.I2 || Endpoint1.Type == NodeType.I3) && (Endpoint2.Type == NodeType.I1 || Endpoint2.Type == NodeType.I2 || Endpoint2.Type == NodeType.I3);
+        }
+
+        /// <summary>
         /// Check whether <paramref name="node"/> is an endpoint of this <see cref="Edge{TNode}"/>.
         /// </summary>
         /// <param name="node">The <typeparamref name="TNode"/> for which we want to know if it is an endpoint of this <see cref="Edge{TNode}"/>.</param>

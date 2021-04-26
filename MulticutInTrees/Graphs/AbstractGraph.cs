@@ -625,7 +625,7 @@ namespace MulticutInTrees.Graphs
         {
             // If the I3-node has exactly three internal neighbours, the result of this edge contraction will be an I2-node.
             // If it has more than three internal neighbours, the result will be an I3-node.
-            bool hasAtLeastFourInternalNeighbours = contractedEdgeI3Node.Neighbours(MockCounter).Count(n => n.Neighbours(MockCounter).Count() > 1) > 3;
+            bool hasAtLeastFourInternalNeighbours = contractedEdgeI3Node.Neighbours(MockCounter).Count(n => n.Degree(MockCounter) > 1) > 3;
             NodeType contractedType;
             NodeType leafType;
 
@@ -666,9 +666,11 @@ namespace MulticutInTrees.Graphs
                 {
                     newNode.Type = NodeType.L1;
                 }
-                else if (internalNeighbour.Type == NodeType.I2)
+                else if (internalNeighbour.Type == NodeType.I2 || internalNeighbour.Neighbours(MockCounter).Count(n => n.Degree(MockCounter) > 1) == 3)
                 {
                     newNode.Type = NodeType.L2;
+                    internalNeighbour.Type = NodeType.I2;
+                    ChangeLeavesFromNodeToType(internalNeighbour, NodeType.L3, NodeType.L2);
                 }
                 else
                 {
