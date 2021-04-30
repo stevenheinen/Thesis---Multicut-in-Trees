@@ -223,9 +223,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(115, result.Item1.NumberOfNodes(MockCounter));
-            Assert.AreEqual(11, result.Item2.Count);
-            Assert.AreEqual(30, result.Item3.Count);
+            Assert.AreEqual(120, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(10, result.Item2.Count);
+            Assert.AreEqual(31, result.Item3.Count);
         }
     }
 }

@@ -666,7 +666,13 @@ namespace MulticutInTrees.Graphs
                 {
                     newNode.Type = NodeType.L1;
                 }
-                else if (internalNeighbour.Type == NodeType.I2 || internalNeighbour.Neighbours(MockCounter).Count(n => n.Degree(MockCounter) > 1) == 3)
+                else if (internalNeighbour.Type == NodeType.I2)
+                {
+                    newNode.Type = NodeType.L1;
+                    internalNeighbour.Type = NodeType.I1;
+                    ChangeLeavesFromNodeToType(internalNeighbour, NodeType.L2, NodeType.L1);
+                }
+                else if (internalNeighbour.Neighbours(MockCounter).Count(n => n.Degree(MockCounter) > 1) == 3)
                 {
                     newNode.Type = NodeType.L2;
                     internalNeighbour.Type = NodeType.I2;

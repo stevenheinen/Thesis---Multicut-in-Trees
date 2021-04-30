@@ -120,6 +120,26 @@ namespace MulticutInTrees.CountedDatastructures
         }
 
         /// <summary>
+        /// Returns the first element in this <see cref="CountedCollection{T}"/> that fits <paramref name="predicate"/>, or <see langword="default"/> if no such element exists.
+        /// </summary>
+        /// <param name="predicate">The condition that determines which element we return.</param>
+        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
+        /// <returns>The <typeparamref name="T"/> that is the first element in this <see cref="CountedCollection{T}"/> that passes <paramref name="predicate"/>, or <see langword="default"/> if no such element exists.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public T FirstOrDefault(Func<T, bool> predicate, Counter counter)
+        {
+#if !EXPERIMENT
+            Utilities.Utils.NullCheck(predicate, nameof(predicate), "Trying to get the first element of a CountedCollection that fits a condition, but the condition-function is null!");
+            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the first element of a CountedCollection that fits a condition, but the Counter is null!");
+#endif
+            return LinkedList.FirstOrDefault(elem =>
+            {
+                counter++;
+                return predicate(elem);
+            });
+        }
+
+        /// <summary>
         /// Returns the last element in this <see cref="CountedCollection{T}"/>.
         /// </summary>
         /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>

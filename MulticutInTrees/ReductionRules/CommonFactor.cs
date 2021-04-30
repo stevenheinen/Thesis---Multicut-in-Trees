@@ -204,7 +204,7 @@ namespace MulticutInTrees.ReductionRules
         internal override bool RunLaterIteration()
         {
 #if VERBOSEDEBUG
-            Console.WriteLine($"Executing {GetType().Name} rule in a later iterations");
+            Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
 

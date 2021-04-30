@@ -9,45 +9,18 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DefaultDocumentationFolder>Documentation</DefaultDocumentationFolder>
     <DefaultDocumentationInvalidCharReplacement>_</DefaultDocumentationInvalidCharReplacement>
-    <!-- 0.6.15 -->
-    <DefaultDocumentationWikiLinks>true</DefaultDocumentationWikiLinks>
-    <DefaultDocumentationFileNameMode>Md5</DefaultDocumentationFileNameMode>
-    <DefaultDocumentationNestedTypeVisibility>Everywhere</DefaultDocumentationNestedTypeVisibility>
-    <DefaultDocumentationHome>home</DefaultDocumentationHome>
-    <!-- 0.7.2 
     <DefaultDocumentationRemoveFileExtensionFromLinks>true</DefaultDocumentationRemoveFileExtensionFromLinks>
     <DefaultDocumentationFileNameMode>Md5</DefaultDocumentationFileNameMode>
     <DefaultDocumentationNestedTypeVisibilities>Namespace,DeclaringType</DefaultDocumentationNestedTypeVisibilities>
     <DefaultDocumentationAssemblyPageName>home</DefaultDocumentationAssemblyPageName>
-    -->
-    <Configurations>Debug;Release;VerboseDebug;Experiment</Configurations>
+    <DisableDefaultDocumentation Condition="'$(BuildingForLiveUnitTesting)' == 'true'">true</DisableDefaultDocumentation>
+	<Configurations>Debug;Release;VerboseDebug;Experiment</Configurations>
   </PropertyGroup>
-
-  <!--
-  <Choose>
-    <When Condition="'$(BuildingForLiveUnitTesting)' == 'true'">
-      <ItemGroup>
-        <PackageReference Include="DefaultDocumentation" Version="0.7.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-      </ItemGroup>
-    </When>
-    <When Condition="'$(BuildingForLiveUnitTesting)' != 'true'">
-      <ItemGroup>
-        <PackageReference Include="DefaultDocumentation" Version="0.7.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  -->
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="CsvHelper" Version="26.1.0" />
-    <PackageReference Include="DefaultDocumentation" Version="0.6.15">
+    <PackageReference Include="CsvHelper" Version="27.0.2" />
+    <PackageReference Include="DefaultDocumentation" Version="0.7.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -69,16 +42,4 @@
       <HintPath>C:\gurobi911\win64\lib\gurobi91.netstandard20.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <!--
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildingForLiveUnitTesting)' != 'true'">
-    <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
-  </Target>
-  -->
-  <!--
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call &quot;P:\Thesis - Multicut in Trees\UpdateDocumentation.cmd&quot;" />
-  </Target>
-  -->
-
 </Project>

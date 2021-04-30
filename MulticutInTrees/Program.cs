@@ -28,7 +28,7 @@ namespace MulticutInTrees
             if (args.Length == 0)
             {
                 //string[] split = "--seed=0 --repetitions=1 --experiments=10 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
-                string[] split = "--seed=0 --repetitions=1 --experiments=1 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=500 --nrDPs=350 --maxSolutionSize=0 -v".Split();
+                string[] split = "--seed=0 --repetitions=1 --experiments=10 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
                 //string[] split = "--seed=0 --repetitions=1 --experiments=10 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
 
                 args = new string[split.Length + 2];

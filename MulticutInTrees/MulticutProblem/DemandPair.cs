@@ -77,15 +77,30 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="edge">The <see cref="Edge{TNode}"/> for which we want to know whether it is part of this demand path.</param>
         /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
         /// <returns><see langword="true"/> if <paramref name="edge"/> is part of the path of this <see cref="DemandPair"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when either endpoint of <paramref name="edge"/>, or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edge"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
         public bool EdgeIsPartOfPath(Edge<Node> edge, Counter counter)
         {
 #if !EXPERIMENT
-            Utils.NullCheck(edge.Endpoint1, nameof(edge.Endpoint1), "Trying to see if an edge is part of a demandpair, but the first endpoint of the edge is null!");
-            Utils.NullCheck(edge.Endpoint2, nameof(edge.Endpoint2), "Trying to see if an edge is part of a demandpair, but the second endpoint of the edge is null!");
+            Utils.NullCheck(edge, nameof(edge), "Trying to see if an edge is part of a demandpair, but the edge is null!");
             Utils.NullCheck(counter, nameof(counter), "Trying to see if an edge is part of a demandpair, but the counter is null!");
 #endif
             return Path.Contains(edge, counter);
+        }
+
+        /// <summary>
+        /// Checks whether <paramref name="node"/> is on the path between the endpoints of this <see cref="DemandPair"/>.
+        /// </summary>
+        /// <param name="node">The <see cref="Node"/> for which we want to know whether it is part of this demand path.</param>
+        /// <param name="counter">The <see cref="Counter"/> to be used for this modification.</param>
+        /// <returns><see langword="true"/> if <paramref name="node"/> is part of the path of this <see cref="DemandPair"/>, <see langword="false"/> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public bool NodeIsPartOfPath(Node node, Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(node, nameof(node), "Trying to see if a node is part of a demandpair, but the node is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to see if a node is part of a demandpair, but the counter is null!");
+#endif
+            return !(Path.FirstOrDefault(e => e.HasEndpoint(node), counter) is null);
         }
 
         /// <summary>

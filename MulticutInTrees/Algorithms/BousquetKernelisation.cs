@@ -64,7 +64,8 @@ namespace MulticutInTrees.Algorithms
             BidimensionalDominatingWingspan bidimensionalDominatingWingspan = new(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);
             reductionRules.Add(bidimensionalDominatingWingspan);
 
-            // todo: generalised dominating wingspan reduction rule
+            GeneralisedDominatingWingspan generalisedDominatingWingspan = new(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);
+            reductionRules.Add(generalisedDominatingWingspan);
 
             ReductionRules = reductionRules.AsReadOnly();
         }

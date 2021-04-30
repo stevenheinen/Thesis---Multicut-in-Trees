@@ -2,10 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CountedDatastructures;
@@ -18,7 +15,7 @@ using MulticutInTrees.Utilities;
 namespace TESTS_MulticutInTrees.ReductionRules
 {
     [TestClass]
-    public class UnitTestBIdimensionalDominatingWingspan
+    public class UnitTestBidimensionalDominatingWingspan
     {
         private static readonly Counter MockCounter = new();
         private static readonly PerformanceMeasurements MockMeasurements = new(nameof(UnitTestCommonFactor));

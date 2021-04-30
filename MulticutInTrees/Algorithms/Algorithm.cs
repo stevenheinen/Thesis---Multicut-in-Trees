@@ -156,8 +156,6 @@ namespace MulticutInTrees.Algorithms
         /// <returns>A tuple with the <see cref="Graph"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="Node"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
         public (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) Run()
         {
-            bool[] appliedReductionRule = new bool[ReductionRules.Count];
-
             for (int i = 0; i < ReductionRules.Count; i++)
             {
                 if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
@@ -173,9 +171,8 @@ namespace MulticutInTrees.Algorithms
                 Console.WriteLine($"Now applying rule {i + 1} ({ReductionRules[i].GetType().Name}).");
 #endif
                 // If we have not executed this rule before, execute it now.
-                if (!appliedReductionRule[i])
+                if (!ReductionRules[i].HasRun)
                 {
-                    appliedReductionRule[i] = true;
                     if (ReductionRules[i].RunFirstIteration())
                     {
                         if (ReductionRules[i].TrueMeansInfeasibleInstance)
