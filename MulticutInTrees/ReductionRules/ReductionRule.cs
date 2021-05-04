@@ -157,7 +157,7 @@ namespace MulticutInTrees.ReductionRules
             Measurements.TimeSpentCheckingApplicability.Stop();
             Measurements.TimeSpentModifyingInstance.Start();
             Algorithm.ContractEdges(edgesToBeContracted, Measurements);
-            Measurements.TimeSpentModifyingInstance.Start();
+            Measurements.TimeSpentModifyingInstance.Stop();
             return true;
         }
 
