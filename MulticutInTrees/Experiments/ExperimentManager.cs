@@ -132,7 +132,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine("Instance generated!");
             }
 
-            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, randomSeed, instance.K, instance.OptimalK, true, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, randomSeed, instance.K, instance.OptimalK, true, -1, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -170,7 +170,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, randomSeed, instance.K, instance.OptimalK, solved, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, randomSeed, instance.K, instance.OptimalK, solved, -1, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -208,7 +208,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, randomSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }

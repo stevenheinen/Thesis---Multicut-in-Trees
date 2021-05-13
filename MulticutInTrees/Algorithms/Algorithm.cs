@@ -110,15 +110,19 @@ namespace MulticutInTrees.Algorithms
         /// <returns>A tuple with the <see cref="Graph"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="Node"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
         public (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) RunNaively()
         {
+            bool returnBool = true;
+
             for (int i = 0; i < ReductionRules.Count; i++)
             {
                 if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
                 {
-                    goto returntrue;
+                    returnBool = true;
+                    break;
                 }
                 if (PartialSolution.Count >= K)
                 {
-                    goto returnfalse;
+                    returnBool = false;
+                    break;
                 }
 
 #if VERBOSEDEBUG
@@ -129,7 +133,8 @@ namespace MulticutInTrees.Algorithms
                 {
                     if (ReductionRules[i].TrueMeansInfeasibleInstance)
                     {
-                        goto returnfalse;
+                        returnBool = false;
+                        break;
                     }
 
                     // If the application of the i-th reduction rule was a success, start again at rule 0.
@@ -143,11 +148,8 @@ namespace MulticutInTrees.Algorithms
 #endif
             }
 
-            returntrue:
-            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
-
-            returnfalse:
-            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            int remainingK = Instance.K - PartialSolution.Count;
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, returnBool, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), remainingK, AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>
@@ -156,15 +158,19 @@ namespace MulticutInTrees.Algorithms
         /// <returns>A tuple with the <see cref="Graph"/> that is left after kernelisation, a <see cref="List{T}"/> with tuples of two <see cref="Node"/>s representing the edges that are part of the solution, and a <see cref="List{T}"/> of <see cref="DemandPair"/>s that are not yet separated.</returns>
         public (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) Run()
         {
+            bool returnBool = true;
+
             for (int i = 0; i < ReductionRules.Count; i++)
             {
                 if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
                 {
-                    goto returntrue;
+                    returnBool = true;
+                    break;
                 }
                 if (PartialSolution.Count >= K)
                 {
-                    goto returnfalse;
+                    returnBool = false;
+                    break;
                 }
 
 #if VERBOSEDEBUG
@@ -177,7 +183,8 @@ namespace MulticutInTrees.Algorithms
                     {
                         if (ReductionRules[i].TrueMeansInfeasibleInstance)
                         {
-                            goto returnfalse;
+                            returnBool = false;
+                            break;
                         }
 
                         // If the first application of the i-th reduction rule was a success, start again at rule 0.
@@ -197,7 +204,8 @@ namespace MulticutInTrees.Algorithms
                 {
                     if (ReductionRules[i].TrueMeansInfeasibleInstance)
                     {
-                        goto returnfalse;
+                        returnBool = false;
+                        break;
                     }
 
                     i = -1;
@@ -210,11 +218,8 @@ namespace MulticutInTrees.Algorithms
 #endif
             }
 
-            returntrue:
-            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, true, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
-
-            returnfalse:
-            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, false, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            int remainingK = Instance.K - PartialSolution.Count;
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, returnBool, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), remainingK, AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>

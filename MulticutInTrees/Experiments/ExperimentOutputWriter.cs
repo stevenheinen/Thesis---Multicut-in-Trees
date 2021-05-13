@@ -71,6 +71,7 @@ namespace MulticutInTrees.Experiments
             writer.WriteField("Solvable");
             writer.WriteField("Remaining nodes");
             writer.WriteField("Remaining DPs");
+            writer.WriteField("Remaining K");
             writer.WriteField("AlgTreeOps");
             writer.WriteField("AlgDPOps");
             writer.WriteField("AlgDPEdgeKeyOps");
@@ -118,6 +119,7 @@ namespace MulticutInTrees.Experiments
             writer.WriteField(output.Solvable);
             writer.WriteField(output.RemainingNodes);
             writer.WriteField(output.RemainingDPs);
+            writer.WriteField(output.RemainingK);
             writer.WriteField(output.AlgorithmOperations.TreeOperationsCounter.Value);
             writer.WriteField(output.AlgorithmOperations.DemandPairsOperationsCounter.Value);
             writer.WriteField(output.AlgorithmOperations.DemandPairsPerEdgeKeysCounter.Value);

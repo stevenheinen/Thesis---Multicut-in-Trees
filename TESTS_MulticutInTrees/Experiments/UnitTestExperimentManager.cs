@@ -23,7 +23,7 @@ namespace TESTS_MulticutInTrees.Experiments
             Assert.ThrowsException<ArgumentNullException>(() => ExperimentManager.RunExperiment(null));
 
             CommandLineOptions options = new();
-            Func<int, CommandLineOptions, ExperimentOutput> func = (i, c) => new ExperimentOutput(1, 1, InputTreeType.Fixed, InputDemandPairsType.Fixed, AlgorithmType.GuoNiedermeierKernelisation, 1, 1, 1, true, 1, 1, new PerformanceMeasurements("test"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            Func<int, CommandLineOptions, ExperimentOutput> func = (i, c) => new ExperimentOutput(1, 1, InputTreeType.Fixed, InputDemandPairsType.Fixed, AlgorithmType.GuoNiedermeierKernelisation, 1, 1, 1, true, 1, 1, 1, new PerformanceMeasurements("test"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
             {

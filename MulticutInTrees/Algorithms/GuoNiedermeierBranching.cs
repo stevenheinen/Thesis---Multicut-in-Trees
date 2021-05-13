@@ -103,7 +103,7 @@ namespace MulticutInTrees.Algorithms
 
             Measurements.TimeSpentModifyingInstance.Stop();
 
-            ExperimentOutput experimentOutput = new(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType.GuoNiederMeierBranching, Instance.RandomSeed, Instance.K, Instance.OptimalK, solved, -1, -1, Measurements, new List<PerformanceMeasurements>().AsReadOnly());
+            ExperimentOutput experimentOutput = new(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType.GuoNiederMeierBranching, Instance.RandomSeed, Instance.K, Instance.OptimalK, solved, -1, -1, -1, Measurements, new List<PerformanceMeasurements>().AsReadOnly());
 
             return (solution, experimentOutput);
         }

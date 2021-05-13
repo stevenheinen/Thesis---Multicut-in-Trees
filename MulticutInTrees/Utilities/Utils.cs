@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
@@ -454,8 +456,25 @@ namespace MulticutInTrees.Utilities
             while (queue.Count > 0)
             {
                 Node node = queue.Dequeue();
-                IEnumerable<Node> neighbours = edges.Where(n => n.Item1 == node.ID || n.Item2 == node.ID).Select(n => n.Item1 == node.ID ? n.Item2 : n.Item1).Select(n => nodes[n]);
-                edges = edges.Where(n => n.Item1 != node.ID && n.Item2 != node.ID).ToList();
+
+                List<Node> neighbours = new();
+                List<(int, int)> others = new();
+
+                foreach ((int, int) edge in edges)
+                {
+                    if (edge.Item1 == node.ID || edge.Item2 == node.ID)
+                    {
+                        Node neighbour = edge.Item1 == node.ID ? nodes[edge.Item2] : nodes[edge.Item1];
+                        neighbours.Add(neighbour);
+                    }
+                    else
+                    {
+                        others.Add(edge);
+                    }
+                }
+
+                edges = others;
+                
                 foreach (Node neighbour in neighbours)
                 {
                     if (!graph.HasNode(neighbour, mockCounter))
@@ -477,11 +496,11 @@ namespace MulticutInTrees.Utilities
         /// Create a set of <see cref="DemandPair"/>s in <paramref name="tree"/> with endpoints identified by the <see cref="int"/> tuples in <paramref name="endpoints"/>.
         /// </summary>
         /// <param name="tree">The <see cref="AbstractGraph{TEdge, TNode}"/> in which to create the <see cref="DemandPair"/>s.</param>
-        /// <param name="endpoints">The <see cref="IEnumerable{T}"/> with <see cref="int"/> tuples that represent the IDs of the <see cref="Node"/>s that are the endpoints of that <see cref="DemandPair"/>.</param>
+        /// <param name="endpoints">The <see cref="IList{T}"/> with <see cref="int"/> tuples that represent the IDs of the <see cref="Node"/>s that are the endpoints of that <see cref="DemandPair"/>.</param>
         /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="endpoints"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">Thrown when a tuple in <paramref name="endpoints"/> has a value that is not the ID of a <see cref="Node"/> in <paramref name="tree"/>.</exception>
-        public static CountedCollection<DemandPair> CreateDemandPairs(Graph tree, IEnumerable<(int, int)> endpoints)
+        public static CountedCollection<DemandPair> CreateDemandPairs(Graph tree, IList<(int, int)> endpoints)
         {
 #if !EXPERIMENT
             NullCheck(tree, nameof(tree), "Trying to create demand pairs given a list with int endpoints, but the tree is null!");
@@ -500,11 +519,11 @@ namespace MulticutInTrees.Utilities
             }
 #endif
             Counter mockCounter = new();
-            CountedCollection<DemandPair> result = new();
+            DemandPair[] dpArray = new DemandPair[endpoints.Count];
 
-            uint id = 0;
-            foreach ((int, int) dp in endpoints)
+            Parallel.For(0, endpoints.Count, id =>
             {
+                (int, int) dp = endpoints[id];
                 Node node1 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item1);
                 Node node2 = tree.Nodes(mockCounter).FirstOrDefault(n => n.ID == dp.Item2);
 #if !EXPERIMENT
@@ -517,11 +536,10 @@ namespace MulticutInTrees.Utilities
                     throw new ArgumentException($"Trying to create demand pairs given a list with int endpoints, but a demand pair has an invalid endpoint (it is {dp.Item2}, but is does not exist in the tree)!", nameof(endpoints));
                 }
 #endif
-                result.Add(new DemandPair(id, node1, node2, tree), mockCounter);
-                id++;
-            }
+                dpArray[id] = new DemandPair((uint)id, node1, node2, tree);
+            });
 
-            return result;
+            return new CountedCollection<DemandPair>(dpArray, mockCounter);
         }
     }
 }

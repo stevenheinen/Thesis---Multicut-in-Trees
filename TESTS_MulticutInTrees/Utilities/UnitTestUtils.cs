@@ -230,8 +230,10 @@ namespace TESTS_MulticutInTrees.Utilities
 
             tree.RemoveNode(tree.Nodes(MockCounter).First(n => n.ID == 3), MockCounter);
 
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 3) }));
-            Assert.ThrowsException<ArgumentException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (3, 0), (2, 1) }));
+            AggregateException a = Assert.ThrowsException<AggregateException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 3) }));
+            Assert.IsInstanceOfType(a.InnerException, typeof(ArgumentException));
+            a = Assert.ThrowsException<AggregateException>(() => Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (3, 0), (2, 1) }));
+            Assert.IsInstanceOfType(a.InnerException, typeof(ArgumentException));
 
             CountedCollection<DemandPair> demandPairs = Utils.CreateDemandPairs(tree, new List<(int, int)>() { (1, 0), (2, 0), (2, 4) });
             Assert.IsNotNull(demandPairs);

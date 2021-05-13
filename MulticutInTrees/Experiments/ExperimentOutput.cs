@@ -59,6 +59,11 @@ namespace MulticutInTrees.Experiments
         public int RemainingDPs { get; }
 
         /// <summary>
+        /// The number of edges that can still be cut in the kernel.
+        /// </summary>
+        public int RemainingK { get; }
+
+        /// <summary>
         /// The maximum size the solution is allowed to be in this experiment.
         /// </summary>
         public int MaxSolutionSize { get; }
@@ -92,10 +97,11 @@ namespace MulticutInTrees.Experiments
         /// <param name="solvable">Whether the instance is solvable.</param>
         /// <param name="remainingNodes">The remaining number of nodes in the kernel.</param>
         /// <param name="remainingDPs">The remaining number of <see cref="DemandPair"/>s in the kernel.</param>
+        /// <param name="remainingK">The number of edges that can still be cut in the kernel.</param>
         /// <param name="algorithmOperations">The <see cref="PerformanceMeasurements"/> the <see cref="Algorithm"/> itself used.</param>
         /// <param name="reductionRulesOperations"><see cref="ReadOnlyCollection{T}"/> of the <see cref="PerformanceMeasurements"/> per <see cref="ReductionRules.ReductionRule"/> in the algorithm.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="algorithmOperations"/> or <paramref name="reductionRulesOperations"/> is <see langword="null"/>.</exception>
-        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int seed, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
+        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int seed, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, int remainingK, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(algorithmOperations, nameof(algorithmOperations), "Trying to creat an experiment output, but the performance measures of the algorithm is null!");
@@ -112,6 +118,7 @@ namespace MulticutInTrees.Experiments
             Solvable = solvable;
             RemainingNodes = remainingNodes;
             RemainingDPs = remainingDPs;
+            RemainingK = remainingK;
             AlgorithmOperations = algorithmOperations;
             ReductionRulesOperations = reductionRulesOperations;
         }
