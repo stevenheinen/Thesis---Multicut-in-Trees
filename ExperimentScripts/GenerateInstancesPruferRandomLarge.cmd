@@ -85,5 +85,6 @@ REM Each instance will be repeated 5 times to compensate for difference in runni
 ..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --treeSeed=8155049 --dpSeed=8305173 --experiments=5 --algorithm=GenerateInstances --treeType=Prufer --dpType=Random --instanceDir="D:\Documents\Universiteit\Thesis\Instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --nrNodes=10240 --nrDPs=8192
 ..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --treeSeed=2436991 --dpSeed=5639152 --experiments=5 --algorithm=GenerateInstances --treeType=Prufer --dpType=Random --instanceDir="D:\Documents\Universiteit\Thesis\Instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --nrNodes=10240 --nrDPs=9216
 ..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --treeSeed=4398246 --dpSeed=7826428 --experiments=5 --algorithm=GenerateInstances --treeType=Prufer --dpType=Random --instanceDir="D:\Documents\Universiteit\Thesis\Instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --nrNodes=10240 --nrDPs=10240
+
 del mipMinSolSizeSolver.log
 pause
