@@ -25,7 +25,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
             Graph tree = new();
             CountedCollection<DemandPair> dps = new();
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 2, 2);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 2, 2);
 
             Assert.IsNotNull(instance);
         }
@@ -33,10 +33,10 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         [TestMethod]
         public void TestPublicConstructor()
         {
-            CommandLineOptions existingOptions = new() { RandomSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "no.txt", OutputDirectory = Directory.GetCurrentDirectory(), InstanceDirectory = Directory.GetCurrentDirectory(), Verbose = true };
+            CommandLineOptions existingOptions = new() { TreeSeed = 0, DemandPairSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "no.txt", OutputDirectory = Directory.GetCurrentDirectory(), InstanceDirectory = Directory.GetCurrentDirectory(), Verbose = true };
 
             MethodInfo fileNameMethod = typeof(InstanceReaderWriter).GetMethod("CreateFilePath", BindingFlags.NonPublic | BindingFlags.Static);
-            string existingFile = (string)fileNameMethod.Invoke(null, new object[] { 0, existingOptions });
+            string existingFile = (string)fileNameMethod.Invoke(null, new object[] { 0, 0, existingOptions });
 
             using (StreamWriter sw = new(existingFile))
             {
@@ -60,7 +60,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
                 sw.WriteLine("4 5");
             }
 
-            MulticutInstance existingInstance = new(0, existingOptions);
+            MulticutInstance existingInstance = new(0, 0, existingOptions);
             Assert.IsNotNull(existingInstance);
             Assert.AreEqual(7, existingInstance.Tree.NumberOfNodes(MockCounter));
             Assert.AreEqual(3, existingInstance.DemandPairs.Count(MockCounter));
@@ -84,12 +84,12 @@ namespace TESTS_MulticutInTrees.MulticutProblem
                 sw.WriteLine("4 5");
             }
 
-            CommandLineOptions notExistingOptions = new() { RandomSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "tree.txt", DemandPairFilePath = "dp.txt", OutputDirectory = Directory.GetCurrentDirectory(), InstanceDirectory = Directory.GetCurrentDirectory(), Verbose = true };
+            CommandLineOptions notExistingOptions = new() { DemandPairSeed = 0, AlgorithmType = AlgorithmType.GuoNiedermeierKernelisation, InputTreeType = InputTreeType.Fixed, InputDemandPairsType = InputDemandPairsType.Fixed, InstanceFilePath = "tree.txt", DemandPairFilePath = "dp.txt", OutputDirectory = Directory.GetCurrentDirectory(), InstanceDirectory = Directory.GetCurrentDirectory(), Verbose = true };
 
-            string notExistingFile = (string)fileNameMethod.Invoke(null, new object[] { 0, notExistingOptions });
+            string notExistingFile = (string)fileNameMethod.Invoke(null, new object[] { 0, 0, notExistingOptions });
             File.Delete(notExistingFile);
 
-            MulticutInstance notExistingInstance = new(0, notExistingOptions);
+            MulticutInstance notExistingInstance = new(0, 0, notExistingOptions);
             Assert.IsNotNull(notExistingInstance);
             Assert.AreEqual(7, notExistingInstance.Tree.NumberOfNodes(MockCounter));
             Assert.AreEqual(3, notExistingInstance.DemandPairs.Count(MockCounter));
@@ -100,16 +100,16 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             Graph tree = new();
             CountedCollection<DemandPair> dps = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 1, 1);
 
             Random random = new(12395);
             Dictionary<(int, int), double> distProb = new();
 
-            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, null, dps, 2, 2));
-            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, null, 2, 2));
-            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(0, null));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -1, 2));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, -8459472, 2));
+            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, null, dps, 2, 2));
+            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, null, 2, 2));
+            Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(0, 0, null));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, -1, 2));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, -8459472, 2));
 
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
@@ -131,7 +131,7 @@ namespace TESTS_MulticutInTrees.MulticutProblem
         {
             Graph tree = new();
             CountedCollection<DemandPair> dps = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, tree, dps, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 1, 1);
             MethodInfo method = typeof(MulticutInstance).GetMethod("ParseLengthDistributionDictionary", BindingFlags.NonPublic | BindingFlags.Static);
 
             string test1 = "shouldNotWork";

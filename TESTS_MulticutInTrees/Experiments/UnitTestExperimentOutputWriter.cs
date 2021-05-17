@@ -17,7 +17,7 @@ namespace TESTS_MulticutInTrees.Experiments
         [TestMethod]
         public void TestNullParameter()
         {
-            ExperimentOutput output = new(1, 1, InputTreeType.Fixed, InputDemandPairsType.Fixed, AlgorithmType.GuoNiedermeierKernelisation, 1, 1, 1, true, 1, 1, 1, new PerformanceMeasurements(nameof(UnitTestExperimentOutputWriter)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(1, 1, InputTreeType.Fixed, InputDemandPairsType.Fixed, AlgorithmType.GuoNiedermeierKernelisation, 1, 1, 1, 1, true, 1, 1, 1, new PerformanceMeasurements(nameof(UnitTestExperimentOutputWriter)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             Assert.ThrowsException<ArgumentNullException>(() => ExperimentOutputWriter.WriteOutput(null, ""));
             Assert.ThrowsException<ArgumentNullException>(() => ExperimentOutputWriter.WriteOutput(new List<ExperimentOutput>() { output }, null));

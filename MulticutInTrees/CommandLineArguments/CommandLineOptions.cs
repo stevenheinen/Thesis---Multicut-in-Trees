@@ -12,10 +12,16 @@ namespace MulticutInTrees.CommandLineArguments
     public class CommandLineOptions
     {
         /// <summary>
-        /// The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple repetitions, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.
+        /// The seed to use for the random number generator that generates the tree for the experiments. Note: when there are multiple repetitions, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.
         /// </summary>
-        [Option("seed", HelpText = "The seed to use for the random number generator that generates the random numbers for the experiments. Note: when there are multiple experiments, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.")]
-        public int RandomSeed { get; set; }
+        [Option("treeSeed", HelpText = "The seed to use for the random number generator that generates the tree for the experiments. Note: when there are multiple experiments, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.")]
+        public int TreeSeed { get; set; }
+
+        /// <summary>
+        /// The seed to use for the random number generator that generates the demand pairs for the experiments. Note: when there are multiple repetitions, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.
+        /// </summary>
+        [Option("dpSeed", HelpText = "The seed to use for the random number generator that generates the demand pairs for the experiments. Note: when there are multiple experiments, the seed used is this argument + the repetition (0-based). For example, with seed 0 and 5 repetitions, the experiments use seeds 0, 1, 2, 3 and 4 respectively.")]
+        public int DemandPairSeed { get; set; }
 
         /// <summary>
         /// The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment.

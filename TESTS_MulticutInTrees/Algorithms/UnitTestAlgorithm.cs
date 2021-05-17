@@ -24,7 +24,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 2, 2);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 2, 2);
             GuoNiedermeierKernelisation gnfpt = new(instance);
 
             Assert.IsNotNull(gnfpt);
@@ -37,7 +37,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             Node node = new(0);
             Node node1 = new(1);
@@ -97,7 +97,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
 
             PropertyInfo dictProperty = typeof(GuoNiedermeierKernelisation).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -135,7 +135,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
 
             PropertyInfo dictProperty = typeof(Algorithm).GetProperty("DemandPairsPerEdge", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -178,7 +178,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             gnfpt.CutEdge(edge25, MockMeasurements);
 
@@ -214,7 +214,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             gnfpt.CutEdges(new CountedList<Edge<Node>>(new List<Edge<Node>>() { edge01, edge25 }, MockCounter), MockMeasurements);
 
@@ -250,7 +250,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             gnfpt.ContractEdge(edge02, MockMeasurements);
 
@@ -285,7 +285,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             gnfpt.ContractEdges(new CountedList<Edge<Node>>(new List<Edge<Node>>() { edge02, edge14 }, MockCounter), MockMeasurements);
 
@@ -320,7 +320,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             gnfpt.ChangeEndpointOfDemandPair(dp3, node5, node2, MockMeasurements);
             Assert.AreEqual(3, dp3.LengthOfPath(MockCounter));
@@ -357,7 +357,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             DemandPair dp3 = new(3, node5, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, dps, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, 100, 100);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             gnfpt.ChangeEndpointOfDemandPairs(new CountedList<(DemandPair, Node, Node)>(new List<(DemandPair, Node, Node)>() { (dp3, node5, node2), (dp1, node4, node0) }, MockCounter), MockMeasurements);
             Assert.AreEqual(3, dp3.LengthOfPath(MockCounter));
@@ -427,7 +427,7 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, 0 },
             };
 
-            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
+            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new(i);
             PerformanceMeasurements m = new("bn");
 
@@ -509,7 +509,7 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 },
             };
 
-            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
+            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new(i);
             PerformanceMeasurements m = new("bn");
 
@@ -588,7 +588,7 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, -1 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, -1 },
             };
 
-            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
+            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new(i);
             PerformanceMeasurements m = new("bn");
 
@@ -673,7 +673,7 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, -1 }, { node24, -1 },
             };
 
-            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
+            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new(i);
             PerformanceMeasurements m = new("bn");
 
@@ -756,7 +756,7 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, 0 },
             };
 
-            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
+            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new(i);
             PerformanceMeasurements m = new("bn");
 
@@ -840,7 +840,7 @@ namespace TESTS_MulticutInTrees.Algorithms
                 { node0, -1 }, { node1, -1 }, { node2, 0 }, { node3, 0 }, { node4, 0 }, { node5, -1 }, { node6, 1 }, { node7, 1 }, { node8, -1 }, { node9, 2 }, { node10, -1 }, { node11, -1 }, { node12, 0 }, { node13, 0 }, { node14, 0 }, { node15, -1 }, { node16, 1 }, { node17, 1 }, { node18, 1 }, { node19, -1 }, { node20, -1 }, { node21, 2 }, { node22, -1 }, { node23, 0 },
             };
 
-            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
+            MulticutInstance i = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(), 200, 200);
             GuoNiedermeierKernelisation a = new(i);
             PerformanceMeasurements m = new("bn");
 

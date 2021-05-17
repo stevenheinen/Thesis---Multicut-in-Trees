@@ -64,7 +64,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {edge14, new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, MockCounter) }
             }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             IdleEdge idleEdge = new(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsNotNull(idleEdge);
         }
@@ -97,7 +97,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {edge14, new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, MockCounter) }
             }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
 
             Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new(null, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { IdleEdge i = new(tree, null, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
@@ -126,7 +126,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair = new(0, node2, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             GuoNiedermeierKernelisation algorithm = new(instance);
             IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
             algorithm.ContractEdge(edge13, MockPerformanceMeasurements);
@@ -157,7 +157,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair3 = new(3, node1, node3, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -190,7 +190,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair3 = new(3, node1, node3, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -222,7 +222,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair2 = new(2, node2, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
             IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 
@@ -253,7 +253,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair2 = new(2, node2, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -276,7 +276,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair = new(0, node0, node1, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
             IdleEdge idleEdge = GetReductionRuleInAlgorithm(algorithm);
 

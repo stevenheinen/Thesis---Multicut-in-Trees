@@ -13,7 +13,7 @@ namespace TESTS_MulticutInTrees.CommandLineArguments
         [TestMethod]
         public void TestCorrectArguments()
         {
-            string[] split = "--seed=0 --repetitions=2 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=10 --nrDPs=5 --maxSolutionSize=5".Split();
+            string[] split = "--treeSeed=0 --dpSeed=3 --repetitions=2 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=10 --nrDPs=5 --maxSolutionSize=5".Split();
             string[] args = new string[split.Length + 2];
             split.CopyTo(args, 0);
             args[^1] = $"--outputDir={Directory.GetCurrentDirectory()}";
@@ -25,7 +25,7 @@ namespace TESTS_MulticutInTrees.CommandLineArguments
         [TestMethod]
         public void TestIncorrectArguments()
         {
-            string[] split = "--seed=0 --repetitions=2 --algorithm=GuoNiedermeierKernelisation --treeType=DoesNotExist --dpType=DoesNotExist --nrNodes=-5 --nrDPs=5 --maxSolutionSize=5".Split();
+            string[] split = "--treeSeed=0 --dpSeed=3 --repetitions=2 --algorithm=GuoNiedermeierKernelisation --treeType=DoesNotExist --dpType=DoesNotExist --nrNodes=-5 --nrDPs=5 --maxSolutionSize=5".Split();
             string[] args = new string[split.Length + 2];
             split.CopyTo(args, 0);
             args[^1] = "--outputDir=";

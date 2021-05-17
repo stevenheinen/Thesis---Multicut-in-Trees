@@ -41,7 +41,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 0);
             GuoNiedermeierKernelisation gnfpt = new(instance);
 
             UnitPath unitPath = new(tree, demandPairs, gnfpt);
@@ -54,7 +54,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 0);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 0);
             GuoNiedermeierKernelisation gnfpt = new(instance);
 
             Assert.ThrowsException<ArgumentNullException>(() => { UnitPath up = new(null, demandPairs, gnfpt); });
@@ -88,7 +88,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
@@ -124,7 +124,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
@@ -156,7 +156,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
@@ -192,7 +192,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
@@ -228,7 +228,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
@@ -263,7 +263,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);
@@ -296,7 +296,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, tree, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 1);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             UnitPath unitPath = GetReductionRuleInAlgorithm(algorithm);

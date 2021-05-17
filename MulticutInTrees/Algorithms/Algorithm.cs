@@ -149,7 +149,7 @@ namespace MulticutInTrees.Algorithms
             }
 
             int remainingK = Instance.K - PartialSolution.Count;
-            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, returnBool, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), remainingK, AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.TreeSeed, Instance.DPSeed, Instance.K, Instance.OptimalK, returnBool, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), remainingK, AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace MulticutInTrees.Algorithms
             }
 
             int remainingK = Instance.K - PartialSolution.Count;
-            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.RandomSeed, Instance.K, Instance.OptimalK, returnBool, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), remainingK, AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
+            return (Tree, PartialSolution, DemandPairs.GetLinkedList().ToList(), new ExperimentOutput(Instance.NumberOfNodes, Instance.NumberOfDemandPairs, Instance.TreeType, Instance.DPType, AlgorithmType, Instance.TreeSeed, Instance.DPSeed, Instance.K, Instance.OptimalK, returnBool, Tree.NumberOfNodes(MockCounter), DemandPairs.Count(MockCounter), remainingK, AlgorithmPerformanceMeasurements, ReductionRules.Select(r => r.Measurements).ToList().AsReadOnly()));
         }
 
         /// <summary>

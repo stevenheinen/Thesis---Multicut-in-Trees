@@ -36,9 +36,14 @@ namespace MulticutInTrees.MulticutProblem
         public InputDemandPairsType DPType { get; }
 
         /// <summary>
-        /// The seed used for the random number generator in the instance.
+        /// The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.
         /// </summary>
-        public int RandomSeed { get; }
+        public int TreeSeed { get; }
+
+        /// <summary>
+        /// The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.
+        /// </summary>
+        public int DPSeed { get; }
 
         /// <summary>
         /// The input <see cref="Tree"/>.
@@ -65,14 +70,15 @@ namespace MulticutInTrees.MulticutProblem
         /// </summary>
         /// <param name="treeType">The <see cref="InputTreeType"/> used to generate the tree in the instance.</param>
         /// <param name="dpType">The <see cref="InputDemandPairsType"/> used to generate the <see cref="DemandPair"/>s in the instance.</param>
-        /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
+        /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
+        /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="tree">The tree of in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
         /// <param name="optimalK">The minimum possible size the cutset can be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than zero.</exception>
-        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int randomSeed, Graph tree, CountedCollection<DemandPair> demandPairs, int k, int optimalK)
+        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int treeSeed, int dpSeed, Graph tree, CountedCollection<DemandPair> demandPairs, int k, int optimalK)
         {
             Counter mockCounter = new();
 #if !EXPERIMENT
@@ -91,7 +97,8 @@ namespace MulticutInTrees.MulticutProblem
             NumberOfDemandPairs = demandPairs.Count(mockCounter);
             TreeType = treeType;
             DPType = dpType;
-            RandomSeed = randomSeed;
+            TreeSeed = treeSeed;
+            DPSeed = dpSeed;
             Tree = tree;
             DemandPairs = demandPairs;
             K = k;
@@ -101,10 +108,11 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// Constructor for a <see cref="MulticutInstance"/>. Checks using <paramref name="options"/> whether the instance already exists. If so, grabs it from the files. If not, it creates it and writes it to the files.
         /// </summary>
-        /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
+        /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
+        /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> given to the program.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        public MulticutInstance(int randomSeed, CommandLineOptions options)
+        public MulticutInstance(int treeSeed, int dpSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(options, nameof(options), "Trying to create a multicut instance, but the commandline options are null!");
@@ -112,12 +120,12 @@ namespace MulticutInTrees.MulticutProblem
             Counter mockCounter = new();
 
             // Try to read the instance from the files
-            (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(randomSeed, options);
+            (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(treeSeed, dpSeed, options);
 
             if (tree is null)
             {
                 // If the instance does not exist in the files, create it.
-                (tree, demandPairs, optimalK) = CreateInstance(randomSeed, options);
+                (tree, demandPairs, optimalK) = CreateInstance(treeSeed, dpSeed, options);
             }
             else if (options.Verbose)
             {
@@ -129,7 +137,7 @@ namespace MulticutInTrees.MulticutProblem
             NumberOfDemandPairs = demandPairs.Count(mockCounter);
             TreeType = options.InputTreeType;
             DPType = options.InputDemandPairsType;
-            RandomSeed = randomSeed;
+            DPSeed = treeSeed;
             Tree = tree;
             DemandPairs = demandPairs;
             K = options.MaxSolutionSize > 0 ? options.MaxSolutionSize : optimalK;
@@ -139,11 +147,12 @@ namespace MulticutInTrees.MulticutProblem
         /// <summary>
         /// The instance corresponding to <paramref name="options"/> does not exist yet, so we will create it here.
         /// </summary>
-        /// <param name="randomSeed">The seed used for the random number generator in the instance.</param>
+        /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
+        /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="options">The <see cref="CommandLineOptions"/> given to the program.</param>
         /// <returns>A tuple with a <see cref="Graph"/>, a <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s and the optimal K parameter value.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private static (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInstance(int randomSeed, CommandLineOptions options)
+        private static (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInstance(int treeSeed, int dpSeed, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(options, nameof(options), "Trying to create a multicut instance, but the commandline options are null!");
@@ -153,8 +162,8 @@ namespace MulticutInTrees.MulticutProblem
                 Console.WriteLine("Instance not yet found in the instance files, creating it!");
             }
 
-            Random treeRandom = new(randomSeed);
-            Random demandPairRandom = new(randomSeed);
+            Random treeRandom = new(treeSeed);
+            Random demandPairRandom = new(dpSeed);
             Graph tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
             Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
             CountedCollection<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
@@ -162,7 +171,7 @@ namespace MulticutInTrees.MulticutProblem
             GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
             int optimalK = algorithm.Run(options.Verbose);
 
-            InstanceReaderWriter.WriteInstance(randomSeed, options, tree, demandPairs.GetLinkedList(), optimalK);
+            InstanceReaderWriter.WriteInstance(treeSeed, dpSeed, options, tree, demandPairs.GetLinkedList(), optimalK);
 
             if (options.Verbose)
             {

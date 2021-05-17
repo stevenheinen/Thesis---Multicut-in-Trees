@@ -3,6 +3,7 @@
 using System;
 using System.Collections.ObjectModel;
 using MulticutInTrees.Algorithms;
+using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
 using MulticutInTrees.MulticutProblem;
 
@@ -39,9 +40,14 @@ namespace MulticutInTrees.Experiments
         public AlgorithmType Algorithm { get; }
 
         /// <summary>
-        /// The seed used for the random number generator in the instance.
+        /// The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.
         /// </summary>
-        public int Seed { get; }
+        public int TreeSeed { get; }
+        
+        /// <summary>
+        /// The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.
+        /// </summary>
+        public int DPSeed { get; }
 
         /// <summary>
         /// Whether the instance is solvable.
@@ -91,7 +97,8 @@ namespace MulticutInTrees.Experiments
         /// <param name="treeType">The <see cref="InputTreeType"/> used to generate the tree in the instance.</param>
         /// <param name="dpType">The <see cref="InputDemandPairsType"/> used to generate the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="AlgorithmType"/> used to solve the instance.</param>
-        /// <param name="seed">The seed used for the random number generator in the instance.</param>
+        /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
+        /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be in this experiment.</param>
         /// <param name="optimalMaxSolutionSize">The minimum possible solution size for this instance.</param>
         /// <param name="solvable">Whether the instance is solvable.</param>
@@ -101,7 +108,7 @@ namespace MulticutInTrees.Experiments
         /// <param name="algorithmOperations">The <see cref="PerformanceMeasurements"/> the <see cref="Algorithm"/> itself used.</param>
         /// <param name="reductionRulesOperations"><see cref="ReadOnlyCollection{T}"/> of the <see cref="PerformanceMeasurements"/> per <see cref="ReductionRules.ReductionRule"/> in the algorithm.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="algorithmOperations"/> or <paramref name="reductionRulesOperations"/> is <see langword="null"/>.</exception>
-        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int seed, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, int remainingK, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
+        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int treeSeed, int dpSeed, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, int remainingK, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(algorithmOperations, nameof(algorithmOperations), "Trying to creat an experiment output, but the performance measures of the algorithm is null!");
@@ -112,7 +119,8 @@ namespace MulticutInTrees.Experiments
             TreeType = treeType;
             DPType = dpType;
             Algorithm = algorithm;
-            Seed = seed;
+            TreeSeed = treeSeed;
+            DPSeed = dpSeed;
             MaxSolutionSize = maxSolutionSize;
             OptimalMaxSolutionSize = optimalMaxSolutionSize;
             Solvable = solvable;
