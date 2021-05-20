@@ -23,7 +23,7 @@ namespace TESTS_MulticutInTrees.Experiments
             Assert.ThrowsException<ArgumentNullException>(() => ExperimentManager.RunExperiment(null));
 
             CommandLineOptions options = new();
-            Func<int, int, int, CommandLineOptions, ExperimentOutput> func = (i, j, k, c) => new ExperimentOutput(1, 1, InputTreeType.Fixed, InputDemandPairsType.Fixed, AlgorithmType.GuoNiedermeierKernelisation, 1, 1, 1, 1, true, 1, 1, 1, new PerformanceMeasurements("test"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            Func<int, int, int, int, CommandLineOptions, ExperimentOutput> func = (i, j, k, l, c) => new ExperimentOutput(1, 1, InputTreeType.Fixed, InputDemandPairsType.Fixed, AlgorithmType.GuoNiedermeierKernelisation, 1, 1, 1, 1, true, 1, 1, 1, new PerformanceMeasurements("test"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
@@ -42,42 +42,42 @@ namespace TESTS_MulticutInTrees.Experiments
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("FormatParseOutput", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, new object[] { null, 1, 1, 1, options });
+                method.Invoke(null, new object[] { null, 1, 1, 1, 1, options });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("FormatParseOutput", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, new object[] { "test", 1, 1, 1, null });
+                method.Invoke(null, new object[] { "test", 1, 1, 1, 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunGurobiMIPAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, new object[] { 1, 1, 1, null });
+                method.Invoke(null, new object[] { 1, 1, 1, 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunBranchingAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, new object[] { 1, 1, 1, null });
+                method.Invoke(null, new object[] { 1, 1, 1, 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunBruteForceAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, new object[] { 1, 1, 1, null });
+                method.Invoke(null, new object[] { 1, 1, 1, 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 
             t = Assert.ThrowsException<TargetInvocationException>(() =>
             {
                 MethodInfo method = typeof(ExperimentManager).GetMethod("RunKernelisationAlgorithm", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, new object[] { 1, 1, 1, null });
+                method.Invoke(null, new object[] { 1, 1, 1, 1, null });
             });
             Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentNullException));
 

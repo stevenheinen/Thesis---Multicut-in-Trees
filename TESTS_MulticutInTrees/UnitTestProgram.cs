@@ -14,7 +14,7 @@ namespace TESTS_MulticutInTrees
             string[] split = "--treeSeed=0 --dpSeed=5000 --repetitions=3 --experiments=5 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
             string[] args = new string[split.Length + 2];
             split.CopyTo(args, 0);
-            args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
+            args[^1] = "--outputDir=D:\\Downloads";
             args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
 
             Program.Main(args);
@@ -23,10 +23,10 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestMain2()
         {
-            string[] split = "--treeSeed=0 --dpSeed=5000  --repetitions=3 --experiments=5 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
+            string[] split = "--treeSeed=0 --dpSeed=5000 --repetitions=3 --experiments=5 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
             string[] args = new string[split.Length + 2];
             split.CopyTo(args, 0);
-            args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
+            args[^1] = "--outputDir=D:\\Downloads";
             args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
 
             Program.Main(args);
@@ -35,10 +35,10 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestMain3()
         {
-            string[] split = "--treeSeed=0 --dpSeed=5000  --repetitions=3 --experiments=5 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
+            string[] split = "--treeSeed=0 --dpSeed=5000 --repetitions=3 --experiments=5 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
             string[] args = new string[split.Length + 2];
             split.CopyTo(args, 0);
-            args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
+            args[^1] = "--outputDir=D:\\Downloads";
             args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
 
             Program.Main(args);
@@ -47,10 +47,10 @@ namespace TESTS_MulticutInTrees
         [TestMethod]
         public void TestMain4()
         {
-            string[] split = "--treeSeed=0 --dpSeed=5000  --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
+            string[] split = "--treeSeed=0 --dpSeed=5000 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
             string[] args = new string[split.Length + 2];
             split.CopyTo(args, 0);
-            args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
+            args[^1] = "--outputDir=D:\\Downloads";
             args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
 
             Program.Main(args);

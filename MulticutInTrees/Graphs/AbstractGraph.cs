@@ -612,6 +612,12 @@ namespace MulticutInTrees.Graphs
                 case (NodeType.I1, NodeType.L1):
                     UpdateNodeTypesEdgeContractionL1I1(contractedEdge.Endpoint1, newNode);
                     break;
+                case (NodeType.L2, NodeType.I2):
+                    contractedEdge.Endpoint1.Type = NodeType.I2;
+                    break;
+                case (NodeType.L3, NodeType.I3):
+                    contractedEdge.Endpoint1.Type = NodeType.I3;
+                    break;
             }
         }
 

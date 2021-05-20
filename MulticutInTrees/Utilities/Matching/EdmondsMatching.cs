@@ -7,10 +7,11 @@ using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
-namespace MulticutInTrees.Utilities
+namespace MulticutInTrees.Utilities.Matching
 {
-    // todo: add counters
-    // todo: see if it is possible to use edges here as well instead of node tuples.
+    // todo: Add counters
+    // todo: See if it is possible to use edges here as well instead of node tuples.
+    // todo: Fix implementation to also work on general graphs.
     /// <summary>
     /// Class that uses Edmond's Blossom algorithm to find a maximum matching in a graph.
     /// </summary>
@@ -21,6 +22,8 @@ namespace MulticutInTrees.Utilities
 
         /// <summary>
         /// Finds a maximum matching in <paramref name="graph"/>.
+        /// <br/>
+        /// <b>NOTE:</b> This implementation is not bug-free. It only works on acyclic graphs (and mostly on general graphs, but no guarantees!).
         /// </summary>
         /// <typeparam name="TGraph">The type of graph to find the matching in.</typeparam>
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
@@ -28,17 +31,24 @@ namespace MulticutInTrees.Utilities
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
         /// <returns>A <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges in the maximum matching.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Thrown when <paramref name="graph"/> is not acyclic.</exception>
         public static List<(TNode, TNode)> FindMaximumMatching<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find a maximum matching in a graph, but the graph is null!");
+            if (!graph.IsAcyclic(MockCounter))
+            {
+                throw new NotSupportedException("This implementation of the blossom matching algorithm is not bug-free! Please only use it on acyclic graphs!");
+            }
 #endif
-            List<(TNode, TNode)> matching = FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
+            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
             return RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(graph, matching);
         }
 
         /// <summary>
         /// Finds whether a matching of size at least <paramref name="requiredSize"/> exists in <paramref name="graph"/>.
+        /// <br/>
+        /// <b>NOTE:</b> This implementation is not bug-free. It only works on acyclic graphs (and mostly on general graphs, but no guarantees!).
         /// </summary>
         /// <typeparam name="TGraph">The type of graph to find the matching in.</typeparam>
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
@@ -47,12 +57,17 @@ namespace MulticutInTrees.Utilities
         /// <param name="requiredSize">The required size of the matching.</param>
         /// <returns><see langword="true"/> if a matching of size <paramref name="requiredSize"/> exists in <paramref name="graph"/>, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Thrown when <paramref name="graph"/> is not acyclic.</exception>
         public static bool HasMatchingOfAtLeast<TGraph, TEdge, TNode>(TGraph graph, int requiredSize) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), $"Trying to find a matching of size at least {requiredSize} in a graph, but the graph is null!");
+            if (!graph.IsAcyclic(MockCounter))
+            {
+                throw new NotSupportedException("This implementation of the blossom matching algorithm is not bug-free! Please only use it on acyclic graphs!");
+            }
 #endif
-            List<(TNode, TNode)> matching = FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
+            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
             return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, matching);
         }
 
@@ -140,58 +155,6 @@ namespace MulticutInTrees.Utilities
             {
                 matching.Add(Utils.OrderEdgeSmallToLarge(path[i]));
             }
-        }
-
-        /// <summary>
-        /// Find a maximal matching in <paramref name="graph"/> using a greedy approach.
-        /// </summary>
-        /// <typeparam name="TGraph">The type of graph to find the matching in.</typeparam>
-        /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
-        /// <typeparam name="TNode">The type of nodes in <paramref name="graph"/>.</typeparam>
-        /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
-        /// <returns>A <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges in the maximal matching.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> FindGreedyMaximalMatching<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
-        {
-#if !EXPERIMENT
-            Utils.NullCheck(graph, nameof(graph), "Trying to find an initial matching in a graph, but the graph is null!");
-#endif
-            List<(TNode, TNode)> matching = new();
-
-            // Save we have not matched any of the nodes.
-            Dictionary<TNode, bool> matched = new();
-            foreach (TNode node in graph.Nodes(MockCounter))
-            {
-                matched[node] = false;
-            }
-
-            // Try to find an edge incident to each node to add to the mathcing.
-            foreach (TNode node in graph.Nodes(MockCounter))
-            {
-                // If we already matched this node, we cannot include any edges incident to it to the matching.
-                if (matched[node])
-                {
-                    continue;
-                }
-
-                // Loop through all neighbours of the node to find an edge that can be added to the matching.
-                foreach (TNode neighbour in node.Neighbours(MockCounter))
-                {
-                    // If we already matched this neighbour, go to the next one.
-                    if (matched[neighbour])
-                    {
-                        continue;
-                    }
-
-                    // We have found an unmatched neighbour. Add the edge between this node and the neighbour to the matching.
-                    matching.Add(Utils.OrderEdgeSmallToLarge((node, neighbour)));
-                    matched[node] = true;
-                    matched[neighbour] = true;
-                    break;
-                }
-            }
-
-            return matching;
         }
 
         /// <summary>

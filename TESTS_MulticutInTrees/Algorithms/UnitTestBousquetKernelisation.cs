@@ -154,7 +154,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(399, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(398, result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(4, result.Item2.Count);
             Assert.AreEqual(178, result.Item3.Count);
         }

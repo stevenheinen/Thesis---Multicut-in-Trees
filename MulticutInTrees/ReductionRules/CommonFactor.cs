@@ -225,9 +225,19 @@ namespace MulticutInTrees.ReductionRules
                 List<DemandPair> pairsOnEdge = dps.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
                 for (int i = 0; i < pairsOnEdge.Count - 1; i++)
                 {
+                    if (!IntersectingDemandPairs.TryGetValue(pairsOnEdge[i], out CountedCollection<DemandPair> intersectionsI, Measurements.DemandPairsOperationsCounter))
+                    {
+                        continue;
+                    }
+
                     for (int j = i + 1; j < pairsOnEdge.Count; j++)
                     {
-                        foreach (DemandPair candidateDP in IntersectingDemandPairs[pairsOnEdge[i], Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Intersect(IntersectingDemandPairs[pairsOnEdge[j], Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
+                        if (!IntersectingDemandPairs.TryGetValue(pairsOnEdge[j], out CountedCollection<DemandPair> intersectionsJ, Measurements.DemandPairsOperationsCounter))
+                        {
+                            continue;
+                        }
+                        
+                        foreach (DemandPair candidateDP in intersectionsI.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Intersect(intersectionsJ.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
                         {
                             pairsToCheck.Add(candidateDP);
                         }
@@ -295,6 +305,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Executing {GetType().Name} rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             FindInitialIntersections();
             Measurements.TimeSpentCheckingApplicability.Start();
             return CheckApplicability(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));

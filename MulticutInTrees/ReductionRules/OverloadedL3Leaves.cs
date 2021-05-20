@@ -183,6 +183,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             Measurements.TimeSpentCheckingApplicability.Start();
             CountedList<(Node, CountedList<DemandPair>, Node)> overloadedLeaves = FindOverloadedL3Leaves();
             return HandleOverloadedL3Leaves(overloadedLeaves);

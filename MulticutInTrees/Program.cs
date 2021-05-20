@@ -22,16 +22,16 @@ namespace MulticutInTrees
                 Console.BufferHeight = short.MaxValue - 1;
             }
 #endif
-            // TODO: think of and run smaller experiments
-
             Console.WriteLine("Hello World!");
 
             // For debug purposes only. Should not be included in the final version of the program.
             if (args.Length == 0)
             {
-                //string[] split = "--seed=0 --repetitions=1 --experiments=10 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--seed=0 --repetitions=1 --experiments=10 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
-                string[] split = "--seed=0 --repetitions=1 --experiments=10 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
+                //string[] split = "--treeSeed=0 --dpSeed=0 --repetitions=1 --experiments=10 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
+                //string[] split = "--treeSeed=0 --dpSeed=0 --repetitions=1 --experiments=10 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
+                //string[] split = "--treeSeed=0 --dpSeed=0 --repetitions=1 --experiments=10 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
+
+                string[] split = "--treeSeed=7157062 --dpSeed=883878 --repetitions=1 --experiments=10 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=254 --nrDPs=512 --maxSolutionSize=0 -v".Split();
 
                 args = new string[split.Length + 2];
                 split.CopyTo(args, 0);

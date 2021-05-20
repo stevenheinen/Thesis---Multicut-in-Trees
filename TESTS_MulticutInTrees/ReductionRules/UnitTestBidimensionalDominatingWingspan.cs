@@ -19,7 +19,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
     {
         private static readonly Counter MockCounter = new();
         private static readonly PerformanceMeasurements MockMeasurements = new(nameof(UnitTestCommonFactor));
-
+        
         private static BidimensionalDominatingWingspan GetReductionRuleInAlgorithm(Algorithm algorithm)
         {
             MethodInfo runPropertySet = typeof(ReductionRule).GetProperty("HasRun", BindingFlags.Public | BindingFlags.Instance).GetSetMethod(true);

@@ -104,6 +104,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying {GetType().Name} rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             Measurements.TimeSpentCheckingApplicability.Start();
             return TryApplyReductionRule(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }

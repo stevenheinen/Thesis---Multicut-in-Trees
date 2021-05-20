@@ -273,7 +273,7 @@ namespace TESTS_MulticutInTrees.Utilities
         }
 
         [TestMethod]
-        public void TestAcyclicGraph()
+        public void TestAcyclicGraph1()
         {
             Graph graph = new();
             Node node0 = new(0);
@@ -298,6 +298,36 @@ namespace TESTS_MulticutInTrees.Utilities
             graph.RemoveNode(node3, MockCounter);
 
             Assert.IsTrue(DFS.IsAcyclic<Graph, Edge<Node>, Node>(graph, MockCounter));
+        }
+
+        [TestMethod]
+        public void TestAcyclicGraph2()
+        {
+            Graph graph = new();
+            Node node0 = new(0);
+            Node node1 = new(1);
+            Node node2 = new(2);
+            Node node3 = new(3);
+            Node node4 = new(4);
+            Node node5 = new(5);
+            Node node6 = new(6);
+            Node node7 = new(7);
+            Node node8 = new(8);
+            Node node9 = new(9);
+            Node node10 = new(10);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
+            Edge<Node> edge46 = new(node4, node6);
+            Edge<Node> edge73 = new(node7, node3);
+            Edge<Node> edge56 = new(node5, node6);
+            Edge<Node> edge54 = new(node5, node4);
+            Edge<Node> edge39 = new(node3, node9);
+            Edge<Node> edge910 = new(node9, node10);
+            Edge<Node> edge98 = new(node9, node8);
+            Edge<Node> edge103 = new(node10, node3);
+            Edge<Node> edge108 = new(node10, node8);
+            Edge<Node> edge410 = new(node4, node10);
+            graph.AddEdges(new List<Edge<Node>>() { edge46, edge73, edge56, edge54, edge39, edge910, edge98, edge103, edge108, edge410 }, MockCounter);
+            Assert.IsFalse(DFS.IsAcyclic<Graph, Edge<Node>, Node>(graph, MockCounter));
         }
 
         [TestMethod]

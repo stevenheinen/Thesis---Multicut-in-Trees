@@ -121,6 +121,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             foreach (KeyValuePair<Node, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
             {
                 CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);

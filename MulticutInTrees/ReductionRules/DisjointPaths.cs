@@ -73,6 +73,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Executing {GetType().Name} rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             Measurements.TimeSpentCheckingApplicability.Start();
             return DisjointPathsGreaterThanK();
         }

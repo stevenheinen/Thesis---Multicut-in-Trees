@@ -137,7 +137,8 @@ namespace MulticutInTrees.MulticutProblem
             NumberOfDemandPairs = demandPairs.Count(mockCounter);
             TreeType = options.InputTreeType;
             DPType = options.InputDemandPairsType;
-            DPSeed = treeSeed;
+            TreeSeed = treeSeed;
+            DPSeed = dpSeed;
             Tree = tree;
             DemandPairs = demandPairs;
             K = options.MaxSolutionSize > 0 ? options.MaxSolutionSize : optimalK;

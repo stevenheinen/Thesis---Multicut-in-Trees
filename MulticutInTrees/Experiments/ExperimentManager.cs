@@ -54,7 +54,7 @@ namespace MulticutInTrees.Experiments
         /// <param name="singleExperimentMethod"><see cref="Func{T1, T2, TResult}"/> that will be used to run a single experiment.</param>
         /// <returns>A <see cref="List{T}"/> of <see cref="ExperimentOutput"/>s that result from these experiments.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> or <paramref name="singleExperimentMethod"/> is <see langword="null"/>.</exception>
-        private static List<ExperimentOutput> RunMultipleExperiments(CommandLineOptions options, Func<int, int, int, CommandLineOptions, ExperimentOutput> singleExperimentMethod)
+        private static List<ExperimentOutput> RunMultipleExperiments(CommandLineOptions options, Func<int, int, int, int, CommandLineOptions, ExperimentOutput> singleExperimentMethod)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to run multiple experiments, but the options are null!");
@@ -62,7 +62,7 @@ namespace MulticutInTrees.Experiments
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput($"Running multiple experiments with the {options.AlgorithmType} algorithm", options.TreeSeed, options.DemandPairSeed, -1, options));
+                Console.WriteLine(FormatParseOutput($"Running multiple experiments with the {options.AlgorithmType} algorithm", options.TreeSeed, options.DemandPairSeed, -1, -1, options));
             }
 
             List<ExperimentOutput> output = new();
@@ -71,7 +71,7 @@ namespace MulticutInTrees.Experiments
             {
                 for (int j = 1; j <= options.Repetitions; j++)
                 {
-                    ExperimentOutput algorithmOutput = singleExperimentMethod(options.TreeSeed + i, options.DemandPairSeed + i, j, options);
+                    ExperimentOutput algorithmOutput = singleExperimentMethod(options.TreeSeed + i, options.DemandPairSeed + i, i + 1, j, options);
                     output.Add(algorithmOutput);
                 }
             }
@@ -85,10 +85,11 @@ namespace MulticutInTrees.Experiments
         /// <param name="experimentMessage">The message that is specific to an experiment.</param>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="currentExperiment">The index of the current experiment in [1..numberOfExperiments].</param>
         /// <param name="currentRepetition">How many times this exact experiment has been executed.</param>
         /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>A <see cref="string"/> with a formatted representation of the command line arguments.</returns>
-        private static string FormatParseOutput(string experimentMessage, int treeSeed, int dpSeed, int currentRepetition, CommandLineOptions options)
+        private static string FormatParseOutput(string experimentMessage, int treeSeed, int dpSeed, int currentExperiment, int currentRepetition, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(experimentMessage, nameof(experimentMessage), "Trying to format the parse output to a nice readable message, but the experiment specific message is null!");
@@ -108,9 +109,17 @@ namespace MulticutInTrees.Experiments
                 sb.Append($"and a tree and demand pairs from the {options.InputTreeType} instance found here \"{options.InstanceFilePath}\".");
             }
 
+            if (currentExperiment != -1)
+            {
+                sb.Append($" This is experiment {currentExperiment} of {options.Experiments}");
+            }
             if (currentRepetition != -1)
             {
-                sb.Append($" This is repetition {currentRepetition} of {options.Repetitions}.");
+                sb.Append($", and repetition {currentRepetition} of {options.Repetitions}");
+            }
+            if (currentExperiment != -1)
+            {
+                sb.Append('.');
             }
 
             return sb.ToString();
@@ -121,18 +130,19 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="currentExperiment">The index of the current experiment in [1..numberOfExperiments].</param>
         /// <param name="currentRepetition">How many times this exact experiment has been executed.</param>
         /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>A basically empty <see cref="ExperimentOutput"/>, since no algorithm was run.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private static ExperimentOutput RunGenerateInstance(int treeSeed, int dpSeed, int currentRepetition, CommandLineOptions options)
+        private static ExperimentOutput RunGenerateInstance(int treeSeed, int dpSeed, int currentExperiment, int currentRepetition, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to run an experiment with the brute force algorithm, but the command line options are null!");
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput("Generating the instance", treeSeed, dpSeed, currentRepetition, options));
+                Console.WriteLine(FormatParseOutput("Generating the instance", treeSeed, dpSeed, currentExperiment, currentRepetition, options));
             }
 
             MulticutInstance instance = new(treeSeed, dpSeed, options);
@@ -152,18 +162,19 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="currentExperiment">The index of the current experiment in [1..numberOfExperiments].</param>
         /// <param name="currentRepetition">How many times this exact experiment has been executed.</param>
         /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>An <see cref="ExperimentOutput"/> with the results of this experiment.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private static ExperimentOutput RunBruteForceAlgorithm(int treeSeed, int dpSeed, int currentRepetition, CommandLineOptions options)
+        private static ExperimentOutput RunBruteForceAlgorithm(int treeSeed, int dpSeed, int currentExperiment, int currentRepetition, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to run an experiment with the brute force algorithm, but the command line options are null!");
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput("Running an experiment with the brute force algorithm", treeSeed, dpSeed, currentRepetition, options));
+                Console.WriteLine(FormatParseOutput("Running an experiment with the brute force algorithm", treeSeed, dpSeed, currentExperiment, currentRepetition, options));
             }
 
             MulticutInstance instance = new(treeSeed, dpSeed, options);
@@ -192,18 +203,19 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="currentExperiment">The index of the current experiment in [1..numberOfExperiments].</param>
         /// <param name="currentRepetition">How many times this exact experiment has been executed.</param>
         /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>An <see cref="ExperimentOutput"/> that includes the smallest possible solution size found by this algorithm.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private static ExperimentOutput RunGurobiMIPAlgorithm(int treeSeed, int dpSeed, int currentRepetition, CommandLineOptions options)
+        private static ExperimentOutput RunGurobiMIPAlgorithm(int treeSeed, int dpSeed, int currentExperiment, int currentRepetition, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to run an experiment with the Gurobi MIP solver, but the command line options are null!");
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput("Finding the minimum possible value for the maximum solution size using the Gurobi MIP solver", treeSeed, dpSeed, currentRepetition, options));
+                Console.WriteLine(FormatParseOutput("Finding the minimum possible value for the maximum solution size using the Gurobi MIP solver", treeSeed, dpSeed, currentExperiment, currentRepetition, options));
             }
 
             MulticutInstance instance = new(treeSeed, dpSeed, options);
@@ -232,18 +244,19 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="currentExperiment">The index of the current experiment in [1..numberOfExperiments].</param>
         /// <param name="currentRepetition">How many times this exact experiment has been executed.</param>
         /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>The <see cref="ExperimentOutput"/> of this algorithm.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private static ExperimentOutput RunBranchingAlgorithm(int treeSeed, int dpSeed, int currentRepetition, CommandLineOptions options)
+        private static ExperimentOutput RunBranchingAlgorithm(int treeSeed, int dpSeed, int currentExperiment, int currentRepetition, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to run an experiment with the branching algorithm, but the command line options are null!");
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput("Running Guo and Niedermeiers branching algorithm", treeSeed, dpSeed, currentRepetition, options));
+                Console.WriteLine(FormatParseOutput("Running Guo and Niedermeiers branching algorithm", treeSeed, dpSeed, currentExperiment, currentRepetition, options));
             }
 
             MulticutInstance instance = new(treeSeed, dpSeed, options);
@@ -272,18 +285,19 @@ namespace MulticutInTrees.Experiments
         /// </summary>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="currentExperiment">The index of the current experiment in [1..numberOfExperiments].</param>
         /// <param name="currentRepetition">How many times this exact experiment has been executed.</param>
         /// <param name="options">The options given to the program via the command line.</param>
         /// <returns>The <see cref="ExperimentOutput"/> of this algorithm.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is <see langword="null"/>.</exception>
-        private static ExperimentOutput RunKernelisationAlgorithm(int treeSeed, int dpSeed, int currentRepetition, CommandLineOptions options)
+        private static ExperimentOutput RunKernelisationAlgorithm(int treeSeed, int dpSeed, int currentExperiment, int currentRepetition, CommandLineOptions options)
         {
 #if !EXPERIMENT
             Utils.NullCheck(options, nameof(options), "Trying to run an experiment with a kernelisation algorithm, but the command line options are null!");
 #endif
             if (options.Verbose)
             {
-                Console.WriteLine(FormatParseOutput($"Running the {options.AlgorithmType} algorithm", treeSeed, dpSeed, currentRepetition, options));
+                Console.WriteLine(FormatParseOutput($"Running the {options.AlgorithmType} algorithm", treeSeed, dpSeed, currentExperiment, currentRepetition, options));
             }
 
             MulticutInstance instance = new(treeSeed, dpSeed, options);
@@ -301,7 +315,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine($"Partial solution size:            {partialSolution.Count}");
                 Console.WriteLine($"Remaining tree:                   {tree}");
                 Console.WriteLine($"Remaining number of demand pairs: {finalDemandPairs.Count}");
-                Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, finalDemandPairs.Select(dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
+                //Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, finalDemandPairs.Select(dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
                 Console.WriteLine($"Time required (ticks):            {stopwatch.ElapsedTicks}");
                 Console.WriteLine($"Entire partial solution:          {partialSolution.Print()}");
                 Console.WriteLine($"Remaining edges:                  {tree.Edges(new Counter()).Print()}");

@@ -8,6 +8,7 @@ using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
+using MulticutInTrees.Utilities.Matching;
 
 namespace MulticutInTrees.ReductionRules
 {
@@ -203,7 +204,8 @@ namespace MulticutInTrees.ReductionRules
                 matchingGraph.AddEdge(newEdge, MockCounter);
             }
 
-            return EdmondsMatching.HasMatchingOfAtLeast<Graph, Edge<Node>, Node>(matchingGraph, MaxSolutionSize - PartialSolution.Count + 1);
+            int requiredSize = MaxSolutionSize - PartialSolution.Count + 1;
+            return matchingGraph.IsAcyclic(MockCounter) ? EdmondsMatching.HasMatchingOfAtLeast<Graph, Edge<Node>, Node>(matchingGraph, requiredSize) : MatchingLibrary.HasMatchingOfSize<Graph, Edge<Node>, Node>(matchingGraph, requiredSize, Measurements.TreeOperationsCounter);
         }
 
         /// <summary>
@@ -240,6 +242,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying the {GetType().Name} reduction rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             if (CaterpillarComponentPerNode.Count(MockCounter) == 0)
             {
                 foreach (KeyValuePair<Node, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))

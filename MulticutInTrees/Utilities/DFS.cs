@@ -51,7 +51,23 @@ namespace MulticutInTrees.Utilities
             {
                 return true;
             }
-            return FindConnectedComponent(inputGraph.Nodes(graphCounter).First(), default, graphCounter, null, true).Count != 0;
+
+            HashSet<TNode> seen = new();
+            foreach (TNode node in inputGraph.Nodes(graphCounter))
+            {
+                if (seen.Contains(node))
+                {
+                    continue;
+                }
+
+                List<TNode> component = FindConnectedComponent(node, default, graphCounter, seen, true);
+                if (component.Count == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

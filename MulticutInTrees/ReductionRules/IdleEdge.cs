@@ -86,6 +86,9 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying {GetType().Name} rule for the first time");
 #endif
             HasRun = true;
+            LastContractedEdges.Clear(MockCounter);
+            LastRemovedDemandPairs.Clear(MockCounter);
+            LastChangedDemandPairs.Clear(MockCounter);
             Measurements.TimeSpentCheckingApplicability.Start();
 
             // In the first iteration, check all edges in the input tree.
