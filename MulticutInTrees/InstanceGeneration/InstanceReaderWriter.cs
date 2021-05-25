@@ -227,7 +227,7 @@ namespace MulticutInTrees.InstanceGeneration
             }
             else
             {
-                fileNameBuilder.Append($"_treeFile=({options.InstanceFilePath})".Replace(".", "[dot]"));
+                fileNameBuilder.Append($"_treeFile=({options.InstanceFilePath})".Replace(".", "[dot]").Replace("\\", "[slash]").Replace(":", ""));
             }
 
             if (options.InputDemandPairsType == InputDemandPairsType.Random)
@@ -236,7 +236,7 @@ namespace MulticutInTrees.InstanceGeneration
             }
             else if (options.InputDemandPairsType == InputDemandPairsType.Fixed)
             {
-                fileNameBuilder.Append($"_dpFile=({options.DemandPairFilePath})".Replace(".", "[dot]"));
+                fileNameBuilder.Append($"_dpFile=({options.DemandPairFilePath})".Replace(".", "[dot]").Replace("\\", "[slash]").Replace(":", ""));
             }
             else if (options.InputDemandPairsType == InputDemandPairsType.LengthDistribution)
             {

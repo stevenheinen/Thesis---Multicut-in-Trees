@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>98442</CodebaseCost>
-    <TotalDuplicatesCost>4306</TotalDuplicatesCost>
-    <TotalFragmentsCost>8776</TotalFragmentsCost>
+    <CodebaseCost>101771</CodebaseCost>
+    <TotalDuplicatesCost>4805</TotalDuplicatesCost>
+    <TotalFragmentsCost>9877</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
     <Duplicate Cost="392">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="5972" End="7363"></OffsetRange>
-        <LineRange Start="80" End="104"></LineRange>
+        <OffsetRange Start="6015" End="7406"></OffsetRange>
+        <LineRange Start="81" End="105"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="7602" End="8993"></OffsetRange>
-        <LineRange Start="93" End="117"></LineRange>
+        <OffsetRange Start="7645" End="9036"></OffsetRange>
+        <LineRange Start="94" End="118"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="313">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="3874" End="5530"></OffsetRange>
-        <LineRange Start="54" End="71"></LineRange>
+        <OffsetRange Start="3917" End="5573"></OffsetRange>
+        <LineRange Start="55" End="72"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="3986" End="5642"></OffsetRange>
-        <LineRange Start="54" End="71"></LineRange>
+        <OffsetRange Start="4029" End="5685"></OffsetRange>
+        <LineRange Start="55" End="72"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="304">
@@ -38,20 +38,20 @@
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\IdleEdge.cs</FileName>
-        <OffsetRange Start="5922" End="7319"></OffsetRange>
-        <LineRange Start="95" End="126"></LineRange>
+        <OffsetRange Start="6087" End="7484"></OffsetRange>
+        <LineRange Start="98" End="129"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="261">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
-        <OffsetRange Start="8254" End="9142"></OffsetRange>
-        <LineRange Start="104" End="114"></LineRange>
+        <OffsetRange Start="8297" End="9185"></OffsetRange>
+        <LineRange Start="105" End="115"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
-        <OffsetRange Start="25276" End="25996"></OffsetRange>
-        <LineRange Start="346" End="352"></LineRange>
+        <OffsetRange Start="25489" End="26209"></OffsetRange>
+        <LineRange Start="347" End="353"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="254">
@@ -66,16 +66,28 @@
         <LineRange Start="42" End="55"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="210">
+    <Duplicate Cost="211">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="11355" End="12767"></OffsetRange>
-        <LineRange Start="180" End="205"></LineRange>
+        <OffsetRange Start="12902" End="13884"></OffsetRange>
+        <LineRange Start="209" End="230"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="14446" End="15859"></OffsetRange>
-        <LineRange Start="209" End="234"></LineRange>
+        <OffsetRange Start="15993" End="16963"></OffsetRange>
+        <LineRange Start="238" End="259"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="210">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
+        <OffsetRange Start="11477" End="12890"></OffsetRange>
+        <LineRange Start="182" End="207"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
+        <OffsetRange Start="14568" End="15981"></OffsetRange>
+        <LineRange Start="211" End="236"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="199">
@@ -90,18 +102,6 @@
         <LineRange Start="221" End="222"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="169">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="12779" End="13596"></OffsetRange>
-        <LineRange Start="207" End="225"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="15871" End="16676"></OffsetRange>
-        <LineRange Start="236" End="254"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="159">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\DinicMaxFlow.cs</FileName>
@@ -114,6 +114,30 @@
         <LineRange Start="154" End="160"></LineRange>
       </Fragment>
     </Duplicate>
+    <Duplicate Cost="145">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
+        <OffsetRange Start="10981" End="11454"></OffsetRange>
+        <LineRange Start="172" End="179"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
+        <OffsetRange Start="14072" End="14545"></OffsetRange>
+        <LineRange Start="201" End="208"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="145">
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
+        <OffsetRange Start="9472" End="9740"></OffsetRange>
+        <LineRange Start="119" End="119"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
+        <OffsetRange Start="26556" End="26824"></OffsetRange>
+        <LineRange Start="358" End="358"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="143">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
@@ -124,18 +148,6 @@
         <FileName>MulticutInTrees\ReductionRules\UnitPath.cs</FileName>
         <OffsetRange Start="4314" End="4853"></OffsetRange>
         <LineRange Start="76" End="86"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="126">
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="10938" End="11332"></OffsetRange>
-        <LineRange Start="171" End="177"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="14029" End="14423"></OffsetRange>
-        <LineRange Start="200" End="206"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="125">
@@ -213,25 +225,66 @@
     <Duplicate Cost="104">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="13608" End="14232"></OffsetRange>
-        <LineRange Start="227" End="238"></LineRange>
+        <OffsetRange Start="13896" End="14520"></OffsetRange>
+        <LineRange Start="232" End="243"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="16688" End="17312"></OffsetRange>
-        <LineRange Start="256" End="267"></LineRange>
+        <OffsetRange Start="16975" End="17599"></OffsetRange>
+        <LineRange Start="261" End="272"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="103">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\DominatedEdge.cs</FileName>
+        <OffsetRange Start="9585" End="10138"></OffsetRange>
+        <LineRange Start="150" End="162"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\IdleEdge.cs</FileName>
+        <OffsetRange Start="5445" End="6075"></OffsetRange>
+        <LineRange Start="82" End="96"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="103">
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\DominatedPath.cs</FileName>
+        <OffsetRange Start="6781" End="7363"></OffsetRange>
+        <LineRange Start="121" End="133"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\OverloadedEdge.cs</FileName>
+        <OffsetRange Start="9737" End="10319"></OffsetRange>
+        <LineRange Start="167" End="179"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\ReductionRules\UnitPath.cs</FileName>
+        <OffsetRange Start="5440" End="6022"></OffsetRange>
+        <LineRange Start="100" End="112"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="93">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="11717" End="12013"></OffsetRange>
-        <LineRange Start="159" End="165"></LineRange>
+        <OffsetRange Start="11760" End="12056"></OffsetRange>
+        <LineRange Start="160" End="166"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="12190" End="12486"></OffsetRange>
-        <LineRange Start="169" End="175"></LineRange>
+        <OffsetRange Start="12233" End="12529"></OffsetRange>
+        <LineRange Start="170" End="176"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="87">
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
+        <OffsetRange Start="2395" End="2745"></OffsetRange>
+        <LineRange Start="39" End="44"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
+        <OffsetRange Start="4466" End="4816"></OffsetRange>
+        <LineRange Start="65" End="70"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">
@@ -261,13 +314,13 @@
     <Duplicate Cost="86">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="3564" End="3826"></OffsetRange>
-        <LineRange Start="53" End="53"></LineRange>
+        <OffsetRange Start="3607" End="3869"></OffsetRange>
+        <LineRange Start="54" End="54"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="3676" End="3938"></OffsetRange>
-        <LineRange Start="53" End="53"></LineRange>
+        <OffsetRange Start="3719" End="3981"></OffsetRange>
+        <LineRange Start="54" End="54"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\OverloadedCaterpillar.cs</FileName>
@@ -302,13 +355,13 @@
     <Duplicate Cost="79">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="6374" End="6574"></OffsetRange>
-        <LineRange Start="81" End="81"></LineRange>
+        <OffsetRange Start="6417" End="6617"></OffsetRange>
+        <LineRange Start="82" End="82"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="6702" End="6902"></OffsetRange>
-        <LineRange Start="82" End="82"></LineRange>
+        <OffsetRange Start="6745" End="6945"></OffsetRange>
+        <LineRange Start="83" End="83"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="78">
@@ -355,13 +408,13 @@
     <Duplicate Cost="73">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
-        <OffsetRange Start="10730" End="10924"></OffsetRange>
-        <LineRange Start="165" End="170"></LineRange>
+        <OffsetRange Start="10773" End="10967"></OffsetRange>
+        <LineRange Start="166" End="171"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
-        <OffsetRange Start="13821" End="14015"></OffsetRange>
-        <LineRange Start="194" End="199"></LineRange>
+        <OffsetRange Start="13864" End="14058"></OffsetRange>
+        <LineRange Start="195" End="200"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="72">

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
@@ -20,12 +21,17 @@ namespace MulticutInTrees.Utilities.Matching
     internal static class MatchingLibrary
     {
         /// <summary>
+        /// <see cref="Counter"/> that can be used for operations that should not affect performance.
+        /// </summary>
+        private readonly static Counter MockCounter = new();
+
+        /// <summary>
         /// The name of the file that is used as input for the matching library.
         /// </summary>
         private readonly static string FileName = $"{AppDomain.CurrentDomain.BaseDirectory}Utilities\\Matching\\MatchingGraph.txt";
 
         /// <summary>
-        /// Uses a NetworkX algorithm to find whether <paramref name="graph"/> has a matching with a size of at least <paramref name="requiredSize"/>.
+        /// Uses a matching algorithm to find whether <paramref name="graph"/> has a matching with a size of at least <paramref name="requiredSize"/>.
         /// </summary>
         /// <typeparam name="TGraph">The type of graph used.</typeparam>
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
@@ -45,20 +51,18 @@ namespace MulticutInTrees.Utilities.Matching
                 return false;
             }
 
-            List<(TNode, TNode)> greedyMatching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
-            if (greedyMatching.Count >= requiredSize)
+            if (graph.IsAcyclic(MockCounter))
             {
-                return true;
+                return EdmondsMatching.HasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize);
             }
 
             string output = RunMatchingLibrary<TGraph, TEdge, TNode>(graph, graphCounter, out Dictionary<(int, int), TEdge> _);
-
             int size = ParseMatchingSize(output);
             return size >= requiredSize;
         }
 
         /// <summary>
-        /// Uses a NetworkX algorithm to find the maximum matching in <paramref name="graph"/>.
+        /// Uses a matching algorithm to find the maximum matching in <paramref name="graph"/>.
         /// </summary>
         /// <typeparam name="TGraph">The type of graph used.</typeparam>
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
@@ -101,28 +105,36 @@ namespace MulticutInTrees.Utilities.Matching
         {
             CreateInputFile<TGraph, TEdge, TNode>(graph, graphCounter, out libEdgeToOrigEdge);
 
+            StringBuilder errorBuilder = new();
+            StringBuilder outputBuilder = new();
+
             Process p = new();
+            p.EnableRaisingEvents = true;
             p.StartInfo = new ProcessStartInfo($"{AppDomain.CurrentDomain.BaseDirectory}Utilities\\Matching\\Min-Cost-Perfect-Matching.exe", $"-f \"{FileName}\" --max")
             {
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
-            p.Start();
 
-            string error = p.StandardError.ReadToEnd();
-            if (error != "")
+            p.OutputDataReceived += (sender, e) => outputBuilder.Append(e.Data + '\n');
+            p.ErrorDataReceived += (sender, e) => errorBuilder.Append(e.Data + '\n');
+
+            p.Start();
+            p.BeginErrorReadLine();
+            p.BeginOutputReadLine();
+            p.WaitForExit();
+
+            string error = errorBuilder.ToString();
+            string output = outputBuilder.ToString();
+
+            if (error != "" && error != "\n")
             {
                 throw new Exception($"The matching library threw an error! Error: {error}");
             }
 
-            string output = p.StandardOutput.ReadToEnd();
-
-            p.WaitForExit();
-
             File.Delete(FileName);
-
             return output;
         }
 
@@ -138,8 +150,9 @@ namespace MulticutInTrees.Utilities.Matching
         private static List<TEdge> ParseMatchingEdges<TEdge, TNode>(string matching, Dictionary<(int, int), TEdge> libEdgeToOrigEdge) where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
             List<TEdge> result = new();
-            string[] split = matching.Split("\r\n");
-            for (int i = 1; i < split.Length - 1; i++)
+            string[] split = matching.Split('\n');
+            split = split.Where(e => e != "").ToArray();
+            for (int i = 1; i < split.Length; i++)
             {
                 string[] line = split[i].Split();
                 if (!int.TryParse(line[0], out int u) || !int.TryParse(line[1], out int v))

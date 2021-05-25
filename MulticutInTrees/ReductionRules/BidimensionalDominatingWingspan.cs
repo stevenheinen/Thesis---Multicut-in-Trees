@@ -176,7 +176,7 @@ namespace MulticutInTrees.ReductionRules
             }
 
             int requiredSize = MaxSolutionSize - PartialSolution.Count + 1;
-            return matchingGraph.IsAcyclic(MockCounter) ? EdmondsMatching.HasMatchingOfAtLeast<Graph, Edge<Node>, Node>(matchingGraph, requiredSize) : MatchingLibrary.HasMatchingOfSize<Graph, Edge<Node>, Node>(matchingGraph, requiredSize, Measurements.TreeOperationsCounter);
+            return MatchingLibrary.HasMatchingOfSize<Graph, Edge<Node>, Node>(matchingGraph, requiredSize, Measurements.TreeOperationsCounter);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace MulticutInTrees.ReductionRules
                 if (ApplyReductionRule(node))
                 {
                     // todo: Immediately stops after a single node was successful for now.
-                    return TryContractEdges(new CountedList<Edge<Node>>(new List<Edge<Node>>() {Tree.GetNeighbouringEdges(node, Measurements.TreeOperationsCounter).First() }, Measurements.TreeOperationsCounter));
+                    return TryContractEdges(new CountedList<Edge<Node>>(new List<Edge<Node>>() { Tree.GetNeighbouringEdges(node, Measurements.TreeOperationsCounter).First() }, Measurements.TreeOperationsCounter));
                 }
             }
 

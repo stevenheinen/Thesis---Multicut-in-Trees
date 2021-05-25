@@ -48,12 +48,12 @@ namespace TESTS_MulticutInTrees.InstanceGeneration
 
             CommandLineOptions options2 = new() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.CNFSAT, InstanceFilePath = "D:\\Downloads\\cnf.sat", InputDemandPairsType = InputDemandPairsType.FromTreeInstance };
             string fileName2 = (string)method.Invoke(null, new object[] { 5330, 414, options2 });
-            string expected2 = "instanceDir\\MulticutInstance_treeSeed=5330_dpSeed=414_treeType=CNFSAT_dpType=FromTreeInstance_treeFile=(D:\\Downloads\\cnf[dot]sat).txt";
+            string expected2 = "instanceDir\\MulticutInstance_treeSeed=5330_dpSeed=414_treeType=CNFSAT_dpType=FromTreeInstance_treeFile=(D[slash]Downloads[slash]cnf[dot]sat).txt";
             Assert.AreEqual(expected2, fileName2);
 
             CommandLineOptions options3 = new() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.Caterpillar, NumberOfNodes = 50, InputDemandPairsType = InputDemandPairsType.Fixed, DemandPairFilePath = "D:\\Documents\\dp.txt" };
             string fileName3 = (string)method.Invoke(null, new object[] { 5330, 414, options3 });
-            string expected3 = "instanceDir\\MulticutInstance_treeSeed=5330_dpSeed=414_treeType=Caterpillar_dpType=Fixed_nrNodes=50_dpFile=(D:\\Documents\\dp[dot]txt).txt";
+            string expected3 = "instanceDir\\MulticutInstance_treeSeed=5330_dpSeed=414_treeType=Caterpillar_dpType=Fixed_nrNodes=50_dpFile=(D[slash]Documents[slash]dp[dot]txt).txt";
             Assert.AreEqual(expected3, fileName3);
 
             CommandLineOptions options4 = new() { InstanceDirectory = "instanceDir", InputTreeType = InputTreeType.Prufer, NumberOfNodes = 50, InputDemandPairsType = InputDemandPairsType.LengthDistribution, DistanceDistribution = "(2, 4, 0.5), (5, 10, 0.2), (50, 100, 0.3)" };
