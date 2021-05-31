@@ -110,17 +110,9 @@ namespace TESTS_MulticutInTrees.Algorithms
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsTrue(result.Item4.Solvable);
-            Assert.AreEqual(1, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(2, result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(3, result.Item2.Count);
             Assert.AreEqual(0, result.Item3.Count);
-
-            foreach (DemandPair dp in result.Item3)
-            {
-                if (!result.Item1.HasNode(dp.Node1, MockCounter) || !result.Item1.HasNode(dp.Node2, MockCounter))
-                {
-                    Assert.Fail($"There is a demand pair with an endpoint that does not exist: {dp.Node1}, {dp.Node2}, {result.Item1.Nodes(MockCounter).Print()}.");
-                }
-            }
         }
 
         [TestMethod]
@@ -141,6 +133,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+            Assert.IsTrue(result.Item4.Solvable);
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
@@ -154,7 +147,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(29, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(27, result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(13, result.Item2.Count);
             Assert.AreEqual(34, result.Item3.Count);
         }
@@ -177,6 +170,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+            Assert.IsTrue(result.Item4.Solvable);
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
@@ -190,7 +184,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(80, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(71, result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(29, result.Item2.Count);
             Assert.AreEqual(85, result.Item3.Count);
         }
@@ -213,6 +207,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+            Assert.IsTrue(result.Item4.Solvable);
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
@@ -226,7 +221,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.AreEqual(resultNaive.Item3.Count, result.Item3.Count);
             //*/
 
-            Assert.AreEqual(40, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(39, result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(12, result.Item2.Count);
             Assert.AreEqual(45, result.Item3.Count);
         }

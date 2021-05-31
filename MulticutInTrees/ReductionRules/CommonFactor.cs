@@ -166,6 +166,9 @@ namespace MulticutInTrees.ReductionRules
         /// </summary>
         private void FindInitialIntersections()
         {
+            IntersectingDemandPairs.Clear(MockCounter);
+            DemandPairIntersections.Clear(MockCounter);
+
             int numberOfDPs = DemandPairs.Count(MockCounter);
             List<DemandPair> temporaryDPs = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
             for (int i = 0; i < numberOfDPs - 1; i++)

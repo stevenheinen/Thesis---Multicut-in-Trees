@@ -64,19 +64,14 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
         private void CheckApplicabilityNode(Node node, HashSet<Edge<Node>> edgesToBeContracted)
         {
-            if (!DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> dpsAtNode, Measurements.DemandPairsPerEdgeKeysCounter))
-            {
-                return;
-            }
-
             int degree = node.Degree(Measurements.TreeOperationsCounter);
             if (degree == 1)
             {
-                CheckApplicabilityLeaf(node, dpsAtNode, edgesToBeContracted);
+                CheckApplicabilityLeaf(node, edgesToBeContracted);
             }
             else if (degree == 2)
             {
-                CheckApplicabilityInternalNode(node, dpsAtNode, edgesToBeContracted);
+                CheckApplicabilityInternalNode(node, edgesToBeContracted);
             }
         }
 
@@ -84,9 +79,8 @@ namespace MulticutInTrees.ReductionRules
         /// Determine for a given internal <see cref="Node"/> which edges can be contracted according to this <see cref="ReductionRule"/>.
         /// </summary>
         /// <param name="node">The <see cref="Node"/> for which we want to determine which edges can be contracted.</param>
-        /// <param name="dpsAtNode">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s that start at <paramref name="node"/>.</param>
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
-        private void CheckApplicabilityInternalNode(Node node, CountedCollection<DemandPair> dpsAtNode, HashSet<Edge<Node>> edgesToBeContracted)
+        private void CheckApplicabilityInternalNode(Node node, HashSet<Edge<Node>> edgesToBeContracted)
         {
             if (!AllowLeafAttachedToInnerNode)
             {
@@ -97,6 +91,17 @@ namespace MulticutInTrees.ReductionRules
                         return;
                     }
                 }
+            }
+
+            if (!DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> dpsAtNode, Measurements.DemandPairsPerEdgeKeysCounter))
+            {
+                Edge<Node> contractEdge = Tree.GetNeighbouringEdges(node, Measurements.TreeOperationsCounter).FirstOrDefault(e => CanContractNeighbouringEdge(e, edgesToBeContracted));
+                if (!(contractEdge is null))
+                {
+                    edgesToBeContracted.Add(contractEdge);
+                }
+
+                return;
             }
 
             Edge<Node> firstEdge = DetermineCommonEdge(node, dpsAtNode);
@@ -204,10 +209,20 @@ namespace MulticutInTrees.ReductionRules
         /// Determine for a given leaf <see cref="Node"/> which edges can be contracted according to this <see cref="ReductionRule"/>.
         /// </summary>
         /// <param name="leaf">The <see cref="Node"/> for which we want to determine which edges can be contracted.</param>
-        /// <param name="dpsAtNode">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s that start at <paramref name="leaf"/>.</param>
         /// <param name="edgesToBeContracted"><see cref="HashSet{T}"/> containing all edges that can be contracted in this application of this <see cref="ReductionRule"/>.</param>
-        private void CheckApplicabilityLeaf(Node leaf, CountedCollection<DemandPair> dpsAtNode, HashSet<Edge<Node>> edgesToBeContracted)
+        private void CheckApplicabilityLeaf(Node leaf, HashSet<Edge<Node>> edgesToBeContracted)
         {
+            if (!DemandPairsPerNode.TryGetValue(leaf, out CountedCollection<DemandPair> dpsAtNode, Measurements.DemandPairsPerEdgeKeysCounter))
+            {
+                Edge<Node> contractEdge = Tree.GetNeighbouringEdges(leaf, Measurements.TreeOperationsCounter).FirstOrDefault(e => CanContractNeighbouringEdge(e, edgesToBeContracted));
+                if (!(contractEdge is null))
+                {
+                    edgesToBeContracted.Add(contractEdge);
+                }
+
+                return;
+            }
+
             Edge<Node> secondEdge = null;
 
             foreach (DemandPair dp in dpsAtNode.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))

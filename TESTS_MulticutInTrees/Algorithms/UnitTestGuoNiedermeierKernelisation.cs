@@ -140,6 +140,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+            Assert.IsTrue(result.Item4.Solvable);
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
@@ -176,6 +177,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+            Assert.IsTrue(result.Item4.Solvable);
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
@@ -212,6 +214,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             Assert.IsNotNull(result.Item2);
             Assert.IsNotNull(result.Item3);
             Assert.IsNotNull(result.Item4);
+            Assert.IsTrue(result.Item4.Solvable);
 
             /* If this test fails, check the expected numbers using this code.
             Graph treeNaive = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));

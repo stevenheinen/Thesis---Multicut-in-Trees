@@ -136,7 +136,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(5, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(4, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
@@ -169,7 +169,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(4, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(3, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
@@ -201,7 +201,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
 
             Assert.IsTrue(uniqueDirection.RunFirstIteration());
-            Assert.AreEqual(3, tree.NumberOfEdges(MockCounter));
+            Assert.AreEqual(1, tree.NumberOfEdges(MockCounter));
         }
 
         [TestMethod]
