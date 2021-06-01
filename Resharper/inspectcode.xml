@@ -14,6 +14,7 @@
     <IssueType Id="CSharpErrors" Category="C# Compiler Errors" CategoryId="CSharpErrors" Description="" Severity="ERROR" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
     <IssueType Id="CollectionNeverUpdated.Local" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Collection is never updated" Description="Collection is never updated: Private accessibility" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CollectionNeverUpdated.Local" />
+    <IssueType Id="ConvertClosureToMethodGroup" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert lambda expression to method group" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertClosureToMethodGroup" />
     <IssueType Id="ConvertIfStatementToConditionalTernaryExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '?:' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToConditionalTernaryExpression" />
     <IssueType Id="EmptyConstructor" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Empty constructor" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=EmptyConstructor" />
     <IssueType Id="EmptyStatement" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Empty statement is redundant" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=EmptyStatement" />
@@ -430,7 +431,6 @@
       <Issue TypeId="UnusedMethodReturnValue.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="9567-9571" Line="158" Message="Method 'Remove' return value is never used" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="9803-9810" Line="163" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="10963-10970" Line="180" Message="Value assigned is not used in any execution path" />
-      <Issue TypeId="UnusedMember.Global" File="CountedDatastructures\CountedDictionary.cs" Offset="11446-11451" Line="189" Message="Method 'Clear' is never used" />
       <Issue TypeId="RedundantAssignment" File="CountedDatastructures\CountedDictionary.cs" Offset="11649-11659" Line="194" Message="Value assigned is not used in any execution path" />
       <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedEnumerable.cs" Offset="1742-1752" Line="35" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="CountedDatastructures\CountedEnumerable.cs" Offset="2058-2068" Line="39" Message="Possible multiple enumeration" />
@@ -821,11 +821,11 @@
       <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="5869-5871" Line="82" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="8768-8770" Line="139" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="8769-8771" Line="139" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="10806-10818" Line="181" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="11795-11807" Line="198" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="12194-12196" Line="211" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="12195-12197" Line="211" Message="'(' or initializer expected" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\CommonFactor.cs" Offset="13914-13925" Line="240" Message="Name 'candidateDP' does not match rule 'Local variables'. Suggested name is 'candidateDp'." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="10922-10934" Line="184" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="11911-11923" Line="201" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="12310-12312" Line="214" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="12311-12313" Line="214" Message="'(' or initializer expected" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\CommonFactor.cs" Offset="14030-14041" Line="243" Message="Name 'candidateDP' does not match rule 'Local variables'. Suggested name is 'candidateDp'." />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\DisjointPaths.cs" Offset="841-854" Line="19" Message="Class 'DisjointPaths' is never instantiated" />
       <Issue TypeId="MemberCanBeProtected.Global" File="ReductionRules\DominatedEdge.cs" Offset="2270-2276" Line="35" Message="Constructor 'DominatedEdge' can be made protected" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\DominatedEdge.cs" Offset="7430-7432" Line="96" Message="Tuple must contain at least two elements." />
@@ -904,23 +904,31 @@
       <Issue TypeId="CSharpErrors" File="ReductionRules\OverloadedL3Leaves.cs" Offset="7935-7937" Line="112" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\OverloadedL3Leaves.cs" Offset="7936-7938" Line="112" Message="'(' or initializer expected" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\UniqueDirection.cs" Offset="1136-1151" Line="18" Message="Class 'UniqueDirection' is never instantiated" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="15417-15419" Line="278" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="15418-15420" Line="278" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="15956-15958" Line="293" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="15957-15959" Line="293" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="15873-15875" Line="293" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="15874-15876" Line="293" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="16412-16414" Line="308" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\UniqueDirection.cs" Offset="16413-16415" Line="308" Message="'(' or initializer expected" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\UnitPath.cs" Offset="840-848" Line="19" Message="Class 'UnitPath' is never instantiated" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\UnitPath.cs" Offset="3685-3687" Line="58" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\UnitPath.cs" Offset="3686-3688" Line="58" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\UnitPath.cs" Offset="4426-4428" Line="78" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\UnitPath.cs" Offset="4427-4429" Line="78" Message="'(' or initializer expected" />
       <Issue TypeId="UnusedType.Global" File="ReductionRules\_NamespaceDocReductionRules.cs" Offset="479-491" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2789-2791" Line="41" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2790-2792" Line="41" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2874-2876" Line="43" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2875-2877" Line="43" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3102-3104" Line="48" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3746-3748" Line="68" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3805-3814" Line="70" Message="Cannot resolve symbol 'Add'" />
+      <Issue TypeId="UnusedVariable" File="Utilities\BFS.cs" Offset="3139-3150" Line="44" Message="Local variable 'mockCounter' is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3156-3158" Line="44" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3157-3159" Line="44" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3241-3243" Line="46" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3242-3244" Line="46" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3478-3480" Line="51" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="4285-4287" Line="73" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="4344-4360" Line="75" Message="Cannot resolve symbol 'Add'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7250-7252" Line="120" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7251-7253" Line="120" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7335-7337" Line="122" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7336-7338" Line="122" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7563-7565" Line="127" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="8203-8205" Line="147" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="8262-8271" Line="149" Message="Cannot resolve symbol 'Add'" />
       <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DFS.cs" Offset="1410-1416" Line="25" Message="Method 'FindConnectedComponent' can be made private" />
       <Issue TypeId="CSharpErrors" File="Utilities\DFS.cs" Offset="3574-3576" Line="55" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Utilities\DFS.cs" Offset="3575-3577" Line="55" Message="'(' or initializer expected" />
@@ -1008,70 +1016,112 @@
       <Issue TypeId="UnusedMember.Global" File="Utilities\FisherYates.cs" Offset="1270-1277" Line="21" Message="Method 'Shuffle' is never used" />
       <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="965-967" Line="21" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="966-968" Line="21" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="12933-12938" Line="186" Message="Cannot resolve symbol 'graph'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="12944-12945" Line="186" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="12957-12958" Line="186" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="12958-12959" Line="186" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13338-13340" Line="198" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13339-13341" Line="198" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13658-13666" Line="207" Message="Cannot resolve symbol 'matching'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13666-13668" Line="207" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14064-14066" Line="215" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14065-14067" Line="215" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14124-14126" Line="216" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14125-14127" Line="216" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14200-14202" Line="217" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14201-14203" Line="217" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="17971-17979" Line="257" Message="Cannot resolve symbol 'nodesInD'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="17985-17986" Line="257" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18049-18050" Line="257" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="18050-18051" Line="257" Message="Empty statement is redundant" />
-      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="18897-18908" Line="280" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
-      <Issue TypeId="UnusedMethodReturnValue.Local" File="Utilities\Matching\EdmondsMatching.cs" Offset="20869-20900" Line="302" Message="Method 'BuildDigraphD' return value is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21809-21811" Line="313" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21810-21812" Line="313" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21867-21869" Line="314" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21868-21870" Line="314" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22034-22041" Line="318" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22318-22325" Line="322" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22663-22670" Line="326" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22979-22986" Line="330" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="23259-23261" Line="336" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="23260-23262" Line="336" Message="'(' or initializer expected" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\Matching\EdmondsMatching.cs" Offset="26897-26916" Line="367" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\Matching\EdmondsMatching.cs" Offset="27068-27085" Line="371" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29389-29391" Line="406" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29390-29392" Line="406" Message="'(' or initializer expected" />
-      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="Utilities\Matching\EdmondsMatching.cs" Offset="29723-29726" Line="413" Message="Non-obvious precedence" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29870-29872" Line="418" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29871-29873" Line="418" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29918-29920" Line="419" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29919-29921" Line="419" Message="'(' or initializer expected" />
-      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="37182-37193" Line="520" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
-      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="37324-37335" Line="520" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40486-40493" Line="556" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40610-40617" Line="557" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40701-40706" Line="559" Message="Cannot resolve symbol 'graph'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40712-40713" Line="559" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40725-40726" Line="559" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="40726-40727" Line="559" Message="Empty statement is redundant" />
-      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatching.cs" Offset="40918-40931" Line="562" Message="Local variable 'beforeBlossom' is never used" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40965-40972" Line="562" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41207-41220" Line="565" Message="Cannot resolve symbol 'beforeBlossom'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41220-41222" Line="565" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Matching\EdmondsMatching.cs" Offset="41493-41505" Line="568" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41713-41726" Line="576" Message="Cannot resolve symbol 'beforeBlossom'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41726-41728" Line="576" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Matching\EdmondsMatching.cs" Offset="41924-41936" Line="578" Message="Possible multiple enumeration" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatching.cs" Offset="43447-43461" Line="602" Message="Content of collection 'hashedMatching' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="43468-43476" Line="602" Message="Cannot resolve symbol 'matching'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="43476-43478" Line="602" Message="'(' or initializer expected" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Matching\EdmondsMatching.cs" Offset="2763-2784" Line="44" Message="Convert to method group" />
+      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Matching\EdmondsMatching.cs" Offset="4901-4922" Line="70" Message="Convert to method group" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13067-13072" Line="186" Message="Cannot resolve symbol 'graph'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13078-13079" Line="186" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13091-13092" Line="186" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="13092-13093" Line="186" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13472-13474" Line="198" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13473-13475" Line="198" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13792-13800" Line="207" Message="Cannot resolve symbol 'matching'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13800-13802" Line="207" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14198-14200" Line="215" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14199-14201" Line="215" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14258-14260" Line="216" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14259-14261" Line="216" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14334-14336" Line="217" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14335-14337" Line="217" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18105-18113" Line="257" Message="Cannot resolve symbol 'nodesInD'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18119-18120" Line="257" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18183-18184" Line="257" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="18184-18185" Line="257" Message="Empty statement is redundant" />
+      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="19031-19042" Line="280" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
+      <Issue TypeId="UnusedMethodReturnValue.Local" File="Utilities\Matching\EdmondsMatching.cs" Offset="21003-21034" Line="302" Message="Method 'BuildDigraphD' return value is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21943-21945" Line="313" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21944-21946" Line="313" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="22001-22003" Line="314" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="22002-22004" Line="314" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22168-22175" Line="318" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22452-22459" Line="322" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22797-22804" Line="326" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="23113-23120" Line="330" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="23393-23395" Line="336" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="23394-23396" Line="336" Message="'(' or initializer expected" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\Matching\EdmondsMatching.cs" Offset="27031-27050" Line="367" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\Matching\EdmondsMatching.cs" Offset="27202-27219" Line="371" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29523-29525" Line="406" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29524-29526" Line="406" Message="'(' or initializer expected" />
+      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="Utilities\Matching\EdmondsMatching.cs" Offset="29857-29860" Line="413" Message="Non-obvious precedence" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30004-30006" Line="418" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30005-30007" Line="418" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30052-30054" Line="419" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30053-30055" Line="419" Message="'(' or initializer expected" />
+      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="37316-37327" Line="520" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
+      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="37458-37469" Line="520" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40620-40627" Line="556" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40744-40751" Line="557" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40835-40840" Line="559" Message="Cannot resolve symbol 'graph'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40846-40847" Line="559" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40859-40860" Line="559" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="40860-40861" Line="559" Message="Empty statement is redundant" />
+      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatching.cs" Offset="41052-41065" Line="562" Message="Local variable 'beforeBlossom' is never used" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="41099-41106" Line="562" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41341-41354" Line="565" Message="Cannot resolve symbol 'beforeBlossom'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41354-41356" Line="565" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Matching\EdmondsMatching.cs" Offset="41627-41639" Line="568" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41847-41860" Line="576" Message="Cannot resolve symbol 'beforeBlossom'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41860-41862" Line="576" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Matching\EdmondsMatching.cs" Offset="42058-42070" Line="578" Message="Possible multiple enumeration" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatching.cs" Offset="43581-43595" Line="602" Message="Content of collection 'hashedMatching' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="43602-43610" Line="602" Message="Cannot resolve symbol 'matching'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="43610-43612" Line="602" Message="'(' or initializer expected" />
+      <Issue TypeId="RedundantUsingDirective" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="341-359" Line="6" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="RedundantUsingDirective" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="361-390" Line="7" Message="Using directive is not required by the code and can be safely removed" />
+      <Issue TypeId="UnusedType.Global" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="674-692" Line="16" Message="Class 'EdmondsMatchingNEW' is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="908-910" Line="21" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="909-911" Line="21" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="2105-2124" Line="36" Message="Method 'FindMaximumMatching' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="4033-4053" Line="59" Message="Method 'HasMatchingOfAtLeast' is never used" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="12792-12806" Line="182" Message="Content of collection 'hashedMatching' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="12813-12821" Line="182" Message="Cannot resolve symbol 'matching'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="12821-12823" Line="182" Message="'(' or initializer expected" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15158-15175" Line="220" Message="Content of collection 'unmatchedVertices' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15182-15187" Line="220" Message="Cannot resolve symbol 'graph'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15193-15194" Line="220" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15207-15208" Line="220" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15208-15209" Line="220" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15456-15458" Line="227" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15457-15459" Line="227" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15810-15833" Line="236" Message="Local variable 'nodesInDToOriginalNodes' is never used" />
+      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15931-15954" Line="236" Message="Local variable 'edgesInDToOriginalEdges' is never used" />
+      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="16301-16306" Line="240" Message="Local variable 'pathP' is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18299-18301" Line="260" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18300-18302" Line="260" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18345-18347" Line="261" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18346-18348" Line="261" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18391-18393" Line="262" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18392-18394" Line="262" Message="'(' or initializer expected" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18425-18437" Line="264" Message="Content of collection 'matchedEdges' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18444-18452" Line="264" Message="Cannot resolve symbol 'matching'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18452-18454" Line="264" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18609-18611" Line="267" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18610-18612" Line="267" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18657-18659" Line="268" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18658-18660" Line="268" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="20204-20206" Line="293" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="20205-20207" Line="293" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22858-22860" Line="332" Message="Cannot resolve symbol 'n1'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22862-22864" Line="332" Message="Cannot resolve symbol 'n2'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22864-22866" Line="332" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22870-22871" Line="332" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22871-22872" Line="332" Message="Empty statement is redundant" />
       <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="862-864" Line="18" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="863-865" Line="18" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2089-2091" Line="34" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2090-2092" Line="34" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2204-2206" Line="37" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2205-2207" Line="37" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2054-2056" Line="34" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2055-2057" Line="34" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2169-2171" Line="37" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2170-2172" Line="37" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="1103-1105" Line="26" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="1104-1106" Line="26" Message="'(' or initializer expected" />
       <Issue TypeId="RedundantStringInterpolation" File="Utilities\Matching\MatchingLibrary.cs" Offset="5023-5024" Line="89" Message="Redundant string interpolation" />

@@ -24,14 +24,14 @@ namespace MulticutInTrees.Utilities.Matching
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
         /// <typeparam name="TNode">The type of nodes in <paramref name="graph"/>.</typeparam>
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
-        /// <returns>A <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges in the maximal matching.</returns>
+        /// <returns>A <see cref="List{T}"/> <typeparamref name="TEdge"/>s that represent the edges in the maximal matching.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
-        public static List<(TNode, TNode)> FindGreedyMaximalMatching<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        public static List<TEdge> FindGreedyMaximalMatching<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find an initial matching in a graph, but the graph is null!");
 #endif
-            List<(TNode, TNode)> matching = new();
+            List<TEdge> matching = new();
 
             // Save we have not matched any of the nodes.
             Dictionary<TNode, bool> matched = new();
@@ -50,8 +50,10 @@ namespace MulticutInTrees.Utilities.Matching
                 }
 
                 // Loop through all neighbours of the node to find an edge that can be added to the matching.
-                foreach (TNode neighbour in node.Neighbours(MockCounter))
+                foreach (TEdge neighbouringEdge in graph.GetNeighbouringEdges(node, MockCounter))
                 {
+                    TNode neighbour = neighbouringEdge.Endpoint1 == node ? neighbouringEdge.Endpoint2 : neighbouringEdge.Endpoint1;
+
                     // If we already matched this neighbour, go to the next one.
                     if (matched[neighbour])
                     {
@@ -59,7 +61,7 @@ namespace MulticutInTrees.Utilities.Matching
                     }
 
                     // We have found an unmatched neighbour. Add the edge between this node and the neighbour to the matching.
-                    matching.Add(Utils.OrderEdgeSmallToLarge((node, neighbour)));
+                    matching.Add(neighbouringEdge);
                     matched[node] = true;
                     matched[neighbour] = true;
                     break;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>101771</CodebaseCost>
-    <TotalDuplicatesCost>4805</TotalDuplicatesCost>
-    <TotalFragmentsCost>9877</TotalFragmentsCost>
+    <CodebaseCost>106304</CodebaseCost>
+    <TotalDuplicatesCost>5253</TotalDuplicatesCost>
+    <TotalFragmentsCost>10773</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
     <Duplicate Cost="392">
@@ -64,6 +64,18 @@
         <FileName>MulticutInTrees\Algorithms\ImprovedGuoNiedermeierKernelisation.cs</FileName>
         <OffsetRange Start="2032" End="2862"></OffsetRange>
         <LineRange Start="42" End="55"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="236">
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\BFS.cs</FileName>
+        <OffsetRange Start="2305" End="3317"></OffsetRange>
+        <LineRange Start="32" End="48"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\BFS.cs</FileName>
+        <OffsetRange Start="6399" End="7411"></OffsetRange>
+        <LineRange Start="108" End="124"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="211">
@@ -148,6 +160,18 @@
         <FileName>MulticutInTrees\ReductionRules\UnitPath.cs</FileName>
         <OffsetRange Start="4314" End="4853"></OffsetRange>
         <LineRange Start="76" End="86"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="129">
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
+        <OffsetRange Start="2395" End="2812"></OffsetRange>
+        <LineRange Start="39" End="44"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
+        <OffsetRange Start="4533" End="4950"></OffsetRange>
+        <LineRange Start="65" End="70"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="125">
@@ -278,13 +302,13 @@
     <Duplicate Cost="87">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
-        <OffsetRange Start="2395" End="2745"></OffsetRange>
-        <LineRange Start="39" End="44"></LineRange>
+        <OffsetRange Start="8576" End="9039"></OffsetRange>
+        <LineRange Start="114" End="120"></LineRange>
       </Fragment>
       <Fragment>
-        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
-        <OffsetRange Start="4466" End="4816"></OffsetRange>
-        <LineRange Start="65" End="70"></LineRange>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatchingNEW.cs</FileName>
+        <OffsetRange Start="8668" End="9131"></OffsetRange>
+        <LineRange Start="114" End="120"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">
@@ -326,6 +350,18 @@
         <FileName>MulticutInTrees\ReductionRules\OverloadedCaterpillar.cs</FileName>
         <OffsetRange Start="3539" End="3801"></OffsetRange>
         <LineRange Start="53" End="53"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="83">
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatching.cs</FileName>
+        <OffsetRange Start="43080" End="43541"></OffsetRange>
+        <LineRange Start="593" End="600"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Utilities\Matching\EdmondsMatchingNEW.cs</FileName>
+        <OffsetRange Start="12300" End="12761"></OffsetRange>
+        <LineRange Start="173" End="180"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="80">

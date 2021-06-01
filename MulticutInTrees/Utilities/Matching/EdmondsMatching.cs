@@ -41,7 +41,7 @@ namespace MulticutInTrees.Utilities.Matching
                 throw new NotSupportedException("This implementation of the blossom matching algorithm is not bug-free! Please only use it on acyclic graphs!");
             }
 #endif
-            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
+            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph).Select(e => Utils.OrderEdgeSmallToLarge<TEdge, TNode>(e)).ToList();
             return RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(graph, matching);
         }
 
@@ -67,7 +67,7 @@ namespace MulticutInTrees.Utilities.Matching
                 throw new NotSupportedException("This implementation of the blossom matching algorithm is not bug-free! Please only use it on acyclic graphs!");
             }
 #endif
-            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph);
+            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph).Select(e => Utils.OrderEdgeSmallToLarge<TEdge, TNode>(e)).ToList();
             return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, matching);
         }
 
