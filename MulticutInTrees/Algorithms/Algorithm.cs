@@ -637,7 +637,11 @@ namespace MulticutInTrees.Algorithms
             {
                 return false;
             }
-            Node internalNeighbour = i1Node.Neighbours(measurements.TreeOperationsCounter).First(n => n.Degree(MockCounter) > 1);
+            Node internalNeighbour = i1Node.Neighbours(measurements.TreeOperationsCounter).FirstOrDefault(n => n.Degree(MockCounter) > 1);
+            if (internalNeighbour is null)
+            {
+                return false;
+            }
             int caterpillar = CaterpillarComponentPerNode[internalNeighbour, measurements.TreeOperationsCounter];
             if (caterpillar == -1 && internalNeighbour.Type == NodeType.I3)
             {

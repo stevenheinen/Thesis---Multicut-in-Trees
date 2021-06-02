@@ -586,11 +586,11 @@ namespace MulticutInTrees.Graphs
                 // We also do not need to change anything when contracting an edge between an L2-leaf and an I2-node, or between an L3-leaf and an I3-node.
                 case (NodeType.I1, NodeType.I2):
                     newNode.Type = NodeType.I1;
-                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint2, NodeType.L2, NodeType.I1);
+                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint2, NodeType.L2, NodeType.L1);
                     break;
                 case (NodeType.I2, NodeType.I1):
                     newNode.Type = NodeType.I1;
-                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint1, NodeType.L2, NodeType.I1);
+                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint1, NodeType.L2, NodeType.L1);
                     break;
                 case (NodeType.I1, NodeType.I3):
                     UpdateNodeTypesEdgeContractionI1I3(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
@@ -618,6 +618,30 @@ namespace MulticutInTrees.Graphs
                 case (NodeType.L3, NodeType.I3):
                     newNode.Type = NodeType.I3;
                     break;
+#if !EXPERIMENT
+                case (NodeType.L1, NodeType.L1):
+                case (NodeType.L1, NodeType.L2):
+                case (NodeType.L1, NodeType.L3):
+                case (NodeType.L2, NodeType.L1):
+                case (NodeType.L2, NodeType.L2):
+                case (NodeType.L2, NodeType.L3):
+                case (NodeType.L3, NodeType.L1):
+                case (NodeType.L3, NodeType.L2):
+                case (NodeType.L3, NodeType.L3):
+                case (NodeType.L1, NodeType.I2):
+                case (NodeType.L1, NodeType.I3):
+                case (NodeType.L2, NodeType.I1):
+                case (NodeType.L2, NodeType.I3):
+                case (NodeType.L3, NodeType.I1):
+                case (NodeType.L3, NodeType.I2):
+                case (NodeType.I1, NodeType.L2):
+                case (NodeType.I1, NodeType.L3):
+                case (NodeType.I2, NodeType.L1):
+                case (NodeType.I2, NodeType.L3):
+                case (NodeType.I3, NodeType.L1):
+                case (NodeType.I3, NodeType.L2):
+                    throw new NotSupportedException($"Trying to contract an edge between a node with type {contractedEdge.Endpoint1.Type} and a node with type {contractedEdge.Endpoint2.Type}, but this should not happen!");
+#endif
             }
         }
 
@@ -660,7 +684,7 @@ namespace MulticutInTrees.Graphs
         {
             // If the I1-node has exactly one leaf (which is also the edge that is contracted), the resulting node will be a leaf. 
             // The type of this leaf depends on the type of the (unique) internal neighbour of the I1-node.
-            bool hasExactlyOneLeaf = contractedEdgeI1Node.Neighbours(MockCounter).Count(n => n.Neighbours(MockCounter).Count() == 1) == 1;
+            bool hasExactlyOneLeaf = contractedEdgeI1Node.Neighbours(MockCounter).Count(n => n.Degree(MockCounter) == 1) == 1;
             if (hasExactlyOneLeaf)
             {
                 TNode internalNeighbour = contractedEdgeI1Node.Neighbours(MockCounter).FirstOrDefault(n => n.Neighbours(MockCounter).Count() > 1);
