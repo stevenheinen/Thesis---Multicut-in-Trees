@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.InstanceGeneration;
@@ -12,6 +13,7 @@ namespace MulticutInTrees.Experiments
     /// <summary>
     /// Class containing the output of an experiment.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ExperimentOutput
     {
         /// <summary>

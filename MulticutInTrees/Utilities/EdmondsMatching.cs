@@ -7,19 +7,13 @@ using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
 
-namespace MulticutInTrees.Utilities.Matching
+namespace MulticutInTrees.Utilities
 {
-    // todo: Add counters
-    // todo: See if it is possible to use edges here as well instead of node tuples.
-    // todo: Fix implementation to also work on general graphs.
     /// <summary>
     /// Class that uses Edmond's Blossom algorithm to find a maximum matching in a graph.
     /// </summary>
     public static class EdmondsMatching
     {
-        // todo: replace with correct counters
-        private static readonly Counter MockCounter = new();
-
         /// <summary>
         /// Finds a maximum matching in <paramref name="graph"/>.
         /// <br/>
@@ -29,20 +23,17 @@ namespace MulticutInTrees.Utilities.Matching
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
         /// <typeparam name="TNode">The type of nodes in <paramref name="graph"/>.</typeparam>
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>A <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges in the maximum matching.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
-        /// <exception cref="NotSupportedException">Thrown when <paramref name="graph"/> is not acyclic.</exception>
-        public static List<(TNode, TNode)> FindMaximumMatching<TGraph, TEdge, TNode>(TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
+        public static List<(TNode, TNode)> FindMaximumMatching<TGraph, TEdge, TNode>(TGraph graph, Counter graphCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find a maximum matching in a graph, but the graph is null!");
-            if (!graph.IsAcyclic(MockCounter))
-            {
-                throw new NotSupportedException("This implementation of the blossom matching algorithm is not bug-free! Please only use it on acyclic graphs!");
-            }
+            Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find a maximum matching in a graph, but the counter is null!");
 #endif
-            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph).Select(e => Utils.OrderEdgeSmallToLarge<TEdge, TNode>(e)).ToList();
-            return RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(graph, matching);
+            HashSet<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph, graphCounter).ToHashSet();
+            return RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(graph, matching, graphCounter).ToList();
         }
 
         /// <summary>
@@ -55,20 +46,17 @@ namespace MulticutInTrees.Utilities.Matching
         /// <typeparam name="TNode">The type of nodes in <paramref name="graph"/>.</typeparam>
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
         /// <param name="requiredSize">The required size of the matching.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns><see langword="true"/> if a matching of size <paramref name="requiredSize"/> exists in <paramref name="graph"/>, <see langword="false"/> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> is <see langword="null"/>.</exception>
-        /// <exception cref="NotSupportedException">Thrown when <paramref name="graph"/> is not acyclic.</exception>
-        public static bool HasMatchingOfAtLeast<TGraph, TEdge, TNode>(TGraph graph, int requiredSize) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
+        public static bool HasMatchingOfSize<TGraph, TEdge, TNode>(TGraph graph, int requiredSize, Counter graphCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), $"Trying to find a matching of size at least {requiredSize} in a graph, but the graph is null!");
-            if (!graph.IsAcyclic(MockCounter))
-            {
-                throw new NotSupportedException("This implementation of the blossom matching algorithm is not bug-free! Please only use it on acyclic graphs!");
-            }
+            Utils.NullCheck(graphCounter, nameof(graphCounter), $"Trying to find a matching of size at least {requiredSize} in a graph, but the counter is null!");
 #endif
-            List<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph).Select(e => Utils.OrderEdgeSmallToLarge<TEdge, TNode>(e)).ToList();
-            return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, matching);
+            HashSet<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph, graphCounter).ToHashSet();
+            return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, matching, graphCounter);
         }
 
         /// <summary>
@@ -78,20 +66,21 @@ namespace MulticutInTrees.Utilities.Matching
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
         /// <typeparam name="TNode">The type of nodes in <paramref name="graph"/>.</typeparam>
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
-        /// <param name="currentMatching">The <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges currently in the matching.</param>
-        /// <returns>A <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges in the maximum matching.</returns>
+        /// <param name="currentMatching">The <see cref="HashSet{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges currently in the matching.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
+        /// <returns>A <see cref="HashSet{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges in the maximum matching.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="currentMatching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(TGraph graph, List<(TNode, TNode)> currentMatching) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        private static HashSet<(TNode, TNode)> RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(TGraph graph, HashSet<(TNode, TNode)> currentMatching, Counter graphCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to recursively find a maximum matching in a graph, but the graph is null!");
             Utils.NullCheck(currentMatching, nameof(currentMatching), "Trying to recursively find a maximum matching in a graph, but the current matching is null!");
 #endif
-            List<(TNode, TNode)> augmentingPath = FindAugmentingPath<TGraph, TEdge, TNode>(graph, currentMatching);
+            List<(TNode, TNode)> augmentingPath = FindAugmentingPath<TGraph, TEdge, TNode>(graph, currentMatching, graphCounter);
             if (augmentingPath.Count > 0)
             {
                 AugmentMatchingAlongPath(currentMatching, augmentingPath);
-                return RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(graph, currentMatching);
+                return RecursiveFindMaximumMatching<TGraph, TEdge, TNode>(graph, currentMatching, graphCounter);
             }
 
             return currentMatching;
@@ -106,9 +95,10 @@ namespace MulticutInTrees.Utilities.Matching
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the matching.</param>
         /// <param name="requiredSize">The required size of the matching.</param>
         /// <param name="currentMatching">The <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges currently in the matching.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns><see langword="true"/> if a matching of size <paramref name="requiredSize"/> exists in <paramref name="graph"/>, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="currentMatching"/> is <see langword="null"/>.</exception>
-        private static bool RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(TGraph graph, int requiredSize, List<(TNode, TNode)> currentMatching) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        private static bool RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(TGraph graph, int requiredSize, HashSet<(TNode, TNode)> currentMatching, Counter graphCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), $"Trying to recursively find a matching of size at least {requiredSize} in a graph, but the graph is null!");
@@ -119,11 +109,11 @@ namespace MulticutInTrees.Utilities.Matching
                 return true;
             }
 
-            List<(TNode, TNode)> augmentingPath = FindAugmentingPath<TGraph, TEdge, TNode>(graph, currentMatching);
+            List<(TNode, TNode)> augmentingPath = FindAugmentingPath<TGraph, TEdge, TNode>(graph, currentMatching, graphCounter);
             if (augmentingPath.Count > 0)
             {
                 AugmentMatchingAlongPath(currentMatching, augmentingPath);
-                return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, currentMatching);
+                return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, currentMatching, graphCounter);
             }
 
             return false;
@@ -137,7 +127,7 @@ namespace MulticutInTrees.Utilities.Matching
         /// <param name="path">The augmenting path to augment the matching along.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="matching"/> or <paramref name="path"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="path"/> is not an augmenting path.</exception>
-        private static void AugmentMatchingAlongPath<TNode>(List<(TNode, TNode)> matching, List<(TNode, TNode)> path) where TNode : AbstractNode<TNode>
+        private static void AugmentMatchingAlongPath<TNode>(HashSet<(TNode, TNode)> matching, List<(TNode, TNode)> path) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(matching, nameof(matching), "Trying to augment a matching along a path, but the matching is null!");
@@ -164,26 +154,27 @@ namespace MulticutInTrees.Utilities.Matching
         /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
         /// <typeparam name="TNode">The type of nodes in <paramref name="graph"/>.</typeparam>
         /// <param name="graph">The <typeparamref name="TGraph"/> in which to find the augmenting path.</param>
-        /// <param name="matching">The <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges currently in the matching.</param>
+        /// <param name="matching">The <see cref="HashSet{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges currently in the matching.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>An empty <see cref="List{T}"/> if no augmenting path can be found, or a <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges on the augmenting path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> FindAugmentingPath<TGraph, TEdge, TNode>(TGraph graph, List<(TNode, TNode)> matching) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> FindAugmentingPath<TGraph, TEdge, TNode>(TGraph graph, HashSet<(TNode, TNode)> matching, Counter graphCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find an augmenting path in a graph, but the graph is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find an augmenting path in a graph, but the current matching is null!");
 #endif
-            if (graph.NumberOfEdges(MockCounter) == 0)
+            if (graph.NumberOfEdges(graphCounter) == 0)
             {
                 return new List<(TNode, TNode)>();
             }
 
             if (matching.Count == 0)
             {
-                return new List<(TNode, TNode)>() { graph.Edges(MockCounter).Select(e => (e.Endpoint1, e.Endpoint2)).First() };
+                return new List<(TNode, TNode)>() { graph.Edges(graphCounter).Select(e => (e.Endpoint1, e.Endpoint2)).First() };
             }
 
-            HashSet<TNode> unmatchedVertices = new(graph.Nodes(MockCounter));
+            HashSet<TNode> unmatchedVertices = new(graph.Nodes(graphCounter));
             foreach ((TNode, TNode) edge in matching)
             {
                 unmatchedVertices.Remove(edge.Item1);
@@ -198,33 +189,29 @@ namespace MulticutInTrees.Utilities.Matching
             HashSet<TNode> adjacentVertices = new();
             foreach (TNode vertex in unmatchedVertices)
             {
-                foreach (TNode neighbour in vertex.Neighbours(MockCounter))
+                foreach (TNode neighbour in vertex.Neighbours(graphCounter))
                 {
                     adjacentVertices.Add(neighbour);
                 }
             }
 
-            HashSet<(TNode, TNode)> hashedMatching = new(matching);
-            List<(TNode, TNode)> unmatchedEdges = graph.Edges(MockCounter).Select(Utils.OrderEdgeSmallToLarge<TEdge, TNode>).Where(n => !hashedMatching.Contains(n) && !hashedMatching.Contains((n.Item2, n.Item1))).ToList();
+            List<(TNode, TNode)> unmatchedEdges = graph.Edges(graphCounter).Select(Utils.OrderEdgeSmallToLarge<TEdge, TNode>).Where(n => !matching.Contains(n) && !matching.Contains((n.Item2, n.Item1))).ToList();
 
             if (unmatchedEdges.Count == 0)
             {
                 return new List<(TNode, TNode)>();
             }
 
-            HashSet<Node> nodesInD = new();
-            Dictionary<Node, TNode> originalNodes = new();
-            Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs = new();
-            BuildDigraphD(unmatchedEdges, hashedMatching, nodesInD, originalNodes, nodesInMiddleOfArcs);
+            AbstractGraph<Edge<Node>, Node> d = BuildDigraphD(unmatchedEdges, matching, out HashSet<Node> nodesInD, out Dictionary<Node, TNode> originalNodes, out Dictionary<TNode, Node> originalToD, out Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, graphCounter);
 
-            List<(TNode, TNode)> pathPPrime = FindPathPPrime(nodesInD, unmatchedEdges, originalNodes, unmatchedVertices, adjacentVertices, nodesInMiddleOfArcs);
+            List<(TNode, TNode)> pathPPrime = FindPathPPrime(nodesInD, unmatchedEdges, originalNodes, unmatchedVertices, adjacentVertices, nodesInMiddleOfArcs, graphCounter);
 
             if (Utils.IsSimplePath(pathPPrime))
             {
                 return pathPPrime;
             }
 
-            return FindAndContractBlossom<TGraph, TEdge, TNode>(graph, pathPPrime, matching);
+            return FindAndContractBlossom<TGraph, TEdge, TNode>(graph, pathPPrime, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
         }
 
         /// <summary>
@@ -237,9 +224,10 @@ namespace MulticutInTrees.Utilities.Matching
         /// <param name="unmatchedVertices"><see cref="HashSet{T}"/> with <typeparamref name="TNode"/>s that are not yet matched.</param>
         /// <param name="adjacentVertices"><see cref="HashSet{T}"/> with <typeparamref name="TNode"/>s that are adjacent to an <typeparamref name="TNode"/> in <paramref name="unmatchedVertices"/>.</param>
         /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>A <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent the edges along the path P'.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="nodesInD"/>, <paramref name="unmatchedEdges"/>, <paramref name="originalNodes"/>, <paramref name="unmatchedVertices"/>, <paramref name="adjacentVertices"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> FindPathPPrime<TNode>(HashSet<Node> nodesInD, List<(TNode, TNode)> unmatchedEdges, Dictionary<Node, TNode> originalNodes, HashSet<TNode> unmatchedVertices, HashSet<TNode> adjacentVertices, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> FindPathPPrime<TNode>(HashSet<Node> nodesInD, List<(TNode, TNode)> unmatchedEdges, Dictionary<Node, TNode> originalNodes, HashSet<TNode> unmatchedVertices, HashSet<TNode> adjacentVertices, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(nodesInD, nameof(nodesInD), "Trying to create path P', but the set with nodes in D is null!");
@@ -264,25 +252,41 @@ namespace MulticutInTrees.Utilities.Matching
             List<(TNode, TNode)> pathPPrime;
             try
             {
-                List<Node> pathInD = BFS.FindShortestPath(start, target, MockCounter);
-
-                pathPPrime = new List<(TNode, TNode)>();
-                for (int i = 0; i < pathInD.Count - 1; i++)
-                {
-                    TNode orig1 = originalNodes[pathInD[i]];
-                    TNode orig2 = originalNodes[pathInD[i + 1]];
-
-                    TNode x = nodesInMiddleOfArcs[(orig1, orig2)];
-                    pathPPrime.Add((orig1, x));
-                    pathPPrime.Add((x, orig2));
-                }
-
-                pathPPrime.Add((pathPPrime[^1].Item2, pathPPrime[^1].Item2.Neighbours(MockCounter).Cast<TNode>().First(unmatchedVertices.Contains)));
+                pathPPrime = InternalFindPathPPrime(start, target, originalNodes, nodesInMiddleOfArcs, graphCounter);
+                pathPPrime.Add((pathPPrime[^1].Item2, pathPPrime[^1].Item2.Neighbours(graphCounter).Cast<TNode>().First(unmatchedVertices.Contains)));
             }
             catch (NotInGraphException)
             {
                 (TNode, TNode) edge = unmatchedEdges.FirstOrDefault(n => unmatchedVertices.Contains(n.Item1) && unmatchedVertices.Contains(n.Item2));
                 pathPPrime = edge.Equals(default) ? new List<(TNode, TNode)>() : new List<(TNode, TNode)>() { edge };
+            }
+
+            return pathPPrime;
+        }
+
+        /// <summary>
+        /// Finds the path between <paramref name="start"/> and <paramref name="target"/> in the digraph D, and transforms it to a path in the original graph.
+        /// </summary>
+        /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
+        /// <param name="start">The node (in D) to start the search from.</param>
+        /// <param name="target">The node (in D) to end the search at.</param>
+        /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
+        /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
+        /// <returns>A <see cref="List{T}"/> with tuples of two <typeparamref name="TNode"/>s that represent a path in the original graph from (the nodes corresponding to) <paramref name="start"/> to <paramref name="target"/>.</returns>
+        private static List<(TNode, TNode)> InternalFindPathPPrime<TNode>(Node start, HashSet<Node> target, Dictionary<Node, TNode> originalNodes, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter)
+        {
+            List<Node> pathInD = BFS.FindShortestPath(start, target, graphCounter);
+
+            List<(TNode, TNode)> pathPPrime = new();
+            for (int i = 0; i < pathInD.Count - 1; i++)
+            {
+                TNode orig1 = originalNodes[pathInD[i]];
+                TNode orig2 = originalNodes[pathInD[i + 1]];
+
+                TNode x = nodesInMiddleOfArcs[(orig1, orig2)];
+                pathPPrime.Add((orig1, x));
+                pathPPrime.Add((x, orig2));
             }
 
             return pathPPrime;
@@ -296,46 +300,49 @@ namespace MulticutInTrees.Utilities.Matching
         /// <param name="matching">The <see cref="List{T}"/> of tuples of two <typeparamref name="TNode"/>s that represent edges in the matching.</param>
         /// <param name="nodesInD">The <see cref="HashSet{T}"/> of <see cref="Node"/>s in the digraph D.</param>
         /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
+        /// <param name="originalToD"><see cref="Dictionary{TKey, TValue}"/> from an original <typeparamref name="TNode"/> to the <see cref="Node"/> in the digraph D.</param>
         /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>A directed graph D with arcs between nodes u and v if there is an edge (u, x) that is not in the matching and an edge (x, v) that is in the matching.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="unmatchedEdges"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static AbstractGraph<Edge<Node>, Node> BuildDigraphD<TNode>(List<(TNode, TNode)> unmatchedEdges, HashSet<(TNode, TNode)> matching, HashSet<Node> nodesInD, Dictionary<Node, TNode> originalNodes, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs) where TNode : AbstractNode<TNode>
+        private static AbstractGraph<Edge<Node>, Node> BuildDigraphD<TNode>(List<(TNode, TNode)> unmatchedEdges, HashSet<(TNode, TNode)> matching, out HashSet<Node> nodesInD, out Dictionary<Node, TNode> originalNodes, out Dictionary<TNode, Node> originalToD, out Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(unmatchedEdges, nameof(unmatchedEdges), "Trying to build the digraph D, but the list with the unmatched edges is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to build the digraph D, but the list with the matched edges is null!");
 #endif
-            nodesInD ??= new HashSet<Node>();
-            originalNodes ??= new Dictionary<Node, TNode>();
-            nodesInMiddleOfArcs ??= new Dictionary<(TNode, TNode), TNode>();
+            nodesInD = new();
+            originalNodes = new();
+            originalToD = new();
+            nodesInMiddleOfArcs = new();
 
             // Build digraph D with an arc (u,v) if there is an x such that (u,x) in E-M and (x,v) in M.
             List<(Node, Node)> arcsInD = new();
-            Dictionary<TNode, Node> originalToD = new();
+            List<(TNode, TNode)> listMatching = new(matching);
 
             foreach ((TNode, TNode) unmatchedEdge in unmatchedEdges)
             {
-                foreach ((TNode, TNode) matchedEdge in matching.Where(n => n.Item1.Equals(unmatchedEdge.Item2)))
+                foreach ((TNode, TNode) matchedEdge in listMatching.Where(n => n.Item1.Equals(unmatchedEdge.Item2)))
                 {
                     CreateArcForD(unmatchedEdge, matchedEdge, nodesInD, arcsInD, nodesInMiddleOfArcs, originalNodes, originalToD);
                 }
-                foreach ((TNode, TNode) matchedEdge in matching.Where(n => n.Item1.Equals(unmatchedEdge.Item1)))
+                foreach ((TNode, TNode) matchedEdge in listMatching.Where(n => n.Item1.Equals(unmatchedEdge.Item1)))
                 {
                     CreateArcForD((unmatchedEdge.Item2, unmatchedEdge.Item1), matchedEdge, nodesInD, arcsInD, nodesInMiddleOfArcs, originalNodes, originalToD);
                 }
-                foreach ((TNode, TNode) matchedEdge in matching.Select(n => (n.Item2, n.Item1)).Where(n => n.Item1.Equals(unmatchedEdge.Item2)))
+                foreach ((TNode, TNode) matchedEdge in listMatching.Select(n => (n.Item2, n.Item1)).Where(n => n.Item1.Equals(unmatchedEdge.Item2)))
                 {
                     CreateArcForD(unmatchedEdge, matchedEdge, nodesInD, arcsInD, nodesInMiddleOfArcs, originalNodes, originalToD);
                 }
-                foreach ((TNode, TNode) matchedEdge in matching.Select(n => (n.Item2, n.Item1)).Where(n => n.Item1.Equals(unmatchedEdge.Item1)))
+                foreach ((TNode, TNode) matchedEdge in listMatching.Select(n => (n.Item2, n.Item1)).Where(n => n.Item1.Equals(unmatchedEdge.Item1)))
                 {
                     CreateArcForD((unmatchedEdge.Item2, unmatchedEdge.Item1), matchedEdge, nodesInD, arcsInD, nodesInMiddleOfArcs, originalNodes, originalToD);
                 }
             }
 
             Graph d = new();
-            d.AddNodes(nodesInD, MockCounter);
-            d.AddEdges(arcsInD.Select(i => new Edge<Node>(i.Item1, i.Item2, true)), MockCounter);
+            d.AddNodes(nodesInD, graphCounter);
+            d.AddEdges(arcsInD.Select(i => new Edge<Node>(i.Item1, i.Item2, true)), graphCounter);
             return d;
         }
 
@@ -394,34 +401,46 @@ namespace MulticutInTrees.Utilities.Matching
         /// <param name="graph">The <typeparamref name="TGraph"/> in which the matching takes place.</param>
         /// <param name="nonSimpleWalk">The augmenting walk that contains a blossom.</param>
         /// <param name="matching">The current matching.</param>
+        /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
+        /// <param name="originalToD"><see cref="Dictionary{TKey, TValue}"/> from an original <typeparamref name="TNode"/> to the <see cref="Node"/> in the digraph D.</param>
+        /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>An augmenting path in <paramref name="graph"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/>, <paramref name="nonSimpleWalk"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> FindAndContractBlossom<TGraph, TEdge, TNode>(TGraph graph, List<(TNode, TNode)> nonSimpleWalk, List<(TNode, TNode)> matching) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> FindAndContractBlossom<TGraph, TEdge, TNode>(TGraph graph, List<(TNode, TNode)> nonSimpleWalk, HashSet<(TNode, TNode)> matching, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(graph, nameof(graph), "Trying to find and contract a blossom, but the graph this blossom is in is null!");
             Utils.NullCheck(nonSimpleWalk, nameof(nonSimpleWalk), "Trying to find and contract a blossom, but the list with the non-simple walk is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find and contract a blossom, but the list with the current matching is null!");
 #endif
-            List<TNode> blossom = new();
+            HashSet<TNode> blossom = new();
             for (int i = 0; i < nonSimpleWalk.Count - 1; i++)
             {
                 for (int j = i + 1; j < nonSimpleWalk.Count; j++)
                 {
                     if (nonSimpleWalk[i].Item1.Equals(nonSimpleWalk[j].Item2))
                     {
-                        blossom = nonSimpleWalk.Skip(i).Take(j - i + 1).Select(n => n.Item1).ToList();
+                        blossom = nonSimpleWalk.Skip(i).Take(j - i + 1).Select(n => n.Item1).ToHashSet();
+                        break;
                     }
                 }
+
+                if (blossom.Count != 0)
+                {
+                    break;
+                }
             }
+
+            TNode contractedBlossomNode = blossom.First();
 
             HashSet<TEdge> originalEdges = new();
             HashSet<TNode> neighbours = new();
             foreach (TNode node in blossom)
             {
-                foreach (TNode neighbour in node.Neighbours(MockCounter))
+                foreach (TNode neighbour in node.Neighbours(graphCounter))
                 {
-                    originalEdges.Add(graph.Edges(MockCounter).First(e => (e.Endpoint1.Equals(node) && e.Endpoint2.Equals(neighbour)) || (e.Endpoint2.Equals(node) && e.Endpoint1.Equals(neighbour))));
+                    originalEdges.Add(graph.Edges(graphCounter).First(e => (e.Endpoint1.Equals(node) && e.Endpoint2.Equals(neighbour)) || (e.Endpoint2.Equals(node) && e.Endpoint1.Equals(neighbour))));
 
                     if (blossom.Contains(neighbour))
                     {
@@ -431,43 +450,46 @@ namespace MulticutInTrees.Utilities.Matching
                 }
             }
 
-            graph.RemoveNodes(blossom, MockCounter);
-            graph.AddNode(blossom[0], MockCounter);
-            IEnumerable<TEdge> edges = (IEnumerable<TEdge>)neighbours.Select(n => new Edge<TNode>(blossom[0], n));
-            graph.AddEdges(edges, MockCounter);
+            graph.RemoveNodes(blossom, graphCounter);
+            graph.AddNode(contractedBlossomNode, graphCounter);
+            IEnumerable<TEdge> edges = (IEnumerable<TEdge>)neighbours.Select(n => new Edge<TNode>(contractedBlossomNode, n));
+            graph.AddEdges(edges, graphCounter);
 
-            List<(TNode, TNode)> contractedPath = FindAugmentingPath<TGraph, TEdge, TNode>(graph, matching.Where(n => !(blossom.Contains(n.Item1) && blossom.Contains(n.Item2))).Select(n => blossom.Contains(n.Item1) ? (blossom[0], n.Item2) : n).Select(n => blossom.Contains(n.Item2) ? (n.Item1, blossom[0]) : n).ToList());
+            HashSet<(TNode, TNode)> tempMatching = matching.Where(n => !(blossom.Contains(n.Item1) && blossom.Contains(n.Item2))).Select(n => blossom.Contains(n.Item1) ? (contractedBlossomNode, n.Item2) : n).Select(n => blossom.Contains(n.Item2) ? (n.Item1, contractedBlossomNode) : n).ToHashSet();
+            List<(TNode, TNode)> contractedPath = FindAugmentingPath<TGraph, TEdge, TNode>(graph, tempMatching, graphCounter);
 
-            graph.RemoveNode(blossom[0], MockCounter);
-            graph.AddNodes(blossom, MockCounter);
-            graph.AddEdges(originalEdges, MockCounter);
+            graph.RemoveNode(contractedBlossomNode, graphCounter);
+            graph.AddNodes(blossom, graphCounter);
+            graph.AddEdges(originalEdges, graphCounter);
 
-            List<(TNode, TNode)> result = ExpandPath<TGraph, TEdge, TNode>(graph, contractedPath, blossom, blossom[0], matching);
-
+            List<(TNode, TNode)> result = ExpandPath(contractedPath, blossom, contractedBlossomNode, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
             return result;
         }
 
         /// <summary>
         /// After an alternating path was found in a graph with a contracted blossom, expand this path to walk over the blossom again.
         /// </summary>
-        /// <typeparam name="TGraph">The type of graph used.</typeparam>
-        /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
         /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
-        /// <param name="graph">The <typeparamref name="TGraph"/> in which we are performing the matching.</param>
         /// <param name="contractedPath">The <see cref="List{T}"/> with the alternating path that should be expanded.</param>
-        /// <param name="blossom">The <see cref="List{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
+        /// <param name="blossom">The <see cref="HashSet{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
         /// <param name="contractedBlossom">The <typeparamref name="TNode"/> that represents the contracted blossom.</param>
-        /// <param name="matching">The <see cref="List{T}"/> with the current matching.</param>
+        /// <param name="matching">The <see cref="HashSet{T}"/> with the current matching.</param>
+        /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
+        /// <param name="originalToD"><see cref="Dictionary{TKey, TValue}"/> from an original <typeparamref name="TNode"/> to the <see cref="Node"/> in the digraph D.</param>
+        /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/>, <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPath<TGraph, TEdge, TNode>(TGraph graph, List<(TNode, TNode)> contractedPath, List<TNode> blossom, TNode contractedBlossom, List<(TNode, TNode)> matching) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/>, <paramref name="matching"/>, <paramref name="originalNodes"/>, <paramref name="originalToD"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
+        private static List<(TNode, TNode)> ExpandPath<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, TNode contractedBlossom, HashSet<(TNode, TNode)> matching, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
-            Utils.NullCheck(graph, nameof(graph), "Trying to expand a path in a graph with a contracted blossom, but the graph is null!");
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom, but the path is null!");
             Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom, but the original blossom is null!");
             Utils.NullCheck(contractedBlossom, nameof(contractedBlossom), "Trying to expand a path in a graph with a contracted blossom, but the contracted blossom is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom, but the current matching is null!");
+            Utils.NullCheck(originalNodes, nameof(originalNodes), "Trying to expand a path in a graph with a contracted blossom, but the dictionary with nodes in D to original nodes is null!");
+            Utils.NullCheck(originalToD, nameof(originalToD), "Trying to expand a path in a graph with a contracted blossom, but the dictionary with original nodes to nodes in D is null!");
+            Utils.NullCheck(nodesInMiddleOfArcs, nameof(nodesInMiddleOfArcs), "Trying to expand a path in a graph with a contracted blossom, but the dictionary with nodes in the middle of edges in D is null!");
 #endif
             if (contractedPath.Count == 0)
             {
@@ -481,19 +503,24 @@ namespace MulticutInTrees.Utilities.Matching
             }
 
             // If the blossom is at the start of the path, reverse the path.
-            if (contractedPath[0].Item1.Equals(contractedBlossom))
+            for (int i = 0; i < contractedPath.Count; i += 2)
             {
-                contractedPath = contractedPath.Select(n => (n.Item2, n.Item1)).ToList();
-                contractedPath.Reverse();
+                if (contractedPath[i].Item1.Equals(contractedBlossom))
+                {
+                    contractedPath = contractedPath.Select(n => (n.Item2, n.Item1)).ToList();
+                    contractedPath.Reverse();
+                    break;
+                }
             }
+
             // If the blossom is at the end of the path (either from the reverse above, or just because it already was), handle that case.
             if (contractedPath[^1].Item2.Equals(contractedBlossom))
             {
-                return ExpandPathBlossomOnEnd(contractedPath, blossom, matching);
+                return ExpandPathBlossomOnEnd(contractedPath, blossom, matching, graphCounter);
             }
 
             // The blossom is somewhere in the middle of the path. Handle that case.
-            return ExpandPathBlossomInMiddle<TGraph, TEdge, TNode>(graph, contractedPath, blossom, contractedBlossom, matching);
+            return ExpandPathBlossomInMiddle(contractedPath, contractedBlossom, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
         }
 
         /// <summary>
@@ -501,29 +528,35 @@ namespace MulticutInTrees.Utilities.Matching
         /// </summary>
         /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
         /// <param name="contractedPath">The <see cref="List{T}"/> with the alternating path that should be expanded.</param>
-        /// <param name="blossom">The <see cref="List{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
-        /// <param name="matching">The <see cref="List{T}"/> with the current matching.</param>
+        /// <param name="blossom">The <see cref="HashSet{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
+        /// <param name="matching">The <see cref="HashSet{T}"/> with the current matching.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPathBlossomOnEnd<TNode>(List<(TNode, TNode)> contractedPath, List<TNode> blossom, List<(TNode, TNode)> matching) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPathBlossomOnEnd<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, HashSet<(TNode, TNode)> matching, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom on the end of the path, but the path is null!");
             Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom somewhere on the end of the path, but the original blossom is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom somewhere on the end of the path, but the current matching is null!");
 #endif
-            TNode enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1, MockCounter));
+            HashSet<TNode> seen = new(contractedPath.SelectMany(t => new TNode[] { t.Item1, t.Item2 }));
+            seen.Remove(contractedPath[^1].Item2);
+
+            TNode enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1, graphCounter));
             contractedPath[^1] = (contractedPath[^1].Item1, enterNode);
+            seen.Add(enterNode);
             bool matched = true;
             while (true)
             {
-                enterNode = matched ? enterNode.Neighbours(MockCounter).Cast<TNode>().FirstOrDefault(n => matching.Contains((n, enterNode)) || matching.Contains((enterNode, n))) : enterNode.Neighbours(MockCounter).Cast<TNode>().FirstOrDefault(n => !matching.Contains((n, enterNode)) && !matching.Contains((enterNode, n)));
+                enterNode = matched ? enterNode.Neighbours(graphCounter).Cast<TNode>().FirstOrDefault(n => !seen.Contains(n) && blossom.Contains(n) && (matching.Contains((n, enterNode)) || matching.Contains((enterNode, n)))) : enterNode.Neighbours(graphCounter).Cast<TNode>().FirstOrDefault(n => !seen.Contains(n) && blossom.Contains(n) && !matching.Contains((n, enterNode)) && !matching.Contains((enterNode, n)));
 
                 if (enterNode is null)
                 {
                     break;
                 }
 
+                seen.Add(enterNode);
                 contractedPath.Add((contractedPath[^1].Item2, enterNode));
                 matched = !matched;
             }
@@ -534,49 +567,40 @@ namespace MulticutInTrees.Utilities.Matching
         /// <summary>
         /// After an alternating path was found in a graph with a contracted blossom somewhere in the middle of this path, expand this path to walk over the blossom again.
         /// </summary>
-        /// <typeparam name="TGraph">The type of graph used.</typeparam>
-        /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
         /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
-        /// <param name="graph">The <typeparamref name="TGraph"/> in which we are performing the matching.</param>
         /// <param name="contractedPath">The <see cref="List{T}"/> with the alternating path that should be expanded.</param>
-        /// <param name="blossom">The <see cref="List{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
         /// <param name="contractedBlossom">The <typeparamref name="TNode"/> that represents the contracted blossom.</param>
-        /// <param name="matching">The <see cref="List{T}"/> with the current matching.</param>
+        /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
+        /// <param name="originalToD"><see cref="Dictionary{TKey, TValue}"/> from an original <typeparamref name="TNode"/> to the <see cref="Node"/> in the digraph D.</param>
+        /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="graph"/>, <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPathBlossomInMiddle<TGraph, TEdge, TNode>(TGraph graph, List<(TNode, TNode)> contractedPath, List<TNode> blossom, TNode contractedBlossom, List<(TNode, TNode)> matching) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="contractedBlossom"/>, <paramref name="originalNodes"/>, <paramref name="originalToD"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
+        private static List<(TNode, TNode)> ExpandPathBlossomInMiddle<TNode>(List<(TNode, TNode)> contractedPath, TNode contractedBlossom, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
-            Utils.NullCheck(graph, nameof(graph), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the graph is null!");
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the path is null!");
-            Utils.NullCheck(blossom, nameof(blossom), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the original blossom is null!");
             Utils.NullCheck(contractedBlossom, nameof(contractedBlossom), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the contracted blossom is null!");
-            Utils.NullCheck(matching, nameof(matching), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the current matching is null!");
+            Utils.NullCheck(originalNodes, nameof(originalNodes), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the dictionary with nodes in D to original nodes is null!");
+            Utils.NullCheck(originalToD, nameof(originalToD), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the dictionary with original nodes to nodes in D is null!");
+            Utils.NullCheck(nodesInMiddleOfArcs, nameof(nodesInMiddleOfArcs), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the dictionary with nodes in the middle of an edge in D is null!");
 #endif
             TNode lastNodeBeforeBlossom = contractedPath.SkipWhile(n => !n.Item2.Equals(contractedBlossom)).First().Item1;
             TNode firstNodeAfterBlossom = contractedPath.SkipWhile(n => !n.Item1.Equals(contractedBlossom)).First().Item2;
 
-            HashSet<TNode> seen = new(graph.Nodes(MockCounter));
-            seen.RemoveWhere(n => blossom.Contains(n) || matching.Select(m => m.Item1).Contains(n) || matching.Select(m => m.Item2).Contains(n));
-
             IEnumerable<(TNode, TNode)> beforeBlossom = contractedPath.TakeWhile(n => !n.Item2.Equals(contractedBlossom));
             IEnumerable<(TNode, TNode)> afterBlossom = contractedPath.Skip(contractedPath.Select(n => n.Item2).ToList().IndexOf(firstNodeAfterBlossom) + 1);
 
-            List<(TNode, TNode)> path1 = new(beforeBlossom);
-            List<(TNode, TNode)> shortest = Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<TNode>() { firstNodeAfterBlossom }, MockCounter, new HashSet<TNode>(seen)));
-            path1.AddRange(shortest);
-            path1.AddRange(afterBlossom);
+            Node start = originalToD[lastNodeBeforeBlossom];
+            Node end = originalToD[firstNodeAfterBlossom];
 
-            if (IsAugmentingPath(path1, matching))
-            {
-                return path1;
-            }
+            List<(TNode, TNode)> blossomPath = InternalFindPathPPrime(start, new HashSet<Node>() { end }, originalNodes, nodesInMiddleOfArcs, graphCounter);
 
-            seen.Add(shortest[1].Item2);
-            List<(TNode, TNode)> path2 = new(beforeBlossom);
-            path2.AddRange(Utils.NodePathToEdgePath(BFS.FindShortestPath(lastNodeBeforeBlossom, new HashSet<TNode>() { firstNodeAfterBlossom }, MockCounter, seen)));
-            path2.AddRange(afterBlossom);
-            return path2;
+            List<(TNode, TNode)> totalPath = new(beforeBlossom);
+            totalPath.AddRange(blossomPath);
+            totalPath.AddRange(afterBlossom);
+
+            return totalPath;
         }
 
         /// <summary>
@@ -584,10 +608,10 @@ namespace MulticutInTrees.Utilities.Matching
         /// </summary>
         /// <typeparam name="TNode">The types of nodes used.</typeparam>
         /// <param name="path">The <see cref="List{T}"/> for which we want to know if it is an augmenting path.</param>
-        /// <param name="matching">The <see cref="List{T}"/> with the current matching.</param>
+        /// <param name="matching">The <see cref="HashSet{T}"/> with the current matching.</param>
         /// <returns><see langword="true"/> if <paramref name="path"/> is an augmenting path given <paramref name="matching"/>, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static bool IsAugmentingPath<TNode>(List<(TNode, TNode)> path, List<(TNode, TNode)> matching) where TNode : AbstractNode<TNode>
+        private static bool IsAugmentingPath<TNode>(List<(TNode, TNode)> path, HashSet<(TNode, TNode)> matching) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(path, nameof(path), "Trying to see if a path is an augmenting path given a matching, but the path is null!");
@@ -599,19 +623,17 @@ namespace MulticutInTrees.Utilities.Matching
                 return false;
             }
 
-            HashSet<(TNode, TNode)> hashedMatching = new(matching);
-
             // Check if the alternating no-yes-no-yes-...-yes-no path is correct given the matching.
             for (int i = 1; i < path.Count - 1; i += 2)
             {
-                if (!hashedMatching.Contains(Utils.OrderEdgeSmallToLarge(path[i])))
+                if (!matching.Contains(Utils.OrderEdgeSmallToLarge(path[i])))
                 {
                     return false;
                 }
             }
             for (int i = 0; i < path.Count; i += 2)
             {
-                if (hashedMatching.Contains(Utils.OrderEdgeSmallToLarge(path[i])))
+                if (matching.Contains(Utils.OrderEdgeSmallToLarge(path[i])))
                 {
                     return false;
                 }

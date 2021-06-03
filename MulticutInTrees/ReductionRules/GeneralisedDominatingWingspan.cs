@@ -8,7 +8,6 @@ using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
 using MulticutInTrees.Utilities;
-using MulticutInTrees.Utilities.Matching;
 
 namespace MulticutInTrees.ReductionRules
 {
@@ -205,7 +204,7 @@ namespace MulticutInTrees.ReductionRules
             }
 
             int requiredSize = MaxSolutionSize - PartialSolution.Count + 1;
-            return MatchingLibrary.HasMatchingOfSize<Graph, Edge<Node>, Node>(matchingGraph, requiredSize, Measurements.TreeOperationsCounter);
+            return EdmondsMatching.HasMatchingOfSize<Graph, Edge<Node>, Node>(matchingGraph, requiredSize, Measurements.TreeOperationsCounter);
         }
 
         /// <summary>

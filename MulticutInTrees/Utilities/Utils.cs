@@ -130,19 +130,27 @@ namespace MulticutInTrees.Utilities
         /// Checks whether a path is a simple path (i.e. does not contain cycles).
         /// </summary>
         /// <typeparam name="TNode">The type of nodes on the path.</typeparam>
-        /// <param name="path">An <see cref="IEnumerable{T}"/> of tuples of <typeparamref name="TNode"/>s that represent the edges on the path.</param>
+        /// <param name="path">An <see cref="IList{T}"/> of tuples of <typeparamref name="TNode"/>s that represent the edges on the path.</param>
         /// <returns><see langword="true"/> if <paramref name="path"/> is a simple path, <see langword="false"/> otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="path"/> is <see langword="null"/>.</exception>
-        public static bool IsSimplePath<TNode>(IEnumerable<(TNode, TNode)> path) where TNode : AbstractNode<TNode>
+        public static bool IsSimplePath<TNode>(IList<(TNode, TNode)> path) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             NullCheck(path, nameof(path), "Trying to see whether a path is a simple path, but the path is null!");
 #endif
-            for (int i = 0; i < path.Count() - 1; i++)
+            if (path.Count == 0)
             {
-                for (int j = i + 1; j < path.Count(); j++)
+                return true;
+            }
+            if (path[0].Item1 == path[^1].Item2)
+            {
+                return false;
+            }
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                for (int j = i + 1; j < path.Count; j++)
                 {
-                    if (path.ElementAt(i).Item1.Equals(path.ElementAt(j).Item2))
+                    if (path[i].Item1.Equals(path[j].Item2))
                     {
                         return false;
                     }

@@ -203,16 +203,11 @@ namespace MulticutInTrees.ReductionRules
             }
         }
 
-        /// <inheritdoc/>
-        internal override bool RunLaterIteration()
+        /// <summary>
+        /// Prepares the data for a run in a later iteration by looking at removed <see cref="DemandPair"/>s.
+        /// </summary>
+        private void RunLaterIterationPreparationRemovedDemandPairs()
         {
-#if VERBOSEDEBUG
-            Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
-#endif
-            Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<DemandPair> pairsToCheck = new();
-
             foreach (DemandPair dp in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 foreach (DemandPair intersectingDemandPair in IntersectingDemandPairs[dp, Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
@@ -222,7 +217,14 @@ namespace MulticutInTrees.ReductionRules
 
                 IntersectingDemandPairs.Remove(dp, Measurements.DemandPairsOperationsCounter);
             }
+        }
 
+        /// <summary>
+        /// Prepares the data for a run in a later iteration by looking at contracted edges.
+        /// </summary>
+        /// <param name="pairsToCheck">The <see cref="HashSet{T}"/> that will contain all <see cref="DemandPair"/>s that need to be checked during the later iteration.</param>
+        private void RunLaterIterationPreparationContractedEdges(HashSet<DemandPair> pairsToCheck)
+        {
             foreach ((Edge<Node> edge, Node _, CountedCollection<DemandPair> dps) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
             {
                 List<DemandPair> pairsOnEdge = dps.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
@@ -239,7 +241,7 @@ namespace MulticutInTrees.ReductionRules
                         {
                             continue;
                         }
-                        
+
                         foreach (DemandPair candidateDP in intersectionsI.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Intersect(intersectionsJ.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
                         {
                             pairsToCheck.Add(candidateDP);
@@ -264,7 +266,14 @@ namespace MulticutInTrees.ReductionRules
                     }
                 }
             }
+        }
 
+        /// <summary>
+        /// Prepares the data for a run in a later iteration by looking at changed <see cref="DemandPair"/>s.
+        /// </summary>
+        /// <param name="pairsToCheck">The <see cref="HashSet{T}"/> that will contain all <see cref="DemandPair"/>s that need to be checked during the later iteration.</param>
+        private void RunLaterIterationPreparationChangedDemandPairs(HashSet<DemandPair> pairsToCheck)
+        {
             foreach ((CountedList<Edge<Node>> edges, DemandPair dp) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
             {
                 pairsToCheck.Add(dp);
@@ -273,7 +282,7 @@ namespace MulticutInTrees.ReductionRules
                 {
                     pairsToCheck.Add(intersectingDemandPair);
                     (DemandPair, DemandPair) key = GetIntersectionKey(dp, intersectingDemandPair);
-                    foreach (Edge<Node> edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter)) 
+                    foreach (Edge<Node> edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
                     {
                         DemandPairIntersections[key, Measurements.DemandPairsOperationsCounter].Remove(edge, Measurements.TreeOperationsCounter);
                     }
@@ -293,6 +302,20 @@ namespace MulticutInTrees.ReductionRules
                     }
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        internal override bool RunLaterIteration()
+        {
+#if VERBOSEDEBUG
+            Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
+#endif
+            Measurements.TimeSpentCheckingApplicability.Start();
+
+            HashSet<DemandPair> pairsToCheck = new();
+            RunLaterIterationPreparationRemovedDemandPairs();
+            RunLaterIterationPreparationContractedEdges(pairsToCheck);
+            RunLaterIterationPreparationChangedDemandPairs(pairsToCheck);
 
             LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
             LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);

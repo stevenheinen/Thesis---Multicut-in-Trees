@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace MulticutInTrees.Experiments
     /// <summary>
     /// Class that writes a list of <see cref="ExperimentOutput"/> to a CSV file.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal static class ExperimentOutputWriter
     {
         /// <summary>

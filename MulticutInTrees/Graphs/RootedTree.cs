@@ -139,9 +139,17 @@ namespace MulticutInTrees.Graphs
             {
                 (RootedTreeNode, RootedTreeNode) key = Utils.OrderEdgeSmallToLarge((node, child));
                 Edge<RootedTreeNode> edge = NodeTupleToEdge[key];
+                if (!edge.Directed)
+                {
+                    NodeTupleToEdge.Remove((key.Item2, key.Item1));
+                }
                 NodeTupleToEdge.Remove(key);
                 (RootedTreeNode, RootedTreeNode) newKey = Utils.OrderEdgeSmallToLarge((parent, child));
                 NodeTupleToEdge[newKey] = edge;
+                if (!edge.Directed)
+                {
+                    NodeTupleToEdge[(newKey.Item2, newKey.Item1)] = edge;
+                }
                 edge.ChangeEndpoint(node, parent, counter);
             }
         }
@@ -202,9 +210,14 @@ namespace MulticutInTrees.Graphs
                     throw new MultipleRootsException($"Trying to remove {node} from {this}, but {node} is the root of this tree and has more than 1 child!");
                 }
                 RootedTreeNode newRoot = node.Children(counter).First();
-                (RootedTreeNode, RootedTreeNode) edgeKey = Utils.OrderEdgeSmallToLarge((node, newRoot));
-                InternalEdges.Remove(NodeTupleToEdge[edgeKey], counter);
+                (RootedTreeNode, RootedTreeNode) edgeKey = (node, newRoot);
+                Edge<RootedTreeNode> rootEdge = NodeTupleToEdge[edgeKey];
+                InternalEdges.Remove(rootEdge, counter);
                 NodeTupleToEdge.Remove(edgeKey);
+                if (!rootEdge.Directed)
+                {
+                    NodeTupleToEdge.Remove((edgeKey.Item2, edgeKey.Item1));
+                }
                 SetRoot(newRoot, counter);
                 node.RemoveNeighbour(newRoot, counter);
                 InternalNodes.Remove(node, counter);
@@ -214,9 +227,14 @@ namespace MulticutInTrees.Graphs
             AddChildrenToParent(node, counter);
             RootedTreeNode parent = node.GetParent(counter);
             parent.RemoveNeighbour(node, counter);
-            (RootedTreeNode, RootedTreeNode) key = Utils.OrderEdgeSmallToLarge((node, parent));
-            InternalEdges.Remove(NodeTupleToEdge[key], counter);
+            (RootedTreeNode, RootedTreeNode) key = (parent, node);
+            Edge<RootedTreeNode> edge = NodeTupleToEdge[key];
+            InternalEdges.Remove(edge, counter);
             NodeTupleToEdge.Remove(key);
+            if (!edge.Directed)
+            {
+                NodeTupleToEdge.Remove((key.Item2, key.Item1));
+            }
             InternalNodes.Remove(node, counter);
         }
 

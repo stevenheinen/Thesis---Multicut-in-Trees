@@ -47,12 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Utilities\Matching\Min-Cost-Perfect-Matching.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="gurobi91.netstandard20">
       <HintPath>C:\gurobi911\win64\lib\gurobi91.netstandard20.dll</HintPath>
     </Reference>

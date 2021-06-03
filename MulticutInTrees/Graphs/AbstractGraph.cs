@@ -180,8 +180,7 @@ namespace MulticutInTrees.Graphs
             List<TEdge> result = new();
             foreach (TNode neighbour in node.Neighbours(counter))
             {
-                (TNode, TNode) tuple = Utils.OrderEdgeSmallToLarge((neighbour, node));
-                result.Add(NodeTupleToEdge[tuple]);
+                result.Add(NodeTupleToEdge[(node, neighbour)]);
             }
             return result;
         }
@@ -249,7 +248,11 @@ namespace MulticutInTrees.Graphs
             }
 #endif
             edge.Endpoint1.AddNeighbour(edge.Endpoint2, counter, edge.Directed);
-            NodeTupleToEdge[Utils.OrderEdgeSmallToLarge<TEdge, TNode>(edge)] = edge;
+            NodeTupleToEdge[(edge.Endpoint1, edge.Endpoint2)] = edge;
+            if (!edge.Directed)
+            {
+                NodeTupleToEdge[(edge.Endpoint2, edge.Endpoint1)] = edge;
+            }
             InternalEdges.Add(edge, counter);
         }
 
@@ -323,7 +326,8 @@ namespace MulticutInTrees.Graphs
                 throw new NotInGraphException($"Trying to remove all edges of {node} from {this}, but {node} is not part of {this}!");
             }
 #endif
-            RemoveEdges(node.Neighbours(counter).Select(neighbour => NodeTupleToEdge[Utils.OrderEdgeSmallToLarge((node, (TNode)neighbour))]), counter);
+            RemoveEdges(node.Neighbours(counter).Select(neighbour => NodeTupleToEdge[(node, neighbour)]), counter);
+            RemoveEdges(node.Neighbours(counter).Select(neighbour => (neighbour, node)).Where(k => NodeTupleToEdge.ContainsKey(k)).Select(k => NodeTupleToEdge[k]), counter);
         }
 
         /// <summary>
@@ -368,7 +372,11 @@ namespace MulticutInTrees.Graphs
             }
 #endif
             edge.Endpoint1.RemoveNeighbour(edge.Endpoint2, counter, edge.Directed);
-            NodeTupleToEdge.Remove(Utils.OrderEdgeSmallToLarge<TEdge, TNode>(edge));
+            NodeTupleToEdge.Remove((edge.Endpoint1, edge.Endpoint2));
+            if (!edge.Directed)
+            {
+                NodeTupleToEdge.Remove((edge.Endpoint2, edge.Endpoint1));
+            }
             InternalEdges.Remove(edge, counter);
         }
 
@@ -517,12 +525,34 @@ namespace MulticutInTrees.Graphs
                 TNode endpoint1 = path[i];
                 TNode endpoint2 = path[i + 1];
 
-                TEdge edge = NodeTupleToEdge[Utils.OrderEdgeSmallToLarge((endpoint1, endpoint2))];
+                TEdge edge = NodeTupleToEdge[(endpoint1, endpoint2)];
 
                 result.Add(edge);
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns the <typeparamref name="TEdge"/> between <paramref name="endpoint1"/> and <paramref name="endpoint2"/>.
+        /// </summary>
+        /// <param name="endpoint1">The first endpoint of the <typeparamref name="TEdge"/>.</param>
+        /// <param name="endpoint2">The second endpoint of the <typeparamref name="TEdge"/>.</param>
+        /// <returns>The <typeparamref name="TEdge"/> between <paramref name="endpoint1"/> and <paramref name="endpoint2"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="endpoint1"/> or <paramref name="endpoint2"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotInGraphException">Thrown when the <typeparamref name="TEdge"/> between <paramref name="endpoint1"/> and <paramref name="endpoint2"/> does not exist in this <see cref="AbstractGraph{TEdge, TNode}"/>.</exception>
+        public TEdge GetEdgeBetween(TNode endpoint1, TNode endpoint2)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(endpoint1, nameof(endpoint1), "Trying to get the edge between two nodes, but the first node is null!");
+            Utils.NullCheck(endpoint2, nameof(endpoint2), "Trying to get the edge between two nodes, but the second node is null!");
+#endif
+            if (NodeTupleToEdge.TryGetValue((endpoint1, endpoint2), out TEdge result))
+            {
+                return result;
+            }
+
+            throw new NotInGraphException($"The requested edge between {endpoint1} and {endpoint2} is not part of this graph!");
         }
 
         /// <summary>
@@ -547,10 +577,17 @@ namespace MulticutInTrees.Graphs
                     continue;
                 }
 
-                (TNode, TNode) oldTuple = Utils.OrderEdgeSmallToLarge<TEdge, TNode>(neighbour);
+                (TNode, TNode) oldTuple = (neighbour.Endpoint1, neighbour.Endpoint2);
                 neighbour.ChangeEndpoint(edge.Endpoint2, edge.Endpoint1, counter);
-                (TNode, TNode) newTuple = Utils.OrderEdgeSmallToLarge<TEdge, TNode>(neighbour);
+                (TNode, TNode) newTuple = (neighbour.Endpoint1, neighbour.Endpoint2);
                 NodeTupleToEdge[newTuple] = NodeTupleToEdge[oldTuple];
+                if (!neighbour.Directed)
+                {
+                    (TNode, TNode) oldTuple2 = (oldTuple.Item2, oldTuple.Item1);
+                    (TNode, TNode) newTuple2 = (newTuple.Item2, newTuple.Item1);
+                    NodeTupleToEdge[newTuple2] = NodeTupleToEdge[oldTuple2];
+                    NodeTupleToEdge.Remove(oldTuple2);
+                }
                 NodeTupleToEdge.Remove(oldTuple);
             }
 
@@ -560,12 +597,42 @@ namespace MulticutInTrees.Graphs
         }
 
         /// <summary>
+        /// Change the endpoint of <paramref name="edge"/> from <paramref name="oldEndpoint"/> to <paramref name="newEndpoint"/>.
+        /// </summary>
+        /// <param name="edge">The <typeparamref name="TEdge"/> for which we want to change its endpoint.</param>
+        /// <param name="oldEndpoint">The old endpoint of <paramref name="edge"/>.</param>
+        /// <param name="newEndpoint">The new endpoint of <paramref name="edge"/>.</param>
+        /// <param name="counter">The <see cref="Counter"/> to be used for performance measurement.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edge"/>, <paramref name="oldEndpoint"/>, <paramref name="newEndpoint"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
+        public void ChangeEndpointOfEdge(TEdge edge, TNode oldEndpoint, TNode newEndpoint, Counter counter)
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(edge, nameof(edge), "Trying to change the endpoint of an edge, but the edge is null!");
+            Utils.NullCheck(oldEndpoint, nameof(oldEndpoint), "Trying to change the endpoint of an edge, but the old endpoint of the edge is null!");
+            Utils.NullCheck(newEndpoint, nameof(newEndpoint), "Trying to change the endpoint of an edge, but the new endpoint of the edge is null!");
+            Utils.NullCheck(counter, nameof(counter), "Trying to change the endpoint of an edge, but the counter is null!");
+#endif
+            (TNode, TNode) oldTuple = (edge.Endpoint1, edge.Endpoint2);
+            edge.ChangeEndpoint(oldEndpoint, newEndpoint, counter);
+            (TNode, TNode) newTuple = (edge.Endpoint1, edge.Endpoint2);
+            NodeTupleToEdge[newTuple] = NodeTupleToEdge[oldTuple];
+            if (!edge.Directed)
+            {
+                (TNode, TNode) oldTuple2 = (oldTuple.Item2, oldTuple.Item1);
+                (TNode, TNode) newTuple2 = (newTuple.Item2, newTuple.Item1);
+                NodeTupleToEdge[newTuple2] = NodeTupleToEdge[oldTuple2];
+                NodeTupleToEdge.Remove(oldTuple2);
+            }
+            NodeTupleToEdge.Remove(oldTuple);
+        }
+
+        /// <summary>
         /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted.
         /// </summary>
         /// <param name="contractedEdge">The <typeparamref name="TEdge"/> that is being contracted.</param>
         /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedEdge"/> or <paramref name="newNode"/> is <see langword="null"/>.</exception>
-        /// <exception cref="NotSupportedException">Thrown when the <see cref="AbstractNode{TNode}.Type"/> of either endpoint of <paramref name="contractedEdge"/> is <see cref="NodeType.Other"/>. In that case, please update the types of the nodes by calling <seealso cref="AbstractGraph{TEdge, TNode}.UpdateNodeTypes()"/>.</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <see cref="AbstractNode{TNode}.Type"/> of either endpoint of <paramref name="contractedEdge"/> is <see cref="NodeType.Other"/>. In that case, please update the types of the nodes by calling <seealso cref="AbstractGraph{TEdge, TNode}.UpdateNodeTypes()"/>. Or, when <paramref name="contractedEdge"/> exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
         private void UpdateNodeTypesDuringEdgeContraction(TEdge contractedEdge, TNode newNode)
         {
 #if !EXPERIMENT
@@ -580,69 +647,188 @@ namespace MulticutInTrees.Graphs
                 throw new NotSupportedException($"Trying to update the nodetypes of the nodes that are the endpoints of the edge {contractedEdge} that is begin contracted, but the type of {contractedEdge.Endpoint2} is not known. Please make sure every node has a nodetype to start with!");
             }
 #endif
-            switch (contractedEdge.Endpoint1.Type, contractedEdge.Endpoint2.Type)
+            // In case of a contraction of an edge between two I1-nodes, two I2-nodes, or two I3-nodes, no changes have to be made.
+            // We also do not need to change anything when contracting an edge between an I2-node and an L2-leaf, or between an I3-node and an L3-leaf (but we do have to check stuff for the other way around).
+            switch (contractedEdge.Endpoint1.Type)
             {
-                // In case of a contraction of an edge between two I1-nodes, two I2-nodes, or two I3-nodes, no changes have to be made.
-                // We also do not need to change anything when contracting an edge between an L2-leaf and an I2-node, or between an L3-leaf and an I3-node.
-                case (NodeType.I1, NodeType.I2):
-                    newNode.Type = NodeType.I1;
-                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint2, NodeType.L2, NodeType.L1);
+                case NodeType.I1:
+                    UpdateNodeTypesDuringEdgeContractionI1Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
                     break;
-                case (NodeType.I2, NodeType.I1):
-                    newNode.Type = NodeType.I1;
-                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint1, NodeType.L2, NodeType.L1);
+                case NodeType.I2:
+                    UpdateNodeTypesDuringEdgeContractionI2Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
                     break;
-                case (NodeType.I1, NodeType.I3):
-                    UpdateNodeTypesEdgeContractionI1I3(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
+                case NodeType.I3:
+                    UpdateNodeTypesDuringEdgeContractionI3Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
                     break;
-                case (NodeType.I3, NodeType.I1):
-                    UpdateNodeTypesEdgeContractionI1I3(contractedEdge.Endpoint2, contractedEdge.Endpoint1, newNode);
+                case NodeType.L1:
+                    UpdateNodeTypesDuringEdgeContractionL1Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
                     break;
-                case (NodeType.I2, NodeType.I3):
-                    newNode.Type = NodeType.I3;
-                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint1, NodeType.L2, NodeType.L3);
+                case NodeType.L2:
+                    UpdateNodeTypesDuringEdgeContractionL2Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
                     break;
-                case (NodeType.I3, NodeType.I2):
-                    newNode.Type = NodeType.I3;
-                    ChangeLeavesFromNodeToType(contractedEdge.Endpoint2, NodeType.L2, NodeType.L3);
+                case NodeType.L3:
+                    UpdateNodeTypesDuringEdgeContractionL3Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, newNode);
                     break;
-                case (NodeType.L1, NodeType.I1):
-                    UpdateNodeTypesEdgeContractionL1I1(contractedEdge.Endpoint2, newNode);
-                    break;
-                case (NodeType.I1, NodeType.L1):
-                    UpdateNodeTypesEdgeContractionL1I1(contractedEdge.Endpoint1, newNode);
-                    break;
-                case (NodeType.L2, NodeType.I2):
-                    newNode.Type = NodeType.I2;
-                    break;
-                case (NodeType.L3, NodeType.I3):
-                    newNode.Type = NodeType.I3;
-                    break;
-#if !EXPERIMENT
-                case (NodeType.L1, NodeType.L1):
-                case (NodeType.L1, NodeType.L2):
-                case (NodeType.L1, NodeType.L3):
-                case (NodeType.L2, NodeType.L1):
-                case (NodeType.L2, NodeType.L2):
-                case (NodeType.L2, NodeType.L3):
-                case (NodeType.L3, NodeType.L1):
-                case (NodeType.L3, NodeType.L2):
-                case (NodeType.L3, NodeType.L3):
-                case (NodeType.L1, NodeType.I2):
-                case (NodeType.L1, NodeType.I3):
-                case (NodeType.L2, NodeType.I1):
-                case (NodeType.L2, NodeType.I3):
-                case (NodeType.L3, NodeType.I1):
-                case (NodeType.L3, NodeType.I2):
-                case (NodeType.I1, NodeType.L2):
-                case (NodeType.I1, NodeType.L3):
-                case (NodeType.I2, NodeType.L1):
-                case (NodeType.I2, NodeType.L3):
-                case (NodeType.I3, NodeType.L1):
-                case (NodeType.I3, NodeType.L2):
-                    throw new NotSupportedException($"Trying to contract an edge between a node with type {contractedEdge.Endpoint1.Type} and a node with type {contractedEdge.Endpoint2.Type}, but this should not happen!");
-#endif
             }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted between an <see cref="NodeType.I1"/>-node and any other node.
+        /// </summary>
+        /// <param name="i1Node">The <see cref="NodeType.I1"/>-node that is an endpoint of the edge that is being contracted.</param>
+        /// <param name="otherNode">The other endpoint of the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
+        /// <exception cref="NotSupportedException"> Then when the edge that is being contracted exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
+        private void UpdateNodeTypesDuringEdgeContractionI1Node(TNode i1Node, TNode otherNode, TNode newNode)
+        {
+            switch (otherNode.Type)
+            {
+                case NodeType.I2:
+                    newNode.Type = NodeType.I1;
+                    ChangeLeavesFromNodeToType(otherNode, NodeType.L2, NodeType.L1);
+                    break;
+                case NodeType.I3:
+                    UpdateNodeTypesEdgeContractionI1I3(i1Node, otherNode, newNode);
+                    break;
+                case NodeType.L1:
+                    UpdateNodeTypesEdgeContractionL1I1(i1Node, newNode);
+                    break;
+                case NodeType.I1:
+                    break;
+                default:
+                    // These cases should not happen
+                    // case (NodeType.I1, NodeType.L2):
+                    // case (NodeType.I1, NodeType.L3):
+                    throw new NotSupportedException($"Trying to contract an edge between a node with type {i1Node.Type} and a node with type {otherNode.Type}, but this should not happen!");
+            }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted between an <see cref="NodeType.I2"/>-node and any other node.
+        /// </summary>
+        /// <param name="i2Node">The <see cref="NodeType.I2"/>-node that is an endpoint of the edge that is being contracted.</param>
+        /// <param name="otherNode">The other endpoint of the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
+        /// <exception cref="NotSupportedException"> Then when the edge that is being contracted exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
+        private void UpdateNodeTypesDuringEdgeContractionI2Node(TNode i2Node, TNode otherNode, TNode newNode)
+        {
+            switch (otherNode.Type)
+            {
+                case NodeType.I1:
+                    newNode.Type = NodeType.I1;
+                    ChangeLeavesFromNodeToType(i2Node, NodeType.L2, NodeType.L1);
+                    break;
+                case NodeType.I3:
+                    newNode.Type = NodeType.I3;
+                    ChangeLeavesFromNodeToType(i2Node, NodeType.L2, NodeType.L3);
+                    break;
+                case NodeType.L2:
+                case NodeType.I2:
+                    break;
+                default:
+                    // All other uncovered cases (listed below) should not occur.
+                    // case (NodeType.I2, NodeType.L1):
+                    // case (NodeType.I2, NodeType.L3):
+                    throw new NotSupportedException($"Trying to contract an edge between a node with type {i2Node.Type} and a node with type {otherNode.Type}, but this should not happen!");
+            }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted between an <see cref="NodeType.I3"/>-node and any other node.
+        /// </summary>
+        /// <param name="i3Node">The <see cref="NodeType.I3"/>-node that is an endpoint of the edge that is being contracted.</param>
+        /// <param name="otherNode">The other endpoint of the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
+        /// <exception cref="NotSupportedException"> Then when the edge that is being contracted exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
+        private void UpdateNodeTypesDuringEdgeContractionI3Node(TNode i3Node, TNode otherNode, TNode newNode)
+        {
+            switch (otherNode.Type)
+            {
+                case NodeType.I1:
+                    UpdateNodeTypesEdgeContractionI1I3(otherNode, i3Node, newNode);
+                    break;
+                case NodeType.I2:
+                    newNode.Type = NodeType.I3;
+                    ChangeLeavesFromNodeToType(otherNode, NodeType.L2, NodeType.L3);
+                    break;
+                case NodeType.L3:
+                case NodeType.I3:
+                    break;
+                default:
+                    // All other uncovered cases (listed below) should not occur.
+                    // case (NodeType.I3, NodeType.L1):
+                    // case (NodeType.I3, NodeType.L2):
+                    throw new NotSupportedException($"Trying to contract an edge between a node with type {i3Node.Type} and a node with type {otherNode.Type}, but this should not happen!");
+            }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted between an <see cref="NodeType.L1"/>-leaf and any other node.
+        /// </summary>
+        /// <param name="l1Leaf">The <see cref="NodeType.L1"/>-leaf that is an endpoint of the edge that is being contracted.</param>
+        /// <param name="otherNode">The other endpoint of the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
+        /// <exception cref="NotSupportedException"> Then when the edge that is being contracted exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
+        private void UpdateNodeTypesDuringEdgeContractionL1Node(TNode l1Leaf, TNode otherNode, TNode newNode)
+        {
+            switch (otherNode.Type)
+            {
+                case NodeType.I1:
+                    UpdateNodeTypesEdgeContractionL1I1(otherNode, newNode);
+                    break;
+                default:
+                    // All other uncovered cases (listed below) should not occur.
+                    // case (NodeType.L1, NodeType.L1):
+                    // case (NodeType.L1, NodeType.L2):
+                    // case (NodeType.L1, NodeType.L3):
+                    // case (NodeType.L1, NodeType.I2):
+                    // case (NodeType.L1, NodeType.I3):
+                    throw new NotSupportedException($"Trying to contract an edge between a node with type {l1Leaf.Type} and a node with type {otherNode.Type}, but this should not happen!");
+            }
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted between an <see cref="NodeType.L2"/>-leaf and any other node.
+        /// </summary>
+        /// <param name="l2Leaf">The <see cref="NodeType.L2"/>-leaf that is an endpoint of the edge that is being contracted.</param>
+        /// <param name="otherNode">The other endpoint of the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
+        /// <exception cref="NotSupportedException"> Then when the edge that is being contracted exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
+        private static void UpdateNodeTypesDuringEdgeContractionL2Node(TNode l2Leaf, TNode otherNode, TNode newNode)
+        {
+            newNode.Type = otherNode.Type switch
+            {
+                NodeType.I2 => NodeType.I2,
+                _ => throw new NotSupportedException($"Trying to contract an edge between a node with type {l2Leaf.Type} and a node with type {otherNode.Type}, but this should not happen!"),
+                // All other uncovered cases (listed below) should not occur.
+                // case (NodeType.L2, NodeType.L1):
+                // case (NodeType.L2, NodeType.L2):
+                // case (NodeType.L2, NodeType.L3):
+                // case (NodeType.L2, NodeType.I1):
+                // case (NodeType.L2, NodeType.I3):
+            };
+        }
+
+        /// <summary>
+        /// Update the <see cref="NodeType"/>s of the <see cref="Node"/>s in the instance when an edge is contracted between an <see cref="NodeType.L3"/>-leaf and any other node.
+        /// </summary>
+        /// <param name="l3Leaf">The <see cref="NodeType.L3"/>-leaf that is an endpoint of the edge that is being contracted.</param>
+        /// <param name="otherNode">The other endpoint of the edge that is being contracted.</param>
+        /// <param name="newNode">The <see cref="Node"/> that is the result of the edge contraction.</param>
+        /// <exception cref="NotSupportedException"> Then when the edge that is being contracted exists between two nodes that have the wrong <see cref="NodeType"/>.</exception>
+        private static void UpdateNodeTypesDuringEdgeContractionL3Node(TNode l3Leaf, TNode otherNode, TNode newNode)
+        {
+            newNode.Type = otherNode.Type switch
+            {
+                NodeType.I3 => NodeType.I3,
+                _ => throw new NotSupportedException($"Trying to contract an edge between a node with type {l3Leaf.Type} and a node with type {otherNode.Type}, but this should not happen!"),
+                // All other uncovered cases (listed below) should not occur.
+                // case (NodeType.L3, NodeType.L1):
+                // case (NodeType.L3, NodeType.L2):
+                // case (NodeType.L3, NodeType.L3):
+                // case (NodeType.L3, NodeType.I1):
+                // case (NodeType.L3, NodeType.I2):
+            };
         }
 
         /// <summary>

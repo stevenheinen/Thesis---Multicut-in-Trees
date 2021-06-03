@@ -7,7 +7,6 @@ using System.Linq;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.MulticutProblem;
-using MulticutInTrees.Utilities.Matching;
 
 namespace MulticutInTrees.Utilities
 {
@@ -116,7 +115,7 @@ namespace MulticutInTrees.Utilities
 
                 // Create the graph for the matching and find a matching in it.
                 Graph graph = CreateMatchingGraph(children, nToNode, nodeToN, takenNodes, commoditiesInSubtree, false, new Dictionary<(Node, Node), Commodity<RootedTreeNode>>(), null);
-                List<(Node, Node)> matching = graph.IsAcyclic(MockCounter) ? EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph) : MatchingLibrary.FindMatching<Graph, Edge<Node>, Node>(graph, MockCounter).Select(Utils.OrderEdgeSmallToLarge<Edge<Node>, Node>).ToList();
+                List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph, MockCounter);
 
                 // Determine all unmatched nodes
                 HashSet<Node> unmatchedNodes = FindUnmatchedNodes(graph.Nodes(measurements.TreeOperationsCounter), matching);
@@ -355,7 +354,7 @@ namespace MulticutInTrees.Utilities
 
                 // Compute the matching graph and the matching in that graph.
                 Graph graph = CreateMatchingGraph(children, nToNode, nodeToN, takenNodes, commoditiesInSubtree, true, edgeToCommodity, pickedCommodity);
-                List<(Node, Node)> matching = graph.IsAcyclic(MockCounter) ? EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph) : MatchingLibrary.FindMatching<Graph, Edge<Node>, Node>(graph, MockCounter).Select(Utils.OrderEdgeSmallToLarge<Edge<Node>, Node>).ToList();
+                List<(Node, Node)> matching = EdmondsMatching.FindMaximumMatching<Graph, Edge<Node>, Node>(graph, MockCounter);
 
                 // Pick the commodities in the current subtree.
                 PickCommodities(pickedCommodities, node, resolvedCommodities, matching, edgeToPickedCommodity, edgeToCommodity);
