@@ -1,9 +1,8 @@
-REM This file will use Guo and Niedermeier's kernelisation algorithm to solve instances.
+REM This file will use the Gurobi MIP solver to compute ideal K values for a number of experiments.
 REM Trees are generated using the Prüfer method, and demand pairs are generated uniform randomly.
 REM The used numbers of nodes are: 2048, 3072, 4096, 5120, 6144, 7168, 8192, 9216, 10240.
 REM The used numbers of demand pairs are: 2048, 3072, 4096, 5120, 6144, 7168, 8192, 9216, 10240.
 REM There are 5 different instances for each combination of nodes and demand pair.
-REM Each instance will be repeated 5 times to compensate for difference in running time because of external factors.
 ..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --treeSeed=8527900 --dpSeed=2046510 --experiments=5 --algorithm=GenerateInstances --treeType=Prufer --dpType=Random --instanceDir="D:\Documents\Universiteit\Thesis\Instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --nrNodes=2048 --nrDPs=2048
 ..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --treeSeed=4773547 --dpSeed=5633394 --experiments=5 --algorithm=GenerateInstances --treeType=Prufer --dpType=Random --instanceDir="D:\Documents\Universiteit\Thesis\Instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --nrNodes=2048 --nrDPs=3072
 ..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --treeSeed=7858273 --dpSeed=562553 --experiments=5 --algorithm=GenerateInstances --treeType=Prufer --dpType=Random --instanceDir="D:\Documents\Universiteit\Thesis\Instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --nrNodes=2048 --nrDPs=4096

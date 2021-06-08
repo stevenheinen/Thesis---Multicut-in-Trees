@@ -163,14 +163,7 @@ namespace MulticutInTrees.MulticutProblem
                 Console.WriteLine("Instance not yet found in the instance files, creating it!");
             }
 
-            Random treeRandom = new(treeSeed);
-            Random demandPairRandom = new(dpSeed);
-            Graph tree = CreateInputTree(options.InputTreeType, treeRandom, options.NumberOfNodes, options.InstanceFilePath);
-            Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
-            CountedCollection<DemandPair> demandPairs = CreateInputDemandPairs(demandPairRandom, tree, options.InputDemandPairsType, options.NumberOfDemandPairs, distanceDistribution, options.DemandPairFilePath);
-
-            GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-            int optimalK = algorithm.Run(options.Verbose);
+            (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = CreateInputTreeAndDemandPairs(treeSeed, dpSeed, options);
 
             InstanceReaderWriter.WriteInstance(treeSeed, dpSeed, options, tree, demandPairs.GetLinkedList(), optimalK);
 
@@ -183,61 +176,74 @@ namespace MulticutInTrees.MulticutProblem
         }
 
         /// <summary>
-        /// Create a <see cref="Graph"/> using the method given in <paramref name="inputTreeType"/>.
+        /// Create the input <see cref="Graph"/> and <see cref="DemandPair"/>s given the commandline options.
         /// </summary>
-        /// <param name="inputTreeType">The <see cref="InputTreeType"/> that says which method to use to create the tree.</param>
-        /// <param name="random">The <see cref="Random"/> to be used for random number generation. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="numberOfNodes">The number of nodes in the resulting <see cref="AbstractGraph{TEdge, TNode}"/>. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file with the CNF-SAT / Vertex Cover instance to generate the <see cref="AbstractGraph{TEdge, TNode}"/> from. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <returns>A <see cref="Graph"/> that is generated according to <paramref name="inputTreeType"/>.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="inputTreeType"/> is its default value: <see cref="InputTreeType.None"/>.</exception>
-        /// <exception cref="NotSupportedException">Thrown when <paramref name="inputTreeType"/> is not supported as tree generation type.</exception>
-        private static Graph CreateInputTree(InputTreeType inputTreeType, Random random, int numberOfNodes, string filePath)
+        /// <param name="treeSeed">The seed for the current random number generator for the <see cref="Graph"/>.</param>
+        /// <param name="dpSeed">The seed for the current random number generator for the <see cref="DemandPair"/>s.</param>
+        /// <param name="options">The <see cref="CommandLineOptions"/>.</param>
+        /// <returns>A tuple with a <see cref="Graph"/>, a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s, and the optimal K value for this instance.</returns>
+        /// <exception cref="ApplicationException">Thrown when an invalid combination of <see cref="CommandLineOptions.InputTreeType"/> and <see cref="CommandLineOptions.InputDemandPairsType"/> is provided.</exception>
+        private static (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInputTreeAndDemandPairs(int treeSeed, int dpSeed, CommandLineOptions options)
         {
-#if !EXPERIMENT
-            if (inputTreeType == InputTreeType.None)
+            switch (options.InputTreeType, options.InputDemandPairsType)
             {
-                throw new ArgumentException("Trying to create a tree for an experiment, but the treetype is null!", nameof(inputTreeType));
+                case (InputTreeType.Prufer, InputDemandPairsType.Random):
+                    {
+                        Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
+                        CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Prufer, InputDemandPairsType.LengthDistribution):
+                    {
+                        //Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
+                        //Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                        // todo: implement length distribution
+                        throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!");
+                        //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        //int optimalK = algorithm.Run(options.Verbose);
+                        //return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Caterpillar, InputDemandPairsType.Random):
+                    {
+                        Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
+                        CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Caterpillar, InputDemandPairsType.LengthDistribution):
+                    {
+                        //Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
+                        //Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                        // todo: implement length distribution
+                        throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!");
+                        //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        //int optimalK = algorithm.Run(options.Verbose);
+                        //return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.VertexCover, InputDemandPairsType.FromTreeInstance):
+                    {
+                        (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceFromVertexCover.GenerateInstance(options);
+                        return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.CNFSAT, InputDemandPairsType.FromTreeInstance):
+                    {
+                        (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceFromCNFSAT.GenerateInstance(options);
+                        return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Fixed, InputDemandPairsType.Fixed):
+                    {
+                        Graph tree = FixedTreeReader.ReadTree(options.InstanceFilePath);
+                        CountedCollection<DemandPair> demandPairs = FixedDemandPairsReader.ReadDemandPairs(tree, options.DemandPairFilePath);
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
+                    }
+                default:
+                    throw new ApplicationException($"The provided combination of input tree ({options.InputTreeType}) and demand pair ({options.InputDemandPairsType}) types is not valid. Please choose from ({InputTreeType.Prufer}, {InputDemandPairsType.Random}), ({InputTreeType.Prufer}, {InputDemandPairsType.LengthDistribution}), ({InputTreeType.Caterpillar}, {InputDemandPairsType.Random}), ({InputTreeType.Caterpillar}, {InputDemandPairsType.LengthDistribution}), ({InputTreeType.VertexCover}, {InputDemandPairsType.FromTreeInstance}), ({InputTreeType.CNFSAT}, {InputDemandPairsType.FromTreeInstance}), or , ({InputTreeType.Fixed}, {InputDemandPairsType.Fixed})");
             }
-#endif
-            return inputTreeType switch
-            {
-                InputTreeType.Caterpillar => CaterpillarGenerator.CreateCaterpillar(numberOfNodes, random),
-                InputTreeType.CNFSAT => throw new NotImplementedException("CNF-SAT instances are not yet supported!"),
-                InputTreeType.Prufer => TreeFromPruferSequence.GenerateTree(numberOfNodes, random),
-                InputTreeType.VertexCover => throw new NotImplementedException("Vertex Cover instances are not yet supported!"),
-                InputTreeType.Fixed => FixedTreeReader.ReadTree(filePath),
-                _ => throw new NotSupportedException($"The input tree type {inputTreeType} is not supported!")
-            };
-        }
-
-        /// <summary>
-        /// Create a <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s using the method given in <see cref="InputTreeType"/>.
-        /// </summary>
-        /// <param name="random">The <see cref="Random"/> to be used for random number generation.</param>
-        /// <param name="inputTree">The <see cref="Graph"/> in which to generate the <see cref="DemandPair"/>s.</param>
-        /// <param name="inputDemandPairsType">The <see cref="InputDemandPairsType"/> that says which method to use to create the <see cref="DemandPair"/>s.</param>
-        /// <param name="numberOfDemandPairs">The required number of <see cref="DemandPair"/>s.</param>
-        /// <param name="distanceProbability">A <see cref="Dictionary{TKey, TValue}"/> from a lower and upperbound on a distance to the probability of choosing that distance for the length of a <see cref="DemandPair"/>. Not required for all <see cref="InputTreeType"/>s.</param>
-        /// <param name="filePath">The path to the file with the endpoints of the the <see cref="DemandPair"/>s. Only required for the <see cref="InputDemandPairsType.Fixed"/> type.</param>
-        /// <returns>A <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s that were generated according to the method given by <paramref name="inputDemandPairsType"/>.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="inputDemandPairsType"/> is its default value: <see cref="InputDemandPairsType.None"/>.</exception>
-        /// <exception cref="NotSupportedException">Thrown when <paramref name="inputDemandPairsType"/> is not supported as demand pair generation type.</exception>
-        private static CountedCollection<DemandPair> CreateInputDemandPairs(Random random, Graph inputTree, InputDemandPairsType inputDemandPairsType, int numberOfDemandPairs, Dictionary<(int, int), double> distanceProbability, string filePath)
-        {
-#if !EXPERIMENT
-            if (inputDemandPairsType == InputDemandPairsType.None)
-            {
-                throw new ArgumentException("Trying to create the demand pairs for an experiment, but the type (how to generate) demand pairs is null!", nameof(inputDemandPairsType));
-            }
-#endif
-            return inputDemandPairsType switch
-            {
-                InputDemandPairsType.Fixed => FixedDemandPairsReader.ReadDemandPairs(inputTree, filePath),
-                InputDemandPairsType.LengthDistribution => throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!"),
-                InputDemandPairsType.Random => new CountedCollection<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(numberOfDemandPairs, inputTree, random), new Counter()),
-                _ => throw new NotSupportedException($"The input demand pair type {inputDemandPairsType} is not supported!")
-            };
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace MulticutInTrees.InstanceGeneration
 
             using (StreamReader sr = new(filePath))
             {
-                string line = sr.ReadLine();
+                string line = sr.ReadLine().Trim();
                 if (!int.TryParse(line, out numberOfNodes))
                 {
                     throw new BadFileFormatException($"Reading a file with a fixed tree. The first line ({line}) could not be parsed to an integer! Expected a single number that represents the number of nodes.");
@@ -46,7 +46,7 @@ namespace MulticutInTrees.InstanceGeneration
 
                 for (int i = 0; i < numberOfNodes - 1; i++)
                 {
-                    line = sr.ReadLine();
+                    line = sr.ReadLine().Trim();
                     string[] edge = line.Split();
                     if (edge.Length != 2 || !int.TryParse(edge[0], out int endpoint1) || !int.TryParse(edge[1], out int endpoint2))
                     {

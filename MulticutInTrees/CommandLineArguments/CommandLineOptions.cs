@@ -24,9 +24,9 @@ namespace MulticutInTrees.CommandLineArguments
         public int DemandPairSeed { get; set; }
 
         /// <summary>
-        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment.
+        /// The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment. Only works for generated input. When input is read from a file, this option will be used as a multiplier for the number of repetitions per experiment
         /// </summary>
-        [Option("experiments", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment.")]
+        [Option("experiments", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment. Only works for generated input. When input is read from a file, this option will be used as a multiplier for the number of repetitions per experiment")]
         public int Experiments { get; set; }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace MulticutInTrees.CommandLineArguments
         /// <summary>
         /// The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.
         /// </summary>
-        [Option("instanceFile", HelpText = "The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.")]
+        [Option("instanceFilePath", HelpText = "The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.")]
         public string InstanceFilePath { get; set; }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace MulticutInTrees.InstanceGeneration
 
             using (StreamReader sr = new(filePath))
             {
-                string line = sr.ReadLine();
+                string line = sr.ReadLine().Trim();
                 if (!int.TryParse(line, out int numberOfDPs))
                 {
                     throw new BadFileFormatException($"Reading a file with fixed demand pairs. The first line ({line}) could not be parsed to an integer! Expected a single number that represents the number of demand pairs.");
@@ -49,7 +49,7 @@ namespace MulticutInTrees.InstanceGeneration
 
                 for (int i = 0; i < numberOfDPs; i++)
                 {
-                    line = sr.ReadLine();
+                    line = sr.ReadLine().Trim();
                     string[] dp = line.Split();
                     if (dp.Length != 2 || !int.TryParse(dp[0], out int endpoint1) || !int.TryParse(dp[1], out int endpoint2))
                     {
