@@ -110,20 +110,6 @@ namespace TESTS_MulticutInTrees.MulticutProblem
             Assert.ThrowsException<ArgumentNullException>(() => new MulticutInstance(0, 0, null));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, -1, 2));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => new MulticutInstance(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, dps, -8459472, 2));
-
-            TargetInvocationException t = Assert.ThrowsException<TargetInvocationException>(() =>
-            {
-                MethodInfo method = typeof(MulticutInstance).GetMethod("CreateInputTree", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(instance, new object[] { null, random, 5, "" });
-            });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentException));
-
-            t = Assert.ThrowsException<TargetInvocationException>(() =>
-            {
-                MethodInfo method = typeof(MulticutInstance).GetMethod("CreateInputDemandPairs", BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(instance, new object[] { random, tree, null, 5, distProb, "" });
-            });
-            Assert.IsInstanceOfType(t.InnerException, typeof(ArgumentException));
         }
 
         [TestMethod]

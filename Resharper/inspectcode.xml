@@ -14,7 +14,6 @@
     <IssueType Id="CSharpErrors" Category="C# Compiler Errors" CategoryId="CSharpErrors" Description="" Severity="ERROR" />
     <IssueType Id="ClassNeverInstantiated.Global" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Class is never instantiated" Description="Class is never instantiated: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ClassNeverInstantiated.Global" />
     <IssueType Id="CollectionNeverUpdated.Local" Category="Potential Code Quality Issues" CategoryId="CodeSmell" SubCategory="Collection is never updated" Description="Collection is never updated: Private accessibility" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CollectionNeverUpdated.Local" />
-    <IssueType Id="ConvertClosureToMethodGroup" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="Convert lambda expression to method group" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertClosureToMethodGroup" />
     <IssueType Id="ConvertIfStatementToConditionalTernaryExpression" Category="Language Usage Opportunities" CategoryId="LanguageUsage" Description="'if' statement can be re-written as '?:' expression" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=ConvertIfStatementToConditionalTernaryExpression" />
     <IssueType Id="EmptyConstructor" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Empty constructor" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=EmptyConstructor" />
     <IssueType Id="EmptyStatement" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Empty statement is redundant" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=EmptyStatement" />
@@ -31,7 +30,6 @@
     <IssueType Id="PublicConstructorInAbstractClass" Category="Common Practices and Code Improvements" CategoryId="BestPractice" Description="Make constructor in abstract class protected" Severity="SUGGESTION" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=PublicConstructorInAbstractClass" />
     <IssueType Id="RedundantAssignment" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Assignment is not used" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantAssignment" />
     <IssueType Id="RedundantBaseConstructorCall" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Redundant base constructor call" Severity="WARNING" />
-    <IssueType Id="RedundantCast" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant cast" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantCast" />
     <IssueType Id="RedundantEnumerableCastCall" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant 'IEnumerable.Cast&lt;T&gt;' or 'IEnumerable.OfType&lt;T&gt;' call" Severity="WARNING" />
     <IssueType Id="RedundantStringInterpolation" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant string interpolation" Severity="SUGGESTION" />
     <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
@@ -39,7 +37,6 @@
     <IssueType Id="UnusedMember.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never used" Description="Type member is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedMember.Global" />
     <IssueType Id="UnusedMember.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type member is never used" Description="Type member is never used: Private accessibility" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedMember.Local" />
     <IssueType Id="UnusedMethodReturnValue.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Method return value is never used" Description="Method return value is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" />
-    <IssueType Id="UnusedMethodReturnValue.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Method return value is never used" Description="Method return value is never used: Private accessibility" Severity="WARNING" />
     <IssueType Id="UnusedParameter.Local" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Unused parameter" Description="Unused parameter: Private accessibility" Severity="WARNING" />
     <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type is never used" Description="Type is never used: Non-private accessibility" Severity="SUGGESTION" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global" />
     <IssueType Id="UnusedVariable" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" Description="Unused local variable" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedVariable" />
@@ -79,11 +76,11 @@
       <Issue TypeId="EmptyStatement" File="Algorithms\Algorithm.cs" Offset="21668-21669" Line="391" Message="Empty statement is redundant" />
       <Issue TypeId="UnusedVariable" File="Algorithms\Algorithm.cs" Offset="26503-26510" Line="465" Message="Local variable 'nrEdges' is never used" />
       <Issue TypeId="UnusedVariable" File="Algorithms\Algorithm.cs" Offset="27812-27819" Line="484" Message="Local variable 'nrEdges' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="42754-42772" Line="686" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="42903-42921" Line="690" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="43023-43041" Line="691" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Algorithms\Algorithm.cs" Offset="43132-43134" Line="692" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Algorithms\Algorithm.cs" Offset="43133-43135" Line="692" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="42868-42886" Line="690" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="43017-43035" Line="694" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Algorithms\Algorithm.cs" Offset="43137-43155" Line="695" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Algorithms\Algorithm.cs" Offset="43246-43248" Line="696" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Algorithms\Algorithm.cs" Offset="43247-43249" Line="696" Message="'(' or initializer expected" />
       <Issue TypeId="UnusedMember.Global" File="Algorithms\AlgorithmType.cs" Offset="571-575" Line="13" Message="Enum member 'None' is never used" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="Algorithms\AlgorithmType.cs" Offset="839-854" Line="21" Message="Name 'GurobiMIPSolver' does not match rule 'Enum members'. Suggested name is 'GurobiMipSolver'." />
       <Issue TypeId="MemberCanBePrivate.Global" File="Algorithms\BousquetKernelisation.cs" Offset="2072-2080" Line="36" Message="Constructor 'BousquetKernelisation' can be made private" />
@@ -365,20 +362,20 @@
       <Issue TypeId="ClassNeverInstantiated.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="547-565" Line="12" Message="Class 'CommandLineOptions' is never instantiated" />
       <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="1305-1309" Line="18" Message="Auto-property accessor is never used" />
       <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2066-2070" Line="24" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2622-2626" Line="30" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2888-2892" Line="36" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3141-3145" Line="42" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3421-3425" Line="48" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3729-3733" Line="54" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4017-4021" Line="60" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4493-4497" Line="66" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4865-4869" Line="72" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5160-5164" Line="78" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5724-5728" Line="84" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6127-6131" Line="90" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedMember.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6415-6430" Line="96" Message="Property 'OutputDirectory' is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6751-6755" Line="102" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6998-7002" Line="108" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2922-2926" Line="30" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3188-3192" Line="36" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3441-3445" Line="42" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3721-3725" Line="48" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4029-4033" Line="54" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4317-4321" Line="60" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4797-4801" Line="66" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5169-5173" Line="72" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5464-5468" Line="78" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6028-6032" Line="84" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6431-6435" Line="90" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedMember.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6719-6734" Line="96" Message="Property 'OutputDirectory' is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7055-7059" Line="102" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7302-7306" Line="108" Message="Auto-property accessor is never used" />
       <Issue TypeId="CSharpErrors" File="CommandLineArguments\CommandLineParser.cs" Offset="953-954" Line="22" Message="Cannot resolve symbol 'p'" />
       <Issue TypeId="CSharpErrors" File="CommandLineArguments\CommandLineParser.cs" Offset="955-957" Line="22" Message="')' expected" />
       <Issue TypeId="CSharpErrors" File="CommandLineArguments\CommandLineParser.cs" Offset="957-959" Line="22" Message="; expected" />
@@ -585,19 +582,19 @@
       <Issue TypeId="CSharpErrors" File="Experiments\ExperimentManager.cs" Offset="19790-19792" Line="303" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="Experiments\ExperimentManager.cs" Offset="19924-19926" Line="305" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Experiments\ExperimentManager.cs" Offset="19925-19927" Line="305" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedType.Global" File="Experiments\ExperimentOutputWriter.cs" Offset="673-695" Line="17" Message="Class 'ExperimentOutputWriter' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Experiments\ExperimentOutputWriter.cs" Offset="1641-1652" Line="27" Message="Method 'WriteOutput' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="1785-1789" Line="30" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2060-2064" Line="32" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2208-2212" Line="34" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedVariable" File="Experiments\ExperimentOutputWriter.cs" Offset="2337-2345" Line="39" Message="Local variable 'fileName' is never used" />
-      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2477-2485" Line="40" Message="Cannot resolve symbol 'fileName'" />
-      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2485-2487" Line="40" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2537-2549" Line="41" Message="Cannot resolve symbol 'streamWriter'" />
-      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2563-2579" Line="41" Message="Cannot resolve symbol 'InvariantCulture'" />
-      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2579-2581" Line="41" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2623-2627" Line="42" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2722-2726" Line="43" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedType.Global" File="Experiments\ExperimentOutputWriter.cs" Offset="744-766" Line="19" Message="Class 'ExperimentOutputWriter' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Experiments\ExperimentOutputWriter.cs" Offset="1712-1723" Line="29" Message="Method 'WriteOutput' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="1856-1860" Line="32" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2131-2135" Line="34" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2279-2283" Line="36" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedVariable" File="Experiments\ExperimentOutputWriter.cs" Offset="2408-2416" Line="41" Message="Local variable 'fileName' is never used" />
+      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2548-2556" Line="42" Message="Cannot resolve symbol 'fileName'" />
+      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2556-2558" Line="42" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2608-2620" Line="43" Message="Cannot resolve symbol 'streamWriter'" />
+      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2634-2650" Line="43" Message="Cannot resolve symbol 'InvariantCulture'" />
+      <Issue TypeId="CSharpErrors" File="Experiments\ExperimentOutputWriter.cs" Offset="2650-2652" Line="43" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2694-2698" Line="44" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Experiments\ExperimentOutputWriter.cs" Offset="2793-2797" Line="45" Message="Possible multiple enumeration" />
       <Issue TypeId="UnusedType.Global" File="Experiments\_NamespaceDocExperiments.cs" Offset="463-475" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="PublicConstructorInAbstractClass" File="Graphs\AbstractGraph.cs" Offset="2101-2107" Line="42" Message="Convert constructor to protected" />
       <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="7658-7671" Line="131" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
@@ -605,32 +602,34 @@
       <Issue TypeId="RedundantStringInterpolation" File="Graphs\AbstractGraph.cs" Offset="11020-11021" Line="177" Message="Redundant string interpolation" />
       <Issue TypeId="CSharpErrors" File="Graphs\AbstractGraph.cs" Offset="11173-11175" Line="180" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Graphs\AbstractGraph.cs" Offset="11174-11176" Line="180" Message="'(' or initializer expected" />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="12906-12919" Line="212" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="13179-13184" Line="217" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="13462-13467" Line="220" Message="Possible multiple enumeration" />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="13689-13702" Line="229" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="15689-15702" Line="259" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="15992-15997" Line="264" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="16275-16280" Line="267" Message="Possible multiple enumeration" />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="16531-16544" Line="276" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="17689-17702" Line="296" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="17995-18000" Line="301" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="18281-18286" Line="304" Message="Possible multiple enumeration" />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="18569-18582" Line="313" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="18912-18918" Line="316" Message="Method 'RemoveAllEdgesOfNode' can be made private" />
-      <Issue TypeId="RedundantCast" File="Graphs\AbstractGraph.cs" Offset="19600-19607" Line="326" Message="Type cast is redundant" />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="19793-19806" Line="332" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="19975-19981" Line="334" Message="Method 'RemoveEdges' can be made private" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="20099-20104" Line="337" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="20385-20390" Line="340" Message="Possible multiple enumeration" />
-      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="20629-20642" Line="349" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
-      <Issue TypeId="MemberCanBeProtected.Global" File="Graphs\AbstractGraph.cs" Offset="21016-21022" Line="352" Message="Method 'RemoveEdge' can be made protected" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="23165-23174" Line="391" Message="Method 'FindLeaves' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="24121-24130" Line="416" Message="Method 'DetermineTypesOfInternalNodes' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="25003-25012" Line="440" Message="Method 'DetermineTypesOfLeaves' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="26988-26994" Line="481" Message="Method 'IsConnected' can be made private" />
-      <Issue TypeId="CSharpErrors" File="Graphs\AbstractGraph.cs" Offset="29103-29105" Line="514" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Graphs\AbstractGraph.cs" Offset="29104-29106" Line="514" Message="'(' or initializer expected" />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="12830-12843" Line="211" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="13103-13108" Line="216" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="13386-13391" Line="219" Message="Possible multiple enumeration" />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="13613-13626" Line="228" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="15736-15749" Line="262" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="16039-16044" Line="267" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="16322-16327" Line="270" Message="Possible multiple enumeration" />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="16578-16591" Line="279" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="17736-17749" Line="299" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="18042-18047" Line="304" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="18328-18333" Line="307" Message="Possible multiple enumeration" />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="18616-18629" Line="316" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="18959-18965" Line="319" Message="Method 'RemoveAllEdgesOfNode' can be made private" />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="19979-19992" Line="336" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="20161-20167" Line="338" Message="Method 'RemoveEdges' can be made private" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="20285-20290" Line="341" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Graphs\AbstractGraph.cs" Offset="20571-20576" Line="344" Message="Possible multiple enumeration" />
+      <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractGraph.cs" Offset="20815-20828" Line="353" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
+      <Issue TypeId="MemberCanBeProtected.Global" File="Graphs\AbstractGraph.cs" Offset="21202-21208" Line="356" Message="Method 'RemoveEdge' can be made protected" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="23474-23483" Line="399" Message="Method 'FindLeaves' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="24430-24439" Line="424" Message="Method 'DetermineTypesOfInternalNodes' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="25312-25321" Line="448" Message="Method 'DetermineTypesOfLeaves' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="26452-26458" Line="475" Message="Method 'IsAcyclic' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Graphs\AbstractGraph.cs" Offset="27297-27303" Line="489" Message="Method 'IsConnected' can be made private" />
+      <Issue TypeId="CSharpErrors" File="Graphs\AbstractGraph.cs" Offset="29412-29414" Line="522" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Graphs\AbstractGraph.cs" Offset="29413-29415" Line="522" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\AbstractGraph.cs" Offset="30687-30701" Line="544" Message="Method 'GetEdgeBetween' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Graphs\AbstractGraph.cs" Offset="34127-34147" Line="607" Message="Method 'ChangeEndpointOfEdge' is never used" />
       <Issue TypeId="InheritdocInvalidUsage" File="Graphs\AbstractNode.cs" Offset="1025-1038" Line="22" Message="Usage of &lt;inheritdoc /&gt; is invalid: No base candidate to inherit from." />
       <Issue TypeId="PublicConstructorInAbstractClass" File="Graphs\AbstractNode.cs" Offset="1773-1779" Line="40" Message="Convert constructor to protected" />
       <Issue TypeId="UnusedMember.Global" File="Graphs\AbstractNode.cs" Offset="5304-5317" Line="92" Message="Method 'AddNeighbours' is never used" />
@@ -721,14 +720,106 @@
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2552-2554" Line="40" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2599-2607" Line="42" Message="Cannot resolve symbol 'filePath'" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2607-2609" Line="42" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="3153-3157" Line="53" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="2656-2669" Line="44" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedDemandPairsReader.cs" Offset="3110-3123" Line="52" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedTreeReader.cs" Offset="2135-2137" Line="37" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedTreeReader.cs" Offset="2136-2138" Line="37" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedTreeReader.cs" Offset="2183-2191" Line="39" Message="Cannot resolve symbol 'filePath'" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\FixedTreeReader.cs" Offset="2191-2193" Line="39" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedTreeReader.cs" Offset="2730-2734" Line="50" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\InputDemandPairsType.cs" Offset="1219-1235" Line="29" Message="Enum member 'FromTreeInstance' is never used" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedTreeReader.cs" Offset="2240-2253" Line="41" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\FixedTreeReader.cs" Offset="2685-2698" Line="49" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\InputDemandPairsType.cs" Offset="570-574" Line="13" Message="Enum member 'None' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\InputTreeType.cs" Offset="555-559" Line="13" Message="Enum member 'None' is never used" />
       <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="InstanceGeneration\InputTreeType.cs" Offset="1043-1049" Line="29" Message="Name 'CNFSAT' does not match rule 'Enum members'. Suggested name is 'Cnfsat'." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="1138-1140" Line="25" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="1139-1141" Line="25" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="4505-4513" Line="82" Message="Cannot resolve symbol 'fileName'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="4513-4515" Line="82" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="4547-4560" Line="83" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="4662-4675" Line="86" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="5951-5953" Line="115" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="5952-5954" Line="115" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="6061-6074" Line="118" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="6169-6171" Line="120" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="6170-6172" Line="120" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedParameter.Local" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="8892-8901" Line="157" Message="Parameter 'dpCounter' is never used" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="8938-8940" Line="159" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="8939-8941" Line="159" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="8972-8974" Line="160" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="8973-8975" Line="160" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9002-9013" Line="162" Message="Cannot resolve symbol 'nodeCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9013-9014" Line="162" Message="')' expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9014-9016" Line="162" Message="Expression expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9016-9017" Line="162" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9292-9294" Line="167" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9293-9295" Line="167" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9408-9419" Line="170" Message="Cannot resolve symbol 'nodeCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9419-9420" Line="170" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9420-9422" Line="170" Message="Expression expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9422-9423" Line="170" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9461-9472" Line="171" Message="Cannot resolve symbol 'nodeCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9472-9473" Line="171" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9473-9475" Line="171" Message="Expression expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9475-9476" Line="171" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9515-9526" Line="172" Message="Cannot resolve symbol 'nodeCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9526-9527" Line="172" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9527-9529" Line="172" Message="Expression expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="9529-9530" Line="172" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10118-10127" Line="181" Message="Cannot resolve symbol 'dpCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10127-10128" Line="181" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10128-10130" Line="181" Message="Expression expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10139-10140" Line="181" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10150-10151" Line="181" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10157-10158" Line="181" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="10158-10159" Line="181" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="13965-13967" Line="222" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="13966-13968" Line="222" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="14069-14080" Line="225" Message="Cannot resolve symbol 'nodeCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="14080-14081" Line="225" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="14081-14083" Line="225" Message="Expression expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="14083-14084" Line="225" Message="Empty statement is redundant" />
+      <Issue TypeId="UnusedParameter.Local" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15726-15737" Line="251" Message="Parameter 'nodeCounter' is never used" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15846-15848" Line="254" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15847-15849" Line="254" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15944-15955" Line="257" Message="Cannot resolve symbol 'nodeCounter'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15955-15956" Line="257" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15956-15958" Line="257" Message="Expression expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromCNFSAT.cs" Offset="15958-15959" Line="257" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="1146-1148" Line="25" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="1147-1149" Line="25" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="3774-3782" Line="62" Message="Cannot resolve symbol 'fileName'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="3782-3784" Line="62" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="3816-3829" Line="63" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="3938-3951" Line="66" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="5256-5258" Line="88" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="5257-5259" Line="88" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="5436-5437" Line="92" Message="Cannot resolve symbol 'i'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="5437-5439" Line="92" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="5659-5672" Line="99" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedVariable" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6014-6023" Line="106" Message="Local variable 'endpoint1' is never used" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6683-6688" Line="115" Message="Cannot resolve symbol 'nodes'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6688-6689" Line="115" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6689-6698" Line="115" Message="Cannot resolve symbol 'endpoint1'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6699-6700" Line="115" Message="Usage of type expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6717-6718" Line="115" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="6718-6719" Line="115" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="7866-7868" Line="137" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="7867-7869" Line="137" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="7956-7957" Line="139" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="7958-7959" Line="139" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="7959-7960" Line="139" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="8125-8129" Line="144" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="8132-8134" Line="144" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9356-9358" Line="163" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9357-9359" Line="163" Message="'(' or initializer expected" />
+      <Issue TypeId="NotAccessedVariable.Compiler" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9378-9383" Line="164" Message="Local variable 'index' is only assigned but its value is never used" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9507-9512" Line="167" Message="Cannot resolve symbol 'index'" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9512-9513" Line="167" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9513-9515" Line="167" Message="Expression expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9546-9547" Line="167" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9578-9579" Line="167" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9592-9593" Line="167" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="InstanceGeneration\InstanceFromVertexCover.cs" Offset="9593-9594" Line="167" Message="Empty statement is redundant" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceReaderWriter.cs" Offset="1055-1057" Line="25" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceReaderWriter.cs" Offset="1056-1058" Line="25" Message="'(' or initializer expected" />
       <Issue TypeId="PossibleMultipleEnumeration" File="InstanceGeneration\InstanceReaderWriter.cs" Offset="2603-2614" Line="43" Message="Possible multiple enumeration" />
@@ -756,6 +847,7 @@
       <Issue TypeId="PossibleNullReferenceException" File="InstanceGeneration\InstanceReaderWriter.cs" Offset="10588-10592" Line="198" Message="Possible 'System.NullReferenceException'" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceReaderWriter.cs" Offset="11877-11879" Line="221" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\InstanceReaderWriter.cs" Offset="11878-11880" Line="221" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedMember.Global" File="InstanceGeneration\RandomDemandPairs.cs" Offset="1674-1699" Line="26" Message="Method 'GenerateRandomDemandPairs' is never used" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\RandomDemandPairs.cs" Offset="2361-2363" Line="36" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\RandomDemandPairs.cs" Offset="2362-2364" Line="36" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="InstanceGeneration\RandomDemandPairs.cs" Offset="2414-2416" Line="38" Message="Tuple must contain at least two elements." />
@@ -774,48 +866,64 @@
       <Issue TypeId="UnusedMember.Global" File="MulticutProblem\MulticutInstance.cs" Offset="6053-6069" Line="115" Message="Constructor 'MulticutInstance' is never used" />
       <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="6343-6345" Line="120" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="6344-6346" Line="120" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9006-9014" Line="166" Message="Cannot resolve symbol 'treeSeed'" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9014-9016" Line="166" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9060-9066" Line="167" Message="Cannot resolve symbol 'dpSeed'" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9066-9068" Line="167" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9592-9596" Line="172" Message="Cannot resolve symbol 'tree'" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9598-9609" Line="172" Message="Cannot resolve symbol 'demandPairs'" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="9623-9624" Line="172" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="MulticutProblem\MulticutInstance.cs" Offset="9626-9627" Line="172" Message="Empty statement is redundant" />
-      <Issue TypeId="UnusedParameter.Local" File="MulticutProblem\MulticutInstance.cs" Offset="14395-14414" Line="226" Message="Parameter 'distanceProbability' is never used" />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="16114-16116" Line="251" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="16115-16117" Line="251" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="10993-11018" Line="193" Message="Cannot resolve symbol 'GenerateRandomDemandPairs'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="11018-11019" Line="193" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="11073-11074" Line="193" Message="; expected" />
+      <Issue TypeId="ObjectCreationAsStatement" File="MulticutProblem\MulticutInstance.cs" Offset="11075-11078" Line="193" Message="Possible unassigned object created by 'new' expression" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="11088-11089" Line="193" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="MulticutProblem\MulticutInstance.cs" Offset="11089-11090" Line="193" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="11151-11155" Line="194" Message="Cannot resolve symbol 'tree'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="11157-11168" Line="194" Message="Cannot resolve symbol 'demandPairs'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="11182-11183" Line="194" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="MulticutProblem\MulticutInstance.cs" Offset="11185-11186" Line="194" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12500-12525" Line="211" Message="Cannot resolve symbol 'GenerateRandomDemandPairs'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12525-12526" Line="211" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12580-12581" Line="211" Message="; expected" />
+      <Issue TypeId="ObjectCreationAsStatement" File="MulticutProblem\MulticutInstance.cs" Offset="12582-12585" Line="211" Message="Possible unassigned object created by 'new' expression" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12595-12596" Line="211" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="MulticutProblem\MulticutInstance.cs" Offset="12596-12597" Line="211" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12658-12662" Line="212" Message="Cannot resolve symbol 'tree'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12664-12675" Line="212" Message="Cannot resolve symbol 'demandPairs'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="12689-12690" Line="212" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="MulticutProblem\MulticutInstance.cs" Offset="12692-12693" Line="212" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="14771-14775" Line="240" Message="Cannot resolve symbol 'tree'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="14777-14788" Line="240" Message="Cannot resolve symbol 'demandPairs'" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="14802-14803" Line="240" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="MulticutProblem\MulticutInstance.cs" Offset="14805-14806" Line="240" Message="Empty statement is redundant" />
+      <Issue TypeId="UnusedMember.Local" File="MulticutProblem\MulticutInstance.cs" Offset="16242-16275" Line="255" Message="Method 'ParseLengthDistributionDictionary' is never used" />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="16371-16373" Line="257" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="MulticutProblem\MulticutInstance.cs" Offset="16372-16374" Line="257" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="MulticutProblem\PerformanceMeasurements.cs" Offset="4892-4894" Line="93" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="MulticutProblem\PerformanceMeasurements.cs" Offset="4893-4895" Line="93" Message="'(' or initializer expected" />
       <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="475-487" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="461-468" Line="11" Message="Class 'Program' is never instantiated" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="959-990" Line="20" Message="Class 'BidimensionalDominatingWingspan' is never instantiated" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1268-1277" Line="25" Message="Property 'CaterpillarComponentPerNode' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1561-1570" Line="30" Message="Property 'DemandPairsPerNode' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1838-1847" Line="35" Message="Property 'PartialSolution' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1999-2008" Line="40" Message="Property 'MaxSolutionSize' can be made private" />
-      <Issue TypeId="UnusedVariable" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6026-6034" Line="81" Message="Local variable 'leafEdge' is never used" />
-      <Issue TypeId="UnusedVariable" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6365-6370" Line="84" Message="Local variable 'right' is never used" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6506-6512" Line="86" Message="Name 'leftDP' does not match rule 'Local variables'. Suggested name is 'leftDp'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6545-6552" Line="87" Message="Name 'rightDP' does not match rule 'Local variables'. Suggested name is 'rightDp'." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="8549-8551" Line="124" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="8550-8552" Line="124" Message="'(' or initializer expected" />
-      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="9126-9127" Line="136" Message="Redundant parentheses" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10607-10609" Line="162" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10608-10610" Line="162" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10666-10668" Line="163" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10667-10669" Line="163" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10708-10710" Line="164" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10709-10711" Line="164" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10808-10809" Line="167" Message="Cannot resolve symbol 'n'" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10812-10814" Line="167" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11087-11100" Line="174" Message="Cannot resolve symbol 'oldToNewNodes'" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11100-11101" Line="174" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11101-11111" Line="174" Message="Cannot resolve symbol 'demandPair'" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11118-11119" Line="174" Message="Usage of type expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11151-11152" Line="174" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11152-11153" Line="174" Message="Empty statement is redundant" />
-      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11280-11283" Line="178" Message="Non-obvious precedence" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="532-539" Line="13" Message="Class 'Program' is never instantiated" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="916-947" Line="19" Message="Class 'BidimensionalDominatingWingspan' is never instantiated" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1225-1234" Line="24" Message="Property 'CaterpillarComponentPerNode' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1518-1527" Line="29" Message="Property 'DemandPairsPerNode' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1795-1804" Line="34" Message="Property 'PartialSolution' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1956-1965" Line="39" Message="Property 'MaxSolutionSize' can be made private" />
+      <Issue TypeId="UnusedVariable" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="5983-5991" Line="80" Message="Local variable 'leafEdge' is never used" />
+      <Issue TypeId="UnusedVariable" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6322-6327" Line="83" Message="Local variable 'right' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6463-6469" Line="85" Message="Name 'leftDP' does not match rule 'Local variables'. Suggested name is 'leftDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="6502-6509" Line="86" Message="Name 'rightDP' does not match rule 'Local variables'. Suggested name is 'rightDp'." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="8506-8508" Line="123" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="8507-8509" Line="123" Message="'(' or initializer expected" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="9083-9084" Line="135" Message="Redundant parentheses" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10564-10566" Line="161" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10565-10567" Line="161" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10623-10625" Line="162" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10624-10626" Line="162" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10665-10667" Line="163" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10666-10668" Line="163" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10765-10766" Line="166" Message="Cannot resolve symbol 'n'" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="10769-10771" Line="166" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11044-11057" Line="173" Message="Cannot resolve symbol 'oldToNewNodes'" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11057-11058" Line="173" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11058-11068" Line="173" Message="Cannot resolve symbol 'demandPair'" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11075-11076" Line="173" Message="Usage of type expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11108-11109" Line="173" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11109-11110" Line="173" Message="Empty statement is redundant" />
+      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="11237-11240" Line="177" Message="Non-obvious precedence" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\CommonFactor.cs" Offset="1084-1096" Line="19" Message="Class 'CommonFactor' is never instantiated" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="5868-5870" Line="82" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="5869-5871" Line="82" Message="'(' or initializer expected" />
@@ -823,9 +931,9 @@
       <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="8769-8771" Line="139" Message="'(' or initializer expected" />
       <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="10922-10934" Line="184" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="ReductionRules\CommonFactor.cs" Offset="11911-11923" Line="201" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="12310-12312" Line="214" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="12311-12313" Line="214" Message="'(' or initializer expected" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\CommonFactor.cs" Offset="14030-14041" Line="243" Message="Name 'candidateDP' does not match rule 'Local variables'. Suggested name is 'candidateDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\CommonFactor.cs" Offset="14356-14367" Line="245" Message="Name 'candidateDP' does not match rule 'Local variables'. Suggested name is 'candidateDp'." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="18635-18637" Line="315" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\CommonFactor.cs" Offset="18636-18638" Line="315" Message="'(' or initializer expected" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\DisjointPaths.cs" Offset="841-854" Line="19" Message="Class 'DisjointPaths' is never instantiated" />
       <Issue TypeId="MemberCanBeProtected.Global" File="ReductionRules\DominatedEdge.cs" Offset="2270-2276" Line="35" Message="Constructor 'DominatedEdge' can be made protected" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\DominatedEdge.cs" Offset="7430-7432" Line="96" Message="Tuple must contain at least two elements." />
@@ -842,36 +950,36 @@
       <Issue TypeId="CSharpErrors" File="ReductionRules\DominatedPath.cs" Offset="5455-5456" Line="89" Message="; expected" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\DominatedPath.cs" Offset="5498-5499" Line="89" Message="; expected" />
       <Issue TypeId="EmptyStatement" File="ReductionRules\DominatedPath.cs" Offset="5499-5500" Line="89" Message="Empty statement is redundant" />
-      <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1076-1105" Line="20" Message="Class 'GeneralisedDominatingWingspan' is never instantiated" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1383-1392" Line="25" Message="Property 'CaterpillarComponentPerNode' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1676-1685" Line="30" Message="Property 'DemandPairsPerNode' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1953-1962" Line="35" Message="Property 'PartialSolution' can be made private" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="2114-2123" Line="40" Message="Property 'MaxSolutionSize' can be made private" />
-      <Issue TypeId="UnusedVariable" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="7656-7664" Line="94" Message="Local variable 'leafEdge' is never used" />
-      <Issue TypeId="UnusedVariable" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="7995-8000" Line="97" Message="Local variable 'right' is never used" />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="8136-8142" Line="99" Message="Name 'leftDP' does not match rule 'Local variables'. Suggested name is 'leftDp'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="8175-8182" Line="100" Message="Name 'rightDP' does not match rule 'Local variables'. Suggested name is 'rightDp'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10046-10052" Line="131" Message="Name 'leftDP' does not match rule 'Parameters'. Suggested name is 'leftDp'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10065-10072" Line="131" Message="Name 'rightDP' does not match rule 'Parameters'. Suggested name is 'rightDp'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10915-10921" Line="144" Message="Name 'leftDP' does not match rule 'Local variables'. Suggested name is 'leftDp'." />
-      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10934-10941" Line="144" Message="Name 'rightDP' does not match rule 'Local variables'. Suggested name is 'rightDp'." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="11585-11587" Line="156" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="11586-11588" Line="156" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13704-13706" Line="191" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13705-13707" Line="191" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13763-13765" Line="192" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13764-13766" Line="192" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13805-13807" Line="193" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13806-13808" Line="193" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13899-13900" Line="196" Message="Cannot resolve symbol 'n'" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13903-13905" Line="196" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14178-14191" Line="203" Message="Cannot resolve symbol 'oldToNewNodes'" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14191-14192" Line="203" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14192-14202" Line="203" Message="Cannot resolve symbol 'demandPair'" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14209-14210" Line="203" Message="Usage of type expected" />
-      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14242-14243" Line="203" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14243-14244" Line="203" Message="Empty statement is redundant" />
-      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14371-14374" Line="207" Message="Non-obvious precedence" />
+      <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1033-1062" Line="19" Message="Class 'GeneralisedDominatingWingspan' is never instantiated" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1340-1349" Line="24" Message="Property 'CaterpillarComponentPerNode' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1633-1642" Line="29" Message="Property 'DemandPairsPerNode' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="1910-1919" Line="34" Message="Property 'PartialSolution' can be made private" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="2071-2080" Line="39" Message="Property 'MaxSolutionSize' can be made private" />
+      <Issue TypeId="UnusedVariable" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="7613-7621" Line="93" Message="Local variable 'leafEdge' is never used" />
+      <Issue TypeId="UnusedVariable" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="7952-7957" Line="96" Message="Local variable 'right' is never used" />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="8093-8099" Line="98" Message="Name 'leftDP' does not match rule 'Local variables'. Suggested name is 'leftDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="8132-8139" Line="99" Message="Name 'rightDP' does not match rule 'Local variables'. Suggested name is 'rightDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10003-10009" Line="130" Message="Name 'leftDP' does not match rule 'Parameters'. Suggested name is 'leftDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10022-10029" Line="130" Message="Name 'rightDP' does not match rule 'Parameters'. Suggested name is 'rightDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10872-10878" Line="143" Message="Name 'leftDP' does not match rule 'Local variables'. Suggested name is 'leftDp'." />
+      <Issue TypeId="InconsistentNaming" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="10891-10898" Line="143" Message="Name 'rightDP' does not match rule 'Local variables'. Suggested name is 'rightDp'." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="11542-11544" Line="155" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="11543-11545" Line="155" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13661-13663" Line="190" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13662-13664" Line="190" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13720-13722" Line="191" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13721-13723" Line="191" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13762-13764" Line="192" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13763-13765" Line="192" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13856-13857" Line="195" Message="Cannot resolve symbol 'n'" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="13860-13862" Line="195" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14135-14148" Line="202" Message="Cannot resolve symbol 'oldToNewNodes'" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14148-14149" Line="202" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14149-14159" Line="202" Message="Cannot resolve symbol 'demandPair'" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14166-14167" Line="202" Message="Usage of type expected" />
+      <Issue TypeId="CSharpErrors" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14199-14200" Line="202" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14200-14201" Line="202" Message="Empty statement is redundant" />
+      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="ReductionRules\GeneralisedDominatingWingspan.cs" Offset="14328-14331" Line="206" Message="Non-obvious precedence" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\IdleEdge.cs" Offset="834-842" Line="18" Message="Class 'IdleEdge' is never instantiated" />
       <Issue TypeId="CSharpErrors" File="ReductionRules\IdleEdge.cs" Offset="5070-5072" Line="70" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\IdleEdge.cs" Offset="5071-5073" Line="70" Message="'(' or initializer expected" />
@@ -914,21 +1022,13 @@
       <Issue TypeId="CSharpErrors" File="ReductionRules\UnitPath.cs" Offset="4426-4428" Line="78" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="ReductionRules\UnitPath.cs" Offset="4427-4429" Line="78" Message="'(' or initializer expected" />
       <Issue TypeId="UnusedType.Global" File="ReductionRules\_NamespaceDocReductionRules.cs" Offset="479-491" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="UnusedVariable" File="Utilities\BFS.cs" Offset="3139-3150" Line="44" Message="Local variable 'mockCounter' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3156-3158" Line="44" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3157-3159" Line="44" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3241-3243" Line="46" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3242-3244" Line="46" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3478-3480" Line="51" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="4285-4287" Line="73" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="4344-4360" Line="75" Message="Cannot resolve symbol 'Add'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7250-7252" Line="120" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7251-7253" Line="120" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7335-7337" Line="122" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7336-7338" Line="122" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="7563-7565" Line="127" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="8203-8205" Line="147" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="8262-8271" Line="149" Message="Cannot resolve symbol 'Add'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2789-2791" Line="41" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2790-2792" Line="41" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2874-2876" Line="43" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="2875-2877" Line="43" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3102-3104" Line="48" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3742-3744" Line="68" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\BFS.cs" Offset="3801-3810" Line="70" Message="Cannot resolve symbol 'Add'" />
       <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\DFS.cs" Offset="1410-1416" Line="25" Message="Method 'FindConnectedComponent' can be made private" />
       <Issue TypeId="CSharpErrors" File="Utilities\DFS.cs" Offset="3574-3576" Line="55" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Utilities\DFS.cs" Offset="3575-3577" Line="55" Message="'(' or initializer expected" />
@@ -1012,217 +1112,145 @@
       <Issue TypeId="CSharpErrors" File="Utilities\DinicMaxFlow.cs" Offset="18435-18437" Line="251" Message="'(' or initializer expected" />
       <Issue TypeId="CSharpErrors" File="Utilities\DinicMaxFlow.cs" Offset="18652-18654" Line="258" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="Utilities\DinicMaxFlow.cs" Offset="18653-18655" Line="258" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedType.Global" File="Utilities\FisherYates.cs" Offset="498-509" Line="11" Message="Class 'FisherYates' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\FisherYates.cs" Offset="1270-1277" Line="21" Message="Method 'Shuffle' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="965-967" Line="21" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="966-968" Line="21" Message="'(' or initializer expected" />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Matching\EdmondsMatching.cs" Offset="2763-2784" Line="44" Message="Convert to method group" />
-      <Issue TypeId="ConvertClosureToMethodGroup" File="Utilities\Matching\EdmondsMatching.cs" Offset="4901-4922" Line="70" Message="Convert to method group" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13067-13072" Line="186" Message="Cannot resolve symbol 'graph'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13078-13079" Line="186" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13091-13092" Line="186" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="13092-13093" Line="186" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13472-13474" Line="198" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13473-13475" Line="198" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13792-13800" Line="207" Message="Cannot resolve symbol 'matching'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="13800-13802" Line="207" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14198-14200" Line="215" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14199-14201" Line="215" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14258-14260" Line="216" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14259-14261" Line="216" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14334-14336" Line="217" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="14335-14337" Line="217" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18105-18113" Line="257" Message="Cannot resolve symbol 'nodesInD'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18119-18120" Line="257" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="18183-18184" Line="257" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="18184-18185" Line="257" Message="Empty statement is redundant" />
-      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="19031-19042" Line="280" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
-      <Issue TypeId="UnusedMethodReturnValue.Local" File="Utilities\Matching\EdmondsMatching.cs" Offset="21003-21034" Line="302" Message="Method 'BuildDigraphD' return value is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21943-21945" Line="313" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="21944-21946" Line="313" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="22001-22003" Line="314" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="22002-22004" Line="314" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22168-22175" Line="318" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22452-22459" Line="322" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="22797-22804" Line="326" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="23113-23120" Line="330" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="23393-23395" Line="336" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="23394-23396" Line="336" Message="'(' or initializer expected" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\Matching\EdmondsMatching.cs" Offset="27031-27050" Line="367" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\Matching\EdmondsMatching.cs" Offset="27202-27219" Line="371" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29523-29525" Line="406" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="29524-29526" Line="406" Message="'(' or initializer expected" />
-      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="Utilities\Matching\EdmondsMatching.cs" Offset="29857-29860" Line="413" Message="Non-obvious precedence" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30004-30006" Line="418" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30005-30007" Line="418" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30052-30054" Line="419" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="30053-30055" Line="419" Message="'(' or initializer expected" />
-      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="37316-37327" Line="520" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
-      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\Matching\EdmondsMatching.cs" Offset="37458-37469" Line="520" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40620-40627" Line="556" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="40744-40751" Line="557" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40835-40840" Line="559" Message="Cannot resolve symbol 'graph'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40846-40847" Line="559" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="40859-40860" Line="559" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatching.cs" Offset="40860-40861" Line="559" Message="Empty statement is redundant" />
-      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatching.cs" Offset="41052-41065" Line="562" Message="Local variable 'beforeBlossom' is never used" />
-      <Issue TypeId="PossibleNullReferenceException" File="Utilities\Matching\EdmondsMatching.cs" Offset="41099-41106" Line="562" Message="Possible 'System.NullReferenceException'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41341-41354" Line="565" Message="Cannot resolve symbol 'beforeBlossom'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41354-41356" Line="565" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Matching\EdmondsMatching.cs" Offset="41627-41639" Line="568" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41847-41860" Line="576" Message="Cannot resolve symbol 'beforeBlossom'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="41860-41862" Line="576" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Matching\EdmondsMatching.cs" Offset="42058-42070" Line="578" Message="Possible multiple enumeration" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatching.cs" Offset="43581-43595" Line="602" Message="Content of collection 'hashedMatching' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="43602-43610" Line="602" Message="Cannot resolve symbol 'matching'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatching.cs" Offset="43610-43612" Line="602" Message="'(' or initializer expected" />
-      <Issue TypeId="RedundantUsingDirective" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="341-359" Line="6" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="361-390" Line="7" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="UnusedType.Global" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="674-692" Line="16" Message="Class 'EdmondsMatchingNEW' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="908-910" Line="21" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="909-911" Line="21" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="2105-2124" Line="36" Message="Method 'FindMaximumMatching' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="4033-4053" Line="59" Message="Method 'HasMatchingOfAtLeast' is never used" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="12792-12806" Line="182" Message="Content of collection 'hashedMatching' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="12813-12821" Line="182" Message="Cannot resolve symbol 'matching'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="12821-12823" Line="182" Message="'(' or initializer expected" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15158-15175" Line="220" Message="Content of collection 'unmatchedVertices' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15182-15187" Line="220" Message="Cannot resolve symbol 'graph'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15193-15194" Line="220" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15207-15208" Line="220" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15208-15209" Line="220" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15456-15458" Line="227" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15457-15459" Line="227" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15810-15833" Line="236" Message="Local variable 'nodesInDToOriginalNodes' is never used" />
-      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="15931-15954" Line="236" Message="Local variable 'edgesInDToOriginalEdges' is never used" />
-      <Issue TypeId="UnusedVariable" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="16301-16306" Line="240" Message="Local variable 'pathP' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18299-18301" Line="260" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18300-18302" Line="260" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18345-18347" Line="261" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18346-18348" Line="261" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18391-18393" Line="262" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18392-18394" Line="262" Message="'(' or initializer expected" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18425-18437" Line="264" Message="Content of collection 'matchedEdges' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18444-18452" Line="264" Message="Cannot resolve symbol 'matching'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18452-18454" Line="264" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18609-18611" Line="267" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18610-18612" Line="267" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18657-18659" Line="268" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="18658-18660" Line="268" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="20204-20206" Line="293" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="20205-20207" Line="293" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22858-22860" Line="332" Message="Cannot resolve symbol 'n1'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22862-22864" Line="332" Message="Cannot resolve symbol 'n2'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22864-22866" Line="332" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22870-22871" Line="332" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\Matching\EdmondsMatchingNEW.cs" Offset="22871-22872" Line="332" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="862-864" Line="18" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="863-865" Line="18" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2054-2056" Line="34" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2055-2057" Line="34" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2169-2171" Line="37" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\GreedyMatching.cs" Offset="2170-2172" Line="37" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="1103-1105" Line="26" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="1104-1106" Line="26" Message="'(' or initializer expected" />
-      <Issue TypeId="RedundantStringInterpolation" File="Utilities\Matching\MatchingLibrary.cs" Offset="5023-5024" Line="89" Message="Redundant string interpolation" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="6474-6476" Line="108" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="6475-6477" Line="108" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="6524-6526" Line="109" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="6525-6527" Line="109" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="6558-6560" Line="111" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="6559-6561" Line="111" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="8693-8695" Line="152" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="8694-8696" Line="152" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="11187-11189" Line="195" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="11188-11190" Line="195" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="11250-11252" Line="196" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="11251-11253" Line="196" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="11405-11407" Line="201" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="11406-11408" Line="201" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="12078-12086" Line="221" Message="Cannot resolve symbol 'FileName'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Matching\MatchingLibrary.cs" Offset="12086-12088" Line="221" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedType.Global" File="Utilities\Matching\_NamespaceDocUtilitiesMatching.cs" Offset="495-507" Line="8" Message="Class 'NamespaceDoc' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="1138-1140" Line="24" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="1139-1141" Line="24" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2925-2936" Line="42" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3437-3448" Line="46" Message="Possible multiple enumeration" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3467-3474" Line="46" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3482-3489" Line="46" Message="Possible 'null' assignment to non-nullable entity" />
-      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="4641-4647" Line="60" Message="Method 'ComputeMaximumMultiCommodityFlowTree' can be made private" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5519-5538" Line="68" Message="Content of collection 'originalCommodities' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5545-5556" Line="68" Message="Cannot resolve symbol 'commodities'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5563-5564" Line="68" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5617-5618" Line="68" Message="Operator '.' cannot be applied to operand of type 'lambda expression'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5618-5624" Line="68" Message="Cannot resolve symbol 'ToList'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5626-5627" Line="68" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5627-5628" Line="68" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5706-5708" Line="69" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5707-5709" Line="69" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6116-6120" Line="76" Message="Cannot resolve symbol 'tree'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6126-6127" Line="76" Message="; expected" />
-      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6126-6127" Line="76" Message="Redundant parentheses" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6140-6145" Line="76" Message="Cannot resolve symbol 'Where'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6372-6373" Line="76" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6385-6386" Line="76" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6386-6387" Line="76" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6743-6745" Line="82" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6744-6746" Line="82" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8336-8340" Line="105" Message="Cannot resolve symbol 'node'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8349-8350" Line="105" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8385-8386" Line="105" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8386-8387" Line="105" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8576-8587" Line="108" Message="Cannot resolve symbol 'commodities'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8608-8609" Line="108" Message="; expected" />
-      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8608-8609" Line="108" Message="Redundant parentheses" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8652-8657" Line="108" Message="Cannot resolve symbol 'Where'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8691-8692" Line="108" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8692-8693" Line="108" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9115-9117" Line="114" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9116-9118" Line="114" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9182-9184" Line="115" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9183-9185" Line="115" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedParameter.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="10905-10913" Line="136" Message="Parameter 'allNodes' is never used" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="11039-11047" Line="138" Message="Cannot resolve symbol 'allNodes'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="11047-11049" Line="138" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13771-13775" Line="179" Message="Cannot resolve symbol 'node'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13784-13785" Line="179" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13820-13821" Line="179" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13827-13829" Line="179" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13830-13831" Line="179" Message="Empty statement is redundant" />
-      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14201-14210" Line="184" Message="Content of collection 'freeNodes' is never updated" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14221-14230" Line="184" Message="Cannot resolve symbol 'FreeNodes'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14230-14231" Line="184" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14335-14336" Line="184" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14336-14337" Line="184" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17808-17809" Line="229" Message="Cannot resolve symbol 'n'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17812-17814" Line="229" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="18064-18066" Line="236" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="18065-18067" Line="236" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="19386-19388" Line="262" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="19387-19389" Line="262" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="20573-20575" Line="277" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="20574-20576" Line="277" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24484-24486" Line="331" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24485-24487" Line="331" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24706-24708" Line="334" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24707-24709" Line="334" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25528-25532" Line="347" Message="Cannot resolve symbol 'node'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25541-25542" Line="347" Message="; expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25577-25578" Line="347" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25578-25579" Line="347" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25658-25669" Line="348" Message="Cannot resolve symbol 'commodities'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25690-25691" Line="348" Message="; expected" />
-      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25690-25691" Line="348" Message="Redundant parentheses" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25734-25739" Line="348" Message="Cannot resolve symbol 'Where'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25773-25774" Line="348" Message="; expected" />
-      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25774-25775" Line="348" Message="Empty statement is redundant" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26139-26141" Line="352" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26140-26142" Line="352" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26206-26208" Line="353" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26207-26209" Line="353" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26300-26302" Line="354" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26301-26303" Line="354" Message="'(' or initializer expected" />
-      <Issue TypeId="UnusedMember.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="30522-30531" Line="426" Message="Method 'IsBetween' is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="13147-13152" Line="177" Message="Cannot resolve symbol 'graph'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="13158-13159" Line="177" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="13172-13173" Line="177" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\EdmondsMatching.cs" Offset="13173-13174" Line="177" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="13553-13555" Line="189" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="13554-13556" Line="189" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedVariable" File="Utilities\EdmondsMatching.cs" Offset="14204-14205" Line="205" Message="Local variable 'd' is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="18308-18316" Line="245" Message="Cannot resolve symbol 'nodesInD'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="18322-18323" Line="245" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="18386-18387" Line="245" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\EdmondsMatching.cs" Offset="18387-18388" Line="245" Message="Empty statement is redundant" />
+      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\EdmondsMatching.cs" Offset="18809-18820" Line="256" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="20870-20872" Line="281" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="20871-20873" Line="281" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23794-23796" Line="314" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23795-23797" Line="314" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23830-23832" Line="315" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23831-23833" Line="315" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23864-23866" Line="316" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23865-23867" Line="316" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23906-23908" Line="317" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="23907-23909" Line="317" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="24063-24065" Line="320" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="24064-24066" Line="320" Message="'(' or initializer expected" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\EdmondsMatching.cs" Offset="24101-24113" Line="321" Message="Content of collection 'listMatching' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="24120-24128" Line="321" Message="Cannot resolve symbol 'matching'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="24128-24130" Line="321" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="24298-24305" Line="325" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="24586-24593" Line="329" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="24935-24942" Line="333" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="25255-25262" Line="337" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="25535-25537" Line="343" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="25536-25538" Line="343" Message="'(' or initializer expected" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\EdmondsMatching.cs" Offset="29175-29194" Line="374" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\EdmondsMatching.cs" Offset="29346-29363" Line="378" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="32547-32549" Line="417" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="32548-32550" Line="417" Message="'(' or initializer expected" />
+      <Issue TypeId="ArrangeMissingParentheses" Severity="SUGGESTION" File="Utilities\EdmondsMatching.cs" Offset="32881-32884" Line="424" Message="Non-obvious precedence" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="33234-33236" Line="437" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="33235-33237" Line="437" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="33282-33284" Line="438" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="33283-33285" Line="438" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="41822-41836" Line="543" Message="Cannot resolve symbol 'contractedPath'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="41847-41848" Line="543" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="41886-41887" Line="543" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\EdmondsMatching.cs" Offset="41887-41888" Line="543" Message="Empty statement is redundant" />
+      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\EdmondsMatching.cs" Offset="42306-42317" Line="552" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
+      <Issue TypeId="RedundantEnumerableCastCall" File="Utilities\EdmondsMatching.cs" Offset="42495-42506" Line="552" Message="Redundant 'IEnumerable.Cast&lt;T&gt;' call" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="46148-46155" Line="588" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="46272-46279" Line="589" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="UnusedVariable" File="Utilities\EdmondsMatching.cs" Offset="46365-46378" Line="591" Message="Local variable 'beforeBlossom' is never used" />
+      <Issue TypeId="PossibleNullReferenceException" File="Utilities\EdmondsMatching.cs" Offset="46412-46419" Line="591" Message="Possible 'System.NullReferenceException'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="46942-46955" Line="599" Message="Cannot resolve symbol 'beforeBlossom'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\EdmondsMatching.cs" Offset="46955-46957" Line="599" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\GreedyMatching.cs" Offset="2146-2148" Line="31" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\GreedyMatching.cs" Offset="2147-2149" Line="31" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\GreedyMatching.cs" Offset="2261-2263" Line="34" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\GreedyMatching.cs" Offset="2262-2264" Line="34" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="1095-1097" Line="23" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="1096-1098" Line="23" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="2882-2893" Line="41" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3394-3405" Line="45" Message="Possible multiple enumeration" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3424-3431" Line="45" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="AssignNullToNotNullAttribute" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="3439-3446" Line="45" Message="Possible 'null' assignment to non-nullable entity" />
+      <Issue TypeId="MemberCanBePrivate.Global" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="4598-4604" Line="59" Message="Method 'ComputeMaximumMultiCommodityFlowTree' can be made private" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5476-5495" Line="67" Message="Content of collection 'originalCommodities' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5502-5513" Line="67" Message="Cannot resolve symbol 'commodities'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5520-5521" Line="67" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5574-5575" Line="67" Message="Operator '.' cannot be applied to operand of type 'lambda expression'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5575-5581" Line="67" Message="Cannot resolve symbol 'ToList'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5583-5584" Line="67" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5584-5585" Line="67" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5663-5665" Line="68" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="5664-5666" Line="68" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6073-6077" Line="75" Message="Cannot resolve symbol 'tree'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6083-6084" Line="75" Message="; expected" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6083-6084" Line="75" Message="Redundant parentheses" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6097-6102" Line="75" Message="Cannot resolve symbol 'Where'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6329-6330" Line="75" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6342-6343" Line="75" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6343-6344" Line="75" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6700-6702" Line="81" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="6701-6703" Line="81" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8293-8297" Line="104" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8306-8307" Line="104" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8342-8343" Line="104" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8343-8344" Line="104" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8533-8544" Line="107" Message="Cannot resolve symbol 'commodities'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8565-8566" Line="107" Message="; expected" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8565-8566" Line="107" Message="Redundant parentheses" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8609-8614" Line="107" Message="Cannot resolve symbol 'Where'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8648-8649" Line="107" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="8649-8650" Line="107" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9072-9074" Line="113" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9073-9075" Line="113" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9139-9141" Line="114" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="9140-9142" Line="114" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedParameter.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="10705-10713" Line="135" Message="Parameter 'allNodes' is never used" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="10839-10847" Line="137" Message="Cannot resolve symbol 'allNodes'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="10847-10849" Line="137" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13571-13575" Line="178" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13584-13585" Line="178" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13620-13621" Line="178" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13627-13629" Line="178" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="13630-13631" Line="178" Message="Empty statement is redundant" />
+      <Issue TypeId="CollectionNeverUpdated.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14001-14010" Line="183" Message="Content of collection 'freeNodes' is never updated" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14021-14030" Line="183" Message="Cannot resolve symbol 'FreeNodes'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14030-14031" Line="183" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14135-14136" Line="183" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="14136-14137" Line="183" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17608-17609" Line="228" Message="Cannot resolve symbol 'n'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17612-17614" Line="228" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17864-17866" Line="235" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="17865-17867" Line="235" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="19186-19188" Line="261" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="19187-19189" Line="261" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="20373-20375" Line="276" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="20374-20376" Line="276" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24284-24286" Line="330" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24285-24287" Line="330" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24506-24508" Line="333" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="24507-24509" Line="333" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25328-25332" Line="346" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25341-25342" Line="346" Message="; expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25377-25378" Line="346" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25378-25379" Line="346" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25458-25469" Line="347" Message="Cannot resolve symbol 'commodities'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25490-25491" Line="347" Message="; expected" />
+      <Issue TypeId="ArrangeRedundantParentheses" Severity="SUGGESTION" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25490-25491" Line="347" Message="Redundant parentheses" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25534-25539" Line="347" Message="Cannot resolve symbol 'Where'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25573-25574" Line="347" Message="; expected" />
+      <Issue TypeId="EmptyStatement" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25574-25575" Line="347" Message="Empty statement is redundant" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25939-25941" Line="351" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="25940-25942" Line="351" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26006-26008" Line="352" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26007-26009" Line="352" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26100-26102" Line="353" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="26101-26103" Line="353" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedMember.Local" File="Utilities\MaximumMultiCommodityFlowInTrees.cs" Offset="30165-30174" Line="425" Message="Method 'IsBetween' is never used" />
       <Issue TypeId="RedundantUsingDirective" File="Utilities\Utils.cs" Offset="361-384" Line="7" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="ParameterOnlyUsedForPreconditionCheck.Global" File="Utilities\Utils.cs" Offset="1595-1604" Line="28" Message="Parameter 'parameter' is only used for precondition check(s)" />
       <Issue TypeId="PossibleNullReferenceException" File="Utilities\Utils.cs" Offset="3593-3603" Line="59" Message="Possible 'System.NullReferenceException'" />
@@ -1238,69 +1266,65 @@
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7426-7430" Line="111" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7487-7491" Line="112" Message="Possible multiple enumeration" />
       <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="7624-7628" Line="117" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8668-8672" Line="139" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8802-8806" Line="141" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8881-8885" Line="143" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8944-8948" Line="145" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="8975-8979" Line="145" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10160-10164" Line="165" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="10309-10311" Line="167" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="10310-10312" Line="167" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10346-10350" Line="168" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10419-10423" Line="170" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10473-10477" Line="171" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="11686-11701" Line="187" Message="Method 'PickRandomWhere' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="11822-11826" Line="190" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12322-12326" Line="194" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="13219-13223" Line="208" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="13498-13502" Line="211" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="13525-13529" Line="211" Message="Possible multiple enumeration" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="14641-14664" Line="223" Message="Method 'BinarySearchGetLastTrue' is never used" />
-      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="16800-16824" Line="259" Message="Method 'BinarySearchGetFirstTrue' is never used" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="18960-18964" Line="300" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="19472-19476" Line="307" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="19589-19591" Line="310" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="19666-19679" Line="313" Message="Cannot resolve symbol 'Add'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="21607-21609" Line="347" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="21608-21610" Line="347" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22018-22020" Line="355" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22019-22021" Line="355" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22091-22093" Line="357" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22092-22094" Line="357" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22218-22222" Line="360" Message="Cannot resolve symbol 'node'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22225-22227" Line="360" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22842-22847" Line="375" Message="Cannot resolve symbol 'node1'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22849-22854" Line="375" Message="Cannot resolve symbol 'node2'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22854-22856" Line="375" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22956-22958" Line="378" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22957-22959" Line="378" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="23196-23201" Line="385" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="23393-23398" Line="386" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23626-23630" Line="390" Message="Cannot resolve symbol 'node'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23632-23637" Line="390" Message="Cannot resolve symbol 'child'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23637-23639" Line="390" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="25388-25393" Line="419" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="25803-25808" Line="424" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="26054-26059" Line="426" Message="Possible multiple enumeration" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="26151-26156" Line="428" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="26892-26894" Line="440" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="26893-26895" Line="440" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="26928-26930" Line="442" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="26929-26931" Line="442" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27089-27090" Line="447" Message="Cannot resolve symbol 'i'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27090-27092" Line="447" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27233-27235" Line="453" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27234-27236" Line="453" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27421-27423" Line="460" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27422-27424" Line="460" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27471-27473" Line="461" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27472-27474" Line="461" Message="'(' or initializer expected" />
-      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="27522-27527" Line="463" Message="Possible multiple enumeration" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="28304-28308" Line="484" Message="Cannot resolve symbol 'node'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="28310-28319" Line="484" Message="Cannot resolve symbol 'neighbour'" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="28319-28321" Line="484" Message="'(' or initializer expected" />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="30797-30799" Line="521" Message="Tuple must contain at least two elements." />
-      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="30798-30800" Line="521" Message="'(' or initializer expected" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="10193-10211" Line="170" Message="Method 'NodePathToEdgePath' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10329-10333" Line="173" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="10478-10480" Line="175" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="10479-10481" Line="175" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10515-10519" Line="176" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10588-10592" Line="178" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="10642-10646" Line="179" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="11855-11870" Line="195" Message="Method 'PickRandomWhere' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="11991-11995" Line="198" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="12491-12495" Line="202" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="13388-13392" Line="216" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="13667-13671" Line="219" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="13694-13698" Line="219" Message="Possible multiple enumeration" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="14810-14833" Line="231" Message="Method 'BinarySearchGetLastTrue' is never used" />
+      <Issue TypeId="UnusedMember.Global" File="Utilities\Utils.cs" Offset="16969-16993" Line="267" Message="Method 'BinarySearchGetFirstTrue' is never used" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="19129-19133" Line="308" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="19641-19645" Line="315" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="19758-19760" Line="318" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="19835-19848" Line="321" Message="Cannot resolve symbol 'Add'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="21776-21778" Line="355" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="21777-21779" Line="355" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22187-22189" Line="363" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22188-22190" Line="363" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22260-22262" Line="365" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22261-22263" Line="365" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22387-22391" Line="368" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="22394-22396" Line="368" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23011-23016" Line="383" Message="Cannot resolve symbol 'node1'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23018-23023" Line="383" Message="Cannot resolve symbol 'node2'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23023-23025" Line="383" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23125-23127" Line="386" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23126-23128" Line="386" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="23365-23370" Line="393" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="23562-23567" Line="394" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23795-23799" Line="398" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23801-23806" Line="398" Message="Cannot resolve symbol 'child'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="23806-23808" Line="398" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="25557-25562" Line="427" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="25972-25977" Line="432" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="26223-26228" Line="434" Message="Possible multiple enumeration" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="26320-26325" Line="436" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27061-27063" Line="448" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27062-27064" Line="448" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27097-27099" Line="450" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27098-27100" Line="450" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27258-27259" Line="455" Message="Cannot resolve symbol 'i'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27259-27261" Line="455" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27402-27404" Line="461" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27403-27405" Line="461" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27590-27592" Line="468" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27591-27593" Line="468" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27640-27642" Line="469" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="27641-27643" Line="469" Message="'(' or initializer expected" />
+      <Issue TypeId="PossibleMultipleEnumeration" File="Utilities\Utils.cs" Offset="27691-27696" Line="471" Message="Possible multiple enumeration" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="28473-28477" Line="492" Message="Cannot resolve symbol 'node'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="28479-28488" Line="492" Message="Cannot resolve symbol 'neighbour'" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="28488-28490" Line="492" Message="'(' or initializer expected" />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="30966-30968" Line="529" Message="Tuple must contain at least two elements." />
+      <Issue TypeId="CSharpErrors" File="Utilities\Utils.cs" Offset="30967-30969" Line="529" Message="'(' or initializer expected" />
       <Issue TypeId="UnusedType.Global" File="Utilities\_NamespaceDocUtilities.cs" Offset="465-477" Line="8" Message="Class 'NamespaceDoc' is never used" />
       <Issue TypeId="UnusedType.Global" File="_NamespaceDocMain.cs" Offset="505-517" Line="8" Message="Class 'NamespaceDoc' is never used" />
     </Project>
