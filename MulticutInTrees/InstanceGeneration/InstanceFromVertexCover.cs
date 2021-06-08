@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using MulticutInTrees.CommandLineArguments;
@@ -17,6 +18,7 @@ namespace MulticutInTrees.InstanceGeneration
     /// <br/>
     /// Based on the method in Proposition 3.1 in <see href="https://link.springer.com/article/10.1007/BF02523685"/>.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class InstanceFromVertexCover
     {
         /// <summary>

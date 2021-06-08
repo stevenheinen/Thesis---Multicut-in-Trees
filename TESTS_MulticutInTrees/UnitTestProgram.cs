@@ -43,17 +43,5 @@ namespace TESTS_MulticutInTrees
 
             Program.Main(args);
         }
-
-        [TestMethod]
-        public void TestMain4()
-        {
-            string[] split = "--treeSeed=0 --dpSeed=5000 --repetitions=3 --experiments=5 --algorithm=ImprovedGuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=50 --nrDPs=35 --maxSolutionSize=0 -v".Split();
-            string[] args = new string[split.Length + 2];
-            split.CopyTo(args, 0);
-            args[^1] = "--outputDir=D:\\Downloads";
-            args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances";
-
-            Program.Main(args);
-        }
     }
 }

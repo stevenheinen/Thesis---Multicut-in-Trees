@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using MulticutInTrees.CommandLineArguments;
 using MulticutInTrees.CountedDatastructures;
@@ -17,6 +18,7 @@ namespace MulticutInTrees.InstanceGeneration
     /// <br/>
     /// Based on the method in Theorem 11 in <see href="https://doi.org/10.1016/S0196-6774(03)00073-7"/>.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class InstanceFromCNFSAT
     {
         /// <summary>
