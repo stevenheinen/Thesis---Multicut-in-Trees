@@ -168,7 +168,7 @@ namespace MulticutInTrees.ReductionRules
                 DemandPair demandPair = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).First(dp => dp.Node1 == v || dp.Node2 == v);
                 Node internalV = v.Degree(Measurements.TreeOperationsCounter) == 1 ? v.Neighbours(Measurements.TreeOperationsCounter).First() : v;
                 Node extremityA = demandPair.NodeIsPartOfPath(leftExtremity, MockCounter) ? leftExtremity : rightExtremity;
-                Node extremityB = demandPair.NodeIsPartOfPath(leftExtremity, MockCounter) ? leftExtremity : rightExtremity;
+                Node extremityB = extremityA == rightExtremity ? leftExtremity : rightExtremity;
 
                 HashSet<Node> allNodes = new();
 
