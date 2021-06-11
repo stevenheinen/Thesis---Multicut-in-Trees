@@ -9,16 +9,16 @@ using MulticutInTrees.ReductionRules;
 namespace MulticutInTrees.Algorithms
 {
     /// <summary>
-    /// <see cref="GuoNiedermeierKernelisation"/> kernelisation with improved reduction rules.
+    /// Equal to <see cref="GuoNiedermeierKernelisation"/>, except that rules <see cref="DominatedEdge"/> and <see cref="DominatedPath"/> are swapped.
     /// </summary>
-    public class ImprovedGuoNiedermeierKernelisation : GuoNiedermeierKernelisation
+    public class GuoNiedermeierKernelisationSwap34 : GuoNiedermeierKernelisation
     {
         /// <summary>
         /// Constructor for <see cref="GuoNiedermeierKernelisation"/>.
         /// </summary>
         /// <param name="instance">The <see cref="MulticutInstance"/> we want to solve.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <see langword="null"/>.</exception>
-        public ImprovedGuoNiedermeierKernelisation(MulticutInstance instance) : base(instance, AlgorithmType.ImprovedGuoNiedermeierKernelisation)
+        public GuoNiedermeierKernelisationSwap34(MulticutInstance instance) : base(instance, AlgorithmType.GuoNiedermeierKernelisationSwap34)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(instance, nameof(instance), "Trying to create an instance of a the Guo-Niedermeier FPT algorithm, but the problem instance is null!");
@@ -36,11 +36,11 @@ namespace MulticutInTrees.Algorithms
             UnitPath unitPath = new(Tree, DemandPairs, this);
             reductionRules.Add(unitPath);
 
-            ImprovedDominatedEdge improvedDominatedEdge = new(Tree, DemandPairs, this, DemandPairsPerEdge);
-            reductionRules.Add(improvedDominatedEdge);
-
             DominatedPath dominatedPath = new(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
+
+            DominatedEdge dominatedEdge = new(Tree, DemandPairs, this, DemandPairsPerEdge);
+            reductionRules.Add(dominatedEdge);
 
             DisjointPaths disjointPaths = new(Tree, DemandPairs, this, PartialSolution, K);
             reductionRules.Add(disjointPaths);

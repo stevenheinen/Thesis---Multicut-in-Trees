@@ -422,13 +422,7 @@ namespace MulticutInTrees.Utilities
                     if (nonSimpleWalk[i].Item1.Equals(nonSimpleWalk[j].Item2))
                     {
                         blossom = nonSimpleWalk.Skip(i).Take(j - i + 1).Select(n => n.Item1).ToHashSet();
-                        break;
                     }
-                }
-
-                if (blossom.Count != 0)
-                {
-                    break;
                 }
             }
 
@@ -462,7 +456,7 @@ namespace MulticutInTrees.Utilities
             graph.AddNodes(blossom, graphCounter);
             graph.AddEdges(originalEdges, graphCounter);
 
-            List<(TNode, TNode)> result = ExpandPath(contractedPath, blossom, contractedBlossomNode, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
+            List<(TNode, TNode)> result = ExpandPath<TGraph, TEdge, TNode>(contractedPath, blossom, contractedBlossomNode, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter, graph);
             return result;
         }
 
@@ -480,7 +474,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/>, <paramref name="matching"/>, <paramref name="originalNodes"/>, <paramref name="originalToD"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPath<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, TNode contractedBlossom, HashSet<(TNode, TNode)> matching, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPath<TGraph, TEdge, TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, TNode contractedBlossom, HashSet<(TNode, TNode)> matching, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter, TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom, but the path is null!");
@@ -516,11 +510,11 @@ namespace MulticutInTrees.Utilities
             // If the blossom is at the end of the path (either from the reverse above, or just because it already was), handle that case.
             if (contractedPath[^1].Item2.Equals(contractedBlossom))
             {
-                return ExpandPathBlossomOnEnd(contractedPath, blossom, matching, graphCounter);
+                return ExpandPathBlossomOnEnd<TGraph, TEdge, TNode>(contractedPath, blossom, matching, graphCounter, graph);
             }
 
             // The blossom is somewhere in the middle of the path. Handle that case.
-            return ExpandPathBlossomInMiddle(contractedPath, contractedBlossom, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
+            return ExpandPathBlossomInMiddle(contractedPath, contractedBlossom, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter, matching);
         }
 
         /// <summary>
@@ -533,7 +527,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPathBlossomOnEnd<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, HashSet<(TNode, TNode)> matching, Counter graphCounter) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPathBlossomOnEnd<TGraph, TEdge, TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, HashSet<(TNode, TNode)> matching, Counter graphCounter, TGraph graph) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom on the end of the path, but the path is null!");
@@ -576,7 +570,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="contractedBlossom"/>, <paramref name="originalNodes"/>, <paramref name="originalToD"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPathBlossomInMiddle<TNode>(List<(TNode, TNode)> contractedPath, TNode contractedBlossom, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPathBlossomInMiddle<TNode>(List<(TNode, TNode)> contractedPath, TNode contractedBlossom, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter, HashSet<(TNode, TNode)> matching) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the path is null!");

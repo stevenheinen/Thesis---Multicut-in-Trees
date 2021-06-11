@@ -97,21 +97,26 @@ namespace MulticutInTrees.ReductionRules
 
             DemandPair leftDP = null;
             DemandPair rightDP = null;
+            int leftLength = int.MaxValue;
+            int rightLength = int.MaxValue;
 
             foreach (DemandPair dp in DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeValuesCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
+                int newLength = dp.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Count(e => e.BetweenInternalNodes());
                 if (dp.EdgeIsPartOfPath(left, Measurements.DemandPairsOperationsCounter))
                 {
-                    if (leftDP is null || dp.LengthOfPath(Measurements.DemandPairsOperationsCounter) < leftDP.LengthOfPath(MockCounter))
+                    if (newLength < leftLength)
                     {
                         leftDP = dp;
+                        leftLength = newLength;
                     }
                 }
                 else
                 {
-                    if (rightDP is null || dp.LengthOfPath(Measurements.DemandPairsOperationsCounter) < rightDP.LengthOfPath(MockCounter))
+                    if (newLength < rightLength)
                     {
                         rightDP = dp;
+                        rightLength = newLength;
                     }
                 }
             }
@@ -147,36 +152,55 @@ namespace MulticutInTrees.ReductionRules
                 return false;
             }
 
-            Node v = leftDP.Node1 == node ? leftDP.Node2 : leftDP.Node1;
-            v = v.Degree(Measurements.TreeOperationsCounter) == 1 ? v.Neighbours(Measurements.TreeOperationsCounter).First() : v;
-            Node extremityA = leftDP.NodeIsPartOfPath(extremity1, MockCounter) ? extremity1 : extremity2;
-            Node extremityB = extremityA == extremity1 ? extremity2 : extremity1;
-
-            HashSet<Node> allNodes = new();
-
-            IEnumerable<Node> leftSide = DFS.FindPathBetween(extremityA, v, Measurements.TreeOperationsCounter);
-            foreach (Node n in leftSide)
+            HashSet<Node> rNeighbours = new();
+            rNeighbours.Add(leftDP.Node1 == node ? leftDP.Node2 : leftDP.Node1);
+            rNeighbours.Add(rightDP.Node1 == node ? rightDP.Node2 : rightDP.Node1);
+            foreach (DemandPair dp in DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
-                allNodes.Add(n);
-                foreach (Node leaf in n.Neighbours(Measurements.TreeOperationsCounter).Where(neighbour => neighbour.Degree(Measurements.TreeOperationsCounter) == 1))
+                rNeighbours.Add(dp.Node1 == node ? dp.Node2 : dp.Node1);
+            }
+
+            Node leftExtremity = leftDP.NodeIsPartOfPath(extremity1, MockCounter) ? extremity1 : extremity2;
+            Node rightExtremity = leftExtremity == extremity1 ? extremity2 : extremity1;
+
+            foreach (Node v in rNeighbours)
+            {
+                DemandPair demandPair = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).First(dp => dp.Node1 == v || dp.Node2 == v);
+                Node internalV = v.Degree(Measurements.TreeOperationsCounter) == 1 ? v.Neighbours(Measurements.TreeOperationsCounter).First() : v;
+                Node extremityA = demandPair.NodeIsPartOfPath(leftExtremity, MockCounter) ? leftExtremity : rightExtremity;
+                Node extremityB = demandPair.NodeIsPartOfPath(leftExtremity, MockCounter) ? leftExtremity : rightExtremity;
+
+                HashSet<Node> allNodes = new();
+
+                IEnumerable<Node> leftSide = DFS.FindPathBetween(extremityA, v, Measurements.TreeOperationsCounter);
+                foreach (Node n in leftSide)
                 {
-                    allNodes.Add(leaf);
+                    allNodes.Add(n);
+                    foreach (Node leaf in n.Neighbours(Measurements.TreeOperationsCounter).Where(neighbour => neighbour.Degree(Measurements.TreeOperationsCounter) == 1))
+                    {
+                        allNodes.Add(leaf);
+                    }
+                }
+
+                IEnumerable<Node> rightSide = DFS.FindPathBetween(extremityB, node, Measurements.TreeOperationsCounter);
+                foreach (Node n in rightSide)
+                {
+                    allNodes.Add(n);
+                    foreach (Node leaf in n.Neighbours(Measurements.TreeOperationsCounter).Where(neighbour => neighbour.Degree(Measurements.TreeOperationsCounter) == 1))
+                    {
+                        allNodes.Add(leaf);
+                    }
+                }
+
+                IEnumerable<DemandPair> dpsInMatching = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Where(dp => allNodes.Contains(dp.Node1) && allNodes.Contains(dp.Node2));
+
+                if (CreateGraphAndComputeMatching(allNodes, dpsInMatching))
+                {
+                    return true;
                 }
             }
 
-            IEnumerable<Node> rightSide = DFS.FindPathBetween(extremityB, node, Measurements.TreeOperationsCounter);
-            foreach (Node n in rightSide)
-            {
-                allNodes.Add(n);
-                foreach (Node leaf in n.Neighbours(Measurements.TreeOperationsCounter).Where(neighbour => neighbour.Degree(Measurements.TreeOperationsCounter) == 1))
-                {
-                    allNodes.Add(leaf);
-                }
-            }
-
-            IEnumerable<DemandPair> dpsInMatching = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Where(dp => allNodes.Contains(dp.Node1) && allNodes.Contains(dp.Node2));
-
-            return CreateGraphAndComputeMatching(allNodes, dpsInMatching);
+            return false;
         }
 
         /// <summary>

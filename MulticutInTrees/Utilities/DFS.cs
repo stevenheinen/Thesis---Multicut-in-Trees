@@ -92,6 +92,11 @@ namespace MulticutInTrees.Utilities
             seen.Add(startNode);
             result.Add(startNode);
 
+            if (startNode == findNode)
+            {
+                return result;
+            }
+
             // Keep track of which node pushed which node onto the stack to test for cycles.
             Dictionary<TNode, TNode> pushingNode = new();
             if (acyclicCheck || findPath)

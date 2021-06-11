@@ -621,6 +621,8 @@ namespace MulticutInTrees.Algorithms
                 (NodeType.I3, NodeType.I2) => UpdateCaterpillarComponentsI2I3Node(contractedEdge.Endpoint2, measurements),
                 (NodeType.L1, NodeType.I1) => UpdateCaterpillarComponentsL1I1Node(contractedEdge.Endpoint2, measurements),
                 (NodeType.I1, NodeType.L1) => UpdateCaterpillarComponentsL1I1Node(contractedEdge.Endpoint1, measurements),
+                (NodeType.L2, NodeType.I2) => contractedEdge.Endpoint2.Degree(measurements.TreeOperationsCounter) <= 3,
+                (NodeType.I2, NodeType.L2) => contractedEdge.Endpoint1.Degree(measurements.TreeOperationsCounter) <= 3,
                 _ => false
             };
         }
@@ -691,22 +693,8 @@ namespace MulticutInTrees.Algorithms
             {
                 return false;
             }
-            int oldValue = CaterpillarComponentPerNode[internalNeighbours.First(n => !n.Equals(i1Node)), MockCounter];
-            int newValue = CaterpillarComponentPerNode[internalNeighbours.Last(n => !n.Equals(i1Node)), MockCounter];
-            List<Node> keysToBeModified = new();
-            foreach (KeyValuePair<Node, int> kv in CaterpillarComponentPerNode.GetCountedEnumerable(measurements.TreeOperationsCounter))
-            {
-                if (kv.Value == oldValue)
-                {
-                    keysToBeModified.Add(kv.Key);
-                }
-            }
-            foreach (Node key in keysToBeModified)
-            {
-                CaterpillarComponentPerNode[key, MockCounter] = newValue;
-            }
 
-            return false;
+            return true;
         }
 
         /// <summary>

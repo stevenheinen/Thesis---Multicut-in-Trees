@@ -40,8 +40,8 @@ namespace MulticutInTrees.Algorithms
         /// </summary>
         ChenKernelisation,
         /// <summary>
-        /// Guo and Niedermeier's kernelisation algorithm with improved reduction rules.
+        /// Guo and Niedermeier's kernelisation algorithm with rules 3 and 4 swapped.
         /// </summary>
-        ImprovedGuoNiedermeierKernelisation,
+        GuoNiedermeierKernelisationSwap34,
     }
 }
