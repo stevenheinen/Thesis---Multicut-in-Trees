@@ -216,6 +216,10 @@ namespace MulticutInTrees.Utilities
             NullCheck(list, nameof(list), "Trying to pick a random element from an IEnumerable, but the IEnumerable is null!");
             NullCheck(random, nameof(random), "Trying to pick a random element from an IEnumerable, but the random number generator is null!");
 #endif
+            if (!list.Any())
+            {
+                return default;
+            }
             return list.ElementAt(random.Next(list.Count()));
         }
 

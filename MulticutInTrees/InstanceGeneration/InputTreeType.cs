@@ -30,6 +30,10 @@ namespace MulticutInTrees.InstanceGeneration
         /// <summary>
         /// A fixed tree, for instance used in tests.
         /// </summary>
-        Fixed
+        Fixed,
+        /// <summary>
+        /// A tree with bounded degree 3. Has many I3-nodes, and few I2-nodes.
+        /// </summary>
+        Degree3Tree
     }
 }

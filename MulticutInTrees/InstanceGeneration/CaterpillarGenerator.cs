@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Accord.Statistics.Distributions.Univariate;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Graphs;
 using MulticutInTrees.Utilities;
@@ -35,7 +36,9 @@ namespace MulticutInTrees.InstanceGeneration
 #endif
             // Determine the number of internal nodes and the number of children.
             // Since there are 2 I1-nodes, and at least 2 L1-leaves, we do - 4. (And +1 to make sure no extra leaves is also possible, making - 3.)
-            int numberOfInternalNodes = random.Next(numberOfNodes - 3);
+            BetaDistribution betaDistribution = new(2.0, 8.0);
+            int numberOfInternalNodes = (int)Math.Round(betaDistribution.Generate(random) * (numberOfNodes - 4));
+            //int numberOfInternalNodes = random.Next(numberOfNodes - 3); OLD: uniform random backbone length
             int numberOfLeaves = numberOfNodes - 4 - numberOfInternalNodes;
 
             // Keep track of the ids we have encountered.
@@ -50,7 +53,7 @@ namespace MulticutInTrees.InstanceGeneration
             tree.AddNode(leftI1, MockCounter);
 
             // List of internal nodes for the leaves to attach to.
-            List<Node> internalNodes = new();
+            List<Node> internalNodes = new() { leftI1, rightI1 };
 
             // Create all I2-nodes
             Node last = leftI1;

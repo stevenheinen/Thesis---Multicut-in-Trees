@@ -102,6 +102,12 @@ namespace MulticutInTrees.CommandLineArguments
         public string InstanceDirectory { get; set; }
 
         /// <summary>
+        /// Whether to overwrite existing instances if they already exist.
+        /// </summary>
+        [Option("overwrite", HelpText = "Whether to overwrite existing instances if they already exist.")]
+        public bool Overwrite { get; set; }
+
+        /// <summary>
         /// Whether the program should run in debug mode.
         /// </summary>
         [Option('v', "verbose", HelpText = "Whether the program should run in verbose mode.")]

@@ -99,10 +99,21 @@ namespace MulticutInTrees.Experiments
             sb.Append($"{experimentMessage} on the following instance: {options.Experiments} different experiments, each with {options.Repetitions} repetitions, tree seed {treeSeed}, dp seed {dpSeed}, ");
             sb.Append(options.MaxSolutionSize > 0 ? $"a maximum solution size of {options.MaxSolutionSize}, " : "the optimal solution size, ");
 
-            if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar)
+            if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar || options.InputTreeType == InputTreeType.Degree3Tree)
             {
                 sb.Append($"a {options.InputTreeType} tree with {options.NumberOfNodes} nodes, ");
-                sb.Append(options.InputDemandPairsType == InputDemandPairsType.Random ? $"and {options.NumberOfDemandPairs} randomly generated demand pairs." : $"and {options.NumberOfDemandPairs} demand pairs generated using {options.DistanceDistribution} as distribution.");
+                if (options.InputDemandPairsType == InputDemandPairsType.Random)
+                {
+                    sb.Append($"and {options.NumberOfDemandPairs} randomly generated demand pairs.");
+                }
+                else if (options.InputDemandPairsType == InputDemandPairsType.LengthDistribution)
+                {
+                    sb.Append($"and {options.NumberOfDemandPairs} demand pairs generated using {options.DistanceDistribution} as distribution.");
+                }
+                else if (options.InputDemandPairsType == InputDemandPairsType.ThroughKnownSolution)
+                {
+                    sb.Append($"and {options.NumberOfDemandPairs} randomly generated through a known solution of size {options.MaxSolutionSize}.");
+                }
             }
             else
             {

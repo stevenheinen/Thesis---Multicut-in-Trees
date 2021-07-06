@@ -221,7 +221,7 @@ namespace MulticutInTrees.InstanceGeneration
             StringBuilder fileNameBuilder = new();
             fileNameBuilder.Append($"{options.InstanceDirectory}\\MulticutInstance_treeSeed={treeSeed}_dpSeed={dpSeed}_treeType={options.InputTreeType}_dpType={options.InputDemandPairsType}");
 
-            if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar)
+            if (options.InputTreeType == InputTreeType.Prufer || options.InputTreeType == InputTreeType.Caterpillar || options.InputTreeType == InputTreeType.Degree3Tree)
             {
                 fileNameBuilder.Append($"_nrNodes={options.NumberOfNodes}");
             }
@@ -241,6 +241,10 @@ namespace MulticutInTrees.InstanceGeneration
             else if (options.InputDemandPairsType == InputDemandPairsType.LengthDistribution)
             {
                 fileNameBuilder.Append($"_dpLengthDist=({options.DistanceDistribution})");
+            }
+            else if (options.InputDemandPairsType == InputDemandPairsType.ThroughKnownSolution)
+            {
+                fileNameBuilder.Append($"_nrDPs={options.NumberOfDemandPairs}_solSize={options.MaxSolutionSize}");
             }
 
             fileNameBuilder.Append(".txt");

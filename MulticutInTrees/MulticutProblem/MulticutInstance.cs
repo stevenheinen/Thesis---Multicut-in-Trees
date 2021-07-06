@@ -119,8 +119,8 @@ namespace MulticutInTrees.MulticutProblem
 #endif
             Counter mockCounter = new();
 
-            // Try to read the instance from the files
-            (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = InstanceReaderWriter.ReadInstance(treeSeed, dpSeed, options);
+            // Try to read the instance from the files, or create a new one if we want to overwrite the existing instance.
+            (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) = options.Overwrite ? CreateInstance(treeSeed, dpSeed, options) : InstanceReaderWriter.ReadInstance(treeSeed, dpSeed, options);
 
             if (tree is null)
             {
@@ -183,6 +183,7 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="options">The <see cref="CommandLineOptions"/>.</param>
         /// <returns>A tuple with a <see cref="Graph"/>, a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s, and the optimal K value for this instance.</returns>
         /// <exception cref="ApplicationException">Thrown when an invalid combination of <see cref="CommandLineOptions.InputTreeType"/> and <see cref="CommandLineOptions.InputDemandPairsType"/> is provided.</exception>
+        /// <exception cref="Exception">Thrown when Gurobi finds a differently sized solution than expected when creating <see cref="DemandPair"/>s through a known solution.</exception>
         private static (Graph tree, CountedCollection<DemandPair> demandPairs, int optimalK) CreateInputTreeAndDemandPairs(int treeSeed, int dpSeed, CommandLineOptions options)
         {
             switch (options.InputTreeType, options.InputDemandPairsType)
@@ -205,6 +206,14 @@ namespace MulticutInTrees.MulticutProblem
                         //int optimalK = algorithm.Run(options.Verbose);
                         //return (tree, demandPairs, optimalK);
                     }
+                case (InputTreeType.Prufer, InputDemandPairsType.ThroughKnownSolution):
+                    {
+                        Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
+                        CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
+                    }
                 case (InputTreeType.Caterpillar, InputDemandPairsType.Random):
                     {
                         Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
@@ -222,6 +231,40 @@ namespace MulticutInTrees.MulticutProblem
                         //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
                         //int optimalK = algorithm.Run(options.Verbose);
                         //return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Caterpillar, InputDemandPairsType.ThroughKnownSolution):
+                    {
+                        Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
+                        CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Degree3Tree, InputDemandPairsType.Random):
+                    {
+                        Graph tree = BinaryTreeGenerator.CreateBinaryTree(options.NumberOfNodes);
+                        CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Degree3Tree, InputDemandPairsType.LengthDistribution):
+                    {
+                        //Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
+                        //Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                        // todo: implement length distribution
+                        throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!");
+                        //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        //int optimalK = algorithm.Run(options.Verbose);
+                        //return (tree, demandPairs, optimalK);
+                    }
+                case (InputTreeType.Degree3Tree, InputDemandPairsType.ThroughKnownSolution):
+                    {
+                        Graph tree = BinaryTreeGenerator.CreateBinaryTree(options.NumberOfNodes);
+                        CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.Verbose);
+                        return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.VertexCover, InputDemandPairsType.FromTreeInstance):
                     {
