@@ -27,19 +27,6 @@ namespace MulticutInTrees
 #endif
             Console.WriteLine("Hello World!");
 
-            PoissonDistribution poissonDistribution = new((int)Math.Round(128 / 6f));
-            ChiSquareDistribution chiSquareDistribution = new((int)Math.Round(128 / 6f));
-            BetaDistribution betaDistribution = new(2.0, 8.0);
-            Random random = new(13584);
-            Random random2 = new(13584);
-            Random random3 = new(13584);
-            int[] values = poissonDistribution.Generate(100, random);
-            int[] values2 = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(chiSquareDistribution.Generate(100, random), i => (int)Math.Round(i)));
-            int[] values3 = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(betaDistribution.Generate(100, random), i => (int)Math.Round(i * 128)));
-
-
-
-
             // For debug purposes only. Should not be included in the final version of the program.
             if (args.Length == 0)
             {
@@ -55,7 +42,7 @@ namespace MulticutInTrees
                 //string[] split = "--treeSeed=7811831 --dpSeed=5951100 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisationSwap34 --treeType=Prufer --dpType=Random --nrNodes=256 --nrDPs=896 --maxSolutionSize=0 -v".Split();
                 //string[] split = "--treeSeed=3257804 --dpSeed=1639694 --repetitions=1 --experiments=1 --algorithm=GenerateInstances --treeType=Caterpillar --dpType=Random --nrNodes=128 --nrDPs=512 --maxSolutionSize=0 -v".Split();
 
-                string[] split = "--treeSeed=1 --dpSeed=8173076 --repetitions=1 --experiments=1 --algorithm=GenerateInstances --treeType=Degree3Tree --dpType=ThroughKnownSolution --nrNodes=128 --nrDPs=128 --maxSolutionSize=6 -v".Split();
+                string[] split = "--treeSeed=2263414 --dpSeed=8878088 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=ThroughKnownSolution --nrNodes=768 --nrDPs=256 --maxSolutionSize=10 -v".Split();
 
                 args = new string[split.Length + 2];
                 split.CopyTo(args, 0);

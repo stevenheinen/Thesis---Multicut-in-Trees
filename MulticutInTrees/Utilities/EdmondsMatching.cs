@@ -55,6 +55,10 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(graph, nameof(graph), $"Trying to find a matching of size at least {requiredSize} in a graph, but the graph is null!");
             Utils.NullCheck(graphCounter, nameof(graphCounter), $"Trying to find a matching of size at least {requiredSize} in a graph, but the counter is null!");
 #endif
+            if (graph.NumberOfEdges(graphCounter) < requiredSize)
+            {
+                return false;
+            }
             HashSet<(TNode, TNode)> matching = GreedyMatching.FindGreedyMaximalMatching<TGraph, TEdge, TNode>(graph, graphCounter).ToHashSet();
             return RecursiveHasMatchingOfAtLeast<TGraph, TEdge, TNode>(graph, requiredSize, matching, graphCounter);
         }

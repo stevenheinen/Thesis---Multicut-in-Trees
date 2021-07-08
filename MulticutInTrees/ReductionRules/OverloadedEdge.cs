@@ -29,11 +29,6 @@ namespace MulticutInTrees.ReductionRules
         private List<Edge<Node>> PartialSolution { get; }
 
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge.
-        /// </summary>
-        private CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
-
-        /// <summary>
         /// Constructor for the <see cref="OverloadedEdge"/> reduction rule.
         /// </summary>
         /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
@@ -41,17 +36,15 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
-        /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s per edge.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/>, <paramref name="partialSolution"/> or <paramref name="demandPairsPerEdge"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public OverloadedEdge(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize, CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge) : base(tree, demandPairs, algorithm)
+        public OverloadedEdge(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the input tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list of demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
             Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the partial solution is null!");
-            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per edge is null!");
             if (maxSolutionSize < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxSolutionSize), $"Trying to create an instance of the {GetType().Name} reduction rule, but the maximum number of edges that can be cut is smaller than zero!");
@@ -59,27 +52,7 @@ namespace MulticutInTrees.ReductionRules
 #endif
             MaxSolutionSize = maxSolutionSize;
             PartialSolution = partialSolution;
-            DemandPairsPerEdge = demandPairsPerEdge;
             MockCounter = new Counter();
-        }
-
-        /// <summary>
-        /// Checks, given a <see cref="Dictionary{TKey, TValue}"/> with per edge how many length-2 <see cref="DemandPair"/>s pass through it, which edges are overloaded.
-        /// </summary>
-        /// <param name="edgeOccurrences"><see cref="Dictionary{TKey, TValue}"/> with the number of length-2 <see cref="DemandPair"/>s per edge.</param>
-        /// <returns>A <see cref="CountedList{T}"/> of edges that can be cut.</returns>
-        private CountedList<Edge<Node>> DetermineOverloadedEdges(CountedDictionary<Edge<Node>, int> edgeOccurrences)
-        {
-            CountedList<Edge<Node>> overloadedEdges = new();
-            int k = MaxSolutionSize - PartialSolution.Count;
-            foreach (KeyValuePair<Edge<Node>, int> edge in edgeOccurrences.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                if (edge.Value > k)
-                {
-                    overloadedEdges.Add(edge.Key, Measurements.TreeOperationsCounter);
-                }
-            }
-            return overloadedEdges;
         }
 
         /// <summary>
@@ -89,6 +62,7 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/> successfully, <see langword="false"/> otherwise.</returns>
         private bool TryApplyReductionRule(IEnumerable<DemandPair> demandPairsToCheck)
         {
+            int k = MaxSolutionSize - PartialSolution.Count;
             CountedDictionary<Edge<Node>, int> edgeOccurrences = new();
             foreach (DemandPair demandPair in demandPairsToCheck)
             {
@@ -110,10 +84,22 @@ namespace MulticutInTrees.ReductionRules
 
                 edgeOccurrences[edge1, Measurements.TreeOperationsCounter]++;
                 edgeOccurrences[edge2, Measurements.TreeOperationsCounter]++;
+
+                if (edgeOccurrences[edge1, Measurements.TreeOperationsCounter] > k)
+                {
+                    CountedList<Edge<Node>> edgeToBeCut = new();
+                    edgeToBeCut.Add(edge1, Measurements.TreeOperationsCounter);
+                    return TryCutEdges(edgeToBeCut);
+                }
+                if (edgeOccurrences[edge2, Measurements.TreeOperationsCounter] > k)
+                {
+                    CountedList<Edge<Node>> edgeToBeCut = new();
+                    edgeToBeCut.Add(edge2, Measurements.TreeOperationsCounter);
+                    return TryCutEdges(edgeToBeCut);
+                }
             }
 
-            CountedList<Edge<Node>> edgesToBeCut = DetermineOverloadedEdges(edgeOccurrences);
-            return TryCutEdges(edgesToBeCut);
+            return false;
         }
 
         /// <inheritdoc/>
@@ -123,45 +109,10 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<DemandPair> demandPairsToCheck = new();
-
-            foreach ((Edge<Node> _, Node _, CountedCollection<DemandPair> demandPairs) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                foreach (DemandPair demandPair in demandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-                {
-                    demandPairsToCheck.Add(demandPair);
-                }
-            }
-
-            foreach ((CountedList<Edge<Node>> _, DemandPair demandPair) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                if (demandPair.LengthOfPath(Measurements.DemandPairsOperationsCounter) != 2)
-                {
-                    continue;
-                }
-
-                if (DemandPairsPerEdge.TryGetValue(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).First(), out CountedCollection<DemandPair> dpsFirst, Measurements.DemandPairsPerEdgeKeysCounter))
-                {
-                    foreach (DemandPair dp in dpsFirst.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
-                    {
-                        demandPairsToCheck.Add(dp);
-                    }
-                }
-                if (DemandPairsPerEdge.TryGetValue(demandPair.EdgesOnDemandPath(Measurements.TreeOperationsCounter).Last(), out CountedCollection<DemandPair> dpsLast, Measurements.DemandPairsPerEdgeKeysCounter))
-                {
-                    foreach (DemandPair dp in dpsLast.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
-                    {
-                        demandPairsToCheck.Add(dp);
-                    }
-                }
-            }
-
             LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
             LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-
-            return TryApplyReductionRule(demandPairsToCheck);
+            return TryApplyReductionRule(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }
 
         /// <inheritdoc/>

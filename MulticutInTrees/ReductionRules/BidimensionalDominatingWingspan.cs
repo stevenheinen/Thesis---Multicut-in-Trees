@@ -129,10 +129,23 @@ namespace MulticutInTrees.ReductionRules
                 {
                     result.Add(path[i]);
                 }
+                else if (path[i].Type == NodeType.I1)
+                {
+                    Node internalNeighbour = path[i].Neighbours(MockCounter).FirstOrDefault(n => n.Type == NodeType.I2);
+                    if (!(internalNeighbour is null) && CaterpillarComponentPerNode[internalNeighbour, MockCounter] == CaterpillarComponentPerNode[node, MockCounter])
+                    {
+                        result.Add(path[i]);
+                        foreach (Node neighbour in path[i].Neighbours(Measurements.TreeOperationsCounter))
+                        {
+                            result.Add(neighbour);
+                        }
+                        continue;
+                    }
+                }
 
                 if (i == 0 || i == path.Count - 1)
                 {
-                    foreach (Node neighbour in path[i].Neighbours(Measurements.TreeOperationsCounter).Where(n => (CaterpillarComponentPerNode[n, MockCounter] == CaterpillarComponentPerNode[node, MockCounter]) && (n.Type == NodeType.L1 || n.Type == NodeType.L2 || n.Type == NodeType.L3)))
+                    foreach (Node neighbour in path[i].Neighbours(Measurements.TreeOperationsCounter).Where(n => CaterpillarComponentPerNode[n, MockCounter] == CaterpillarComponentPerNode[node, MockCounter] && n.Type == NodeType.L2))
                     {
                         result.Add(neighbour);
                     }
@@ -196,7 +209,6 @@ namespace MulticutInTrees.ReductionRules
 
                 if (ApplyReductionRule(node))
                 {
-                    // todo: Immediately stops after a single node was successful for now.
                     return TryContractEdges(new CountedList<Edge<Node>>(new List<Edge<Node>>() { Tree.GetNeighbouringEdges(node, Measurements.TreeOperationsCounter).First() }, Measurements.TreeOperationsCounter));
                 }
             }

@@ -72,13 +72,12 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <summary>
-        /// Determine the <see cref="DemandPair"/>s that can be deleted. A <see cref="DemandPair"/> can be deleted when there are at least k+1 <see cref="DemandPair"/>s starting at a node v and going to nodes in the same caterpillar component that does not contain v. We delete the longest of these paths.
+        /// Determine the <see cref="DemandPair"/> that can be deleted. A <see cref="DemandPair"/> can be deleted when there are at least k+1 <see cref="DemandPair"/>s starting at a node v and going to nodes in the same caterpillar component that does not contain v. We delete the longest of these paths.
         /// </summary>
-        /// <returns>A <see cref="CountedList{T}"/> with <see cref="DemandPair"/>s that can be deleted.</returns>
-        private CountedList<DemandPair> DeterminePairsToBeDeleted()
+        /// <returns>A <see cref="CountedList{T}"/> with the <see cref="DemandPair"/> that can be deleted, or no elements when no <see cref="DemandPair"/> can be deleted.</returns>
+        private CountedList<DemandPair> DeterminePairToBeDeleted()
         {
             int k = MaxSolutionSize - PartialSolution.Count;
-            CountedList<DemandPair> result = new();
             foreach (Node node in DemandPairsPerNode.GetKeys(Measurements.DemandPairsPerEdgeKeysCounter))
             {
                 CountedCollection<DemandPair> demandPairs = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter];
@@ -108,10 +107,12 @@ namespace MulticutInTrees.ReductionRules
                     {
                         continue;
                     }
+                    CountedList<DemandPair> result = new();
                     result.Add(pairsToComponent.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Aggregate((n, m) => n.LengthOfPath(Measurements.DemandPairsOperationsCounter) > m.LengthOfPath(Measurements.DemandPairsOperationsCounter) ? n : m), Measurements.DemandPairsOperationsCounter);
+                    return result;
                 }
             }
-            return result;
+            return new CountedList<DemandPair>();
         }
 
         /// <inheritdoc/>
@@ -124,13 +125,16 @@ namespace MulticutInTrees.ReductionRules
             LastContractedEdges.Clear(MockCounter);
             LastRemovedDemandPairs.Clear(MockCounter);
             LastChangedDemandPairs.Clear(MockCounter);
-            foreach (KeyValuePair<Node, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
+            if (CaterpillarComponentPerNode.Count(MockCounter) == 0)
             {
-                CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);
+                foreach (KeyValuePair<Node, int> kv in DFS.DetermineCaterpillarComponents(Tree.Nodes(Measurements.TreeOperationsCounter), Measurements.TreeOperationsCounter))
+                {
+                    CaterpillarComponentPerNode.Add(kv.Key, kv.Value, MockCounter);
+                }
             }
 
             Measurements.TimeSpentCheckingApplicability.Start();
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
+            CountedList<DemandPair> pairsToBeDeleted = DeterminePairToBeDeleted();
             return TryRemoveDemandPairs(pairsToBeDeleted);
         }
 
@@ -141,20 +145,10 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Applying the {GetType().Name} reduction rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
-
-            if (LastContractedEdges.Count(MockCounter) == 0 && LastChangedDemandPairs.Count(MockCounter) == 0)
-            {
-                LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-                Measurements.TimeSpentCheckingApplicability.Stop();
-                return false;
-            }
-
-            CountedList<DemandPair> pairsToBeDeleted = DeterminePairsToBeDeleted();
-
             LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
             LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-
+            CountedList<DemandPair> pairsToBeDeleted = DeterminePairToBeDeleted();
             return TryRemoveDemandPairs(pairsToBeDeleted);
         }
     }

@@ -399,6 +399,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             OverloadedCaterpillar overloadedCaterpillar = GetReductionRuleInAlgorithm(algorithm);
 
+            Assert.IsFalse(overloadedCaterpillar.RunFirstIteration());
+
             algorithm.RemoveDemandPair(dp3, MockMeasurements);
 
             Assert.IsFalse(overloadedCaterpillar.RunLaterIteration());

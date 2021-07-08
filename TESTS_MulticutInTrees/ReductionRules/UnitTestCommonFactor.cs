@@ -44,8 +44,10 @@ namespace TESTS_MulticutInTrees.ReductionRules
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
             List<Edge<Node>> partialSolution = new();
+            CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge = new();
+            CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode = new();
             int maxSolutionSize = 4;
-            CommonFactor commonFactor = new(tree, dps, algorithm, partialSolution, maxSolutionSize);
+            CommonFactor commonFactor = new(tree, dps, algorithm, demandPairsPerEdge, demandPairsPerNode, partialSolution, maxSolutionSize);
             Assert.IsNotNull(commonFactor);
         }
 
@@ -56,13 +58,17 @@ namespace TESTS_MulticutInTrees.ReductionRules
             CountedCollection<DemandPair> dps = new();
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
+            CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge = new();
+            CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode = new();
             List<Edge<Node>> partialSolution = new();
 
-            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(null, dps, algorithm, partialSolution, 3));
-            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, null, algorithm, partialSolution, 3));
-            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, dps, null, partialSolution, 3));
-            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, dps, algorithm, null, 3));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new CommonFactor(tree, dps, algorithm, partialSolution, -3));
+            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(null, dps, algorithm, demandPairsPerEdge, demandPairsPerNode, partialSolution, 3));
+            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, null, algorithm, demandPairsPerEdge, demandPairsPerNode, partialSolution, 3));
+            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, dps, null, demandPairsPerEdge, demandPairsPerNode, partialSolution, 3));
+            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, dps, algorithm, null, demandPairsPerNode, partialSolution, 3));
+            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, dps, algorithm, demandPairsPerEdge, null, partialSolution, 3));
+            Assert.ThrowsException<ArgumentNullException>(() => new CommonFactor(tree, dps, algorithm, demandPairsPerEdge, demandPairsPerNode, null, 3));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => new CommonFactor(tree, dps, algorithm, demandPairsPerEdge, demandPairsPerNode, partialSolution, -3));
         }
 
         [TestMethod]
@@ -231,7 +237,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Node node5 = new(5);
             Node node6 = new(6);
             Node node7 = new(7);
-            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7 }, MockCounter);
+            Node node8 = new(8);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8 }, MockCounter);
             Edge<Node> edge01 = new(node0, node1);
             Edge<Node> edge02 = new(node0, node2);
             Edge<Node> edge13 = new(node1, node3);
@@ -239,10 +246,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Edge<Node> edge25 = new(node2, node5);
             Edge<Node> edge26 = new(node2, node6);
             Edge<Node> edge07 = new(node0, node7);
-            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14, edge25, edge26, edge07 }, MockCounter);
+            Edge<Node> edge38 = new(node3, node8);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14, edge25, edge26, edge07, edge38 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new(1, node0, node3, tree);
+            DemandPair dp1 = new(1, node0, node8, tree);
             DemandPair dp2 = new(2, node1, node4, tree);
             DemandPair dp3 = new(3, node7, node5, tree);
             DemandPair dp4 = new(4, node7, node6, tree);
@@ -273,7 +281,8 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Node node5 = new(5);
             Node node6 = new(6);
             Node node7 = new(7);
-            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7 }, MockCounter);
+            Node node8 = new(8);
+            tree.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8 }, MockCounter);
             Edge<Node> edge01 = new(node0, node1);
             Edge<Node> edge02 = new(node0, node2);
             Edge<Node> edge13 = new(node1, node3);
@@ -281,10 +290,11 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Edge<Node> edge25 = new(node2, node5);
             Edge<Node> edge26 = new(node2, node6);
             Edge<Node> edge07 = new(node0, node7);
-            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14, edge25, edge26, edge07 }, MockCounter);
+            Edge<Node> edge38 = new(node3, node8);
+            tree.AddEdges(new List<Edge<Node>>() { edge01, edge02, edge13, edge14, edge25, edge26, edge07, edge38 }, MockCounter);
             tree.UpdateNodeTypes();
 
-            DemandPair dp1 = new(1, node0, node3, tree);
+            DemandPair dp1 = new(1, node0, node8, tree);
             DemandPair dp2 = new(2, node1, node4, tree);
             DemandPair dp3 = new(3, node7, node5, tree);
             DemandPair dp4 = new(4, node7, node6, tree);

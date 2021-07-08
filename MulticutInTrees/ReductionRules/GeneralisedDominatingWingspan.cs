@@ -79,7 +79,17 @@ namespace MulticutInTrees.ReductionRules
         {
             int caterpillar = CaterpillarComponentPerNode[node, Measurements.TreeOperationsCounter];
             Node extremity1 = CaterpillarComponentPerNode.GetCountedEnumerable(Measurements.TreeOperationsCounter).First(kv => kv.Value == caterpillar && !(kv.Key.Neighbours(Measurements.TreeOperationsCounter).FirstOrDefault(n => CaterpillarComponentPerNode[n, Measurements.TreeOperationsCounter] != caterpillar) is null)).Key;
+            Node ex1Neighbour = extremity1.Neighbours(Measurements.TreeOperationsCounter).FirstOrDefault(n => n.Type == NodeType.I1);
+            if (!(ex1Neighbour is null))
+            {
+                extremity1 = ex1Neighbour;
+            }
             Node extremity2 = CaterpillarComponentPerNode.GetCountedEnumerable(Measurements.TreeOperationsCounter).Last(kv => kv.Value == caterpillar && !(kv.Key.Neighbours(Measurements.TreeOperationsCounter).FirstOrDefault(n => CaterpillarComponentPerNode[n, Measurements.TreeOperationsCounter] != caterpillar) is null)).Key;
+            Node ex2Neighbour = extremity2.Neighbours(Measurements.TreeOperationsCounter).FirstOrDefault(n => n.Type == NodeType.I1);
+            if (!(ex2Neighbour is null))
+            {
+                extremity2 = ex2Neighbour;
+            }
             return (extremity1, extremity2);
         }
 
@@ -171,14 +181,18 @@ namespace MulticutInTrees.ReductionRules
                 Node extremityB = extremityA == rightExtremity ? leftExtremity : rightExtremity;
 
                 HashSet<Node> allNodes = new();
+                HashSet<Node> allNodesLeft = new();
+                HashSet<Node> allNodesRight = new();
 
                 IEnumerable<Node> leftSide = DFS.FindPathBetween(extremityA, v, Measurements.TreeOperationsCounter);
                 foreach (Node n in leftSide)
                 {
                     allNodes.Add(n);
+                    allNodesLeft.Add(n);
                     foreach (Node leaf in n.Neighbours(Measurements.TreeOperationsCounter).Where(neighbour => neighbour.Degree(Measurements.TreeOperationsCounter) == 1))
                     {
                         allNodes.Add(leaf);
+                        allNodesLeft.Add(leaf);
                     }
                 }
 
@@ -186,13 +200,15 @@ namespace MulticutInTrees.ReductionRules
                 foreach (Node n in rightSide)
                 {
                     allNodes.Add(n);
+                    allNodesRight.Add(n);
                     foreach (Node leaf in n.Neighbours(Measurements.TreeOperationsCounter).Where(neighbour => neighbour.Degree(Measurements.TreeOperationsCounter) == 1))
                     {
                         allNodes.Add(leaf);
+                        allNodesRight.Add(leaf);
                     }
                 }
 
-                IEnumerable<DemandPair> dpsInMatching = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Where(dp => allNodes.Contains(dp.Node1) && allNodes.Contains(dp.Node2));
+                IEnumerable<DemandPair> dpsInMatching = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Where(dp => (allNodesLeft.Contains(dp.Node1) && allNodesRight.Contains(dp.Node2)) || (allNodesLeft.Contains(dp.Node2) && allNodesRight.Contains(dp.Node1)));
 
                 if (CreateGraphAndComputeMatching(allNodes, dpsInMatching))
                 {
@@ -249,7 +265,6 @@ namespace MulticutInTrees.ReductionRules
 
                 if (ApplyReductionRule(node))
                 {
-                    // todo: Immediately stops after a single node was successful for now.
                     return TryContractEdges(new CountedList<Edge<Node>>(new List<Edge<Node>>() { Tree.GetNeighbouringEdges(node, Measurements.TreeOperationsCounter).First() }, Measurements.TreeOperationsCounter));
                 }
             }

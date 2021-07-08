@@ -19,14 +19,14 @@ namespace MulticutInTrees.ReductionRules
     public class CommonFactor : ReductionRule
     {
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> with per <see cref="DemandPair"/> the <see cref="DemandPair"/>s it intersects with.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="Edge{TNode}"/>.
         /// </summary>
-        private CountedDictionary<DemandPair, CountedCollection<DemandPair>> IntersectingDemandPairs { get; }
-
+        protected CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> DemandPairsPerEdge { get; }
+        
         /// <summary>
-        /// <see cref="CountedDictionary{TKey, TValue}"/> with the edges that are the intersection between two <see cref="DemandPair"/>s.
+        /// <see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="Node"/>.
         /// </summary>
-        private CountedDictionary<(DemandPair, DemandPair), CountedCollection<Edge<Node>>> DemandPairIntersections { get; }
+        protected CountedDictionary<Node, CountedCollection<DemandPair>> DemandPairsPerNode { get; }
 
         /// <summary>
         /// The maximum size the solution is allowed to have.
@@ -44,16 +44,20 @@ namespace MulticutInTrees.ReductionRules
         /// <param name="tree">The input <see cref="Graph"/> in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="algorithm">The <see cref="Algorithm"/> this <see cref="ReductionRule"/> is part of.</param>
+        /// <param name="demandPairsPerEdge"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="Edge{TNode}"/>.</param>
+        /// <param name="demandPairsPerNode"><see cref="CountedDictionary{TKey, TValue}"/> containing a <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/> per <see cref="Node"/>.</param>
         /// <param name="partialSolution">The <see cref="List{T}"/> with the edges that are definitely part of the solution.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/>, <paramref name="demandPairs"/>, <paramref name="algorithm"/> or <paramref name="partialSolution"/> is <see langword="null"/>.</exception>"
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxSolutionSize"/> is smaller than zero.</exception>
-        public CommonFactor(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
+        public CommonFactor(Graph tree, CountedCollection<DemandPair> demandPairs, Algorithm algorithm, CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> demandPairsPerEdge, CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode, List<Edge<Node>> partialSolution, int maxSolutionSize) : base(tree, demandPairs, algorithm)
         {
 #if !EXPERIMENT
             Utils.NullCheck(tree, nameof(tree), $"Trying to create an instance of the {GetType().Name} reduction rule, but the tree is null!");
             Utils.NullCheck(demandPairs, nameof(demandPairs), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with demand pairs is null!");
             Utils.NullCheck(algorithm, nameof(algorithm), $"Trying to create an instance of the {GetType().Name} reduction rule, but the algorithm it is part of is null!");
+            Utils.NullCheck(demandPairsPerEdge, nameof(demandPairsPerEdge), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per edge is null!");
+            Utils.NullCheck(demandPairsPerNode, nameof(demandPairsPerNode), $"Trying to create an instance of the {GetType().Name} reduction rule, but the dictionary with demand pairs per node is null!");
             Utils.NullCheck(partialSolution, nameof(partialSolution), $"Trying to create an instance of the {GetType().Name} reduction rule, but the list with the partial solution is null!");
             if (maxSolutionSize < 0)
             {
@@ -61,72 +65,34 @@ namespace MulticutInTrees.ReductionRules
             }
 #endif
             MockCounter = new Counter();
+            DemandPairsPerEdge = demandPairsPerEdge;
+            DemandPairsPerNode = demandPairsPerNode;
             PartialSolution = partialSolution;
             MaxSolutionSize = maxSolutionSize;
-            IntersectingDemandPairs = new CountedDictionary<DemandPair, CountedCollection<DemandPair>>();
-            DemandPairIntersections = new CountedDictionary<(DemandPair, DemandPair), CountedCollection<Edge<Node>>>();
         }
 
         /// <summary>
-        /// Checks whether this <see cref="ReductionRule"/> is applicable on <paramref name="p0"/>.
+        /// Uses the <see cref="AbstractNode{TNode}.ID"/> of the endpoints of <paramref name="e1"/> and <paramref name="e2"/> to sort <paramref name="e1"/> and <paramref name="e2"/> in order to be used as key.
         /// </summary>
-        /// <param name="p0">The <see cref="DemandPair"/> for which we want to know if this rule is applicable.</param>
-        /// <param name="intersectingPairs">The <see cref="CountedCollection{T}"/> with <see cref="DemandPair"/>s that intersect <paramref name="p0"/>.</param>
-        /// <param name="intersectingPairCount">The number of <see cref="DemandPair"/>s that intersect with <paramref name="p0"/>.</param>
-        /// <param name="k">The remaining number of edges that can be cut.</param>
-        /// <returns><see langword="true"/> if this <see cref="ReductionRule"/> can be applied on <paramref name="p0"/>, <see langword="false"/> otherwise.</returns>
-        private bool CheckApplicabilitySinglePair(DemandPair p0, CountedCollection<DemandPair> intersectingPairs, int intersectingPairCount, int k)
+        /// <param name="e1">The first <see cref="Edge{TNode}"/>.</param>
+        /// <param name="e2">The second <see cref="Edge{TNode}"/>.</param>
+        /// <returns>A tuple with <paramref name="e1"/> and <paramref name="e2"/> sorted on the unique ID of their endpoints.</returns>
+
+        private static (Edge<Node>, Edge<Node>) GetIntersectionKey(Edge<Node> e1, Edge<Node> e2)
         {
-            IEnumerable<Edge<Node>> p0Path = p0.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
-            int subsetFailCount = 0;
-            HashSet<(DemandPair, DemandPair)> checkedPairs = new();
-            foreach (DemandPair pi in intersectingPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
+            if (e1.Endpoint1.ID < e2.Endpoint1.ID)
             {
-                foreach (DemandPair pj in intersectingPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-                {
-                    if (pi == pj)
-                    {
-                        continue;
-                    }
-
-                    (DemandPair, DemandPair) key = GetIntersectionKey(pi, pj);
-                    if (checkedPairs.Contains(key))
-                    {
-                        continue;
-                    }
-
-                    checkedPairs.Add(key);
-
-                    // If key is not in the dictionary, pi and pj do not intersect, and since the empty set is a subset of every set, this is a correct case.
-                    if (!DemandPairIntersections.TryGetValue(key, out CountedCollection<Edge<Node>> intersection, Measurements.DemandPairsOperationsCounter))
-                    {
-                        continue;
-                    }
-
-                    if (!intersection.GetCountedEnumerable(Measurements.TreeOperationsCounter).IsSubsetOf(p0Path))
-                    {
-                        subsetFailCount++;
-                    }
-
-                    if (intersectingPairCount - subsetFailCount <= k)
-                    {
-                        return false;
-                    }
-                }
+                return (e1, e2);
             }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Uses <see cref="DemandPair.ID"/> to sort <paramref name="dp1"/> and <paramref name="dp2"/> in order to be used as key for <see cref="DemandPairIntersections"/>.
-        /// </summary>
-        /// <param name="dp1">The first <see cref="DemandPair"/>.</param>
-        /// <param name="dp2">The second <see cref="DemandPair"/>.</param>
-        /// <returns>A tuple with <paramref name="dp1"/> and <paramref name="dp2"/> sorted on their unique ID to be used as key for <see cref="DemandPairIntersections"/>.</returns>
-        private static (DemandPair, DemandPair) GetIntersectionKey(DemandPair dp1, DemandPair dp2)
-        {
-            return dp1.ID < dp2.ID ? (dp1, dp2) : (dp2, dp1);
+            if (e2.Endpoint1.ID < e1.Endpoint1.ID)
+            {
+                return (e2, e1);
+            }
+            if (e1.Endpoint2.ID < e2.Endpoint2.ID)
+            {
+                return (e1, e2);
+            }
+            return (e2, e1);
         }
 
         /// <summary>
@@ -136,172 +102,155 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we were able to apply this <see cref="ReductionRule"/>, <see langword="false"/> otherwise.</returns>
         private bool CheckApplicability(IEnumerable<DemandPair> demandPairsToCheck)
         {
-            List<DemandPair> pairsToBeRemoved = new();
-
-            int k = MaxSolutionSize - PartialSolution.Count;
             foreach (DemandPair p0 in demandPairsToCheck)
             {
-                if (!IntersectingDemandPairs.TryGetValue(p0, out CountedCollection<DemandPair> intersectingPairs, Measurements.DemandPairsOperationsCounter))
+                if (CheckApplicabilitySinglePair(p0))
                 {
-                    continue;
-                }
-
-                int intersectingPairCount = intersectingPairs.Count(Measurements.DemandPairsOperationsCounter);
-                if (intersectingPairCount <= k)
-                {
-                    continue;
-                }
-
-                if (CheckApplicabilitySinglePair(p0, intersectingPairs, intersectingPairCount, k))
-                {
-                    pairsToBeRemoved.Add(p0);
+                    CountedList<DemandPair> pairsToBeRemoved = new(); 
+                    pairsToBeRemoved.Add(p0, Measurements.DemandPairsOperationsCounter);
+                    return TryRemoveDemandPairs(pairsToBeRemoved);
                 }
             }
 
-            return TryRemoveDemandPairs(new CountedList<DemandPair>(pairsToBeRemoved, Measurements.DemandPairsOperationsCounter));
+            return false;
         }
 
         /// <summary>
-        /// Computes the intersections of every two <see cref="DemandPair"/>s and saves information in <see cref="IntersectingDemandPairs"/> and <see cref="DemandPairIntersections"/>.
+        /// Find the set of edges Z: the edges that share an endpoint with a node on <paramref name="p0"/>, but do not lie on <paramref name="p0"/> itself. Also computes the set <paramref name="dps"/> with <see cref="DemandPair"/>s that start at a node on <paramref name="p0"/>.
         /// </summary>
-        private void FindInitialIntersections()
+        /// <param name="p0">The current <see cref="DemandPair"/> we are checking.</param>
+        /// <param name="dps">The set with <see cref="DemandPair"/>s that start at a node on <paramref name="p0"/>.</param>
+        /// <returns>A <see cref="HashSet{T}"/> with the edges that share an endpoint with a node on <paramref name="p0"/>, but do not lie on <paramref name="p0"/> itself.</returns>
+        private HashSet<Edge<Node>> FindSetZ(DemandPair p0, out HashSet<DemandPair> dps)
         {
-            IntersectingDemandPairs.Clear(MockCounter);
-            DemandPairIntersections.Clear(MockCounter);
-
-            int numberOfDPs = DemandPairs.Count(MockCounter);
-            List<DemandPair> temporaryDPs = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
-            for (int i = 0; i < numberOfDPs - 1; i++)
+            HashSet<Node> nodesOnP0 = new();
+            foreach (Edge<Node> edge in p0.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
             {
-                DemandPair dp1 = temporaryDPs[i];
-                IEnumerable<Edge<Node>> path1 = dp1.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
-                for (int j = i + 1; j < numberOfDPs; j++)
-                {
-                    DemandPair dp2 = temporaryDPs[j];
-                    IEnumerable<Edge<Node>> path2 = dp2.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter);
-                    IEnumerable<Edge<Node>> intersection = path1.Intersect(path2);
+                nodesOnP0.Add(edge.Endpoint1);
+                nodesOnP0.Add(edge.Endpoint2);
+            }
 
-                    if (!intersection.Any())
+            dps = new();
+            HashSet<Edge<Node>> z = new();
+            foreach (Node node in nodesOnP0)
+            {
+                if (DemandPairsPerNode.TryGetValue(node, out CountedCollection<DemandPair> d, Measurements.DemandPairsPerEdgeKeysCounter))
+                {
+                    foreach (DemandPair dp in d.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
+                    {
+                        dps.Add(dp);
+                    }
+                }
+                foreach (Edge<Node> neighbour in Tree.GetNeighbouringEdges(node, Measurements.TreeOperationsCounter))
+                {
+                    z.Add(neighbour);
+                }
+            }
+            foreach (Edge<Node> edge in p0.EdgesOnDemandPath(Measurements.TreeOperationsCounter))
+            {
+                z.Remove(edge);
+            }
+
+            return z;
+        }
+
+        /// <summary>
+        /// Find the set Y: the set of edges in Z, such that there starts a <see cref="DemandPair"/> at a node on P_0 that goes through this edge.
+        /// </summary>
+        /// <param name="p0">The current <see cref="DemandPair"/> we are checking.</param>
+        /// <param name="z">The set Z.</param>
+        /// <param name="dps">The set with <see cref="DemandPair"/>s that start at a node in P_0.</param>
+        /// <returns>The <see cref="HashSet{T}"/> Y.</returns>
+        private HashSet<Edge<Node>> FindSetY(DemandPair p0, HashSet<Edge<Node>> z, HashSet<DemandPair> dps)
+        {
+            HashSet<Edge<Node>> y = new();
+            foreach (Edge<Node> edge in z)
+            {
+                if (DemandPairsPerEdge.TryGetValue(edge, out CountedCollection<DemandPair> d, Measurements.DemandPairsPerEdgeKeysCounter))
+                {
+                    foreach (DemandPair dp in d.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
+                    {
+                        if (dps.Contains(dp) && dp.EdgesOnDemandPath(Measurements.TreeOperationsCounter).Any(e => p0.EdgeIsPartOfPath(e, Measurements.TreeOperationsCounter)))
+                        {
+                            y.Add(edge);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return y;
+        }
+
+        /// <summary>
+        /// Find the set of edges in the matching graph. An edge exists between two vertices if there is a <see cref="DemandPair"/> that goes through both edges the vertices represent.
+        /// </summary>
+        /// <param name="vertices"><see cref="IEnumerable{T}"/> of <see cref="Edge{TNode}"/>s that will be vertices in the matching graph.</param>
+        /// <returns>A <see cref="List{T}"/> with a tuple of two <see cref="Edge{TNode}"/>s that will become edges in the matching graph.</returns>
+        private List<(Edge<Node>, Edge<Node>)> FindEdgesForMatchingGraph(IEnumerable<Edge<Node>> vertices)
+        {
+            HashSet<(Edge<Node>, Edge<Node>)> checkedPairs = new();
+            List<(Edge<Node>, Edge<Node>)> edges = new();
+            foreach (Edge<Node> e1 in vertices)
+            {
+                foreach (Edge<Node> e2 in vertices)
+                {
+                    if (e1 == e2)
                     {
                         continue;
                     }
 
-                    if (!IntersectingDemandPairs.ContainsKey(dp1, MockCounter))
-                    {
-                        IntersectingDemandPairs[dp1, MockCounter] = new CountedCollection<DemandPair>();
-                    }
-                    IntersectingDemandPairs[dp1, Measurements.DemandPairsOperationsCounter].Add(dp2, Measurements.DemandPairsOperationsCounter);
-
-                    if (!IntersectingDemandPairs.ContainsKey(dp2, MockCounter))
-                    {
-                        IntersectingDemandPairs[dp2, MockCounter] = new CountedCollection<DemandPair>();
-                    }
-                    IntersectingDemandPairs[dp2, Measurements.DemandPairsOperationsCounter].Add(dp1, Measurements.DemandPairsOperationsCounter);
-
-                    DemandPairIntersections[GetIntersectionKey(dp1, dp2), MockCounter] = new CountedCollection<Edge<Node>>(intersection, MockCounter);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Prepares the data for a run in a later iteration by looking at removed <see cref="DemandPair"/>s.
-        /// </summary>
-        private void RunLaterIterationPreparationRemovedDemandPairs()
-        {
-            foreach (DemandPair dp in LastRemovedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                foreach (DemandPair intersectingDemandPair in IntersectingDemandPairs[dp, Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-                {
-                    DemandPairIntersections.Remove(GetIntersectionKey(dp, intersectingDemandPair), Measurements.DemandPairsOperationsCounter);
-                }
-
-                IntersectingDemandPairs.Remove(dp, Measurements.DemandPairsOperationsCounter);
-            }
-        }
-
-        /// <summary>
-        /// Prepares the data for a run in a later iteration by looking at contracted edges.
-        /// </summary>
-        /// <param name="pairsToCheck">The <see cref="HashSet{T}"/> that will contain all <see cref="DemandPair"/>s that need to be checked during the later iteration.</param>
-        private void RunLaterIterationPreparationContractedEdges(HashSet<DemandPair> pairsToCheck)
-        {
-            foreach ((Edge<Node> edge, Node _, CountedCollection<DemandPair> dps) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-            {
-                List<DemandPair> pairsOnEdge = dps.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).ToList();
-                for (int i = 0; i < pairsOnEdge.Count - 1; i++)
-                {
-                    if (!IntersectingDemandPairs.TryGetValue(pairsOnEdge[i], out CountedCollection<DemandPair> intersectionsI, Measurements.DemandPairsOperationsCounter))
+                    (Edge<Node>, Edge<Node>) key = GetIntersectionKey(e1, e2);
+                    if (checkedPairs.Contains(key))
                     {
                         continue;
                     }
+                    checkedPairs.Add(key);
 
-                    for (int j = i + 1; j < pairsOnEdge.Count; j++)
+                    if (DemandPairsPerEdge[key.Item1, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).Any(dp => DemandPairsPerEdge[key.Item2, Measurements.DemandPairsPerEdgeKeysCounter].Contains(dp, Measurements.DemandPairsPerEdgeValuesCounter)))
                     {
-                        if (!IntersectingDemandPairs.TryGetValue(pairsOnEdge[j], out CountedCollection<DemandPair> intersectionsJ, Measurements.DemandPairsOperationsCounter))
-                        {
-                            continue;
-                        }
-
-                        foreach (DemandPair candidateDP in intersectionsI.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Intersect(intersectionsJ.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter)))
-                        {
-                            pairsToCheck.Add(candidateDP);
-                        }
-
-                        (DemandPair, DemandPair) key = GetIntersectionKey(pairsOnEdge[i], pairsOnEdge[j]);
-                        DemandPairIntersections[key, Measurements.DemandPairsOperationsCounter].Remove(edge, Measurements.TreeOperationsCounter);
-                        if (DemandPairIntersections[key, MockCounter].Count(MockCounter) == 0)
-                        {
-                            DemandPairIntersections.Remove(key, MockCounter);
-                            IntersectingDemandPairs[pairsOnEdge[i], MockCounter].Remove(pairsOnEdge[j], MockCounter);
-                            IntersectingDemandPairs[pairsOnEdge[j], MockCounter].Remove(pairsOnEdge[i], MockCounter);
-                            if (IntersectingDemandPairs[pairsOnEdge[i], MockCounter].Count(MockCounter) == 0)
-                            {
-                                IntersectingDemandPairs.Remove(pairsOnEdge[i], MockCounter);
-                            }
-                            if (IntersectingDemandPairs[pairsOnEdge[j], MockCounter].Count(MockCounter) == 0)
-                            {
-                                IntersectingDemandPairs.Remove(pairsOnEdge[j], MockCounter);
-                            }
-                        }
+                        edges.Add(key);
                     }
                 }
             }
+            return edges;
         }
 
         /// <summary>
-        /// Prepares the data for a run in a later iteration by looking at changed <see cref="DemandPair"/>s.
+        /// Create the matching graph for the <see cref="DemandPair"/> <paramref name="p0"/> and check whether it has a matching of sufficient size.
         /// </summary>
-        /// <param name="pairsToCheck">The <see cref="HashSet{T}"/> that will contain all <see cref="DemandPair"/>s that need to be checked during the later iteration.</param>
-        private void RunLaterIterationPreparationChangedDemandPairs(HashSet<DemandPair> pairsToCheck)
+        /// <param name="p0">The current <see cref="DemandPair"/> we are checking.</param>
+        /// <returns><see langword="true"/> if we can apply this <see cref="ReductionRule"/> on <paramref name="p0"/>, <see langword="false"/> otherwise.</returns>
+        private bool CheckApplicabilitySinglePair(DemandPair p0)
         {
-            foreach ((CountedList<Edge<Node>> edges, DemandPair dp) in LastChangedDemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-            {
-                pairsToCheck.Add(dp);
+            HashSet<Edge<Node>> z = FindSetZ(p0, out HashSet<DemandPair> dps);
+            HashSet<Edge<Node>> y = FindSetY(p0, z, dps);
 
-                foreach (DemandPair intersectingDemandPair in IntersectingDemandPairs[dp, Measurements.DemandPairsOperationsCounter].GetCountedEnumerable(Measurements.DemandPairsOperationsCounter))
-                {
-                    pairsToCheck.Add(intersectingDemandPair);
-                    (DemandPair, DemandPair) key = GetIntersectionKey(dp, intersectingDemandPair);
-                    foreach (Edge<Node> edge in edges.GetCountedEnumerable(Measurements.TreeOperationsCounter))
-                    {
-                        DemandPairIntersections[key, Measurements.DemandPairsOperationsCounter].Remove(edge, Measurements.TreeOperationsCounter);
-                    }
-                    if (DemandPairIntersections[key, MockCounter].Count(MockCounter) == 0)
-                    {
-                        DemandPairIntersections.Remove(key, MockCounter);
-                        IntersectingDemandPairs[dp, MockCounter].Remove(intersectingDemandPair, MockCounter);
-                        IntersectingDemandPairs[intersectingDemandPair, MockCounter].Remove(dp, MockCounter);
-                        if (IntersectingDemandPairs[dp, MockCounter].Count(MockCounter) == 0)
-                        {
-                            IntersectingDemandPairs.Remove(dp, MockCounter);
-                        }
-                        if (IntersectingDemandPairs[intersectingDemandPair, MockCounter].Count(MockCounter) == 0)
-                        {
-                            IntersectingDemandPairs.Remove(intersectingDemandPair, MockCounter);
-                        }
-                    }
-                }
+            IEnumerable<Edge<Node>> vertices = z.Except(y);
+            List<(Edge<Node>, Edge<Node>)> edges = FindEdgesForMatchingGraph(vertices);
+
+            Dictionary<Edge<Node>, Node> edgeToNodeInMatchingGraph = new();
+            List<Node> matchingNodes = new();
+            List<Edge<Node>> matchingEdges = new();
+            uint nodeCounter = 0;
+            foreach (Edge<Node> edge in vertices)
+            {
+                Node n = new(nodeCounter++);
+                edgeToNodeInMatchingGraph[edge] = n;
+                matchingNodes.Add(n);
             }
+            foreach ((Edge<Node>, Edge<Node>) edgePair in edges)
+            {
+                Edge<Node> e = new(edgeToNodeInMatchingGraph[edgePair.Item1], edgeToNodeInMatchingGraph[edgePair.Item2]);
+                matchingEdges.Add(e);
+            }
+
+            Graph matchingGraph = new();
+            matchingGraph.AddNodes(matchingNodes, Measurements.TreeOperationsCounter);
+            matchingGraph.AddEdges(matchingEdges, Measurements.TreeOperationsCounter);
+
+            int k = MaxSolutionSize - PartialSolution.Count + 1 - y.Count;
+            return EdmondsMatching.HasMatchingOfSize<Graph, Edge<Node>, Node>(matchingGraph, k, Measurements.TreeOperationsCounter);
         }
 
         /// <inheritdoc/>
@@ -311,17 +260,10 @@ namespace MulticutInTrees.ReductionRules
             Console.WriteLine($"Executing {GetType().Name} rule in a later iteration");
 #endif
             Measurements.TimeSpentCheckingApplicability.Start();
-
-            HashSet<DemandPair> pairsToCheck = new();
-            RunLaterIterationPreparationRemovedDemandPairs();
-            RunLaterIterationPreparationContractedEdges(pairsToCheck);
-            RunLaterIterationPreparationChangedDemandPairs(pairsToCheck);
-
             LastContractedEdges.Clear(Measurements.TreeOperationsCounter);
             LastRemovedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
             LastChangedDemandPairs.Clear(Measurements.DemandPairsOperationsCounter);
-
-            return CheckApplicability(pairsToCheck);
+            return CheckApplicability(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }
 
         /// <inheritdoc/>
@@ -334,7 +276,6 @@ namespace MulticutInTrees.ReductionRules
             LastContractedEdges.Clear(MockCounter);
             LastRemovedDemandPairs.Clear(MockCounter);
             LastChangedDemandPairs.Clear(MockCounter);
-            FindInitialIntersections();
             Measurements.TimeSpentCheckingApplicability.Start();
             return CheckApplicability(DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter));
         }

@@ -129,7 +129,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Node node7 = new(7);
             Node node8 = new(8);
             Node node9 = new(9);
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Node node10 = new(10);
+            Node node11 = new(11);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11 }, MockCounter);
             Edge<Node> edge01 = new(node0, node1);
             Edge<Node> edge06 = new(node0, node6);
             Edge<Node> edge07 = new(node0, node7);
@@ -139,7 +141,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Edge<Node> edge34 = new(node3, node4);
             Edge<Node> edge48 = new(node4, node8);
             Edge<Node> edge49 = new(node4, node9);
-            graph.AddEdges(new List<Edge<Node>>() { edge01, edge06, edge07, edge12, edge23, edge25, edge34, edge48, edge49 }, MockCounter);
+            Edge<Node> edge810 = new(node8, node10);
+            Edge<Node> edge911 = new(node9, node11);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge06, edge07, edge12, edge23, edge25, edge34, edge48, edge49, edge810, edge911 }, MockCounter);
             graph.UpdateNodeTypes();
 
             DemandPair dp1 = new(1, node1, node3, graph);
@@ -170,7 +174,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Node node7 = new(7);
             Node node8 = new(8);
             Node node9 = new(9);
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9 }, MockCounter);
+            Node node10 = new(10);
+            Node node11 = new(11);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11 }, MockCounter);
             Edge<Node> edge01 = new(node0, node1);
             Edge<Node> edge06 = new(node0, node6);
             Edge<Node> edge07 = new(node0, node7);
@@ -180,7 +186,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Edge<Node> edge34 = new(node3, node4);
             Edge<Node> edge48 = new(node4, node8);
             Edge<Node> edge49 = new(node4, node9);
-            graph.AddEdges(new List<Edge<Node>>() { edge01, edge06, edge07, edge12, edge23, edge25, edge34, edge48, edge49 }, MockCounter);
+            Edge<Node> edge810 = new(node8, node10);
+            Edge<Node> edge911 = new(node9, node11);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge06, edge07, edge12, edge23, edge25, edge34, edge48, edge49, edge810, edge911 }, MockCounter);
             graph.UpdateNodeTypes();
 
             DemandPair dp1 = new(1, node1, node3, graph);

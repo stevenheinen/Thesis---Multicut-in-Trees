@@ -58,7 +58,7 @@ namespace MulticutInTrees.Algorithms
             DominatedPath dominatedPath = new(Tree, DemandPairs, this, DemandPairsPerEdge);
             reductionRules.Add(dominatedPath);
 
-            CommonFactor commonFactor = new(Tree, DemandPairs, this, PartialSolution, K);
+            CommonFactor commonFactor = new(Tree, DemandPairs, this, DemandPairsPerEdge, DemandPairsPerNode, PartialSolution, K);
             reductionRules.Add(commonFactor);
 
             BidimensionalDominatingWingspan bidimensionalDominatingWingspan = new(Tree, DemandPairs, this, DemandPairsPerNode, CaterpillarComponentPerNode, PartialSolution, K);

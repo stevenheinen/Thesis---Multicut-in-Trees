@@ -379,6 +379,27 @@ namespace MulticutInTrees.Graphs
             }
             InternalEdges.Remove(edge, counter);
         }
+        
+        /// <summary>
+        /// Removes all <typeparamref name="TEdge"/>s from this <see cref="AbstractGraph{TEdge, TNode}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for performance measurement.</param>
+        public virtual void RemoveAllEdges(Counter counter)
+        {
+            List<TEdge> edges = new(InternalEdges.GetCountedEnumerable(MockCounter));
+            RemoveEdges(edges, counter);
+        }
+
+        /// <summary>
+        /// Removes all <typeparamref name="TNode"/>s from this <see cref="AbstractGraph{TEdge, TNode}"/>.
+        /// </summary>
+        /// <param name="counter">The <see cref="Counter"/> to be used for performance measurement.</param>
+        public virtual void RemoveAllNodes(Counter counter)
+        {
+            RemoveAllEdges(counter);
+            List<TNode> nodes = new(InternalNodes.GetCountedEnumerable(MockCounter));
+            RemoveNodes(nodes, counter);
+        }
 
         /// <summary>
         /// Update the <see cref="NodeType"/> for all the nodes in this <see cref="AbstractGraph{TEdge, TNode}"/>.

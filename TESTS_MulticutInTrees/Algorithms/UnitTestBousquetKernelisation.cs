@@ -110,7 +110,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
             Assert.IsTrue(result.Item4.Solvable);
-            Assert.AreEqual(1, result.Item1.NumberOfNodes(MockCounter));
+            Assert.AreEqual(0, result.Item1.NumberOfNodes(MockCounter));
             Assert.AreEqual(3, result.Item2.Count);
             Assert.AreEqual(0, result.Item3.Count);
         }

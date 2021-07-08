@@ -117,6 +117,7 @@ namespace MulticutInTrees.Algorithms
                 if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
                 {
                     returnBool = true;
+                    Tree.RemoveAllNodes(MockCounter);
                     break;
                 }
                 if (PartialSolution.Count >= K)
@@ -165,6 +166,7 @@ namespace MulticutInTrees.Algorithms
                 if (DemandPairs.Count(AlgorithmPerformanceMeasurements.DemandPairsOperationsCounter) == 0)
                 {
                     returnBool = true;
+                    Tree.RemoveAllNodes(MockCounter);
                     break;
                 }
                 if (PartialSolution.Count >= K)
@@ -615,8 +617,8 @@ namespace MulticutInTrees.Algorithms
             {
                 (NodeType.I1, NodeType.I2) => UpdateCaterpillarComponentsI1I2Node(contractedEdge.Endpoint2, measurements),
                 (NodeType.I2, NodeType.I1) => UpdateCaterpillarComponentsI1I2Node(contractedEdge.Endpoint1, measurements),
-                (NodeType.I1, NodeType.I3) => UpdateCaterpillarComponentsI1I3Node(contractedEdge.Endpoint1, contractedEdge.Endpoint2, measurements),
-                (NodeType.I3, NodeType.I1) => UpdateCaterpillarComponentsI1I3Node(contractedEdge.Endpoint2, contractedEdge.Endpoint1, measurements),
+                (NodeType.I1, NodeType.I3) => UpdateCaterpillarComponentsI1I3Node(contractedEdge.Endpoint2, measurements),
+                (NodeType.I3, NodeType.I1) => UpdateCaterpillarComponentsI1I3Node(contractedEdge.Endpoint1, measurements),
                 (NodeType.I2, NodeType.I3) => UpdateCaterpillarComponentsI2I3Node(contractedEdge.Endpoint1, measurements),
                 (NodeType.I3, NodeType.I2) => UpdateCaterpillarComponentsI2I3Node(contractedEdge.Endpoint2, measurements),
                 (NodeType.L1, NodeType.I1) => UpdateCaterpillarComponentsL1I1Node(contractedEdge.Endpoint2, measurements),
@@ -682,11 +684,10 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Update the caterpillar components when an edge between a <see cref="NodeType.I1"/>-node and a <see cref="NodeType.I3"/>-node is contracted.
         /// </summary>
-        /// <param name="i1Node">The <see cref="NodeType.I1"/>-node of the contracted edge.</param>
         /// <param name="i3Node">The <see cref="NodeType.I3"/>-node of the contracted edge.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> that need to be used.</param>
         /// <returns>Whether the caterpillar components have to be recomputed after the edge contraction.</returns>
-        private bool UpdateCaterpillarComponentsI1I3Node(Node i1Node, Node i3Node, PerformanceMeasurements measurements)
+        private bool UpdateCaterpillarComponentsI1I3Node(Node i3Node, PerformanceMeasurements measurements)
         {
             IEnumerable<Node> internalNeighbours = i3Node.Neighbours(measurements.TreeOperationsCounter).Where(n => n.Degree(MockCounter) > 1);
             if (internalNeighbours.Count() > 3)

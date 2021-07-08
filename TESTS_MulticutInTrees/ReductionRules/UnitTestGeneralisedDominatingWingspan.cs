@@ -148,7 +148,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new(4, node8, node0, graph);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, graph, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, graph, demandPairs, 2, 2);
             BousquetKernelisation algorithm = new(instance);
 
             GeneralisedDominatingWingspan bidimensionalDominatingWingspan = GetReductionRuleInAlgorithm(algorithm);
@@ -219,7 +219,9 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Node node8 = new(8);
             Node node9 = new(9);
             Node node10 = new(10);
-            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10 }, MockCounter);
+            Node node11 = new(11);
+            Node node12 = new(12);
+            graph.AddNodes(new List<Node>() { node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12 }, MockCounter);
             Edge<Node> edge01 = new(node0, node1);
             Edge<Node> edge06 = new(node0, node6);
             Edge<Node> edge07 = new(node0, node7);
@@ -230,16 +232,19 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Edge<Node> edge410 = new(node4, node10);
             Edge<Node> edge108 = new(node10, node8);
             Edge<Node> edge109 = new(node10, node9);
-            graph.AddEdges(new List<Edge<Node>>() { edge01, edge06, edge07, edge12, edge23, edge25, edge34, edge410, edge108, edge109 }, MockCounter);
+            Edge<Node> edge811 = new(node8, node11);
+            Edge<Node> edge912 = new(node9, node12);
+            graph.AddEdges(new List<Edge<Node>>() { edge01, edge06, edge07, edge12, edge23, edge25, edge34, edge410, edge108, edge109, edge811, edge912 }, MockCounter);
             graph.UpdateNodeTypes();
 
             DemandPair dp1 = new(1, node5, node6, graph);
             DemandPair dp2 = new(2, node5, node9, graph);
             DemandPair dp3 = new(3, node6, node3, graph);
             DemandPair dp4 = new(4, node10, node0, graph);
-            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
+            DemandPair dp5 = new(5, node2, node7, graph);
+            CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, graph, demandPairs, 1, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, graph, demandPairs, 2, 2);
             BousquetKernelisation algorithm = new(instance);
 
             GeneralisedDominatingWingspan bidimensionalDominatingWingspan = GetReductionRuleInAlgorithm(algorithm);
@@ -289,7 +294,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new(1, node0, node5, graph);
             DemandPair dp2 = new(2, node0, node11, graph);
             DemandPair dp3 = new(3, node3, node1, graph);
-            DemandPair dp4 = new(4, node2, node10, graph);
+            DemandPair dp4 = new(4, node2, node13, graph);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
 
             MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, graph, demandPairs, 1, 1);
