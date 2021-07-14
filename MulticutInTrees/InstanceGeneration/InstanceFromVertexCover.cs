@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using MulticutInTrees.Algorithms;
 using MulticutInTrees.CommandLineArguments;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
@@ -40,6 +41,11 @@ namespace MulticutInTrees.InstanceGeneration
             Graph vertexCoverGraph = ReadVertexCoverGraph(options.InstanceFilePath, out int optimalK);
             Graph multicutTree = CreateMulticutTree(vertexCoverGraph.Nodes(MockCounter), vertexCoverGraph.NumberOfNodes(MockCounter), out Node[] nodesInTree);
             CountedCollection<DemandPair> demandPairs = CreateDemandPairs(multicutTree, nodesInTree, vertexCoverGraph.Edges(MockCounter));
+            if (optimalK == 0)
+            {
+                GurobiMIPAlgorithm algorithm = new(multicutTree, demandPairs.GetLinkedList());
+                optimalK = algorithm.Run(options.Verbose);
+            }
             return (multicutTree, demandPairs, optimalK);
         }
 
@@ -88,8 +94,8 @@ namespace MulticutInTrees.InstanceGeneration
                 }
 
                 Graph graph = new();
-                Node[] nodes = new Node[numberOfNodes + 1];
-                for (uint i = 1; i <= numberOfNodes; i++)
+                Node[] nodes = new Node[numberOfNodes];
+                for (uint i = 0; i < numberOfNodes; i++)
                 {
                     Node node = new(i);
                     nodes[i] = node;
@@ -138,8 +144,8 @@ namespace MulticutInTrees.InstanceGeneration
         {
             Graph graph = new();
             nodesInTree = new Node[numberOfNodes + 1];
-            Node center = new(0);
-            nodesInTree[0] = center;
+            Node center = new((uint)numberOfNodes);
+            nodesInTree[numberOfNodes] = center;
             
             foreach (Node node in nodesInVertexCoverGraph)
             {
@@ -148,7 +154,7 @@ namespace MulticutInTrees.InstanceGeneration
             }
 
             graph.AddNodes(nodesInTree, MockCounter);
-            graph.AddEdges(nodesInTree.Skip(1).Select(n => new Edge<Node>(n, center)), MockCounter);
+            graph.AddEdges(nodesInTree.SkipLast(1).Select(n => new Edge<Node>(n, center)), MockCounter);
             graph.UpdateNodeTypes();
             return graph;
         }

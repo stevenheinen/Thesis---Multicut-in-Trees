@@ -112,21 +112,32 @@ namespace MulticutInTrees.ReductionRules
 
             foreach (DemandPair dp in DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeValuesCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
-                int newLength = dp.EdgesOnDemandPath(Measurements.DemandPairsOperationsCounter).Count(e => e.BetweenInternalNodes());
+                Node otherEndpoint = dp.Node1 == node ? dp.Node2 : dp.Node1;
+                if (otherEndpoint.Type == NodeType.L2 && otherEndpoint.Neighbours(Measurements.TreeOperationsCounter).First() == parent)
+                {
+                    return (null, null);
+                }
+
+                int dpLength = dp.LengthOfPath(Measurements.DemandPairsOperationsCounter);
+                if (otherEndpoint.Degree(Measurements.TreeOperationsCounter) == 1)
+                {
+                    dpLength--;
+                }
+
                 if (dp.EdgeIsPartOfPath(left, Measurements.DemandPairsOperationsCounter))
                 {
-                    if (newLength < leftLength)
+                    if (dpLength < leftLength)
                     {
                         leftDP = dp;
-                        leftLength = newLength;
+                        leftLength = dpLength;
                     }
                 }
-                else
+                else if (dp.EdgeIsPartOfPath(right, Measurements.DemandPairsOperationsCounter))
                 {
-                    if (newLength < rightLength)
+                    if (dpLength < rightLength)
                     {
                         rightDP = dp;
-                        rightLength = newLength;
+                        rightLength = dpLength;
                     }
                 }
             }
@@ -154,31 +165,49 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we can apply this <see cref="ReductionRule"/> on <paramref name="node"/>, <see langword="false"/> otherwise.</returns>
         private bool ApplyReductionRule(Node node)
         {
-            (Node extremity1, Node extremity2) = ComputeExtremities(node);
             (DemandPair leftDP, DemandPair rightDP) = MinimalDPs(node);
-
-            if (leftDP is null || rightDP is null || !LeafCoversItsWingspan(extremity1, extremity2, leftDP, rightDP))
+            if (leftDP is null || rightDP is null)
             {
                 return false;
             }
 
-            HashSet<Node> rNeighbours = new();
-            rNeighbours.Add(leftDP.Node1 == node ? leftDP.Node2 : leftDP.Node1);
-            rNeighbours.Add(rightDP.Node1 == node ? rightDP.Node2 : rightDP.Node1);
+            (Node extremity1, Node extremity2) = ComputeExtremities(node);
+            if (!LeafCoversItsWingspan(extremity1, extremity2, leftDP, rightDP))
+            {
+                return false;
+            }
+
+            Dictionary<Node, bool> rNeighbours = new();
+            Node leftEndpoint = leftDP.Node1 == node ? leftDP.Node2 : leftDP.Node1;
+            Node rightEndpoint = rightDP.Node1 == node ? rightDP.Node2 : rightDP.Node1;
+            Node parent = node.Neighbours(Measurements.TreeOperationsCounter).First();
+            Edge<Node> left = Tree.GetNeighbouringEdges(parent, Measurements.TreeOperationsCounter).First(e => e.BetweenInternalNodes());
+            Edge<Node> right = Tree.GetNeighbouringEdges(parent, Measurements.TreeOperationsCounter).Last(e => e.BetweenInternalNodes());
+            int leftLength = leftEndpoint.Degree(Measurements.TreeOperationsCounter) == 1 ? leftDP.LengthOfPath(Measurements.DemandPairsOperationsCounter) - 1 : leftDP.LengthOfPath(Measurements.DemandPairsOperationsCounter);
+            int rightLength = rightEndpoint.Degree(Measurements.TreeOperationsCounter) == 1 ? rightDP.LengthOfPath(Measurements.DemandPairsOperationsCounter) - 1 : rightDP.LengthOfPath(Measurements.DemandPairsOperationsCounter);
             foreach (DemandPair dp in DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
-                rNeighbours.Add(dp.Node1 == node ? dp.Node2 : dp.Node1);
+                Node otherEndpoint = dp.Node1 == node ? dp.Node2 : dp.Node1;
+                bool degreeIsOne = otherEndpoint.Degree(Measurements.TreeOperationsCounter) == 1;
+                int dpLength = degreeIsOne ? dp.LengthOfPath(Measurements.DemandPairsOperationsCounter) - 1 : dp.LengthOfPath(Measurements.DemandPairsOperationsCounter);
+                Node nodeToAdd = degreeIsOne ? otherEndpoint.Neighbours(Measurements.TreeOperationsCounter).First() : otherEndpoint;
+                if (dp.EdgeIsPartOfPath(left, Measurements.DemandPairsOperationsCounter) && dpLength <= leftLength)
+                {
+                    rNeighbours[nodeToAdd] = true;
+                }
+                else if (dp.EdgeIsPartOfPath(right, Measurements.DemandPairsOperationsCounter) && dpLength <= rightLength)
+                {
+                    rNeighbours[nodeToAdd] = false;
+                }
             }
 
             Node leftExtremity = leftDP.NodeIsPartOfPath(extremity1, MockCounter) ? extremity1 : extremity2;
             Node rightExtremity = leftExtremity == extremity1 ? extremity2 : extremity1;
 
-            foreach (Node v in rNeighbours)
+            foreach ((Node v, bool toTheLeft) in rNeighbours)
             {
-                DemandPair demandPair = DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).First(dp => dp.Node1 == v || dp.Node2 == v);
-                Node internalV = v.Degree(Measurements.TreeOperationsCounter) == 1 ? v.Neighbours(Measurements.TreeOperationsCounter).First() : v;
-                Node extremityA = demandPair.NodeIsPartOfPath(leftExtremity, MockCounter) ? leftExtremity : rightExtremity;
-                Node extremityB = extremityA == rightExtremity ? leftExtremity : rightExtremity;
+                Node extremityA = toTheLeft ? leftExtremity : rightExtremity;
+                Node extremityB = toTheLeft ? rightExtremity : leftExtremity;
 
                 HashSet<Node> allNodes = new();
                 HashSet<Node> allNodesLeft = new();

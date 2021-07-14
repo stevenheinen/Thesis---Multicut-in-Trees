@@ -209,11 +209,12 @@ namespace TESTS_MulticutInTrees.Utilities
 
             List<(Node, Node)> contractedPath = new() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5) };
             HashSet<Node> blossom = new() { node5, node6, node7, node8, node9, node10, node11, node12, node13 };
+            HashSet<(Node, Node)> edgesInBlossom = new() { (node5, node6), (node6, node7), (node7, node8), (node8, node9), (node9, node10), (node10, node11), (node11, node12), (node12, node13), (node5, node13) };
             HashSet<(Node, Node)> matching = new() { (node1, node2), (node3, node4), (node5, node6), (node7, node8), (node9, node10), (node11, node12) };
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomOnEnd", BindingFlags.NonPublic | BindingFlags.Static);
             method = method.MakeGenericMethod(new Type[1] { typeof(Node) });
-            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, blossom, matching, MockCounter });
+            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, blossom, edgesInBlossom, matching, MockCounter });
 
             List<(Node, Node)> expectedPath = new() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5), (node5, node6), (node6, node7), (node7, node8), (node8, node9), (node9, node10), (node10, node11), (node11, node12), (node12, node13) };
             Assert.AreEqual(13, augmentingPath.Count);
@@ -258,11 +259,12 @@ namespace TESTS_MulticutInTrees.Utilities
 
             List<(Node, Node)> contractedPath = new() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5) };
             HashSet<Node> blossom = new() { node5, node6, node7, node8, node9, node10, node11, node12, node13 };
+            HashSet<(Node, Node)> edgesInBlossom = new() { (node5, node6), (node6, node7), (node7, node8), (node8, node9), (node9, node10), (node10, node11), (node11, node12), (node12, node13), (node5, node13) };
             HashSet<(Node, Node)> matching = new() { (node1, node2), (node3, node4), (node5, node6), (node8, node9), (node10, node11), (node12, node13) };
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomOnEnd", BindingFlags.NonPublic | BindingFlags.Static);
             method = method.MakeGenericMethod(new Type[1] { typeof(Node) });
-            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, blossom, matching, MockCounter });
+            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, blossom, edgesInBlossom, matching, MockCounter });
 
             List<(Node, Node)> expectedPath = new() { (node0, node1), (node1, node2), (node2, node3), (node3, node4), (node4, node5), (node5, node6), (node6, node7) };
             Assert.AreEqual(7, augmentingPath.Count);

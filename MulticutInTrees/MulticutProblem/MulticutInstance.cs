@@ -242,7 +242,7 @@ namespace MulticutInTrees.MulticutProblem
                     }
                 case (InputTreeType.Degree3Tree, InputDemandPairsType.Random):
                     {
-                        Graph tree = BinaryTreeGenerator.CreateBinaryTree(options.NumberOfNodes);
+                        Graph tree = Degree3TreeGenerator.CreateDegree3Tree(options.NumberOfNodes);
                         CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
                         int optimalK = algorithm.Run(options.Verbose);
@@ -260,7 +260,7 @@ namespace MulticutInTrees.MulticutProblem
                     }
                 case (InputTreeType.Degree3Tree, InputDemandPairsType.ThroughKnownSolution):
                     {
-                        Graph tree = BinaryTreeGenerator.CreateBinaryTree(options.NumberOfNodes);
+                        Graph tree = Degree3TreeGenerator.CreateDegree3Tree(options.NumberOfNodes);
                         CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
                         int optimalK = algorithm.Run(options.Verbose);

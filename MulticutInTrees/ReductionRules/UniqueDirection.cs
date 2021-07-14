@@ -305,6 +305,7 @@ namespace MulticutInTrees.ReductionRules
 #if VERBOSEDEBUG
             Console.WriteLine($"Applying {GetType().Name} rule in a later iteration");
 #endif
+            Measurements.TimeSpentCheckingApplicability.Start();
             HashSet<Node> nodesToCheck = new();
 
             foreach ((Edge<Node> _, Node node, CountedCollection<DemandPair> _) in LastContractedEdges.GetCountedEnumerable(Measurements.TreeOperationsCounter))

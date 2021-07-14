@@ -99,6 +99,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
+            Measurements.TimeSpentCheckingApplicability.Stop();
             return false;
         }
 

@@ -212,6 +212,13 @@ namespace MulticutInTrees.Utilities
 
             if (Utils.IsSimplePath(pathPPrime))
             {
+                //todo:temp
+                if (pathPPrime.Count > 0 && !IsAugmentingPath(pathPPrime, matching))
+                {
+                    throw new Exception();
+                }
+
+
                 return pathPPrime;
             }
 
@@ -418,6 +425,7 @@ namespace MulticutInTrees.Utilities
             Utils.NullCheck(nonSimpleWalk, nameof(nonSimpleWalk), "Trying to find and contract a blossom, but the list with the non-simple walk is null!");
             Utils.NullCheck(matching, nameof(matching), "Trying to find and contract a blossom, but the list with the current matching is null!");
 #endif
+            HashSet<(TNode, TNode)> edgesInBlossom = new();
             HashSet<TNode> blossom = new();
             for (int i = 0; i < nonSimpleWalk.Count - 1; i++)
             {
@@ -425,7 +433,9 @@ namespace MulticutInTrees.Utilities
                 {
                     if (nonSimpleWalk[i].Item1.Equals(nonSimpleWalk[j].Item2))
                     {
-                        blossom = nonSimpleWalk.Skip(i).Take(j - i + 1).Select(n => n.Item1).ToHashSet();
+                        IEnumerable<(TNode, TNode)> temp = nonSimpleWalk.Skip(i).Take(j - i + 1);
+                        edgesInBlossom = temp.ToHashSet();
+                        blossom = temp.Select(n => n.Item1).ToHashSet();
                     }
                 }
             }
@@ -460,7 +470,7 @@ namespace MulticutInTrees.Utilities
             graph.AddNodes(blossom, graphCounter);
             graph.AddEdges(originalEdges, graphCounter);
 
-            List<(TNode, TNode)> result = ExpandPath(contractedPath, blossom, contractedBlossomNode, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
+            List<(TNode, TNode)> result = ExpandPath(contractedPath, blossom, edgesInBlossom, contractedBlossomNode, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
             return result;
         }
 
@@ -470,6 +480,7 @@ namespace MulticutInTrees.Utilities
         /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
         /// <param name="contractedPath">The <see cref="List{T}"/> with the alternating path that should be expanded.</param>
         /// <param name="blossom">The <see cref="HashSet{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
+        /// <param name="edgesInBlossom"><see cref="HashSet{T}"/> with all edges in the blossom.</param>
         /// <param name="contractedBlossom">The <typeparamref name="TNode"/> that represents the contracted blossom.</param>
         /// <param name="matching">The <see cref="HashSet{T}"/> with the current matching.</param>
         /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
@@ -478,7 +489,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/>, <paramref name="contractedBlossom"/>, <paramref name="matching"/>, <paramref name="originalNodes"/>, <paramref name="originalToD"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPath<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, TNode contractedBlossom, HashSet<(TNode, TNode)> matching, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPath<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, HashSet<(TNode, TNode)> edgesInBlossom, TNode contractedBlossom, HashSet<(TNode, TNode)> matching, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom, but the path is null!");
@@ -514,7 +525,7 @@ namespace MulticutInTrees.Utilities
             // If the blossom is at the end of the path (either from the reverse above, or just because it already was), handle that case.
             if (contractedPath[^1].Item2.Equals(contractedBlossom))
             {
-                return ExpandPathBlossomOnEnd(contractedPath, blossom, matching, graphCounter);
+                return ExpandPathBlossomOnEnd(contractedPath, blossom, edgesInBlossom, matching, graphCounter);
             }
 
             // The blossom is somewhere in the middle of the path. Handle that case.
@@ -527,11 +538,12 @@ namespace MulticutInTrees.Utilities
         /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
         /// <param name="contractedPath">The <see cref="List{T}"/> with the alternating path that should be expanded.</param>
         /// <param name="blossom">The <see cref="HashSet{T}"/> of <typeparamref name="TNode"/>s in the blossom.</param>
+        /// <param name="edgesInBlossom"><see cref="HashSet{T}"/> with all edges in the blossom.</param>
         /// <param name="matching">The <see cref="HashSet{T}"/> with the current matching.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="blossom"/> or <paramref name="matching"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPathBlossomOnEnd<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, HashSet<(TNode, TNode)> matching, Counter graphCounter) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPathBlossomOnEnd<TNode>(List<(TNode, TNode)> contractedPath, HashSet<TNode> blossom, HashSet<(TNode, TNode)> edgesInBlossom, HashSet<(TNode, TNode)> matching, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom on the end of the path, but the path is null!");
@@ -541,13 +553,23 @@ namespace MulticutInTrees.Utilities
             HashSet<TNode> seen = new(contractedPath.SelectMany(t => new TNode[] { t.Item1, t.Item2 }));
             seen.Remove(contractedPath[^1].Item2);
 
+            Dictionary<TNode, int> indexInBlossom = new();
+
+
             TNode enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1, graphCounter));
             contractedPath[^1] = (contractedPath[^1].Item1, enterNode);
             seen.Add(enterNode);
             bool matched = true;
             while (true)
             {
-                enterNode = matched ? enterNode.Neighbours(graphCounter).Cast<TNode>().FirstOrDefault(n => !seen.Contains(n) && blossom.Contains(n) && (matching.Contains((n, enterNode)) || matching.Contains((enterNode, n)))) : enterNode.Neighbours(graphCounter).Cast<TNode>().FirstOrDefault(n => !seen.Contains(n) && blossom.Contains(n) && !matching.Contains((n, enterNode)) && !matching.Contains((enterNode, n)));
+                if (matched)
+                {
+                    enterNode = enterNode.Neighbours(graphCounter).Cast<TNode>().FirstOrDefault(n => !seen.Contains(n) && blossom.Contains(n) && (matching.Contains((n, enterNode)) || matching.Contains((enterNode, n))) && (edgesInBlossom.Contains((enterNode, n)) || edgesInBlossom.Contains((n, enterNode))));
+                }
+                else
+                {
+                    enterNode = enterNode.Neighbours(graphCounter).Cast<TNode>().FirstOrDefault(n => !seen.Contains(n) && blossom.Contains(n) && !matching.Contains((n, enterNode)) && !matching.Contains((enterNode, n)) && (edgesInBlossom.Contains((enterNode, n)) || edgesInBlossom.Contains((n, enterNode))));
+                }
 
                 if (enterNode is null)
                 {

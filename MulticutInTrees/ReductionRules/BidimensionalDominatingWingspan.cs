@@ -87,16 +87,26 @@ namespace MulticutInTrees.ReductionRules
 
             foreach (DemandPair dp in DemandPairsPerNode[node, Measurements.DemandPairsPerEdgeValuesCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter))
             {
+                Node otherEndpoint = dp.Node1 == node ? dp.Node2 : dp.Node1;
+                if (otherEndpoint.Type == NodeType.L2 && otherEndpoint.Neighbours(Measurements.TreeOperationsCounter).First() == parent)
+                {
+                    return (null, null);
+                }
+                int dpLength = dp.LengthOfPath(Measurements.DemandPairsOperationsCounter);
+                if (otherEndpoint.Degree(MockCounter) == 1)
+                {
+                    dpLength--;
+                }
                 if (dp.EdgeIsPartOfPath(left, Measurements.DemandPairsOperationsCounter))
                 {
-                    if (leftDP is null || dp.LengthOfPath(Measurements.DemandPairsOperationsCounter) < leftDP.LengthOfPath(MockCounter))
+                    if (leftDP is null || dpLength < leftDP.LengthOfPath(MockCounter))
                     {
                         leftDP = dp;
                     }
                 }
-                else
+                else if (dp.EdgeIsPartOfPath(right, Measurements.DemandPairsOperationsCounter))
                 {
-                    if (rightDP is null || dp.LengthOfPath(Measurements.DemandPairsOperationsCounter) < rightDP.LengthOfPath(MockCounter))
+                    if (rightDP is null || dpLength < rightDP.LengthOfPath(MockCounter))
                     {
                         rightDP = dp;
                     }
@@ -113,13 +123,14 @@ namespace MulticutInTrees.ReductionRules
         }
 
         /// <summary>
-        /// Computes all the nodes in the subcaterpillar of <paramref name="node"/>.
+        /// Computes all the nodes in the subcaterpillar of the wingspan of <paramref name="node"/>.
         /// </summary>
-        /// <param name="node">The <see cref="Node"/> for which we want to know the nodes in its wingspan.</param>
+        /// <param name="node">The node for which we want to compute the subcaterpillar of its wingspan.</param>
+        /// <param name="leftEndpoint">The first endpoint of the wingspan.</param>
+        /// <param name="rightEndpoint">The second endpoint of the wingspan.</param>
         /// <returns>A <see cref="HashSet{T}"/> with all <see cref="Node"/>s in the wingspan of <paramref name="node"/>.</returns>
-        private HashSet<Node> SubcaterpillarOfWingspan(Node node)
+        private HashSet<Node> SubcaterpillarOfWingspan(Node node, Node leftEndpoint, Node rightEndpoint)
         {
-            (Node leftEndpoint, Node rightEndpoint) = ComputeWingspanEndpoints(node);
             HashSet<Node> result = new();
             List<Node> path = DFS.FindPathBetween(leftEndpoint, rightEndpoint, Measurements.TreeOperationsCounter);
 
@@ -168,7 +179,13 @@ namespace MulticutInTrees.ReductionRules
         /// <returns><see langword="true"/> if we can apply this <see cref="ReductionRule"/> on <paramref name="node"/>, <see langword="false"/> otherwise.</returns>
         private bool ApplyReductionRule(Node node)
         {
-            HashSet<Node> subcaterpillar = SubcaterpillarOfWingspan(node);
+            (Node wingspanEndpoint1, Node wingspanEndpoint2) = ComputeWingspanEndpoints(node);
+            if (wingspanEndpoint1 is null || wingspanEndpoint2 is null)
+            {
+                return false;
+            }
+
+            HashSet<Node> subcaterpillar = SubcaterpillarOfWingspan(node, wingspanEndpoint1, wingspanEndpoint2);
             IEnumerable<DemandPair> dpsInMatching = DemandPairs.GetCountedEnumerable(Measurements.DemandPairsOperationsCounter).Where(dp => subcaterpillar.Contains(dp.Node1) && subcaterpillar.Contains(dp.Node2));
 
             Graph matchingGraph = new();

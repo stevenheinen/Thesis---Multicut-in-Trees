@@ -11,10 +11,8 @@ namespace MulticutInTrees.InstanceGeneration
     /// </summary>
     public static class ErdosRenyiGraph
     {
-        private static readonly Counter MockCounter = new();
-
         /// <summary>
-        /// Creates a random Erdos-Renyi graph.
+        /// Creates a random Erdos-Renyi graph using the G(n, p) model.
         /// </summary>
         /// <param name="numberOfNodes">The number of nodes that should be in the graph. Should be zero or greater.</param>
         /// <param name="chancePerEdge">The chance for each possible edge to exist in the graph. There will be roughly <paramref name="numberOfNodes"/> * <paramref name="numberOfNodes"/> * <paramref name="chancePerEdge"/> edges. Should be zero or greater.</param>
@@ -39,16 +37,17 @@ namespace MulticutInTrees.InstanceGeneration
                 throw new ArgumentOutOfRangeException(nameof(chancePerEdge), "Trying to create an Erdos-Renyi graph with a change of larger than 1 per possible edge!");
             }
 #endif
+            Counter mockCounter = new();
             Graph graph = new();
 
             for (uint i = 0; i < numberOfNodes; i++)
             {
-                graph.AddNode(new Node(i), MockCounter);
+                graph.AddNode(new Node(i), mockCounter);
             }
 
-            foreach (Node node1 in graph.Nodes(MockCounter))
+            foreach (Node node1 in graph.Nodes(mockCounter))
             {
-                foreach (Node node2 in graph.Nodes(MockCounter))
+                foreach (Node node2 in graph.Nodes(mockCounter))
                 {
                     if (node2.ID <= node1.ID)
                     {
@@ -57,7 +56,7 @@ namespace MulticutInTrees.InstanceGeneration
                     if (random.NextDouble() < chancePerEdge)
                     {
                         Edge<Node> edge = new(node1, node2);
-                        graph.AddEdge(edge, MockCounter);
+                        graph.AddEdge(edge, mockCounter);
                     }
                 }
             }

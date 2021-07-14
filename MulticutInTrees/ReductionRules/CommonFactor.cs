@@ -112,6 +112,7 @@ namespace MulticutInTrees.ReductionRules
                 }
             }
 
+            Measurements.TimeSpentCheckingApplicability.Stop();
             return false;
         }
 
@@ -193,6 +194,11 @@ namespace MulticutInTrees.ReductionRules
             List<(Edge<Node>, Edge<Node>)> edges = new();
             foreach (Edge<Node> e1 in vertices)
             {
+                if (!DemandPairsPerEdge.TryGetValue(e1, out CountedCollection<DemandPair> dpsThroughE1, Measurements.DemandPairsPerEdgeKeysCounter))
+                {
+                    continue;
+                }
+
                 foreach (Edge<Node> e2 in vertices)
                 {
                     if (e1 == e2)
@@ -207,7 +213,12 @@ namespace MulticutInTrees.ReductionRules
                     }
                     checkedPairs.Add(key);
 
-                    if (DemandPairsPerEdge[key.Item1, Measurements.DemandPairsPerEdgeKeysCounter].GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).Any(dp => DemandPairsPerEdge[key.Item2, Measurements.DemandPairsPerEdgeKeysCounter].Contains(dp, Measurements.DemandPairsPerEdgeValuesCounter)))
+                    if (!DemandPairsPerEdge.TryGetValue(e2, out CountedCollection<DemandPair> dpsThroughE2, Measurements.DemandPairsPerEdgeKeysCounter))
+                    {
+                        continue;
+                    }
+
+                    if (dpsThroughE1.GetCountedEnumerable(Measurements.DemandPairsPerEdgeValuesCounter).Any(dp => dpsThroughE2.Contains(dp, Measurements.DemandPairsPerEdgeValuesCounter)))
                     {
                         edges.Add(key);
                     }

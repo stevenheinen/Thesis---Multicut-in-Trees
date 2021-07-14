@@ -263,7 +263,7 @@ namespace MulticutInTrees.Algorithms
 
             Node toBeDeletedNode = edge.Endpoint1 == newNode ? edge.Endpoint2 : edge.Endpoint1;
             CountedCollection<DemandPair> pairsOnEdge = RemoveDemandPairsFromContractedEdge(edge, newNode, measurements);
-            UpdateDemandPairsStartingAtContractedEdge(edge, toBeDeletedNode, newNode, pairsOnEdge, measurements);
+            UpdateDemandPairsStartingAtContractedEdge(edge, toBeDeletedNode, newNode, measurements);
 
             // Tell the reduction rules what information in the input has been modified.
             for (int i = 0; i < ReductionRules.Count; i++)
@@ -395,6 +395,7 @@ namespace MulticutInTrees.Algorithms
             RemoveDemandPairs(separatedDemandPairs, measurements);
             Node res = ContractEdge(edge, measurements);
 
+            /*
             foreach (DemandPair demandPair in separatedDemandPairs.GetCountedEnumerable(measurements.DemandPairsPerEdgeValuesCounter))
             {
                 if (demandPair.LengthOfPath(measurements.DemandPairsOperationsCounter) == 1)
@@ -403,6 +404,7 @@ namespace MulticutInTrees.Algorithms
                 }
                 demandPair.OnEdgeContracted(edge, res, measurements.DemandPairsOperationsCounter);
             }
+            */
 
             return res;
         }
@@ -573,16 +575,14 @@ namespace MulticutInTrees.Algorithms
         /// <param name="edge">The <see cref="Edge{TNode}"/> that is being contracted.</param>
         /// <param name="child">The <see cref="Node"/> that will be removed by the contraction.</param>
         /// <param name="newNode">The <see cref="Node"/> that is the result of the contraction.</param>
-        /// <param name="pairsOnEdge">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s that go over <paramref name="edge"/>.</param>
         /// <param name="measurements">The <see cref="PerformanceMeasurements"/> to be used during this modification.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/>, <paramref name="pairsOnEdge"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
-        private void UpdateDemandPairsStartingAtContractedEdge(Edge<Node> edge, Node child, Node newNode, CountedCollection<DemandPair> pairsOnEdge, PerformanceMeasurements measurements)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="edge"/>, <paramref name="child"/>, <paramref name="newNode"/> or <paramref name="measurements"/> is <see langword="null"/>.</exception>
+        private void UpdateDemandPairsStartingAtContractedEdge(Edge<Node> edge, Node child, Node newNode, PerformanceMeasurements measurements)
         {
 #if !EXPERIMENT
             Utils.NullCheck(edge, nameof(edge), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the edge that will be contracted is null!");
             Utils.NullCheck(child, nameof(child), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the node that will be removed by the contraction is null!");
             Utils.NullCheck(newNode, nameof(newNode), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the node that is the result of the contraction is null!");
-            Utils.NullCheck(pairsOnEdge, nameof(pairsOnEdge), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the list of demand pairs going through the contracted edge is null!");
             Utils.NullCheck(measurements, nameof(measurements), "Trying to update the demand pairs starting at the endpoints of the edge that will be contracted, but the performance measures to be used are null!");
 #endif
             if (DemandPairsPerNode.TryGetValue(child, out CountedCollection<DemandPair> pairsAtChild, measurements.DemandPairsPerEdgeKeysCounter))

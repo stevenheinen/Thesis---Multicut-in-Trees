@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using MulticutInTrees.Algorithms;
 using MulticutInTrees.CommandLineArguments;
@@ -43,7 +42,10 @@ namespace MulticutInTrees.Experiments
             };
 
 #if EXPERIMENT
-            results.WriteOutput(options.OutputDirectory);
+            if (options.AlgorithmType != AlgorithmType.GenerateInstances)
+            {
+                results.WriteOutput(options.OutputDirectory);
+            }
 #endif
         }
 

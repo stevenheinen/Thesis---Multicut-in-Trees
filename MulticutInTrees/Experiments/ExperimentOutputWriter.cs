@@ -39,6 +39,10 @@ namespace MulticutInTrees.Experiments
             try
             {
                 string fileName = $@"{outputDirectory}\Experiments_{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.csv";
+                while (File.Exists(fileName))
+                {
+                    fileName = fileName.Insert(fileName.Length - 4, "_continued");
+                }
                 using StreamWriter streamWriter = new(fileName);
                 using CsvWriter csvWriter = new(streamWriter, CultureInfo.InvariantCulture);
                 CreateHeader(csvWriter, list.First().ReductionRulesOperations.Count);
