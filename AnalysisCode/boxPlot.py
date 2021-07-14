@@ -54,7 +54,10 @@ def read_csv_files_in_folder(folder: str, algorithm: str, nodes: set, dps: set, 
                             for i in range(len(name_indices)):
                                 reduction_rule_names.append(row[name_indices[i]])
                         current_nodes = int(row[0])
-                        title = "tree with " + row[0] + " nodes generated with the " + row[2] + " method, demand pairs generated using the " + row[3] + " method, and the " + algorithm + " algorithm."
+                        tree_type = row[2]
+                        if tree_type == "Prufer":
+                            tree_type = "Prüfer"
+                        title = "tree with " + row[0] + " nodes generated with the " + tree_type + " method, demand pairs generated using the " + row[3] + " method, and the " + algorithm + " algorithm."
                         if algorithm == "Guo and Niedermeier":
                             short_title = "GuoNiedermeier" + row[2] + row[0] + "nodes" + row[3] + "DPs"
                         elif algorithm == "Bousquet et al.":
@@ -97,7 +100,6 @@ def read_csv_files_in_folder(folder: str, algorithm: str, nodes: set, dps: set, 
                         key_ops = int(row[key_counter_indices[i]])
                         value_ops = int(row[value_counter_indices[i]])
                         operations[key][i].append(tree_ops + dp_ops + key_ops + value_ops)
-            title += " Average over " + str(line_count - 1) + " experiments."
             titles[current_nodes] = []
             titles[current_nodes].append(title)
             short_titles[current_nodes] = []
@@ -111,7 +113,7 @@ def draw_kernel_size_plots(titles: dict(), short_titles: dict(), nodes: set, dps
     for k in range(different_ks):
         for node in nodes:
             fig, ax = plot.subplots(figsize=(10, 6))
-            ax.set_title("Remaining number of nodes and demand pairs in the kernel for a " + titles[node][k], wrap=True)
+            ax.set_title("Remaining number of nodes and demand pairs in the kernel for a " + titles[node][k] + " Average over " + str(number_of_experiments) + " experiments.", wrap=True)
             ax.set_xticklabels(dps)
             node_data = []
             dp_data = []
@@ -146,7 +148,7 @@ def draw_time_plots(titles: dict(), short_titles: dict(), nodes: set, dps: set, 
     for k in range(different_ks):
         for node in nodes:
             fig, ax = plot.subplots(figsize=(22, 10))
-            ax.set_title("Number of ticks per reduction rule for a " + titles[node][k], wrap=True)
+            ax.set_title("Number of ticks per reduction rule for a " + titles[node][k] + " Average over " + str(number_of_experiments) + " experiments.", wrap=True)
             plot.ticklabel_format(axis="y", style="plain")
             ax.set_xticklabels(dps)
             ticks_data = []
@@ -184,7 +186,7 @@ def draw_operations_plots(titles: dict(), short_titles: dict(), nodes: set, dps:
     for k in range(different_ks):
         for node in nodes:
             fig, ax = plot.subplots(figsize=(22, 10))
-            ax.set_title("Number of operations per reduction rule for a " + titles[node][k], wrap=True)
+            ax.set_title("Number of operations per reduction rule for a " + titles[node][k] + " Average over " + str(number_of_experiments) + " experiments.", wrap=True)
             plot.ticklabel_format(axis="y", style="plain")
             ax.set_xticklabels(dps)
             operations_data = []
@@ -224,7 +226,7 @@ def make_plots(folder: str, algorithm: str, throughKnownSolution: bool) -> None:
     reduction_rules_names = []
     ticks = {}
     operations = {}
-    titles, short_titles = read_csv_files_in_folder(folder, algorithm, nodes, dps, remaining_nodes, remaining_dps, remaining_k, original_k, reduction_rules_names, ticks, operations, throughKnownSolution, [4, 8, 16, 32, 96])
+    titles, short_titles = read_csv_files_in_folder(folder, algorithm, nodes, dps, remaining_nodes, remaining_dps, remaining_k, original_k, reduction_rules_names, ticks, operations, throughKnownSolution, [5, 10, 20, 50, 100])
     if throughKnownSolution:
         draw_kernel_size_plots(titles, short_titles, nodes, dps, remaining_nodes, remaining_dps, 5)
         draw_kernel_size_plots(titles, short_titles, nodes, dps, reduction_rules_names, ticks, 5)
@@ -236,25 +238,49 @@ def make_plots(folder: str, algorithm: str, throughKnownSolution: bool) -> None:
 
 
 guo_niedermeier_algorithm_name = "Guo and Niedermeier"
-make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomLarge", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarRandomLarge", guo_niedermeier_algorithm_name, False)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarRandomSmall", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeRandomLarge", guo_niedermeier_algorithm_name, False)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeRandomSmall", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierGNPVertexCover", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomSmall", guo_niedermeier_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
 
 bousquet_algorithm_name = "Bousquet et al."
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionSmall", bousquet_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomLarge", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarLengthDistributionLarge", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarLengthDistributionSmall", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarRandomLarge", bousquet_algorithm_name, False)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarRandomSmall", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarThroughKnownSolutionLarge", bousquet_algorithm_name, True)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarThroughKnownSolutionSmall", bousquet_algorithm_name, True)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeLengthDistributionSmall", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeLengthDistributionLarge", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeRandomLarge", bousquet_algorithm_name, False)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeRandomSmall", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeThroughKnownSolutionLarge", bousquet_algorithm_name, True)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeThroughKnownSolutionSmall", bousquet_algorithm_name, True)
 # make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetGNPVertexCover", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferLengthDistributionSmall", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferLengthDistributionLarge", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomLarge", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomSmall", bousquet_algorithm_name, False)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionLarge", bousquet_algorithm_name, True)
+# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionSmall", bousquet_algorithm_name, True)
 
 # TODO:
 # - All experiments need to be rerun...
-# - Only after that, create the new plots.
+# - I am not sure whether the current method works for the GNPVertexCover instances
+# - Only after the experiments have been rerun, create the new plots.
+# - We still need to find a way to show the results on the 3SAT, CNF-SAT, and VertexCover (non-GNP version) results

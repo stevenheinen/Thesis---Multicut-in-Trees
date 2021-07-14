@@ -1,0 +1,95 @@
+GenerateInstances:
+-3SAT
+TODO --> CaterpillarLengthDistributionLarge
+TODO --> CaterpillarLengthDistributionSmall
+-CaterpillarRandomLarge
+--CaterpillarRandomSmall
+CaterpillarThroughKnownSolutionLarge
+CaterpillarThroughKnownSolutionSmall
+--CNFSAT
+TODO --> Degree3TreeLengthDistributionLarge
+TODO --> Degree3TreeLengthDistributionSmall
+Degree3TreeRandomLarge
+Degree3TreeRandomSmall
+Degree3TreeThroughKnownSolutionLarge
+Degree3TreeThroughKnownSolutionSmall
+-GNPVertexCover
+TODO --> PruferLengthDistributionLarge
+TODO --> PruferLengthDistributionSmall
+-PruferRandomLarge
+--PruferRandomSmall
+PruferThroughKnownSolutionLarge
+PruferThroughKnownSolutionSmall
+--VertexCover
+
+Bousquet:
+3SAT
+TODO --> CaterpillarLengthDistributionLarge
+TODO --> CaterpillarLengthDistributionSmall
+CaterpillarRandomLarge
+CaterpillarRandomSmall
+CaterpillarThroughKnownSolutionLarge
+CaterpillarThroughKnownSolutionSmall
+CNFSAT
+TODO --> Degree3TreeLengthDistributionLarge
+TODO --> Degree3TreeLengthDistributionSmall
+Degree3TreeRandomLarge
+Degree3TreeRandomSmall
+Degree3TreeThroughKnownSolutionLarge
+Degree3TreeThroughKnownSolutionSmall
+GNPVertexCover
+TODO --> PruferLengthDistributionLarge
+TODO --> PruferLengthDistributionSmall
+PruferRandomLarge
+PruferRandomSmall
+PruferThroughKnownSolutionLarge
+PruferThroughKnownSolutionSmall
+VertexCover
+
+GuoNiedermeier:
+3SAT
+TODO --> CaterpillarLengthDistributionLarge
+TODO --> CaterpillarLengthDistributionSmall
+CaterpillarRandomLarge
+CaterpillarRandomSmall
+CaterpillarThroughKnownSolutionLarge
+CaterpillarThroughKnownSolutionSmall
+CNFSAT
+TODO --> Degree3TreeLengthDistributionLarge
+TODO --> Degree3TreeLengthDistributionSmall
+Degree3TreeRandomLarge
+Degree3TreeRandomSmall
+Degree3TreeThroughKnownSolutionLarge
+Degree3TreeThroughKnownSolutionSmall
+GNPVertexCover
+TODO --> PruferLengthDistributionLarge
+TODO --> PruferLengthDistributionSmall
+PruferRandomLarge
+PruferRandomSmall
+PruferThroughKnownSolutionLarge
+PruferThroughKnownSolutionSmall
+VertexCover
+
+GuoNiedermeierSwap34:
+3SAT
+TODO --> CaterpillarLengthDistributionLarge
+TODO --> CaterpillarLengthDistributionSmall
+CaterpillarRandomLarge
+CaterpillarRandomSmall
+CaterpillarThroughKnownSolutionLarge
+CaterpillarThroughKnownSolutionSmall
+CNFSAT
+TODO --> Degree3TreeLengthDistributionLarge
+TODO --> Degree3TreeLengthDistributionSmall
+Degree3TreeRandomLarge
+Degree3TreeRandomSmall
+Degree3TreeThroughKnownSolutionLarge
+Degree3TreeThroughKnownSolutionSmall
+GNPVertexCover
+TODO --> PruferLengthDistributionLarge
+TODO --> PruferLengthDistributionSmall
+PruferRandomLarge
+PruferRandomSmall
+PruferThroughKnownSolutionLarge
+PruferThroughKnownSolutionSmall
+VertexCover
