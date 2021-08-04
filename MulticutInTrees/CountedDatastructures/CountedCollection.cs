@@ -79,9 +79,8 @@ namespace MulticutInTrees.CountedDatastructures
             Utilities.Utils.NullCheck(predicate, nameof(predicate), "Trying to get the number of elements that fit a function in a CountedCollection, but the function is null!");
             Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to get the number of elements that fit a function in a CountedCollection, but the Counter is null!");
 #endif
-            int res = LinkedList.Count(predicate);
-            counter += res;
-            return res;
+            counter += LinkedList.Count;
+            return LinkedList.Count(predicate);
         }
 
         /// <summary>
@@ -267,6 +266,7 @@ namespace MulticutInTrees.CountedDatastructures
                 result.Add(LinkedList.First.Value);
                 Remove(LinkedList.First.Value, counter);
             }
+            counter++;
             return result;
         }
 
@@ -290,7 +290,6 @@ namespace MulticutInTrees.CountedDatastructures
             List<T> result = new();
             for (int i = 0; i < count; i++)
             {
-                counter++;
                 result.Add(LinkedList.First.Value);
                 Remove(LinkedList.First.Value, counter);
             }
@@ -317,6 +316,7 @@ namespace MulticutInTrees.CountedDatastructures
                 result.Add(LinkedList.Last.Value);
                 Remove(LinkedList.Last.Value, counter);
             }
+            counter++;
             return result;
         }
 
@@ -340,7 +340,6 @@ namespace MulticutInTrees.CountedDatastructures
             List<T> result = new();
             for (int i = 0; i < count; i++)
             {
-                counter++;
                 result.Add(LinkedList.Last.Value);
                 Remove(LinkedList.Last.Value, counter);
             }
@@ -374,26 +373,6 @@ namespace MulticutInTrees.CountedDatastructures
             Dictionary[newElement] = Dictionary[oldElement];
             Dictionary[newElement].Value = newElement;
             Dictionary.Remove(oldElement);
-        }
-
-        /// <summary>
-        /// Change each element in this <see cref="CountedCollection{T}"/> according to <paramref name="function"/>.
-        /// </summary>
-        /// <param name="function">The <see cref="Func{T, TResult}"/> that determines for each element what it should be replaced with.</param>
-        /// <param name="counter">The <see cref="Counter"/> that should be used for this operation.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> or <paramref name="counter"/> is <see langword="null"/>.</exception>
-        public void ChangeOccurrence(Func<T, T> function, Counter counter)
-        {
-#if !EXPERIMENT
-            Utilities.Utils.NullCheck(function, nameof(function), "Trying to change all elements in a CountedCollection according to a function, but the function is null!");
-            Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to change all elements in a CountedCollection according to a function, but the counter is null!");
-#endif
-            foreach (T node in LinkedList)
-            {
-                counter++;
-                T newNode = function(node);
-                ChangeElement(node, newNode, counter);
-            }
         }
 
         /// <summary>

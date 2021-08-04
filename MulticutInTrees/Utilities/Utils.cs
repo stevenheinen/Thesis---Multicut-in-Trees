@@ -1,7 +1,9 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -552,6 +554,75 @@ namespace MulticutInTrees.Utilities
             });
 
             return new CountedCollection<DemandPair>(dpArray, mockCounter);
+        }
+
+        /// <summary>
+        /// Create a number of text files with all path length distributions for each graph in <paramref name="pathToInputDirectory"/>.
+        /// </summary>
+        /// <param name="pathToInputDirectory">Path to the directory with all input graphs.</param>
+        /// <param name="pathToOutputDirectory">Path to the directory where the results should be stored.</param>
+        /// <param name="partialOutputName">Part of the name the output file should have.</param>
+        public static void CreateLengthHistogramTextFile(string pathToInputDirectory, string pathToOutputDirectory, string partialOutputName)
+        {
+            ConcurrentDictionary<int, ConcurrentDictionary<int, long>> lengthOccurrencesPerNumberOfNodes = new();
+            int totalNumberOfFiles = Directory.GetFiles(pathToInputDirectory).Length;
+            int fileCount = 0;
+            Console.WriteLine($"Handled {fileCount} of {totalNumberOfFiles} files in {pathToInputDirectory} directory!");
+            foreach (string fileName in Directory.GetFiles(pathToInputDirectory))
+            {
+                int numberOfNodes;
+                Dictionary<uint, Node> numberToNode = new();
+                Graph g = new();
+                Counter counter = new();
+                using (StreamReader sr = new(fileName))
+                {
+                    sr.ReadLine();
+                    string line = sr.ReadLine();
+                    numberOfNodes = int.Parse(line.Split()[0]);
+                    sr.ReadLine();
+                    for (uint i = 0; i < numberOfNodes; i++)
+                    {
+                        Node n = new(i);
+                        numberToNode[i] = n;
+                        g.AddNode(n, counter);
+                    }
+                    for (int i = 0; i < numberOfNodes - 1; i++)
+                    {
+                        line = sr.ReadLine();
+                        string[] s = line.Split();
+                        Node n1 = numberToNode[uint.Parse(s[0])];
+                        Node n2 = numberToNode[uint.Parse(s[1])];
+                        Edge<Node> e = new(n1, n2);
+                        g.AddEdge(e, counter);
+                    }
+                }
+
+                ConcurrentDictionary<(Node, Node), int> allPairsShortestPaths = BFS.AllPairsShortestPathTree<Graph, Edge<Node>, Node>(g, counter);
+                if (lengthOccurrencesPerNumberOfNodes.TryAdd(numberOfNodes, new ConcurrentDictionary<int, long>()))
+                {
+                    Parallel.For(0, numberOfNodes, i =>
+                    {
+                        lengthOccurrencesPerNumberOfNodes[numberOfNodes].TryAdd(i, 0);
+                    });
+                }
+                Parallel.ForEach(allPairsShortestPaths, pair =>
+                {
+                    lengthOccurrencesPerNumberOfNodes[numberOfNodes].AddOrUpdate(pair.Value, 0, (k, v) => v + 1);
+                });
+
+                fileCount++;
+                Console.WriteLine($"Handled {fileCount} of {totalNumberOfFiles} files in {pathToInputDirectory} directory!");
+            }
+
+            Parallel.ForEach(lengthOccurrencesPerNumberOfNodes, pair =>
+            {
+                string fileName = Path.Combine(pathToOutputDirectory, partialOutputName + pair.Key + "nodes.txt");
+                using StreamWriter sw = new(fileName);
+                foreach (int length in pair.Value.Keys.OrderBy(n => n))
+                {
+                    sw.WriteLine($"{length} {pair.Value[length]}");
+                }
+            });
         }
     }
 }

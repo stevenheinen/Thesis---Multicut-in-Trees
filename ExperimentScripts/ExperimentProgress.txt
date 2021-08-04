@@ -1,26 +1,32 @@
 GenerateInstances:
--3SAT
+--3SAT
 TODO --> CaterpillarLengthDistributionLarge
 TODO --> CaterpillarLengthDistributionSmall
--CaterpillarRandomLarge
+--CaterpillarRandomLarge
 --CaterpillarRandomSmall
 CaterpillarThroughKnownSolutionLarge
-CaterpillarThroughKnownSolutionSmall
+--CaterpillarThroughKnownSolutionSmall
 --CNFSAT
 TODO --> Degree3TreeLengthDistributionLarge
 TODO --> Degree3TreeLengthDistributionSmall
 Degree3TreeRandomLarge
-Degree3TreeRandomSmall
-Degree3TreeThroughKnownSolutionLarge
-Degree3TreeThroughKnownSolutionSmall
--GNPVertexCover
+--Degree3TreeRandomSmall
+--Degree3TreeThroughKnownSolutionLarge
+--Degree3TreeThroughKnownSolutionSmall
+--GNPVertexCover
 TODO --> PruferLengthDistributionLarge
 TODO --> PruferLengthDistributionSmall
--PruferRandomLarge
+--PruferRandomLarge
 --PruferRandomSmall
-PruferThroughKnownSolutionLarge
-PruferThroughKnownSolutionSmall
+--PruferThroughKnownSolutionLarge
+--PruferThroughKnownSolutionSmall
 --VertexCover
+
+==============================================================================================================
+TODO
+- (laptop)-Degree3TreeRandomLarge --> moeten er 50 * 9 * 9 = 4050 zijn, zijn er ???
+==============================================================================================================
+
 
 Bousquet:
 3SAT

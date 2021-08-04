@@ -240,7 +240,7 @@ namespace MulticutInTrees.InstanceGeneration
             }
             else if (options.InputDemandPairsType == InputDemandPairsType.LengthDistribution)
             {
-                fileNameBuilder.Append($"_dpLengthDist=({options.DistanceDistribution})");
+                fileNameBuilder.Append($"_nrDPs={options.NumberOfDemandPairs}_dpLengthDist=({options.DistanceDistribution})");
             }
             else if (options.InputDemandPairsType == InputDemandPairsType.ThroughKnownSolution)
             {

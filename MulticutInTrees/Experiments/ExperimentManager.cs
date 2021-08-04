@@ -235,7 +235,7 @@ namespace MulticutInTrees.Experiments
             GurobiMIPAlgorithm algorithm = new(instance);
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            int minimumSize = algorithm.Run(options.Verbose);
+            int minimumSize = algorithm.Run(options.MIPTimeLimit, options.Verbose);
             stopwatch.Stop();
 
             if (options.Verbose)

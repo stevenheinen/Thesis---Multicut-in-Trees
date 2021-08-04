@@ -1,9 +1,5 @@
-from functools import reduce
-import numpy as np
-from numpy.lib.shape_base import apply_along_axis
 import pandas as pd
 import matplotlib.pyplot as plot
-from pandas.core.frame import DataFrame
 import seaborn as sns
 import csv
 import os

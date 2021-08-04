@@ -134,7 +134,7 @@ namespace MulticutInTrees.CountedDatastructures
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(counter, nameof(counter), "Trying to insert an element in a CountedList, but the counter is null!");
 #endif
-            counter++;
+            counter += List.Count - index;
             List.Insert(index, item);
         }
 

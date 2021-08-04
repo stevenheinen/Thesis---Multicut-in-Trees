@@ -1,7 +1,9 @@
 // This code was written between November 2020 and October 2021 by Steven Heinen (mailto:s.a.heinen@uu.nl) within a final thesis project of the Computing Science master program at Utrecht University under supervision of J.M.M. van Rooij (mailto:j.m.m.vanrooij@uu.nl).
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MulticutInTrees.CountedDatastructures;
 using MulticutInTrees.Exceptions;
 using MulticutInTrees.Graphs;
@@ -86,6 +88,59 @@ namespace MulticutInTrees.Utilities
             }
 
             throw new NotInGraphException($"There is no path between {startNode} and a node in {targetSet.Print()}!");
+        }
+
+        /// <summary>
+        /// Computes all pairs shortest paths in a tree.
+        /// </summary>
+        /// <typeparam name="TGraph">The type of graph.</typeparam>
+        /// <typeparam name="TEdge">The type of edges in the graph.</typeparam>
+        /// <typeparam name="TNode">The type of nodes in the tree.</typeparam>
+        /// <param name="tree">The <see cref="Graph"/> for which we want to compute the all pairs shortest paths. Should be a tree.</param>
+        /// <param name="treeCounter">The <see cref="Counter"/> for the tree operations.</param>
+        /// <returns>A <see cref="ConcurrentDictionary{TKey, TValue}"/> with a tuple of <typeparamref name="TNode"/>s as key and as value the length of the path between those two <typeparamref name="TNode"/>s.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="treeCounter"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Thrown when <paramref name="tree"/> is not a tree.</exception>
+        public static ConcurrentDictionary<(TNode, TNode), int> AllPairsShortestPathTree<TGraph, TEdge, TNode>(TGraph tree, Counter treeCounter) where TGraph : AbstractGraph<TEdge, TNode> where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        {
+            Counter mockCounter = new();
+#if !EXPERIMENT
+            Utils.NullCheck(tree, nameof(tree), "Trying to find all pairs shortest path in a tree, but the tree is null!");
+            Utils.NullCheck(treeCounter, nameof(treeCounter), "Trying to all pairs shortest path in a tree, but the counter is null!");
+            if (!tree.IsTree(mockCounter))
+            {
+                throw new NotSupportedException("Trying to all pairs shortest path in a tree, but the provided graph is not a tree!");
+            }
+#endif
+            ConcurrentDictionary<(TNode, TNode), int> result = new();
+            Parallel.ForEach(tree.Nodes(treeCounter), startNode =>
+            {
+                HashSet<TNode> seen = new();
+                Queue<(TNode, int)> queue = new();
+                queue.Enqueue((startNode, 0));
+                seen.Add(startNode);
+                result[(startNode, startNode)] = 0;
+
+                while (queue.Count > 0)
+                {
+                    treeCounter++;
+                    (TNode node, int length) = queue.Dequeue();
+
+                    foreach (TNode neighbour in node.Neighbours(mockCounter))
+                    {
+                        if (seen.Contains(neighbour))
+                        {
+                            continue;
+                        }
+
+                        result[(startNode, neighbour)] = length + 1;
+                        seen.Add(neighbour);
+                        queue.Enqueue((neighbour, length + 1));
+                    }
+                }
+            });
+
+            return result;
         }
     }
 }

@@ -155,6 +155,58 @@ namespace MulticutInTrees.Utilities
         }
 
         /// <summary>
+        /// Find all nodes that are connected to the given startnode.
+        /// </summary>
+        /// <typeparam name="TEdge">The type of edges used.</typeparam>
+        /// <typeparam name="TNode">The type of nodes used.</typeparam>
+        /// <param name="startNode">The node to start with.</param>
+        /// <param name="graphCounter">The <see cref="Counter"/> (for graph operations) that should be used during the DFS.</param>
+        /// <param name="seen">Optional. Nodes in this <see cref="HashSet{T}"/> will be skipped during the DFS.</param>
+        /// <returns>A <see cref="List{T}"/> with all <typeparamref name="TNode"/>s that are connected to <paramref name="startNode"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="startNode"/> or <paramref name="graphCounter"/> is <see langword="null"/>.</exception>
+        public static List<TNode> FindConnectedComponent<TEdge, TNode>(TNode startNode, Counter graphCounter, HashSet<TEdge> seen = null) where TEdge : Edge<TNode> where TNode : AbstractNode<TNode>
+        {
+#if !EXPERIMENT
+            Utils.NullCheck(startNode, nameof(startNode), "Trying to find the connected component starting from a node, but the node is null!");
+            Utils.NullCheck(graphCounter, nameof(graphCounter), "Trying to find whether two nodes are connected, but counter is null!");
+#endif
+            Counter mockCounter = new();
+
+            List<TNode> result = new();
+            HashSet<(TNode, TNode)> seen2 = new();
+            if (!(seen is null))
+            {
+                foreach (TEdge edge in seen)
+                {
+                    seen2.Add(Utils.OrderEdgeSmallToLarge<TEdge, TNode>(edge));
+                }
+            }
+            Stack<TNode> stack = new();
+            stack.Push(startNode);
+            result.Add(startNode);
+
+            while (stack.Count > 0)
+            {
+                TNode node = stack.Pop();
+
+                // Potentially push this node's neighbours onto the stack.
+                foreach (TNode neighbour in node.Neighbours(mockCounter))
+                {
+                    (TNode, TNode) currEdge = Utils.OrderEdgeSmallToLarge((node, neighbour));
+                    if (!seen2.Contains(currEdge))
+                    {
+                        _ = graphCounter++;
+                        result.Add(neighbour);
+                        seen2.Add(currEdge);
+                        stack.Push(neighbour);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Computes the different caterpillar components in a set of nodes.
         /// </summary>
         /// <typeparam name="TNode">The type of nodes used.</typeparam>

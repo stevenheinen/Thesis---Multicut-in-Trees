@@ -37,8 +37,6 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.GetCountedEnumerable(null));
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.Add(number, null));
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.ChangeElement(number, number, null));
-            Assert.ThrowsException<ArgumentNullException>(() => countedCollection.ChangeOccurrence(null, counter));
-            Assert.ThrowsException<ArgumentNullException>(() => countedCollection.ChangeOccurrence(n => n + 1, null));
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.Clear(null));
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.Contains(number, null));
             Assert.ThrowsException<ArgumentNullException>(() => countedCollection.Count(null));
@@ -151,16 +149,6 @@ namespace TESTS_MulticutInTrees.CountedDatastructures
             Assert.AreEqual(8, before);
             Assert.AreEqual(0, after);
             Assert.ThrowsException<InvalidOperationException>(() => { (before, after) = countedCollection.ElementBeforeAndAfter(-2, counter); });
-        }
-
-        [TestMethod]
-        public void TestChangeOccurrence()
-        {
-            List<int> list = new() { 984, 894, 897, 98479, 749, 748, 74, 97489, 78, 789, 7, 43, 2, 3517420, 0, 71050743 };
-            CountedCollection<int> countedCollection = new(list, counter);
-            countedCollection.ChangeOccurrence(n => n % 2 == 1 ? n + 1 : n, counter);
-            Assert.AreEqual(0, countedCollection.Count(n => n % 2 == 1, counter));
-            Assert.AreEqual(71050744, countedCollection.Last(counter));
         }
 
         [TestMethod]

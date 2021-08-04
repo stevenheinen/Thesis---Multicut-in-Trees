@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>109586</CodebaseCost>
-    <TotalDuplicatesCost>5060</TotalDuplicatesCost>
-    <TotalFragmentsCost>10788</TotalFragmentsCost>
+    <CodebaseCost>113933</CodebaseCost>
+    <TotalDuplicatesCost>5076</TotalDuplicatesCost>
+    <TotalFragmentsCost>11033</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
     <Duplicate Cost="408">
@@ -102,6 +102,23 @@
         <LineRange Start="223" End="224"></LineRange>
       </Fragment>
     </Duplicate>
+    <Duplicate Cost="193">
+      <Fragment>
+        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
+        <OffsetRange Start="11941" End="12527"></OffsetRange>
+        <LineRange Start="202" End="206"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
+        <OffsetRange Start="14248" End="14834"></OffsetRange>
+        <LineRange Start="227" End="231"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
+        <OffsetRange Start="16519" End="17105"></OffsetRange>
+        <LineRange Start="252" End="256"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="159">
       <Fragment>
         <FileName>MulticutInTrees\Utilities\DinicMaxFlow.cs</FileName>
@@ -114,21 +131,38 @@
         <LineRange Start="154" End="160"></LineRange>
       </Fragment>
     </Duplicate>
+    <Duplicate Cost="154">
+      <Fragment>
+        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
+        <OffsetRange Start="12808" End="13270"></OffsetRange>
+        <LineRange Start="211" End="214"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
+        <OffsetRange Start="15123" End="15585"></OffsetRange>
+        <LineRange Start="236" End="239"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
+        <OffsetRange Start="17372" End="17834"></OffsetRange>
+        <LineRange Start="261" End="264"></LineRange>
+      </Fragment>
+    </Duplicate>
     <Duplicate Cost="147">
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="12759" End="13199"></OffsetRange>
-        <LineRange Start="212" End="215"></LineRange>
+        <OffsetRange Start="11246" End="11662"></OffsetRange>
+        <LineRange Start="194" End="197"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="15003" End="15443"></OffsetRange>
-        <LineRange Start="238" End="241"></LineRange>
+        <OffsetRange Start="13545" End="13961"></OffsetRange>
+        <LineRange Start="219" End="222"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="17203" End="17643"></OffsetRange>
-        <LineRange Start="264" End="267"></LineRange>
+        <OffsetRange Start="15838" End="16254"></OffsetRange>
+        <LineRange Start="244" End="247"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="145">
@@ -141,23 +175,6 @@
         <FileName>MulticutInTrees\ReductionRules\GeneralisedDominatingWingspan.cs</FileName>
         <OffsetRange Start="18014" End="18487"></OffsetRange>
         <LineRange Start="269" End="276"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="140">
-      <Fragment>
-        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="11246" End="11640"></OffsetRange>
-        <LineRange Start="194" End="197"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="13474" End="13868"></OffsetRange>
-        <LineRange Start="220" End="223"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="15696" End="16090"></OffsetRange>
-        <LineRange Start="246" End="249"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="125">
@@ -237,18 +254,6 @@
         <LineRange Start="641" End="646"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="105">
-      <Fragment>
-        <FileName>MulticutInTrees\InstanceGeneration\KnownSolutionDemandPairs.cs</FileName>
-        <OffsetRange Start="3870" End="4122"></OffsetRange>
-        <LineRange Start="58" End="60"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\InstanceGeneration\KnownSolutionDemandPairs.cs</FileName>
-        <OffsetRange Start="4311" End="4557"></OffsetRange>
-        <LineRange Start="65" End="67"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="104">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
@@ -269,7 +274,7 @@
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\InstanceGeneration\InstanceFromVertexCover.cs</FileName>
-        <OffsetRange Start="4186" End="4567"></OffsetRange>
+        <OffsetRange Start="4208" End="4589"></OffsetRange>
         <LineRange Start="72" End="81"></LineRange>
       </Fragment>
     </Duplicate>
@@ -312,18 +317,6 @@
         <FileName>MulticutInTrees\InstanceGeneration\GNMGraph.cs</FileName>
         <OffsetRange Start="2241" End="2447"></OffsetRange>
         <LineRange Start="38" End="44"></LineRange>
-      </Fragment>
-    </Duplicate>
-    <Duplicate Cost="86">
-      <Fragment>
-        <FileName>MulticutInTrees\InstanceGeneration\KnownSolutionDemandPairs.cs</FileName>
-        <OffsetRange Start="7115" End="7550"></OffsetRange>
-        <LineRange Start="114" End="125"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\InstanceGeneration\KnownSolutionDemandPairs.cs</FileName>
-        <OffsetRange Start="8149" End="8584"></OffsetRange>
-        <LineRange Start="137" End="148"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="86">

@@ -102,6 +102,12 @@ namespace MulticutInTrees.CommandLineArguments
         public string InstanceDirectory { get; set; }
 
         /// <summary>
+        /// The maximum time that can be spent by the MIP solver to compute the optimal solution.
+        /// </summary>
+        [Option("mipTimeLimit", Default = 21600.0, HelpText = "The maximum time that can be spent by the MIP solver to compute the optimal solution.")]
+        public double MIPTimeLimit { get; set; }
+
+        /// <summary>
         /// Whether to overwrite existing instances if they already exist.
         /// </summary>
         [Option("overwrite", HelpText = "Whether to overwrite existing instances if they already exist.")]

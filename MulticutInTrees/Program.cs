@@ -29,22 +29,7 @@ namespace MulticutInTrees
             // For debug purposes only. Should not be included in the final version of the program.
             if (args.Length == 0)
             {
-                //string[] split = "--treeSeed=0 --dpSeed=0 --repetitions=1 --experiments=10 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--treeSeed=7590661 --dpSeed=3097415 --repetitions=1 --experiments=1 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=384 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--treeSeed=0 --dpSeed=0 --repetitions=1 --experiments=10 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=5000 --nrDPs=4000 --maxSolutionSize=0 -v".Split();
-
-                //string[] split = "--repetitions=1 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random -v".Split();
-
-                //string[] split = "--treeSeed=7811831 --dpSeed=5951100 --repetitions=1 --experiments=1 --algorithm=BousquetKernelisation --treeType=Prufer --dpType=Random --nrNodes=256 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--treeSeed=7811831 --dpSeed=5951100 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisation --treeType=Prufer --dpType=Random --nrNodes=256 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--treeSeed=7811831 --dpSeed=5951100 --repetitions=1 --experiments=1 --algorithm=ChenKernelisation --treeType=Prufer --dpType=Random --nrNodes=256 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--treeSeed=7811831 --dpSeed=5951100 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisationSwap34 --treeType=Prufer --dpType=Random --nrNodes=256 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-                //string[] split = "--treeSeed=3257804 --dpSeed=1639694 --repetitions=1 --experiments=1 --algorithm=GenerateInstances --treeType=Caterpillar --dpType=Random --nrNodes=128 --nrDPs=512 --maxSolutionSize=0 -v".Split();
-
-                //string[] split = "--treeSeed=6799356 --dpSeed=2683856 --repetitions=1 --experiments=1 --algorithm=GuoNiedermeierKernelisation --treeType=Caterpillar --dpType=Random --nrNodes=128 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-                string[] split = "--treeSeed=6799356 --dpSeed=2683856 --repetitions=1 --experiments=1 --algorithm=BousquetKernelisation --treeType=Caterpillar --dpType=Random --nrNodes=128 --nrDPs=896 --maxSolutionSize=0 -v".Split();
-
-                //string[] split = "--algorithm=GenerateInstances --treeType=VertexCover --dpType=FromTreeInstance -v".Split();
+                string[] split = "--treeSeed=6809501 --dpSeed=6721572 --repetitions=1 --experiments=1 --algorithm=GenerateInstances --treeType=Prufer --dpType=ThroughKnownSolution --nrNodes=128 --nrDPs=128 --maxSolutionSize=5 -v".Split();
 
                 args = new string[split.Length + 2];
                 split.CopyTo(args, 0);

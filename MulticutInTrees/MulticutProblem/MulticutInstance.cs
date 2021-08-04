@@ -193,25 +193,24 @@ namespace MulticutInTrees.MulticutProblem
                         Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
                         CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Prufer, InputDemandPairsType.LengthDistribution):
                     {
-                        //Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
-                        //Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
-                        // todo: implement length distribution
-                        throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!");
-                        //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        //int optimalK = algorithm.Run(options.Verbose);
-                        //return (tree, demandPairs, optimalK);
+                        Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
+                        Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                        CountedCollection<DemandPair> demandPairs = new(LengthDistributionDemandPairs.CreateDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed), distanceDistribution), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
+                        return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Prufer, InputDemandPairsType.ThroughKnownSolution):
                     {
                         Graph tree = TreeFromPruferSequence.GenerateTree(options.NumberOfNodes, new Random(treeSeed));
                         CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Caterpillar, InputDemandPairsType.Random):
@@ -219,25 +218,24 @@ namespace MulticutInTrees.MulticutProblem
                         Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
                         CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Caterpillar, InputDemandPairsType.LengthDistribution):
                     {
-                        //Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
-                        //Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
-                        // todo: implement length distribution
-                        throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!");
-                        //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        //int optimalK = algorithm.Run(options.Verbose);
-                        //return (tree, demandPairs, optimalK);
+                        Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
+                        Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                        CountedCollection<DemandPair> demandPairs = new(LengthDistributionDemandPairs.CreateDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed), distanceDistribution), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
+                        return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Caterpillar, InputDemandPairsType.ThroughKnownSolution):
                     {
                         Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
                         CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Degree3Tree, InputDemandPairsType.Random):
@@ -245,25 +243,24 @@ namespace MulticutInTrees.MulticutProblem
                         Graph tree = Degree3TreeGenerator.CreateDegree3Tree(options.NumberOfNodes);
                         CountedCollection<DemandPair> demandPairs = new(RandomDemandPairs.GenerateRandomDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Degree3Tree, InputDemandPairsType.LengthDistribution):
                     {
-                        //Graph tree = CaterpillarGenerator.CreateCaterpillar(options.NumberOfNodes, new Random(treeSeed));
-                        //Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
-                        // todo: implement length distribution
-                        throw new NotImplementedException("Demand pairs with a preferred length distribution are not yet supported!");
-                        //GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        //int optimalK = algorithm.Run(options.Verbose);
-                        //return (tree, demandPairs, optimalK);
+                        Graph tree = Degree3TreeGenerator.CreateDegree3Tree(options.NumberOfNodes);
+                        Dictionary<(int, int), double> distanceDistribution = ParseLengthDistributionDictionary(options.DistanceDistribution);
+                        CountedCollection<DemandPair> demandPairs = new(LengthDistributionDemandPairs.CreateDemandPairs(options.NumberOfDemandPairs, tree, new Random(dpSeed), distanceDistribution), new Counter());
+                        GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
+                        return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.Degree3Tree, InputDemandPairsType.ThroughKnownSolution):
                     {
                         Graph tree = Degree3TreeGenerator.CreateDegree3Tree(options.NumberOfNodes);
                         CountedCollection<DemandPair> demandPairs = new(KnownSolutionDemandPairs.GenerateDemandPairsThroughKnownSolution(tree, options.NumberOfDemandPairs, options.MaxSolutionSize, new Random(dpSeed)), new Counter());
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 case (InputTreeType.VertexCover, InputDemandPairsType.FromTreeInstance):
@@ -281,7 +278,7 @@ namespace MulticutInTrees.MulticutProblem
                         Graph tree = FixedTreeReader.ReadTree(options.InstanceFilePath);
                         CountedCollection<DemandPair> demandPairs = FixedDemandPairsReader.ReadDemandPairs(tree, options.DemandPairFilePath);
                         GurobiMIPAlgorithm algorithm = new(tree, demandPairs.GetLinkedList());
-                        int optimalK = algorithm.Run(options.Verbose);
+                        int optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
                         return (tree, demandPairs, optimalK);
                     }
                 default:

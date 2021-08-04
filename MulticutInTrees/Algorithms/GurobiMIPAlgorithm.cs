@@ -67,10 +67,11 @@ namespace MulticutInTrees.Algorithms
         /// <summary>
         /// Find the smallest possible solution size in this instnace.
         /// </summary>
+        /// <param name="timeLimit">The maximum time (in seconds) that can be spent during optimisation.</param>
         /// <param name="verbose">Whether the output of the solver should be printed to the console.</param>
         /// <returns>The smallest possible solution size in this instance.</returns>
         /// <exception cref="GRBException">Thrown when something goes wrong during the execution of the solver.</exception>
-        public int Run(bool verbose = false)
+        public int Run(double timeLimit, bool verbose = false)
         {
             try
             {
@@ -84,6 +85,12 @@ namespace MulticutInTrees.Algorithms
                 {
                     env.Set("LogToConsole", "0");
                 }
+
+                if (timeLimit > 0)
+                {
+                    env.TimeLimit = timeLimit;
+                }
+
                 env.Start();
 
                 GRBModel model = new(env);
@@ -114,8 +121,13 @@ namespace MulticutInTrees.Algorithms
                     }
                     model.AddConstr(pathValue >= 1, demandPair.ToString());
                 }
-
+                
                 model.Optimize();
+
+                if (model.Status == GRB.Status.TIME_LIMIT)
+                {
+                    return (int)Math.Min(model.ObjVal, model.ObjBound);
+                }
 
                 return (int)model.ObjVal;
             }

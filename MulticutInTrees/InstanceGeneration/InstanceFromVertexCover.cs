@@ -44,7 +44,7 @@ namespace MulticutInTrees.InstanceGeneration
             if (optimalK == 0)
             {
                 GurobiMIPAlgorithm algorithm = new(multicutTree, demandPairs.GetLinkedList());
-                optimalK = algorithm.Run(options.Verbose);
+                optimalK = algorithm.Run(options.MIPTimeLimit, options.Verbose);
             }
             return (multicutTree, demandPairs, optimalK);
         }

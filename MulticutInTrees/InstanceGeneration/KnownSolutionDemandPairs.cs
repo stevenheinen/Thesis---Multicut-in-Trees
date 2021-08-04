@@ -50,20 +50,23 @@ namespace MulticutInTrees.InstanceGeneration
             }
 #endif
             List<Edge<Node>> solution = GenerateKnownSolution(tree, solutionSize, random).ToList();
-            Dictionary<Edge<Node>, (List<Node>, List<Node>)> possibleDemandPairEndpoints = ComputePossibleDemandPairEndpoints(solution);
             List<DemandPair> result = new();
+
             for (int i = 0; i < solutionSize; i++)
             {
                 Edge<Node> edge = solution[i];
-                Node endpoint1 = possibleDemandPairEndpoints[edge].Item1.PickRandom(random);
-                Node endpoint2 = possibleDemandPairEndpoints[edge].Item2.PickRandom(random);
+                (List<Node>, List<Node>) possibleDemandPairEndpoints = ComputePossibleDemandPairEndpoints(solution, result, edge);
+                Node endpoint1 = possibleDemandPairEndpoints.Item1.PickRandom(random);
+                Node endpoint2 = possibleDemandPairEndpoints.Item2.PickRandom(random);
                 result.Add(new DemandPair((uint)i, endpoint1, endpoint2, tree));
             }
+
+            Dictionary<Edge<Node>, (List<Node>, List<Node>)> possibleEndpoints = ComputePossibleExtraDemandPairEndpoints(solution);
             for (uint i = (uint)solutionSize; i < numberOfDemandPairs; i++)
             {
                 Edge<Node> edge = solution.PickRandom(random);
-                Node endpoint1 = possibleDemandPairEndpoints[edge].Item1.PickRandom(random);
-                Node endpoint2 = possibleDemandPairEndpoints[edge].Item2.PickRandom(random);
+                Node endpoint1 = possibleEndpoints[edge].Item1.PickRandom(random);
+                Node endpoint2 = possibleEndpoints[edge].Item2.PickRandom(random);
                 result.Add(new DemandPair(i, endpoint1, endpoint2, tree));
             }
             return result;
@@ -88,67 +91,46 @@ namespace MulticutInTrees.InstanceGeneration
         }
         
         /// <summary>
-        /// Picks possible endpoints for the <see cref="DemandPair"/>s that will go through each <see cref="Edge{TNode}"/> in <paramref name="edges"/>.
+        /// Picks possible endpoints for the <see cref="DemandPair"/> that will go through <paramref name="currentEdge"/>.
         /// </summary>
-        /// <param name="edges">The <see cref="Edge{TNode}"/>s that form the known solution.</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with per <see cref="Edge{TNode}"/> a tuple with the possible endpoints of the <see cref="DemandPair"/>s going through it.</returns>
-        private static Dictionary<Edge<Node>, (List<Node>, List<Node>)> ComputePossibleDemandPairEndpoints(IEnumerable<Edge<Node>> edges)
+        /// <param name="solutionEdges">The <see cref="Edge{TNode}"/>s in the solution.</param>
+        /// <param name="existingDemandPairs">All <see cref="DemandPair"/>s that were already generated.</param>
+        /// <param name="currentEdge">The current <see cref="Edge{TNode}"/> through which we are generating a <see cref="DemandPair"/>.</param>
+        /// <returns>A tuple with the possible endpoints of the <see cref="DemandPair"/> going through <paramref name="currentEdge"/>.</returns>
+        private static (List<Node>, List<Node>) ComputePossibleDemandPairEndpoints(IEnumerable<Edge<Node>> solutionEdges, IEnumerable<DemandPair> existingDemandPairs, Edge<Node> currentEdge)
+        {
+            HashSet<Edge<Node>> invalidEdges = new();
+            foreach (DemandPair dp in existingDemandPairs)
+            {
+                int length = dp.LengthOfPath(MockCounter);
+                foreach (Edge<Node> edgeOnDemandPath in dp.EdgesOnDemandPath(MockCounter)) 
+                {
+                    invalidEdges.Add(edgeOnDemandPath);
+                }
+            }
+
+            foreach (Edge<Node> otherEdge in solutionEdges)
+            {
+                invalidEdges.Add(otherEdge);
+            }
+
+            List<Node> cc1 = DFS.FindConnectedComponent(currentEdge.Endpoint1, MockCounter, invalidEdges);
+            List<Node> cc2 = DFS.FindConnectedComponent(currentEdge.Endpoint2, MockCounter, invalidEdges);
+            return (cc1, cc2);
+        }
+
+        /// <summary>
+        /// Finds the connected components on both sides of each <see cref="Edge{TNode}"/> in <paramref name="solutionEdges"/>. These are the possible endpoints for the generated <see cref="DemandPair"/>s.
+        /// </summary>
+        /// <param name="solutionEdges">The <see cref="Edge{TNode}"/> in the solution.</param>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with per <see cref="Edge{TNode}"/> a tuple with the two connected components that appear when this <see cref="Edge{TNode}"/> is removed from the <see cref="Graph"/>.</returns>
+        private static Dictionary<Edge<Node>, (List<Node>, List<Node>)> ComputePossibleExtraDemandPairEndpoints(IEnumerable<Edge<Node>> solutionEdges)
         {
             Dictionary<Edge<Node>, (List<Node>, List<Node>)> result = new();
-            HashSet<Node> allEdgeEndpoints = new();
-            foreach (Edge<Node> edge in edges)
+            foreach (Edge<Node> edge in solutionEdges)
             {
-                allEdgeEndpoints.Add(edge.Endpoint1);
-                allEdgeEndpoints.Add(edge.Endpoint2);
-            }
-            foreach (Edge<Node> edge in edges)
-            {
-                HashSet<Node> invalidEndpoints = new();
-                foreach (Edge<Node> otherEdge in edges)
-                {
-                    if (edge == otherEdge)
-                    {
-                        continue;
-                    }
-                    List<Node> path = DFS.FindPathBetween(edge.Endpoint1, otherEdge.Endpoint1, MockCounter, new HashSet<Node>() { edge.Endpoint2 });
-                    if (path.Last() != otherEdge.Endpoint1)
-                    {
-                        continue;
-                    }
-                    if (path.Contains(otherEdge.Endpoint2))
-                    {
-                        invalidEndpoints.Add(otherEdge.Endpoint1);
-                    }
-                    else
-                    {
-                        invalidEndpoints.Add(otherEdge.Endpoint2);
-                    }
-                }
-                invalidEndpoints.Add(edge.Endpoint2);
-                List<Node> cc1 = DFS.FindConnectedComponent(edge.Endpoint1, MockCounter, invalidEndpoints);
-                invalidEndpoints.Clear();
-                foreach (Edge<Node> otherEdge in edges)
-                {
-                    if (edge == otherEdge)
-                    {
-                        continue;
-                    }
-                    List<Node> path = DFS.FindPathBetween(edge.Endpoint2, otherEdge.Endpoint1, MockCounter, new HashSet<Node>() { edge.Endpoint1 });
-                    if (path.Last() != otherEdge.Endpoint1)
-                    {
-                        continue;
-                    }
-                    if (path.Contains(otherEdge.Endpoint2))
-                    {
-                        invalidEndpoints.Add(otherEdge.Endpoint1);
-                    }
-                    else
-                    {
-                        invalidEndpoints.Add(otherEdge.Endpoint2);
-                    }
-                }
-                invalidEndpoints.Add(edge.Endpoint1);
-                List<Node> cc2 = DFS.FindConnectedComponent(edge.Endpoint2, MockCounter, invalidEndpoints);
+                List<Node> cc1 = DFS.FindConnectedComponent(edge.Endpoint1, MockCounter, new HashSet<Node>() { edge.Endpoint2 });
+                List<Node> cc2 = DFS.FindConnectedComponent(edge.Endpoint2, MockCounter, new HashSet<Node>() { edge.Endpoint1 });
                 result[edge] = (cc1, cc2);
             }
             return result;
