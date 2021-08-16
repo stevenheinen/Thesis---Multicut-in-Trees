@@ -40,6 +40,7 @@ namespace MulticutInTrees.InstanceGeneration
             Counter counter = new();
             List<DemandPair> demandPairs = new();
 
+            /*
             // TODO: THIS IS VERY TEMPORARY
             Node n1 = tree.Nodes(counter).ElementAt(0);
             Node n2 = n1.Neighbours(counter).First();
@@ -50,6 +51,7 @@ namespace MulticutInTrees.InstanceGeneration
             }
             return demandPairs;
             // END OF VERY TEMPORARY IMPLEMENTATION
+            */
 
             Dictionary<int, List<(Node, Node)>> lengthToNodePairs = ComputeLengthToNodePairs(tree, counter, out int maximumLength);
             Dictionary<double, (int, int)> cumulativeLengthDistribution = ComputeCumulativeLengthDistribution(lengthDistribution);
