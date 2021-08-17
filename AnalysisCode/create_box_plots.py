@@ -96,9 +96,10 @@ def read_csv_files_in_folder(folder: str, algorithm: str, nodes: set, dps: set, 
                         key_ops = int(row[key_counter_indices[i]])
                         value_ops = int(row[value_counter_indices[i]])
                         operations[key][i].append(tree_ops + dp_ops + key_ops + value_ops)
-            titles[current_nodes] = []
+            if not titles.__contains__(current_nodes):
+                titles[current_nodes] = []
+                short_titles[current_nodes] = []
             titles[current_nodes].append(title)
-            short_titles[current_nodes] = []
             short_titles[current_nodes].append(short_title)
     return (titles, short_titles)
 
@@ -223,57 +224,59 @@ def make_plots(folder: str, algorithm: str, throughKnownSolution: bool) -> None:
     ticks = {}
     operations = {}
     titles, short_titles = read_csv_files_in_folder(folder, algorithm, nodes, dps, remaining_nodes, remaining_dps, remaining_k, original_k, reduction_rules_names, ticks, operations, throughKnownSolution, [5, 10, 20, 50, 100])
+    if len(titles) == 0:
+        return
     if throughKnownSolution:
         draw_kernel_size_plots(titles, short_titles, nodes, dps, remaining_nodes, remaining_dps, 5)
-        draw_kernel_size_plots(titles, short_titles, nodes, dps, reduction_rules_names, ticks, 5)
-        draw_kernel_size_plots(titles, short_titles, nodes, dps, reduction_rules_names, operations, 5)
+        draw_time_plots(titles, short_titles, nodes, dps, reduction_rules_names, ticks, 5)
+        draw_operations_plots(titles, short_titles, nodes, dps, reduction_rules_names, operations, 5)
     else:
         draw_kernel_size_plots(titles, short_titles, nodes, dps, remaining_nodes, remaining_dps, 1)
-        draw_kernel_size_plots(titles, short_titles, nodes, dps, reduction_rules_names, ticks, 1)
-        draw_kernel_size_plots(titles, short_titles, nodes, dps, reduction_rules_names, operations, 1)
+        draw_time_plots(titles, short_titles, nodes, dps, reduction_rules_names, ticks, 1)
+        draw_operations_plots(titles, short_titles, nodes, dps, reduction_rules_names, operations, 1)
 
 
 guo_niedermeier_algorithm_name = "Guo and Niedermeier"
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarRandomLarge", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarRandomSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeRandomLarge", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeRandomSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierGNPVertexCover", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarRandomLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarRandomSmall", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierCaterpillarThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeRandomLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeRandomSmall", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierDegree3TreeThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierGNPVertexCover", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferLengthDistributionSmall", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferLengthDistributionLarge", guo_niedermeier_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomLarge", guo_niedermeier_algorithm_name, False)
 make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferRandomSmall", guo_niedermeier_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionLarge", guo_niedermeier_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\GuoNiedermeierPruferThroughKnownSolutionSmall", guo_niedermeier_algorithm_name, True)
 
 bousquet_algorithm_name = "Bousquet et al."
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarLengthDistributionLarge", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarLengthDistributionSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarRandomLarge", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarRandomSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarThroughKnownSolutionLarge", bousquet_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarThroughKnownSolutionSmall", bousquet_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeLengthDistributionSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeLengthDistributionLarge", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeRandomLarge", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeRandomSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeThroughKnownSolutionLarge", bousquet_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeThroughKnownSolutionSmall", bousquet_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetGNPVertexCover", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferLengthDistributionSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferLengthDistributionLarge", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomLarge", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomSmall", bousquet_algorithm_name, False)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionLarge", bousquet_algorithm_name, True)
-# make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionSmall", bousquet_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarLengthDistributionLarge", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarLengthDistributionSmall", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarRandomLarge", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarRandomSmall", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarThroughKnownSolutionLarge", bousquet_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetCaterpillarThroughKnownSolutionSmall", bousquet_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeLengthDistributionSmall", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeLengthDistributionLarge", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeRandomLarge", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeRandomSmall", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeThroughKnownSolutionLarge", bousquet_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetDegree3TreeThroughKnownSolutionSmall", bousquet_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetGNPVertexCover", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferLengthDistributionSmall", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferLengthDistributionLarge", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomLarge", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferRandomSmall", bousquet_algorithm_name, False)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionLarge", bousquet_algorithm_name, True)
+make_plots("D:\\Documents\\Universiteit\\Thesis\\ExperimentResults\\BousquetPruferThroughKnownSolutionSmall", bousquet_algorithm_name, True)
 
 # TODO:
 # - All experiments need to be rerun...

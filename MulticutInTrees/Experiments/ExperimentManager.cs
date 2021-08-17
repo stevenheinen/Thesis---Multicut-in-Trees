@@ -328,7 +328,9 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine($"Partial solution size:            {partialSolution.Count}");
                 Console.WriteLine($"Remaining tree:                   {tree}");
                 Console.WriteLine($"Remaining number of demand pairs: {finalDemandPairs.Count}");
-                //Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, finalDemandPairs.Select(dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
+#if VERBOSEDEBUG
+                Console.WriteLine($"Edge-disjoint demand pairs left:  {MaximumMultiCommodityFlowInTrees.ComputeMaximumMultiCommodityFlowGraph<Graph, Edge<Node>, Node>(tree, System.Linq.Enumerable.Select(finalDemandPairs, dp => (dp.Node1, dp.Node2)), new PerformanceMeasurements(""))}");
+#endif
                 Console.WriteLine($"Time required (ticks):            {stopwatch.ElapsedTicks}");
                 Console.WriteLine($"Entire partial solution:          {partialSolution.Print()}");
                 Console.WriteLine($"Remaining edges:                  {tree.Edges(new Counter()).Print()}");

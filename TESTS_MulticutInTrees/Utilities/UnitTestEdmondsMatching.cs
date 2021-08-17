@@ -92,7 +92,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomInMiddle", BindingFlags.NonPublic | BindingFlags.Static);
             method = method.MakeGenericMethod(new Type[] { typeof(Node) });
-            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, node4, args[3], args[4], args[5], MockCounter });
+            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, matching, node4, args[3], args[4], args[5], MockCounter });
 
             List<(Node, Node)> expectedPath = new() { (node15, node14), (node14, node13), (node13, node8), (node8, node7), (node7, node6), (node6, node5), (node5, node4), (node4, node3), (node3, node2), (node2, node1), (node1, node0) };
             Assert.AreEqual(11, augmentingPath.Count);
@@ -164,7 +164,7 @@ namespace TESTS_MulticutInTrees.Utilities
 
             MethodInfo method = typeof(EdmondsMatching).GetMethod("ExpandPathBlossomInMiddle", BindingFlags.NonPublic | BindingFlags.Static);
             method = method.MakeGenericMethod(new Type[] { typeof(Node) });
-            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, node4, args[3], args[4], args[5], MockCounter });
+            List<(Node, Node)> augmentingPath = (List<(Node, Node)>)method.Invoke(null, new object[] { contractedPath, matching, node4, args[3], args[4], args[5], MockCounter });
 
             List<(Node, Node)> expectedPath = new() { (node15, node14), (node14, node13), (node13, node7), (node7, node12), (node12, node11), (node11, node10), (node10, node9), (node9, node8), (node8, node4), (node4, node3), (node3, node2), (node2, node1), (node1, node0) };
             Assert.AreEqual(13, augmentingPath.Count);

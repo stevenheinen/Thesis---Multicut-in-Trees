@@ -169,7 +169,7 @@ namespace MulticutInTrees.MulticutProblem
 
             if (options.Verbose)
             {
-                Console.WriteLine($"Instance created! Minimum possible solution size: {optimalK}. This experiment is using {options.MaxSolutionSize}.");
+                Console.WriteLine($"Instance created! Minimum possible solution size: {optimalK}. This experiment is using {(options.MaxSolutionSize == 0 ? optimalK : options.MaxSolutionSize)}.");
             }
 
             return (tree, demandPairs, optimalK);

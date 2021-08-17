@@ -42,14 +42,14 @@ CaterpillarRandomLarge 				--> moeten er 81 zijn, zijn er ???
 CaterpillarRandomSmall 				--> moeten er 64 zijn, zijn er ???
 CaterpillarThroughKnownSolutionLarge 		--> moeten er 405 zijn, zijn er ???
 CaterpillarThroughKnownSolutionSmall 		--> moeten er 320 zijn, zijn er ???
---CNFSAT					--> moeten er 50 zijn, zijn er 50
+CNFSAT						--> moeten er 50 zijn, zijn er ???
 Degree3TreeLengthDistributionLarge		--> moeten er ??? zijn, zijn er ???
 Degree3TreeLengthDistributionSmall		--> moeten er ??? zijn, zijn er ???
 Degree3TreeRandomLarge 				--> moeten er 81 zijn, zijn er ???
 Degree3TreeRandomSmall 				--> moeten er 64 zijn, zijn er ???
 Degree3TreeThroughKnownSolutionLarge 		--> moeten er 405 zijn, zijn er ???
 Degree3TreeThroughKnownSolutionSmall 		--> moeten er 320 zijn, zijn er ???
---GNPVertexCover				--> moeten er 6400 zijn, zijn er 6400
+GNPVertexCover					--> moeten er 6400 zijn, zijn er ???
 PruferLengthDistributionLarge			--> moeten er ??? zijn, zijn er ???
 PruferLengthDistributionSmall			--> moeten er ??? zijn, zijn er ???
 PruferRandomLarge 				--> moeten er 81 zijn, zijn er ???

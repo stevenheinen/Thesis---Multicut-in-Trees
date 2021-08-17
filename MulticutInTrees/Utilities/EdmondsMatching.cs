@@ -210,19 +210,12 @@ namespace MulticutInTrees.Utilities
 
             List<(TNode, TNode)> pathPPrime = FindPathPPrime(nodesInD, unmatchedEdges, originalNodes, unmatchedVertices, adjacentVertices, nodesInMiddleOfArcs, graphCounter);
 
-            if (Utils.IsSimplePath(pathPPrime))
+            while (!Utils.IsSimplePath(pathPPrime))
             {
-                //todo:temp
-                if (pathPPrime.Count > 0 && !IsAugmentingPath(pathPPrime, matching))
-                {
-                    throw new Exception();
-                }
-
-
-                return pathPPrime;
+                pathPPrime = FindAndContractBlossom<TGraph, TEdge, TNode>(graph, pathPPrime, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
             }
 
-            return FindAndContractBlossom<TGraph, TEdge, TNode>(graph, pathPPrime, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
+            return pathPPrime;
         }
 
         /// <summary>
@@ -440,6 +433,19 @@ namespace MulticutInTrees.Utilities
                 }
             }
 
+            if ((blossom.Count & 1) == 0)
+            {
+                List<(TNode, TNode)> newWalk = InternalFindPathPPrime(originalToD[nonSimpleWalk[0].Item1], new HashSet<Node>() { originalToD[nonSimpleWalk[^1].Item1] }, originalNodes, nodesInMiddleOfArcs, graphCounter);
+                newWalk.Add(nonSimpleWalk[^1]);
+
+                if (Utils.IsSimplePath(newWalk))
+                {
+                    return newWalk;
+                }
+
+                return FindAndContractBlossom<TGraph, TEdge, TNode>(graph, newWalk, matching, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
+            }
+
             TNode contractedBlossomNode = blossom.First();
 
             HashSet<TEdge> originalEdges = new();
@@ -529,7 +535,7 @@ namespace MulticutInTrees.Utilities
             }
 
             // The blossom is somewhere in the middle of the path. Handle that case.
-            return ExpandPathBlossomInMiddle(contractedPath, contractedBlossom, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
+            return ExpandPathBlossomInMiddle(contractedPath, matching, contractedBlossom, originalNodes, originalToD, nodesInMiddleOfArcs, graphCounter);
         }
 
         /// <summary>
@@ -552,9 +558,6 @@ namespace MulticutInTrees.Utilities
 #endif
             HashSet<TNode> seen = new(contractedPath.SelectMany(t => new TNode[] { t.Item1, t.Item2 }));
             seen.Remove(contractedPath[^1].Item2);
-
-            Dictionary<TNode, int> indexInBlossom = new();
-
 
             TNode enterNode = blossom.First(n => n.HasNeighbour(contractedPath[^1].Item1, graphCounter));
             contractedPath[^1] = (contractedPath[^1].Item1, enterNode);
@@ -581,6 +584,12 @@ namespace MulticutInTrees.Utilities
                 matched = !matched;
             }
 
+#if !EXPERIMENT
+            if (!IsAugmentingPath(contractedPath, matching))
+            {
+                throw new Exception("The augmenting path found by the matching algorithm is not an augmenting path!");
+            }
+#endif
             return contractedPath;
         }
 
@@ -589,6 +598,7 @@ namespace MulticutInTrees.Utilities
         /// </summary>
         /// <typeparam name="TNode">The type of nodes in the graph.</typeparam>
         /// <param name="contractedPath">The <see cref="List{T}"/> with the alternating path that should be expanded.</param>
+        /// <param name="matching">The <see cref="HashSet{T}"/> with the current matching.</param>
         /// <param name="contractedBlossom">The <typeparamref name="TNode"/> that represents the contracted blossom.</param>
         /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
         /// <param name="originalToD"><see cref="Dictionary{TKey, TValue}"/> from an original <typeparamref name="TNode"/> to the <see cref="Node"/> in the digraph D.</param>
@@ -596,7 +606,7 @@ namespace MulticutInTrees.Utilities
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>The expanded alternating path.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="contractedPath"/>, <paramref name="contractedBlossom"/>, <paramref name="originalNodes"/>, <paramref name="originalToD"/> or <paramref name="nodesInMiddleOfArcs"/> is <see langword="null"/>.</exception>
-        private static List<(TNode, TNode)> ExpandPathBlossomInMiddle<TNode>(List<(TNode, TNode)> contractedPath, TNode contractedBlossom, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
+        private static List<(TNode, TNode)> ExpandPathBlossomInMiddle<TNode>(List<(TNode, TNode)> contractedPath, HashSet<(TNode, TNode)> matching, TNode contractedBlossom, Dictionary<Node, TNode> originalNodes, Dictionary<TNode, Node> originalToD, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter) where TNode : AbstractNode<TNode>
         {
 #if !EXPERIMENT
             Utils.NullCheck(contractedPath, nameof(contractedPath), "Trying to expand a path in a graph with a contracted blossom somewhere in the middle of the path, but the path is null!");
@@ -620,6 +630,12 @@ namespace MulticutInTrees.Utilities
             totalPath.AddRange(blossomPath);
             totalPath.AddRange(afterBlossom);
 
+#if !EXPERIMENT
+            if (!IsAugmentingPath(contractedPath, matching))
+            {
+                throw new Exception("The augmenting path found by the matching algorithm is not an augmenting path!");
+            }
+#endif
             return totalPath;
         }
 
