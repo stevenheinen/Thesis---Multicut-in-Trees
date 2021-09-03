@@ -41,7 +41,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Graph tree = new();
             CountedCollection<DemandPair> dps = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
             CountedDictionary<Node, CountedCollection<DemandPair>> dpsPerNode = new();
             CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> dpsPerEdge = new();
@@ -54,7 +54,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
         {
             Graph tree = new();
             CountedCollection<DemandPair> dps = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
             CountedDictionary<Node, CountedCollection<DemandPair>> dpsPerNode = new();
             CountedDictionary<Edge<Node>, CountedCollection<DemandPair>> dpsPerEdge = new();
@@ -95,7 +95,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp6 = new(6, node0, node5, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5, dp6 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -130,7 +130,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp4 = new(4, node0, node6, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -163,7 +163,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp3 = new(3, node3, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -195,7 +195,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp2 = new(2, node0, node4, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -220,7 +220,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp1 = new(0, node1, node2, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -258,7 +258,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp5 = new(5, node3, node5, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -294,7 +294,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp5 = new(5, node3, node5, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);
@@ -352,7 +352,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair dp15 = new(15, node6, node11, tree);
             CountedCollection<DemandPair> dps = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, dp10, dp11, dp12, dp13, dp14, dp15 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, tree, dps, 10, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, 0, 0, "", "", tree, dps, 10, 10);
             BousquetKernelisation algorithm = new(instance);
 
             UniqueDirection uniqueDirection = GetReductionRuleInAlgorithm(algorithm);

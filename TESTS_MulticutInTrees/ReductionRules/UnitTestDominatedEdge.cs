@@ -64,7 +64,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {edge14, new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, MockCounter) }
             }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             DominatedEdge dominatedEdge = new(tree, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge);
             Assert.IsNotNull(dominatedEdge);
         }
@@ -97,7 +97,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
                 {edge14, new CountedCollection<DemandPair>(new List<DemandPair>(){ demandPair }, MockCounter) }
             }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new(null, demandPairs, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new(tree, null, new GuoNiedermeierKernelisation(instance), demandPairPerEdge); });
             Assert.ThrowsException<ArgumentNullException>(() => { DominatedEdge de = new(tree, demandPairs, null, demandPairPerEdge); });
@@ -126,7 +126,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair2 = new(2, node3, node0, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -157,7 +157,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair4 = new(4, node0, node2, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -191,7 +191,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair6 = new(6, node1, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5, demandPair6 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -226,7 +226,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair6 = new(5, node1, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair4, demandPair5, demandPair6 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -261,7 +261,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair5 = new(5, node1, node3, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -294,7 +294,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair5 = new(5, node1, node3, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -329,7 +329,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair5 = new(5, node3, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -365,7 +365,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair6 = new(6, node2, node4, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5, demandPair6 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             DominatedEdge dominatedEdge = GetReductionRuleInAlgorithm(algorithm);
@@ -400,7 +400,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             DemandPair demandPair5 = new(5, node1, node3, tree);
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 100, 100);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 100, 100);
             Algorithm algorithm = new GuoNiedermeierKernelisation(instance);
 
             algorithm.ContractEdge(edge34, MockMeasurements);

@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DuplicatesReport ToolsVersion="202.0.20200928.101108">
   <Statistics>
-    <CodebaseCost>113933</CodebaseCost>
-    <TotalDuplicatesCost>5076</TotalDuplicatesCost>
-    <TotalFragmentsCost>11033</TotalFragmentsCost>
+    <CodebaseCost>114084</CodebaseCost>
+    <TotalDuplicatesCost>4682</TotalDuplicatesCost>
+    <TotalFragmentsCost>10245</TotalFragmentsCost>
   </Statistics>
   <Duplicates>
-    <Duplicate Cost="408">
-      <Fragment>
-        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisation.cs</FileName>
-        <OffsetRange Start="2802" End="4050"></OffsetRange>
-        <LineRange Start="47" End="71"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\Algorithms\GuoNiedermeierKernelisationSwap34.cs</FileName>
-        <OffsetRange Start="1620" End="2868"></OffsetRange>
-        <LineRange Start="31" End="55"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="313">
       <Fragment>
         <FileName>MulticutInTrees\ReductionRules\BidimensionalDominatingWingspan.cs</FileName>
@@ -52,6 +40,18 @@
         <FileName>MulticutInTrees\Utilities\MaximumMultiCommodityFlowInTrees.cs</FileName>
         <OffsetRange Start="25289" End="26009"></OffsetRange>
         <LineRange Start="346" End="352"></LineRange>
+      </Fragment>
+    </Duplicate>
+    <Duplicate Cost="213">
+      <Fragment>
+        <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
+        <OffsetRange Start="7243" End="7805"></OffsetRange>
+        <LineRange Start="152" End="153"></LineRange>
+      </Fragment>
+      <Fragment>
+        <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
+        <OffsetRange Start="10540" End="11102"></OffsetRange>
+        <LineRange Start="223" End="224"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="212">
@@ -90,33 +90,21 @@
         <LineRange Start="279" End="303"></LineRange>
       </Fragment>
     </Duplicate>
-    <Duplicate Cost="199">
-      <Fragment>
-        <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="7243" End="7761"></OffsetRange>
-        <LineRange Start="152" End="153"></LineRange>
-      </Fragment>
-      <Fragment>
-        <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="10496" End="11014"></OffsetRange>
-        <LineRange Start="223" End="224"></LineRange>
-      </Fragment>
-    </Duplicate>
     <Duplicate Cost="193">
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="11941" End="12527"></OffsetRange>
-        <LineRange Start="202" End="206"></LineRange>
+        <OffsetRange Start="12819" End="13405"></OffsetRange>
+        <LineRange Start="218" End="222"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="14248" End="14834"></OffsetRange>
-        <LineRange Start="227" End="231"></LineRange>
+        <OffsetRange Start="15126" End="15712"></OffsetRange>
+        <LineRange Start="243" End="247"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="16519" End="17105"></OffsetRange>
-        <LineRange Start="252" End="256"></LineRange>
+        <OffsetRange Start="17397" End="17983"></OffsetRange>
+        <LineRange Start="268" End="272"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="159">
@@ -134,35 +122,35 @@
     <Duplicate Cost="154">
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="12808" End="13270"></OffsetRange>
-        <LineRange Start="211" End="214"></LineRange>
+        <OffsetRange Start="13686" End="14148"></OffsetRange>
+        <LineRange Start="227" End="230"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="15123" End="15585"></OffsetRange>
-        <LineRange Start="236" End="239"></LineRange>
+        <OffsetRange Start="16001" End="16463"></OffsetRange>
+        <LineRange Start="252" End="255"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="17372" End="17834"></OffsetRange>
-        <LineRange Start="261" End="264"></LineRange>
+        <OffsetRange Start="18250" End="18712"></OffsetRange>
+        <LineRange Start="277" End="280"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="147">
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="11246" End="11662"></OffsetRange>
-        <LineRange Start="194" End="197"></LineRange>
+        <OffsetRange Start="12124" End="12540"></OffsetRange>
+        <LineRange Start="210" End="213"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="13545" End="13961"></OffsetRange>
-        <LineRange Start="219" End="222"></LineRange>
+        <OffsetRange Start="14423" End="14839"></OffsetRange>
+        <LineRange Start="235" End="238"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\MulticutProblem\MulticutInstance.cs</FileName>
-        <OffsetRange Start="15838" End="16254"></OffsetRange>
-        <LineRange Start="244" End="247"></LineRange>
+        <OffsetRange Start="16716" End="17132"></OffsetRange>
+        <LineRange Start="260" End="263"></LineRange>
       </Fragment>
     </Duplicate>
     <Duplicate Cost="145">
@@ -233,12 +221,12 @@
     <Duplicate Cost="115">
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="41410" End="41794"></OffsetRange>
+        <OffsetRange Start="41498" End="41882"></OffsetRange>
         <LineRange Start="674" End="682"></LineRange>
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="43391" End="43775"></OffsetRange>
+        <OffsetRange Start="43479" End="43863"></OffsetRange>
         <LineRange Start="708" End="716"></LineRange>
       </Fragment>
     </Duplicate>
@@ -404,7 +392,7 @@
       </Fragment>
       <Fragment>
         <FileName>MulticutInTrees\Algorithms\Algorithm.cs</FileName>
-        <OffsetRange Start="8393" End="8800"></OffsetRange>
+        <OffsetRange Start="8437" End="8844"></OffsetRange>
         <LineRange Start="166" End="176"></LineRange>
       </Fragment>
     </Duplicate>

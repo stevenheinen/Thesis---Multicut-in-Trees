@@ -42,7 +42,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
             int maxSize = 10;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new(instance);
             List<Edge<Node>> partialSolution = new();
             CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode = new();
@@ -59,7 +59,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
             int maxSize = 10;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 10);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 10);
             GuoNiedermeierKernelisation algorithm = new(instance);
             List<Edge<Node>> partialSolution = new();
             CountedDictionary<Node, CountedCollection<DemandPair>> demandPairsPerNode = new();
@@ -147,7 +147,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             int maxSize = 4;
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 4);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 4);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             OverloadedCaterpillar overloadedCaterpillar = GetReductionRuleInAlgorithm(algorithm);
@@ -228,7 +228,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             int maxSize = 4;
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 4);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 4);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             OverloadedCaterpillar overloadedCaterpillar = GetReductionRuleInAlgorithm(algorithm);
@@ -309,7 +309,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             int maxSize = 4;
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 4);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 4);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             OverloadedCaterpillar overloadedCaterpillar = GetReductionRuleInAlgorithm(algorithm);
@@ -394,7 +394,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             int maxSize = 4;
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 4);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 4);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             OverloadedCaterpillar overloadedCaterpillar = GetReductionRuleInAlgorithm(algorithm);
@@ -471,7 +471,7 @@ namespace TESTS_MulticutInTrees.ReductionRules
 
             int maxSize = 3;
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, maxSize, 3);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, maxSize, 3);
             GuoNiedermeierKernelisation algorithm = new(instance);
 
             OverloadedCaterpillar overloadedCaterpillar = GetReductionRuleInAlgorithm(algorithm);

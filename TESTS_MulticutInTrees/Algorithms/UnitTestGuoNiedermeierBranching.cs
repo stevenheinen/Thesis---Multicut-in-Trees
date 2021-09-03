@@ -22,7 +22,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 0);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 1, 0);
 
             GuoNiedermeierBranching gnb = new(instance);
             Assert.IsNotNull(gnb);
@@ -33,7 +33,7 @@ namespace TESTS_MulticutInTrees.Algorithms
         {
             Graph tree = new();
             CountedCollection<DemandPair> demandPairs = new();
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 1, 0);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 1, 0);
 
             Assert.ThrowsException<ArgumentNullException>(() => { GuoNiedermeierBranching gnb = new(null); });
         }
@@ -76,7 +76,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4 }, MockCounter);
 
             int k = 3;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, k, 3);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, k, 3);
 
             GuoNiedermeierBranching gnb = new(instance);
             (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
@@ -122,7 +122,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             int k = 2;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, k, 2);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, k, 2);
 
             GuoNiedermeierBranching gnb = new(instance);
             (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
@@ -172,7 +172,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3 }, MockCounter);
 
             int k = 1;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, k, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, k, 1);
 
             GuoNiedermeierBranching gnb = new(instance);
             (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
@@ -234,7 +234,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
             int k = 3;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, k, 3);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, k, 3);
 
             GuoNiedermeierBranching gnb = new(instance);
             (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();
@@ -274,7 +274,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { dp1, dp2, dp3, dp4, dp5 }, MockCounter);
 
             int k = 4;
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, k, 4);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, k, 4);
 
             GuoNiedermeierBranching gnb = new(instance);
             (List<Edge<Node>>, ExperimentOutput) solution = gnb.Run();

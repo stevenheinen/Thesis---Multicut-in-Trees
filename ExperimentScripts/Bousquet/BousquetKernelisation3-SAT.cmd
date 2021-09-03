@@ -1,6 +1,10 @@
-REM This file will run the kernelisation algorithm by Bousquet et al. on instances created from 3-SAT instances.
-for /r D:\Documents\Universiteit\Thesis\3SAT-instances\ %%i in (*.cnf) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=BousquetKernelisation --treeType=CNFSAT --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\3SAT-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\Bousquet3SAT" -v --instanceFilePath="%%i"
+set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "repetitions=1"
+set "algorithm=BousquetKernelisation"
+set "satInstanceDir=D:\Documents\Universiteit\Thesis\3SAT-instances\"
+set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\3SAT-instances"
+set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults\Bousquet3SAT"
+for /r "%satInstanceDir%" %%i in (*.cnf) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=CNFSAT --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
 del mipMinSolSizeSolver.log
-pause

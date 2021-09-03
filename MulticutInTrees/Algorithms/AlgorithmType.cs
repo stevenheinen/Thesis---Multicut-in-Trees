@@ -39,9 +39,5 @@ namespace MulticutInTrees.Algorithms
         /// The kernelisation algorithm by Chen et al. that finds a kernel of size O(k^3).
         /// </summary>
         ChenKernelisation,
-        /// <summary>
-        /// Guo and Niedermeier's kernelisation algorithm with rules 3 and 4 swapped.
-        /// </summary>
-        GuoNiedermeierKernelisationSwap34,
     }
 }

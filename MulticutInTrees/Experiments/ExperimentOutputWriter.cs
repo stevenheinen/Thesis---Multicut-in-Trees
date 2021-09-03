@@ -73,6 +73,8 @@ namespace MulticutInTrees.Experiments
             writer.WriteField("Algorithm");
             writer.WriteField("TreeSeed");
             writer.WriteField("DPSeed");
+            writer.WriteField("TreeFileName");
+            writer.WriteField("DPFileName");
             writer.WriteField("Optimal K");
             writer.WriteField("K used");
             writer.WriteField("Solvable");
@@ -122,6 +124,8 @@ namespace MulticutInTrees.Experiments
             writer.WriteField(output.Algorithm);
             writer.WriteField(output.TreeSeed);
             writer.WriteField(output.DPSeed);
+            writer.WriteField(output.TreeFileName);
+            writer.WriteField(output.DPFileName);
             writer.WriteField(output.OptimalMaxSolutionSize);
             writer.WriteField(output.MaxSolutionSize);
             writer.WriteField(output.Solvable);

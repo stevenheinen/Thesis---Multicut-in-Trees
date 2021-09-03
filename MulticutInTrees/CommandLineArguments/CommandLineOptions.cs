@@ -62,13 +62,13 @@ namespace MulticutInTrees.CommandLineArguments
         /// <summary>
         /// The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.
         /// </summary>
-        [Option("instanceFilePath", HelpText = "The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.")]
+        [Option("instanceFilePath", Default = "", HelpText = "The path to the file with either the CNF-SAT or Vertex Cover instance, or the fixed tree. Only necessary for CNFSAT, VertexCover or Fixed input tree types.")]
         public string InstanceFilePath { get; set; }
 
         /// <summary>
         /// The path to the file with the endpoints of the demand pairs. Only necessary for fixed input demand pairs.
         /// </summary>
-        [Option("dpFile", HelpText = "The path to the file with the endpoints of the demand pairs. Only necessary for fixed input demand pairs.")]
+        [Option("dpFile", Default = "", HelpText = "The path to the file with the endpoints of the demand pairs. Only necessary for fixed input demand pairs.")]
         public string DemandPairFilePath { get; set; }
 
         /// <summary>

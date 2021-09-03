@@ -39,7 +39,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             DemandPair dp = new(0, node0, node3, tree);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, new CountedCollection<DemandPair>(new List<DemandPair>() { dp }, MockCounter), 3, 1);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, new CountedCollection<DemandPair>(new List<DemandPair>() { dp }, MockCounter), 3, 1);
             GuoNiedermeierKernelisation g = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) solution = g.Run();
             Assert.IsTrue(solution.Item4.Solvable);
@@ -103,7 +103,7 @@ namespace TESTS_MulticutInTrees.Algorithms
 
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>() { demandPair1, demandPair2, demandPair3, demandPair4, demandPair5 }, MockCounter);
 
-            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, tree, demandPairs, 3, 3);
+            MulticutInstance instance = new(InputTreeType.Fixed, InputDemandPairsType.Fixed, -1, -1, "", "", tree, demandPairs, 3, 3);
             GuoNiedermeierKernelisation gnfpt = new(instance);
 
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
@@ -132,7 +132,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             int optimalK = 28;
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(dpSeed))), MockCounter);
-            MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, treeSeed, dpSeed, tree, demandPairs, optimalK, optimalK);
+            MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, treeSeed, dpSeed, "", "", tree, demandPairs, optimalK, optimalK);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -169,7 +169,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             int optimalK = 54;
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(dpSeed))), MockCounter);
-            MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, treeSeed, dpSeed, tree, demandPairs, optimalK, optimalK);
+            MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, treeSeed, dpSeed, "", "", tree, demandPairs, optimalK, optimalK);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 
@@ -206,7 +206,7 @@ namespace TESTS_MulticutInTrees.Algorithms
             int optimalK = 24;
             Graph tree = TreeFromPruferSequence.GenerateTree(nrNodes, new Random(treeSeed));
             CountedCollection<DemandPair> demandPairs = new(new List<DemandPair>(RandomDemandPairs.GenerateRandomDemandPairs(nrDPs, tree, new Random(dpSeed))), MockCounter);
-            MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, treeSeed, dpSeed, tree, demandPairs, optimalK, optimalK);
+            MulticutInstance instance = new(InputTreeType.Prufer, InputDemandPairsType.Random, treeSeed, dpSeed, "", "", tree, demandPairs, optimalK, optimalK);
             GuoNiedermeierKernelisation gnfpt = new(instance);
             (Graph, List<Edge<Node>>, List<DemandPair>, ExperimentOutput) result = gnfpt.Run();
 

@@ -102,6 +102,8 @@ namespace MulticutInTrees.InstanceGeneration
                     graph.AddNode(node, MockCounter);
                 }
 
+                (int, int)[] edgeIndices = new (int, int)[numberOfEdges];
+                int offset = 0;
                 for (uint i = 0; i < numberOfEdges; i++)
                 {
                     line = sr.ReadLine().Trim();
@@ -120,8 +122,17 @@ namespace MulticutInTrees.InstanceGeneration
                         throw new BadFileFormatException($"The line {line} is not of a correct format. Its third word should be a number that represents the endpoint of an edge, but it cannot be converted to an integer.!");
                     }
 
-                    Edge<Node> edge = new(nodes[endpoint1], nodes[endpoint2]);
-                    graph.AddEdge(edge, MockCounter);
+                    if (endpoint1 == numberOfNodes || endpoint2 == numberOfNodes)
+                    {
+                        offset = 1;
+                    }
+
+                    edgeIndices[i] = (endpoint1, endpoint2);
+                }
+
+                foreach ((int endpoint1, int endpoint2) in edgeIndices)
+                {
+                    graph.AddEdge(new Edge<Node>(nodes[endpoint1 - offset], nodes[endpoint2 - offset]), MockCounter);
                 }
 
                 return graph;

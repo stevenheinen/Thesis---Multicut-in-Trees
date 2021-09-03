@@ -227,7 +227,8 @@ namespace MulticutInTrees.InstanceGeneration
             }
             else
             {
-                fileNameBuilder.Append($"_treeFile=({options.InstanceFilePath})".Replace(".", "[dot]").Replace("\\", "[slash]").Replace(":", ""));
+                string file = options.InstanceFilePath.Split("\\")[^1];
+                fileNameBuilder.Append($"_treeFile=({file})".Replace(".", "[dot]"));
             }
 
             if (options.InputDemandPairsType == InputDemandPairsType.Random)
@@ -236,7 +237,8 @@ namespace MulticutInTrees.InstanceGeneration
             }
             else if (options.InputDemandPairsType == InputDemandPairsType.Fixed)
             {
-                fileNameBuilder.Append($"_dpFile=({options.DemandPairFilePath})".Replace(".", "[dot]").Replace("\\", "[slash]").Replace(":", ""));
+                string file = options.DemandPairFilePath.Split("\\")[^1];
+                fileNameBuilder.Append($"_dpFile=({file})".Replace(".", "[dot]"));
             }
             else if (options.InputDemandPairsType == InputDemandPairsType.LengthDistribution)
             {

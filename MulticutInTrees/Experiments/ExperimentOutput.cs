@@ -52,6 +52,16 @@ namespace MulticutInTrees.Experiments
         public int DPSeed { get; }
 
         /// <summary>
+        /// The name of the file from which the tree was generated.
+        /// </summary>
+        public string TreeFileName { get; }
+
+        /// <summary>
+        /// The name of the file from which the <see cref="DemandPair"/>s were generated.
+        /// </summary>
+        public string DPFileName { get; }
+
+        /// <summary>
         /// Whether the instance is solvable.
         /// </summary>
         public bool Solvable { get; }
@@ -101,6 +111,8 @@ namespace MulticutInTrees.Experiments
         /// <param name="algorithm">The <see cref="AlgorithmType"/> used to solve the instance.</param>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="treeFileName">The name of the file from which the tree was generated.</param>
+        /// <param name="dpFileName">The name of the file from which the <see cref="DemandPair"/>s were generated.</param>
         /// <param name="maxSolutionSize">The maximum size the solution is allowed to be in this experiment.</param>
         /// <param name="optimalMaxSolutionSize">The minimum possible solution size for this instance.</param>
         /// <param name="solvable">Whether the instance is solvable.</param>
@@ -110,7 +122,7 @@ namespace MulticutInTrees.Experiments
         /// <param name="algorithmOperations">The <see cref="PerformanceMeasurements"/> the <see cref="Algorithm"/> itself used.</param>
         /// <param name="reductionRulesOperations"><see cref="ReadOnlyCollection{T}"/> of the <see cref="PerformanceMeasurements"/> per <see cref="ReductionRules.ReductionRule"/> in the algorithm.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="algorithmOperations"/> or <paramref name="reductionRulesOperations"/> is <see langword="null"/>.</exception>
-        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int treeSeed, int dpSeed, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, int remainingK, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
+        public ExperimentOutput(int nodes, int demandPairs, InputTreeType treeType, InputDemandPairsType dpType, AlgorithmType algorithm, int treeSeed, int dpSeed, string treeFileName, string dpFileName, int maxSolutionSize, int optimalMaxSolutionSize, bool solvable, int remainingNodes, int remainingDPs, int remainingK, PerformanceMeasurements algorithmOperations, ReadOnlyCollection<PerformanceMeasurements> reductionRulesOperations)
         {
 #if !EXPERIMENT
             Utilities.Utils.NullCheck(algorithmOperations, nameof(algorithmOperations), "Trying to creat an experiment output, but the performance measures of the algorithm is null!");

@@ -1,27 +1,38 @@
-REM This file will run the kernelisation algorithm by Guo and Niedermeier on instances created from Vertex Cover instances.
-for %%i in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb30-15-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%i"
+set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "repetitions=1"
+set "algorithm=GuoNiedermeierKernelisation"
+set "vertexCoverInstanceDir1=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb30-15-mis\"
+set "vertexCoverInstanceDir2=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb35-17-mis\"
+set "vertexCoverInstanceDir3=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb40-19-mis\"
+set "vertexCoverInstanceDir4=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb45-21-mis\"
+set "vertexCoverInstanceDir5=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb50-23-mis\"
+set "vertexCoverInstanceDir6=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb53-24-mis\"
+set "vertexCoverInstanceDir7=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb56-25-mis\"
+set "vertexCoverInstanceDir8=D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb59-26-mis\"
+set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances"
+set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover"
+for /r "%vertexCoverInstanceDir1%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%j in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb35-17-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%j"
+for /r "%vertexCoverInstanceDir2%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%k in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb40-19-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%k"
+for /r "%vertexCoverInstanceDir3%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%l in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb45-21-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%l"
+for /r "%vertexCoverInstanceDir4%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%m in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb50-23-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%m"
+for /r "%vertexCoverInstanceDir5%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%n in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb53-24-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%n"
+for /r "%vertexCoverInstanceDir6%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%o in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb56-25-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%o"
+for /r "%vertexCoverInstanceDir7%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
-for %%p in (D:\Documents\Universiteit\Thesis\VertexCoverInstances\frb59-26-mis\*.mis) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GuoNiedermeierKernelisation --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\VertexCover-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierVertexCover" -v --instanceFilePath="%%p"
+for /r "%vertexCoverInstanceDir8%" %%i in (*.mis) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
 del mipMinSolSizeSolver.log
-pause

@@ -1,6 +1,10 @@
-REM This file will create txt files with instances created from CNF-SAT instances.
-for %%i in (D:\Documents\Universiteit\Thesis\CNF-SAT-instances\*.cnf) do (
-..\..\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe --algorithm=GenerateInstances --treeType=CNFSAT --dpType=FromTreeInstance --instanceDir="D:\Documents\Universiteit\Thesis\Instances\CNF-SAT-instances" --outputDir="D:\Documents\Universiteit\Thesis\ExperimentResults" -v --instanceFilePath="%%i"
+set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "algorithm=GenerateInstances"
+set "repetitions=1"
+set "cnfsatInstanceDir=D:\Documents\Universiteit\Thesis\CNF-SAT-instances\"
+set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\CNF-SAT-instances"
+set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults"
+for /r "%cnfsatInstanceDir%" %%i in (*.cnf) do (
+"%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=CNFSAT --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
 del mipMinSolSizeSolver.log
-pause

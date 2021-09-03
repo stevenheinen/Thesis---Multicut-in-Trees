@@ -256,7 +256,7 @@ namespace MulticutInTrees.Utilities
             List<(TNode, TNode)> pathPPrime;
             try
             {
-                pathPPrime = InternalFindPathPPrime(start, target, originalNodes, nodesInMiddleOfArcs, graphCounter);
+                pathPPrime = InternalFindPathPPrime(start, target, originalNodes, nodesInMiddleOfArcs, new HashSet<Node>(), graphCounter);
                 pathPPrime.Add((pathPPrime[^1].Item2, pathPPrime[^1].Item2.Neighbours(graphCounter).Cast<TNode>().First(unmatchedVertices.Contains)));
             }
             catch (NotInGraphException)
@@ -276,11 +276,12 @@ namespace MulticutInTrees.Utilities
         /// <param name="target">The node (in D) to end the search at.</param>
         /// <param name="originalNodes"><see cref="Dictionary{TKey, TValue}"/> from a <see cref="Node"/> in the digraph D to the original <typeparamref name="TNode"/>.</param>
         /// <param name="nodesInMiddleOfArcs"><see cref="Dictionary{TKey, TValue}"/> with, for each arc in the digraph D, the <typeparamref name="TNode"/> that is between the unmatched and the matched edge that was used to create this arc in D.</param>
+        /// <param name="skip"><see cref="Node"/>s to be skipped during the BFS.</param>
         /// <param name="graphCounter">The <see cref="Counter"/> to be used for performance measurement.</param>
         /// <returns>A <see cref="List{T}"/> with tuples of two <typeparamref name="TNode"/>s that represent a path in the original graph from (the nodes corresponding to) <paramref name="start"/> to <paramref name="target"/>.</returns>
-        private static List<(TNode, TNode)> InternalFindPathPPrime<TNode>(Node start, HashSet<Node> target, Dictionary<Node, TNode> originalNodes, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, Counter graphCounter)
+        private static List<(TNode, TNode)> InternalFindPathPPrime<TNode>(Node start, HashSet<Node> target, Dictionary<Node, TNode> originalNodes, Dictionary<(TNode, TNode), TNode> nodesInMiddleOfArcs, HashSet<Node> skip, Counter graphCounter)
         {
-            List<Node> pathInD = BFS.FindShortestPath(start, target, graphCounter);
+            List<Node> pathInD = BFS.FindShortestPath(start, target, graphCounter, skip);
 
             List<(TNode, TNode)> pathPPrime = new();
             for (int i = 0; i < pathInD.Count - 1; i++)
@@ -435,7 +436,7 @@ namespace MulticutInTrees.Utilities
 
             if ((blossom.Count & 1) == 0)
             {
-                List<(TNode, TNode)> newWalk = InternalFindPathPPrime(originalToD[nonSimpleWalk[0].Item1], new HashSet<Node>() { originalToD[nonSimpleWalk[^1].Item1] }, originalNodes, nodesInMiddleOfArcs, graphCounter);
+                List<(TNode, TNode)> newWalk = InternalFindPathPPrime(originalToD[nonSimpleWalk[0].Item1], new HashSet<Node>() { originalToD[nonSimpleWalk[^1].Item1] }, originalNodes, nodesInMiddleOfArcs, new HashSet<Node>(), graphCounter);
                 newWalk.Add(nonSimpleWalk[^1]);
 
                 if (Utils.IsSimplePath(newWalk))
@@ -624,7 +625,12 @@ namespace MulticutInTrees.Utilities
             Node start = originalToD[lastNodeBeforeBlossom];
             Node end = originalToD[firstNodeAfterBlossom];
 
-            List<(TNode, TNode)> blossomPath = InternalFindPathPPrime(start, new HashSet<Node>() { end }, originalNodes, nodesInMiddleOfArcs, graphCounter);
+            HashSet<Node> skip = new(contractedPath.Select(n => originalToD[n.Item1]));
+            skip.Add(originalToD[contractedPath[^1].Item2]);
+            skip.Remove(start);
+            skip.Remove(end);
+
+            List<(TNode, TNode)> blossomPath = InternalFindPathPPrime(start, new HashSet<Node>() { end }, originalNodes, nodesInMiddleOfArcs, skip, graphCounter);
 
             List<(TNode, TNode)> totalPath = new(beforeBlossom);
             totalPath.AddRange(blossomPath);

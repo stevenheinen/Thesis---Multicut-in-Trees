@@ -33,7 +33,7 @@ namespace MulticutInTrees.Experiments
 #endif
             List<ExperimentOutput> results = options.AlgorithmType switch
             {
-                AlgorithmType.GuoNiedermeierKernelisation or AlgorithmType.GuoNiedermeierKernelisationSwap34 or AlgorithmType.BousquetKernelisation or AlgorithmType.ChenKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
+                AlgorithmType.GuoNiedermeierKernelisation or AlgorithmType.BousquetKernelisation or AlgorithmType.ChenKernelisation => RunMultipleExperiments(options, RunKernelisationAlgorithm),
                 AlgorithmType.GurobiMIPSolver => RunMultipleExperiments(options, RunGurobiMIPAlgorithm),
                 AlgorithmType.GuoNiederMeierBranching => RunMultipleExperiments(options, RunBranchingAlgorithm),
                 AlgorithmType.BruteForce => RunMultipleExperiments(options, RunBruteForceAlgorithm),
@@ -165,7 +165,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine("Instance generated!");
             }
 
-            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, treeSeed, dpSeed, instance.K, instance.OptimalK, true, -1, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GenerateInstances, treeSeed, dpSeed, instance.TreeFileName, instance.DPFileName, instance.K, instance.OptimalK, true, -1, -1, -1, new PerformanceMeasurements("Generate instances"), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -206,7 +206,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, treeSeed, dpSeed, instance.K, instance.OptimalK, solved, -1, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.BruteForce, treeSeed, dpSeed, instance.TreeFileName, instance.DPFileName, instance.K, instance.OptimalK, solved, -1, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -247,7 +247,7 @@ namespace MulticutInTrees.Experiments
                 Console.WriteLine();
             }
 
-            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, treeSeed, dpSeed, options.MaxSolutionSize, minimumSize, true, -1, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
+            ExperimentOutput output = new(instance.NumberOfNodes, instance.NumberOfDemandPairs, options.InputTreeType, options.InputDemandPairsType, AlgorithmType.GurobiMIPSolver, treeSeed, dpSeed, instance.TreeFileName, instance.DPFileName, options.MaxSolutionSize, minimumSize, true, -1, -1, -1, new PerformanceMeasurements(nameof(GurobiMIPAlgorithm)), new ReadOnlyCollection<PerformanceMeasurements>(new List<PerformanceMeasurements>()));
 
             return output;
         }
@@ -357,7 +357,6 @@ namespace MulticutInTrees.Experiments
             return algorithmType switch
             {
                 AlgorithmType.GuoNiedermeierKernelisation => new GuoNiedermeierKernelisation(instance),
-                AlgorithmType.GuoNiedermeierKernelisationSwap34 => new GuoNiedermeierKernelisationSwap34(instance),
                 AlgorithmType.BousquetKernelisation => new BousquetKernelisation(instance),
                 AlgorithmType.ChenKernelisation => new ChenKernelisation(instance),
                 _ => throw new NotSupportedException($"The algorithm type {algorithmType} is not supported!")

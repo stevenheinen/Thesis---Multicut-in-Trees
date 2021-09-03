@@ -46,6 +46,16 @@ namespace MulticutInTrees.MulticutProblem
         public int DPSeed { get; }
 
         /// <summary>
+        /// The name of the file from which the tree was generated.
+        /// </summary>
+        public string TreeFileName { get; }
+
+        /// <summary>
+        /// The name of the file from which the <see cref="DemandPair"/>s were generated.
+        /// </summary>
+        public string DPFileName { get; }
+
+        /// <summary>
         /// The input <see cref="Tree"/>.
         /// </summary>
         public Graph Tree { get; }
@@ -72,13 +82,15 @@ namespace MulticutInTrees.MulticutProblem
         /// <param name="dpType">The <see cref="InputDemandPairsType"/> used to generate the <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="treeSeed">The seed used for the random number generator for the <see cref="AbstractGraph{TEdge, TNode}"/> in the instance.</param>
         /// <param name="dpSeed">The seed used for the random number generator for the <see cref="DemandPair"/>s in the instance.</param>
+        /// <param name="treeFileName">The name of the file from which the tree was generated.</param>
+        /// <param name="dpFileName">The name of the file from which the <see cref="DemandPair"/>s were generated.</param>
         /// <param name="tree">The tree of in the instance.</param>
         /// <param name="demandPairs">The <see cref="CountedCollection{T}"/> of <see cref="DemandPair"/>s in the instance.</param>
         /// <param name="k">The size the cutset is allowed to be.</param>
         /// <param name="optimalK">The minimum possible size the cutset can be.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="tree"/> or <paramref name="demandPairs"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="k"/> is smaller than zero.</exception>
-        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int treeSeed, int dpSeed, Graph tree, CountedCollection<DemandPair> demandPairs, int k, int optimalK)
+        internal MulticutInstance(InputTreeType treeType, InputDemandPairsType dpType, int treeSeed, int dpSeed, string treeFileName, string dpFileName, Graph tree, CountedCollection<DemandPair> demandPairs, int k, int optimalK)
         {
             Counter mockCounter = new();
 #if !EXPERIMENT
@@ -99,6 +111,8 @@ namespace MulticutInTrees.MulticutProblem
             DPType = dpType;
             TreeSeed = treeSeed;
             DPSeed = dpSeed;
+            TreeFileName = treeFileName;
+            DPFileName = dpFileName;
             Tree = tree;
             DemandPairs = demandPairs;
             K = k;
@@ -139,6 +153,8 @@ namespace MulticutInTrees.MulticutProblem
             DPType = options.InputDemandPairsType;
             TreeSeed = treeSeed;
             DPSeed = dpSeed;
+            TreeFileName = options.InstanceFilePath.Split("\\")[^1];
+            DPFileName = options.DemandPairFilePath.Split("\\")[^1];
             Tree = tree;
             DemandPairs = demandPairs;
             K = options.MaxSolutionSize > 0 ? options.MaxSolutionSize : optimalK;
