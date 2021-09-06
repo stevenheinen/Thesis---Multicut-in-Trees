@@ -24,29 +24,6 @@ namespace MulticutInTrees
                 Console.BufferHeight = short.MaxValue - 1;
             }
 #endif
-            Console.WriteLine("Hello World!");
-
-            // For debug purposes only. Should not be included in the final version of the program.
-            if (args.Length == 0)
-            {
-
-                // --instanceDir="D:\Documents\Universiteit\Thesis\Instances\GNPVertexCover-instances" --outputDir="D:\Downloads" -v --instanceFilePath="D:\Documents\Universiteit\Thesis\GNPVertexCoverInstances\gnp_nrNodes=384_nrEdges=640_seed=5185438.mis"
-
-
-                string[] split = "--treeSeed=0 --dpSeed=0 --repetitions=1 --experiments=1 --algorithm=BousquetKernelisation --treeType=VertexCover --dpType=FromTreeInstance --maxSolutionSize=0 -v".Split();
-
-                args = new string[split.Length + 3];
-                split.CopyTo(args, 0);
-                //args[^1] = "--outputDir=D:\\Documents\\Universiteit\\Thesis\\ExperimentResults";
-                args[^1] = "--outputDir=D:\\Downloads";
-                //args[^2] = "--instanceDir=D:\\Documents\\Universiteit\\Thesis\\Instances\\GNPVertexCover-instances";
-                args[^2] = "--instanceDir=D:\\Downloads\\New folder";
-                //args[^3] = "--instanceFilePath=D:\\Documents\\Universiteit\\Thesis\\3SAT-instances\\uf50-218\\uf50-0001.cnf";
-                //args[^3] = "--instanceFilePath=D:\\Downloads\\3sat-test.cnf";
-                args[^3] = "--instanceFilePath=D:\\Documents\\Universiteit\\Thesis\\VertexCoverInstances\\frb45-21-mis\\frb45-21-2.mis";
-                //args[^3] = "--instanceFilePath=D:\\Documents\\Universiteit\\Thesis\\GNMVertexCoverInstances\\gnm_nrNodes=128_nrEdges=128_seed=6007244.mis";
-            }
-
             // Parse the command line arguments and run the experiments.
             CommandLineParser.ParseAndExecute(args);
         }

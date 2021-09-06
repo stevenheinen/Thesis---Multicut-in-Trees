@@ -26,7 +26,7 @@ namespace MulticutInTrees.CommandLineArguments
         /// <summary>
         /// The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment. Only works for generated input. When input is read from a file, this option will be used as a multiplier for the number of repetitions per experiment
         /// </summary>
-        [Option("experiments", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment. Only works for generated input. When input is read from a file, this option will be used as a multiplier for the number of repetitions per experiment")]
+        [Option("experiments", Default = 1, HelpText = "The number of experiments to run with these settings. Each experiment starts with its own random number generator, that is seeded as the seed argument plus the number of the current experiment. Only works for generated input. When input is read from a file, this option will be used as a multiplier for the number of repetitions per experiment.")]
         public int Experiments { get; set; }
 
         /// <summary>
