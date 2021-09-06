@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=20"
 set "repetitions=1"
 set "algorithm=BousquetKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\Degree3TreeThroughKnownSolutionLarge"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetDegree3TreeThroughKnownSolutionLarge"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=9550151 --dpSeed=8034975 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=2048 --maxSolutionSize=5
 "%exeLocation%" --treeSeed=3624865 --dpSeed=553572 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=2048 --maxSolutionSize=10
 "%exeLocation%" --treeSeed=459080 --dpSeed=5593777 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=2048 --maxSolutionSize=20

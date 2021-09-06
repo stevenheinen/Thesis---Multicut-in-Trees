@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=50"
 set "repetitions=1"
 set "algorithm=GuoNiedermeierKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\Degree3TreeRandomLarge"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierDegree3TreeRandomLarge"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=7763228 --dpSeed=6287255 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=2048 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=649759 --dpSeed=9133679 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=3072 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=6468207 --dpSeed=4381785 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=4096 --maxSolutionSize=0

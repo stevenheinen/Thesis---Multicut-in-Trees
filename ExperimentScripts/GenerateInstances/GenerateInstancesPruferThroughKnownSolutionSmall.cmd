@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=50"
 set "repetitions=1"
 set "algorithm=GenerateInstances"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\PruferThroughKnownSolutionSmall"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=6809465 --dpSeed=6721536 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=5
 "%exeLocation%" --treeSeed=9303223 --dpSeed=7360083 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=10
 "%exeLocation%" --treeSeed=5392685 --dpSeed=1838159 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=20

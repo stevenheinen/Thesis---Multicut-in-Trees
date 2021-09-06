@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=50"
 set "repetitions=1"
 set "algorithm=GenerateInstances"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\PruferRandomLarge"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=8527900 --dpSeed=2046510 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=2048
 "%exeLocation%" --treeSeed=4773547 --dpSeed=5633394 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=3072
 "%exeLocation%" --treeSeed=7858273 --dpSeed=562553 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=2048 --nrDPs=4096

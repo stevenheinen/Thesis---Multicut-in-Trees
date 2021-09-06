@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=100"
 set "repetitions=1"
 set "algorithm=GenerateInstances"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\Degree3TreeRandomSmall"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=5225706 --dpSeed=4656174 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=8173074 --dpSeed=8246651 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=256 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=3744801 --dpSeed=6560504 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=384 --maxSolutionSize=0

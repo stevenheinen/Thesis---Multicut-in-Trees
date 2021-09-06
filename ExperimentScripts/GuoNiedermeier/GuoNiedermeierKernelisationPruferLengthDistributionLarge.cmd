@@ -1,10 +1,10 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=50"
 set "repetitions=1"
 set "algorithm=GuoNiedermeierKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\PruferLengthDistributionLarge"
-set "resultsOutputDirShort=D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierPruferLengthDistributionShortLarge"
-set "resultsOutputDirLong=D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierPruferLengthDistributionLongLarge"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDirShort=FILL IN IN CMD FILE"
+set "resultsOutputDirLong=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=3218375 --dpSeed=9306963 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 16, 0.9), (113, 238, 0.1)" --nrNodes=2048 --nrDPs=2048 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=1860445 --dpSeed=1164464 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 16, 0.9), (113, 238, 0.1)" --nrNodes=2048 --nrDPs=3072 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=8990293 --dpSeed=9334298 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 16, 0.9), (113, 238, 0.1)" --nrNodes=2048 --nrDPs=4096 --maxSolutionSize=0

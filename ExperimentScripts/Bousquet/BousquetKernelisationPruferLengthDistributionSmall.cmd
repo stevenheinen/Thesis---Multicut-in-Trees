@@ -1,10 +1,10 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=100"
 set "repetitions=1"
 set "algorithm=BousquetKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\PruferLengthDistributionSmall"
-set "resultsOutputDirShort=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetPruferLengthDistributionShortSmall"
-set "resultsOutputDirLong=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetPruferLengthDistributionLongSmall"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDirShort=FILL IN IN CMD FILE"
+set "resultsOutputDirLong=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=7852550 --dpSeed=2735527 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 4, 0.9), (28, 53, 0.1)" --nrNodes=128 --nrDPs=128 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=1395097 --dpSeed=4290172 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 4, 0.9), (28, 53, 0.1)" --nrNodes=128 --nrDPs=256 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=4408106 --dpSeed=9564789 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Prufer --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 4, 0.9), (28, 53, 0.1)" --nrNodes=128 --nrDPs=384 --maxSolutionSize=0

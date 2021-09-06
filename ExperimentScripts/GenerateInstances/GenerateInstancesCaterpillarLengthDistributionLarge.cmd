@@ -1,10 +1,10 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=50"
 set "repetitions=1"
 set "algorithm=GenerateInstances"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\CaterpillarLengthDistributionLarge"
-set "resultsOutputDirShort=D:\Documents\Universiteit\Thesis\ExperimentResults"
-set "resultsOutputDirLong=D:\Documents\Universiteit\Thesis\ExperimentResults"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDirShort=FILL IN IN CMD FILE"
+set "resultsOutputDirLong=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=960981 --dpSeed=6275991 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 84, 0.9), (558, 1313, 0.1)" --nrNodes=2048 --nrDPs=2048 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=1742808 --dpSeed=9027211 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm=%algorithm% --treeType=Caterpillar --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 84, 0.9), (558, 1313, 0.1)" --nrNodes=2048 --nrDPs=3072 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=5727442 --dpSeed=3801156 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm=%algorithm% --treeType=Caterpillar --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 84, 0.9), (558, 1313, 0.1)" --nrNodes=2048 --nrDPs=4096 --maxSolutionSize=0

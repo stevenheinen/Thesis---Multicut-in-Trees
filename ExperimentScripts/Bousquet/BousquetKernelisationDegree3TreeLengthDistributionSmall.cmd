@@ -1,10 +1,10 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=100"
 set "repetitions=1"
 set "algorithm=BousquetKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\Degree3TreeLengthDistributionSmall"
-set "resultsOutputDirShort=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetDegree3TreeLengthDistributionShortSmall"
-set "resultsOutputDirLong=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetDegree3TreeLengthDistributionLongSmall"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDirShort=FILL IN IN CMD FILE"
+set "resultsOutputDirLong=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=4866499 --dpSeed=3340276 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 4, 0.9), (9, 12, 0.1)" --nrNodes=128 --nrDPs=128 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=1893589 --dpSeed=2410678 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 4, 0.9), (9, 12, 0.1)" --nrNodes=128 --nrDPs=256 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=8267378 --dpSeed=8859459 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Degree3Tree --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 4, 0.9), (9, 12, 0.1)" --nrNodes=128 --nrDPs=384 --maxSolutionSize=0

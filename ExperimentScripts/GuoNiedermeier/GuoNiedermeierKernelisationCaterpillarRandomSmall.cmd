@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=100"
 set "repetitions=1"
 set "algorithm=GuoNiedermeierKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\CaterpillarRandomSmall"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults\GuoNiedermeierCaterpillarRandomSmall"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=9911216 --dpSeed=2074946 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128
 "%exeLocation%" --treeSeed=5900853 --dpSeed=3752524 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=256
 "%exeLocation%" --treeSeed=3068649 --dpSeed=1716587 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=Random --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=384

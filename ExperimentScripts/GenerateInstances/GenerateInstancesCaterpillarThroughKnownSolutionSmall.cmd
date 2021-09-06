@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=50"
 set "repetitions=1"
 set "algorithm=GenerateInstances"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\CaterpillarThroughKnownSolutionSmall"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=6005382 --dpSeed=6570227 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=5
 "%exeLocation%" --treeSeed=5575743 --dpSeed=3610895 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=10
 "%exeLocation%" --treeSeed=251142 --dpSeed=5518598 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=ThroughKnownSolution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --nrNodes=128 --nrDPs=128 --maxSolutionSize=20

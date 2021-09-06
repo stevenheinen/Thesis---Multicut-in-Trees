@@ -1,10 +1,10 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "experiments=100"
 set "repetitions=1"
 set "algorithm=BousquetKernelisation"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\CaterpillarLengthDistributionSmall"
-set "resultsOutputDirShort=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetCaterpillarLengthDistributionShortSmall"
-set "resultsOutputDirLong=D:\Documents\Universiteit\Thesis\ExperimentResults\BousquetCaterpillarLengthDistributionLongSmall"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDirShort=FILL IN IN CMD FILE"
+set "resultsOutputDirLong=FILL IN IN CMD FILE"
 "%exeLocation%" --treeSeed=7272254 --dpSeed=4544123 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 5, 0.9), (35, 89, 0.1)" --nrNodes=128 --nrDPs=128 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=5626119 --dpSeed=8311817 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 5, 0.9), (35, 89, 0.1)" --nrNodes=128 --nrDPs=256 --maxSolutionSize=0
 "%exeLocation%" --treeSeed=5550136 --dpSeed=9885991 --experiments="%experiments%" --repetitions="%repetitions%" --algorithm="%algorithm%" --treeType=Caterpillar --dpType=LengthDistribution --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDirShort%" -v --distanceDistribution="(2, 5, 0.9), (35, 89, 0.1)" --nrNodes=128 --nrDPs=384 --maxSolutionSize=0

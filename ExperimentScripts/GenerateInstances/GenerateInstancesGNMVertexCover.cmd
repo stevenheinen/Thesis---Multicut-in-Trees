@@ -1,9 +1,9 @@
-set "exeLocation=P:\Thesis - Multicut in Trees\MulticutInTrees\bin\Experiment\net5.0\MulticutInTrees.exe"
+set "exeLocation=FILL IN IN CMD FILE"
 set "repetitions=1"
 set "algorithm=GenerateInstances"
-set "vertexCoverInstanceDir=D:\Documents\Universiteit\Thesis\GNMVertexCoverInstances\"
-set "multicutInstanceDir=D:\Documents\Universiteit\Thesis\Instances\GNMVertexCover-instances"
-set "resultsOutputDir=D:\Documents\Universiteit\Thesis\ExperimentResults"
+set "vertexCoverInstanceDir=FILL IN IN CMD FILE"
+set "multicutInstanceDir=FILL IN IN CMD FILE"
+set "resultsOutputDir=FILL IN IN CMD FILE"
 for /r "%vertexCoverInstanceDir%" %%i in (*.mis) do (
 "%exeLocation%" --algorithm="%algorithm%" --repetitions="%repetitions%" --treeType=VertexCover --dpType=FromTreeInstance --instanceDir="%multicutInstanceDir%" --outputDir="%resultsOutputDir%" -v --instanceFilePath="%%i"
 )
