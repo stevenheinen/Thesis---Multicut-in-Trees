@@ -305,22 +305,22 @@
       <Issue TypeId="ClassNeverInstantiated.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="547-565" Line="12" Message="Class 'CommandLineOptions' is never instantiated" />
       <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="1305-1309" Line="18" Message="Auto-property accessor is never used" />
       <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2066-2070" Line="24" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2922-2926" Line="30" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3188-3192" Line="36" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3441-3445" Line="42" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3721-3725" Line="48" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4029-4033" Line="54" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4317-4321" Line="60" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4811-4815" Line="66" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5197-5201" Line="72" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5492-5496" Line="78" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6056-6060" Line="84" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6459-6463" Line="90" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedMember.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6747-6762" Line="96" Message="Property 'OutputDirectory' is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7083-7087" Line="102" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7434-7438" Line="108" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7712-7716" Line="114" Message="Auto-property accessor is never used" />
-      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7959-7963" Line="120" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="2923-2927" Line="30" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3189-3193" Line="36" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3442-3446" Line="42" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="3722-3726" Line="48" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4030-4034" Line="54" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4318-4322" Line="60" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="4812-4816" Line="66" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5198-5202" Line="72" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="5493-5497" Line="78" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6057-6061" Line="84" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6460-6464" Line="90" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedMember.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="6748-6763" Line="96" Message="Property 'OutputDirectory' is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7084-7088" Line="102" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7435-7439" Line="108" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7713-7717" Line="114" Message="Auto-property accessor is never used" />
+      <Issue TypeId="UnusedAutoPropertyAccessor.Global" File="CommandLineArguments\CommandLineOptions.cs" Offset="7960-7964" Line="120" Message="Auto-property accessor is never used" />
       <Issue TypeId="CSharpErrors" File="CommandLineArguments\CommandLineParser.cs" Offset="953-954" Line="22" Message="Cannot resolve symbol 'p'" />
       <Issue TypeId="CSharpErrors" File="CommandLineArguments\CommandLineParser.cs" Offset="955-957" Line="22" Message="')' expected" />
       <Issue TypeId="CSharpErrors" File="CommandLineArguments\CommandLineParser.cs" Offset="957-959" Line="22" Message="; expected" />
@@ -1002,6 +1002,7 @@
       <Issue TypeId="CSharpErrors" File="MulticutProblem\PerformanceMeasurements.cs" Offset="4892-4894" Line="93" Message="Tuple must contain at least two elements." />
       <Issue TypeId="CSharpErrors" File="MulticutProblem\PerformanceMeasurements.cs" Offset="4893-4895" Line="93" Message="'(' or initializer expected" />
       <Issue TypeId="UnusedType.Global" File="MulticutProblem\_NamespaceDocMulticutProblem.cs" Offset="475-487" Line="8" Message="Class 'NamespaceDoc' is never used" />
+      <Issue TypeId="RedundantUsingDirective" File="Program.cs" Offset="271-284" Line="3" Message="Using directive is not required by the code and can be safely removed" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="Program.cs" Offset="532-539" Line="13" Message="Class 'Program' is never instantiated" />
       <Issue TypeId="ClassNeverInstantiated.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="916-947" Line="19" Message="Class 'BidimensionalDominatingWingspan' is never instantiated" />
       <Issue TypeId="MemberCanBePrivate.Global" File="ReductionRules\BidimensionalDominatingWingspan.cs" Offset="1225-1234" Line="24" Message="Property 'CaterpillarComponentPerNode' can be made private" />
